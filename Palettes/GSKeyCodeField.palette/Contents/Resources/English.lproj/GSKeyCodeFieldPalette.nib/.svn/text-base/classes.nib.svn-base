@@ -1,8 +1,0 @@
-{
-    IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = GSKeyCodeField; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
-        {CLASS = GSKeyCodeFieldPalette; LANGUAGE = ObjC; SUPERCLASS = IBPalette; }
-    ); 
-    IBVersion = 1; 
-}
