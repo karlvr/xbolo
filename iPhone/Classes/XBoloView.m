@@ -6,10 +6,10 @@
 //  Copyright 2009 Robert Chrzanowski. All rights reserved.
 //
 
-#import "GSBoloView.h"
+#import "XBoloView.h"
 
 
-@implementation GSBoloView
+@implementation XBoloView
 
 - (void)drawRect:(CGRect)rect {
   UIImage *image;

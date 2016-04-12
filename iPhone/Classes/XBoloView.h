@@ -6,10 +6,10 @@
 //  Copyright 2009 Robert Chrzanowski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
-@interface GSBoloView : UIView {
+@interface XBoloView : UIView {
 
 }
 

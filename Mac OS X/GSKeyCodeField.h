@@ -4,15 +4,13 @@
   unsigned short keyCode;
 }
 - (id)initWithKeyCode:(unsigned short)aKeyCode;
-- (void)setKeyCode:(unsigned short)aKeyCode;
-- (unsigned short)keyCode;
+@property (nonatomic) unsigned short keyCode;
 - (IBAction)takeKeyValueFrom:(id)sender;
 @end
 
 @interface GSKeyCodeField : NSControl {
   unsigned int modifiers;
 }
-- (void)setKeyCode:(unsigned short)aKeyCode;
-- (unsigned short)keyCode;
+@property unsigned short keyCode;
 - (IBAction)takeKeyValueFrom:(id)sender;
 @end

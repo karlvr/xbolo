@@ -4,6 +4,7 @@
 NSMutableDictionary *nameDictionary;
 
 @implementation GSKeyCodeFieldCell
+@synthesize keyCode;
 
 + (void)initialize {
   if (self == [GSKeyCodeFieldCell class]) {
@@ -197,10 +198,6 @@ NSMutableDictionary *nameDictionary;
     [(NSControl *)[self controlView] updateCell:self];
     [self sendActionToTarget];
   }
-}
-
-- (unsigned short)keyCode {
-  return keyCode;
 }
 
 - (void)setObjectValue:(id)object {
