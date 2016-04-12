@@ -38,36 +38,6 @@
 		404D429B0FF8528F00589EA2 /* GSXBoloController.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42990FF8528F00589EA2 /* GSXBoloController.h */; };
 		404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429A0FF8528F00589EA2 /* GSXBoloController.m */; };
 		404D429E0FF852DA00589EA2 /* Main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429D0FF852DA00589EA2 /* Main.m */; };
-		404D42E30FF8585000589EA2 /* BaseStatDead.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C50FF8585000589EA2 /* BaseStatDead.png */; };
-		404D42E40FF8585000589EA2 /* BaseStatFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C60FF8585000589EA2 /* BaseStatFriendly.png */; };
-		404D42E50FF8585000589EA2 /* BaseStatHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C70FF8585000589EA2 /* BaseStatHostile.png */; };
-		404D42E60FF8585000589EA2 /* BaseStatNeutral.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C80FF8585000589EA2 /* BaseStatNeutral.png */; };
-		404D42E70FF8585000589EA2 /* Cursor.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C90FF8585000589EA2 /* Cursor.png */; };
-		404D42E80FF8585000589EA2 /* KeyConfig.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CA0FF8585000589EA2 /* KeyConfig.png */; };
-		404D42E90FF8585000589EA2 /* MineRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CB0FF8585000589EA2 /* MineRadio.png */; };
-		404D42EA0FF8585000589EA2 /* PillCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CC0FF8585000589EA2 /* PillCenter.png */; };
-		404D42EB0FF8585000589EA2 /* PillRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CD0FF8585000589EA2 /* PillRadio.png */; };
-		404D42EC0FF8585000589EA2 /* PillStatDead.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CE0FF8585000589EA2 /* PillStatDead.png */; };
-		404D42ED0FF8585000589EA2 /* PillStatFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CF0FF8585000589EA2 /* PillStatFriendly.png */; };
-		404D42EE0FF8585000589EA2 /* PillStatHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D00FF8585000589EA2 /* PillStatHostile.png */; };
-		404D42EF0FF8585000589EA2 /* PillStatIntFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D10FF8585000589EA2 /* PillStatIntFriendly.png */; };
-		404D42F00FF8585000589EA2 /* PillStatIntHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D20FF8585000589EA2 /* PillStatIntHostile.png */; };
-		404D42F10FF8585000589EA2 /* PillStatNeutral.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D30FF8585000589EA2 /* PillStatNeutral.png */; };
-		404D42F20FF8585000589EA2 /* PlayerInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D40FF8585000589EA2 /* PlayerInfo.png */; };
-		404D42F30FF8585000589EA2 /* PlayerStatAlliedFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */; };
-		404D42F40FF8585000589EA2 /* PlayerStatFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */; };
-		404D42F50FF8585000589EA2 /* PlayerStatHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D70FF8585000589EA2 /* PlayerStatHostile.png */; };
-		404D42F60FF8585000589EA2 /* RoadRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D80FF8585000589EA2 /* RoadRadio.png */; };
-		404D42F70FF8585000589EA2 /* Sound.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D90FF8585000589EA2 /* Sound.png */; };
-		404D42F80FF8585000589EA2 /* Sprites.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DA0FF8585000589EA2 /* Sprites.png */; };
-		404D42F90FF8585000589EA2 /* StatusBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DB0FF8585000589EA2 /* StatusBackground.png */; };
-		404D42FA0FF8585000589EA2 /* StipplePattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DC0FF8585000589EA2 /* StipplePattern.png */; };
-		404D42FB0FF8585000589EA2 /* TankCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DD0FF8585000589EA2 /* TankCenter.png */; };
-		404D42FC0FF8585000589EA2 /* Tiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DE0FF8585000589EA2 /* Tiles.png */; };
-		404D42FD0FF8585000589EA2 /* TreeRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DF0FF8585000589EA2 /* TreeRadio.png */; };
-		404D42FE0FF8585000589EA2 /* WallRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E00FF8585000589EA2 /* WallRadio.png */; };
-		404D42FF0FF8585000589EA2 /* ZoomIn.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E10FF8585000589EA2 /* ZoomIn.png */; };
-		404D43000FF8585000589EA2 /* ZoomOut.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E20FF8585000589EA2 /* ZoomOut.png */; };
 		404D43110FF85B5700589EA2 /* XBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D430F0FF85B5700589EA2 /* XBoloView.m */; };
 		404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43380FF85B6B00589EA2 /* XBoloViewController.m */; };
 		404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */; };
@@ -133,7 +103,6 @@
 		40A5932F0FBE78FC00F3E650 /* bmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C27AAC0FA6A22600647706 /* bmap.h */; };
 		40A593310FBE78FC00F3E650 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		40A593320FBE78FC00F3E650 /* XBolo.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5068218029195BE01A80102 /* XBolo.icns */; };
-		40A593330FBE78FC00F3E650 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = F562277F02981B17012C88AB /* MainMenu.nib */; };
 		40A593340FBE78FC00F3E650 /* builderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197603E5088801924B91 /* builderdeath.aiff */; };
 		40A593350FBE78FC00F3E650 /* explosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197703E5088801924B91 /* explosion.aiff */; };
 		40A593360FBE78FC00F3E650 /* tankshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197803E5088801924B91 /* tankshot.aiff */; };
@@ -154,6 +123,8 @@
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
+		558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558243611CBD7A63006BDC14 /* MainMenu.xib */; };
+		558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
 		55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
 		55C4A54F1CBD71C6003A29B0 /* bmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27AAD0FA6A22600647706 /* bmap.c */; };
 		55C4A5501CBD71DE003A29B0 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = FDF3ECCB0736F4DA0070DF96 /* io.c */; };
@@ -245,36 +216,6 @@
 		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSXBoloController.h; path = "Mac OS X/GSXBoloController.h"; sourceTree = "<group>"; };
 		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSXBoloController.m; path = "Mac OS X/GSXBoloController.m"; sourceTree = "<group>"; };
 		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Main.m; path = "Mac OS X/Main.m"; sourceTree = "<group>"; };
-		404D42C50FF8585000589EA2 /* BaseStatDead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatDead.png; path = Images/BaseStatDead.png; sourceTree = "<group>"; };
-		404D42C60FF8585000589EA2 /* BaseStatFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatFriendly.png; path = Images/BaseStatFriendly.png; sourceTree = "<group>"; };
-		404D42C70FF8585000589EA2 /* BaseStatHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatHostile.png; path = Images/BaseStatHostile.png; sourceTree = "<group>"; };
-		404D42C80FF8585000589EA2 /* BaseStatNeutral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatNeutral.png; path = Images/BaseStatNeutral.png; sourceTree = "<group>"; };
-		404D42C90FF8585000589EA2 /* Cursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cursor.png; path = Images/Cursor.png; sourceTree = "<group>"; };
-		404D42CA0FF8585000589EA2 /* KeyConfig.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = KeyConfig.png; path = Images/KeyConfig.png; sourceTree = "<group>"; };
-		404D42CB0FF8585000589EA2 /* MineRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MineRadio.png; path = Images/MineRadio.png; sourceTree = "<group>"; };
-		404D42CC0FF8585000589EA2 /* PillCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillCenter.png; path = Images/PillCenter.png; sourceTree = "<group>"; };
-		404D42CD0FF8585000589EA2 /* PillRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillRadio.png; path = Images/PillRadio.png; sourceTree = "<group>"; };
-		404D42CE0FF8585000589EA2 /* PillStatDead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatDead.png; path = Images/PillStatDead.png; sourceTree = "<group>"; };
-		404D42CF0FF8585000589EA2 /* PillStatFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatFriendly.png; path = Images/PillStatFriendly.png; sourceTree = "<group>"; };
-		404D42D00FF8585000589EA2 /* PillStatHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatHostile.png; path = Images/PillStatHostile.png; sourceTree = "<group>"; };
-		404D42D10FF8585000589EA2 /* PillStatIntFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntFriendly.png; path = Images/PillStatIntFriendly.png; sourceTree = "<group>"; };
-		404D42D20FF8585000589EA2 /* PillStatIntHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntHostile.png; path = Images/PillStatIntHostile.png; sourceTree = "<group>"; };
-		404D42D30FF8585000589EA2 /* PillStatNeutral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatNeutral.png; path = Images/PillStatNeutral.png; sourceTree = "<group>"; };
-		404D42D40FF8585000589EA2 /* PlayerInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerInfo.png; path = Images/PlayerInfo.png; sourceTree = "<group>"; };
-		404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatAlliedFriendly.png; path = Images/PlayerStatAlliedFriendly.png; sourceTree = "<group>"; };
-		404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatFriendly.png; path = Images/PlayerStatFriendly.png; sourceTree = "<group>"; };
-		404D42D70FF8585000589EA2 /* PlayerStatHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatHostile.png; path = Images/PlayerStatHostile.png; sourceTree = "<group>"; };
-		404D42D80FF8585000589EA2 /* RoadRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = RoadRadio.png; path = Images/RoadRadio.png; sourceTree = "<group>"; };
-		404D42D90FF8585000589EA2 /* Sound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sound.png; path = Images/Sound.png; sourceTree = "<group>"; };
-		404D42DA0FF8585000589EA2 /* Sprites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sprites.png; path = Images/Sprites.png; sourceTree = "<group>"; };
-		404D42DB0FF8585000589EA2 /* StatusBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StatusBackground.png; path = Images/StatusBackground.png; sourceTree = "<group>"; };
-		404D42DC0FF8585000589EA2 /* StipplePattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StipplePattern.png; path = Images/StipplePattern.png; sourceTree = "<group>"; };
-		404D42DD0FF8585000589EA2 /* TankCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TankCenter.png; path = Images/TankCenter.png; sourceTree = "<group>"; };
-		404D42DE0FF8585000589EA2 /* Tiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Tiles.png; path = Images/Tiles.png; sourceTree = "<group>"; };
-		404D42DF0FF8585000589EA2 /* TreeRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TreeRadio.png; path = Images/TreeRadio.png; sourceTree = "<group>"; };
-		404D42E00FF8585000589EA2 /* WallRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WallRadio.png; path = Images/WallRadio.png; sourceTree = "<group>"; };
-		404D42E10FF8585000589EA2 /* ZoomIn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomIn.png; path = Images/ZoomIn.png; sourceTree = "<group>"; };
-		404D42E20FF8585000589EA2 /* ZoomOut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomOut.png; path = Images/ZoomOut.png; sourceTree = "<group>"; };
 		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloView.m; path = iPhone/Classes/XBoloView.m; sourceTree = "<group>"; };
 		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloView.h; path = iPhone/Classes/XBoloView.h; sourceTree = "<group>"; };
 		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloViewController.h; path = iPhone/Classes/XBoloViewController.h; sourceTree = "<group>"; };
@@ -325,6 +266,8 @@
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -335,7 +278,6 @@
 		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = explosion.aiff; path = Sounds/explosion.aiff; sourceTree = "<group>"; };
 		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
 		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tree.aiff; path = Sounds/tree.aiff; sourceTree = "<group>"; };
-		F562278002981B17012C88AB /* MainMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MainMenu.nib; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
 		FD969DCD07441F9C009568EF /* rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rect.h; sourceTree = "<group>"; };
@@ -462,6 +404,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				558243641CBD7ABB006BDC14 /* Images.xcassets */,
 				F55317CA03E5054901924B91 /* Images */,
 				F55317CB03E5055801924B91 /* Sounds */,
 				F5068218029195BE01A80102 /* XBolo.icns */,
@@ -470,7 +413,7 @@
 				FD507B6E03EB7E6000360B11 /* Localizable.strings */,
 				FD968C270472BA17000001C9 /* DefaultPreferences.plist */,
 				FDB3E70103E620A7000001CA /* Credits.rtf */,
-				F562277F02981B17012C88AB /* MainMenu.nib */,
+				558243611CBD7A63006BDC14 /* MainMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -611,37 +554,7 @@
 		F55317CA03E5054901924B91 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				404D42C50FF8585000589EA2 /* BaseStatDead.png */,
-				404D42C60FF8585000589EA2 /* BaseStatFriendly.png */,
-				404D42C70FF8585000589EA2 /* BaseStatHostile.png */,
-				404D42C80FF8585000589EA2 /* BaseStatNeutral.png */,
-				404D42C90FF8585000589EA2 /* Cursor.png */,
-				404D42CA0FF8585000589EA2 /* KeyConfig.png */,
-				404D42CB0FF8585000589EA2 /* MineRadio.png */,
-				404D42CC0FF8585000589EA2 /* PillCenter.png */,
-				404D42CD0FF8585000589EA2 /* PillRadio.png */,
-				404D42CE0FF8585000589EA2 /* PillStatDead.png */,
-				404D42CF0FF8585000589EA2 /* PillStatFriendly.png */,
-				404D42D00FF8585000589EA2 /* PillStatHostile.png */,
-				404D42D10FF8585000589EA2 /* PillStatIntFriendly.png */,
 				4050678E109533640037C3D3 /* PillStatIntAllied.png */,
-				404D42D20FF8585000589EA2 /* PillStatIntHostile.png */,
-				404D42D30FF8585000589EA2 /* PillStatNeutral.png */,
-				404D42D40FF8585000589EA2 /* PlayerInfo.png */,
-				404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */,
-				404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */,
-				404D42D70FF8585000589EA2 /* PlayerStatHostile.png */,
-				404D42D80FF8585000589EA2 /* RoadRadio.png */,
-				404D42D90FF8585000589EA2 /* Sound.png */,
-				404D42DA0FF8585000589EA2 /* Sprites.png */,
-				404D42DB0FF8585000589EA2 /* StatusBackground.png */,
-				404D42DC0FF8585000589EA2 /* StipplePattern.png */,
-				404D42DD0FF8585000589EA2 /* TankCenter.png */,
-				404D42DE0FF8585000589EA2 /* Tiles.png */,
-				404D42DF0FF8585000589EA2 /* TreeRadio.png */,
-				404D42E00FF8585000589EA2 /* WallRadio.png */,
-				404D42E10FF8585000589EA2 /* ZoomIn.png */,
-				404D42E20FF8585000589EA2 /* ZoomOut.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -852,7 +765,6 @@
 			files = (
 				40A593310FBE78FC00F3E650 /* InfoPlist.strings in Resources */,
 				40A593320FBE78FC00F3E650 /* XBolo.icns in Resources */,
-				40A593330FBE78FC00F3E650 /* MainMenu.nib in Resources */,
 				40A593340FBE78FC00F3E650 /* builderdeath.aiff in Resources */,
 				40A593350FBE78FC00F3E650 /* explosion.aiff in Resources */,
 				40A593360FBE78FC00F3E650 /* tankshot.aiff in Resources */,
@@ -860,6 +772,7 @@
 				40A5933A0FBE78FC00F3E650 /* Credits.rtf in Resources */,
 				40A5933B0FBE78FC00F3E650 /* Localizable.strings in Resources */,
 				40A5934C0FBE78FC00F3E650 /* DefaultPreferences.plist in Resources */,
+				558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */,
 				405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */,
 				405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */,
 				405E19390FC7E4A6008CDDF0 /* sink.aiff in Resources */,
@@ -876,39 +789,10 @@
 				402097C60FC91E2F0018390E /* fhitterrain.aiff in Resources */,
 				402097C70FC91E2F0018390E /* fhittree.aiff in Resources */,
 				402097C90FC91E2F0018390E /* fsink.aiff in Resources */,
+				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
 				402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */,
 				402097CC0FC91E2F0018390E /* ftree.aiff in Resources */,
 				402098370FC926C00018390E /* fshot.aiff in Resources */,
-				404D42E30FF8585000589EA2 /* BaseStatDead.png in Resources */,
-				404D42E40FF8585000589EA2 /* BaseStatFriendly.png in Resources */,
-				404D42E50FF8585000589EA2 /* BaseStatHostile.png in Resources */,
-				404D42E60FF8585000589EA2 /* BaseStatNeutral.png in Resources */,
-				404D42E70FF8585000589EA2 /* Cursor.png in Resources */,
-				404D42E80FF8585000589EA2 /* KeyConfig.png in Resources */,
-				404D42E90FF8585000589EA2 /* MineRadio.png in Resources */,
-				404D42EA0FF8585000589EA2 /* PillCenter.png in Resources */,
-				404D42EB0FF8585000589EA2 /* PillRadio.png in Resources */,
-				404D42EC0FF8585000589EA2 /* PillStatDead.png in Resources */,
-				404D42ED0FF8585000589EA2 /* PillStatFriendly.png in Resources */,
-				404D42EE0FF8585000589EA2 /* PillStatHostile.png in Resources */,
-				404D42EF0FF8585000589EA2 /* PillStatIntFriendly.png in Resources */,
-				404D42F00FF8585000589EA2 /* PillStatIntHostile.png in Resources */,
-				404D42F10FF8585000589EA2 /* PillStatNeutral.png in Resources */,
-				404D42F20FF8585000589EA2 /* PlayerInfo.png in Resources */,
-				404D42F30FF8585000589EA2 /* PlayerStatAlliedFriendly.png in Resources */,
-				404D42F40FF8585000589EA2 /* PlayerStatFriendly.png in Resources */,
-				404D42F50FF8585000589EA2 /* PlayerStatHostile.png in Resources */,
-				404D42F60FF8585000589EA2 /* RoadRadio.png in Resources */,
-				404D42F70FF8585000589EA2 /* Sound.png in Resources */,
-				404D42F80FF8585000589EA2 /* Sprites.png in Resources */,
-				404D42F90FF8585000589EA2 /* StatusBackground.png in Resources */,
-				404D42FA0FF8585000589EA2 /* StipplePattern.png in Resources */,
-				404D42FB0FF8585000589EA2 /* TankCenter.png in Resources */,
-				404D42FC0FF8585000589EA2 /* Tiles.png in Resources */,
-				404D42FD0FF8585000589EA2 /* TreeRadio.png in Resources */,
-				404D42FE0FF8585000589EA2 /* WallRadio.png in Resources */,
-				404D42FF0FF8585000589EA2 /* ZoomIn.png in Resources */,
-				404D43000FF8585000589EA2 /* ZoomOut.png in Resources */,
 				4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */,
 				407333AF10F10E5100A018A1 /* XBoloMap.icns in Resources */,
 				35290DD31231E4FD009A579E /* msgreceived.aiff in Resources */,
@@ -1028,12 +912,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		F562277F02981B17012C88AB /* MainMenu.nib */ = {
+		558243611CBD7A63006BDC14 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				F562278002981B17012C88AB /* MainMenu.nib */,
+				558243621CBD7A63006BDC14 /* English */,
 			);
-			name = MainMenu.nib;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		FD507B6E03EB7E6000360B11 /* Localizable.strings */ = {
@@ -1212,7 +1096,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -1275,7 +1158,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -1289,11 +1171,7 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
+				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};

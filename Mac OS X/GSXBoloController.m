@@ -220,7 +220,7 @@ static void getlisttrackerstatus(int status);
   // init toolbar items
   toolbarPlayerInfoItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
   [toolbarPlayerInfoItem setLabel:NSLocalizedString(@"Player Info", nil)];
-  [toolbarPlayerInfoItem setImage:[NSImage imageNamed:GSPlayerInfoImage]];
+  [toolbarPlayerInfoItem setImage:[NSImage imageNamed:NSImageNameUser]];
   [toolbarPlayerInfoItem setTarget:self];
   [toolbarPlayerInfoItem setAction:@selector(prefPane:)];
 
@@ -2039,7 +2039,7 @@ END
 
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
   if (returnCode == NSOKButton) {
-    [self setHostMapString:[[sheet filenames] objectAtIndex:0]];
+    [self setHostMapString:[[[sheet URLs] objectAtIndex:0] path]];
   }
 }
 
@@ -2871,7 +2871,7 @@ TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Hostname", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, eString);
+  NSBeginAlertSheet(@"Error Resolving Hostname", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3242,7 +3242,7 @@ TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, eString);
+  NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
 
 CLEANUP
   switch (ERROR) {

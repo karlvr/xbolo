@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1030" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
@@ -12,7 +12,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <menu title="Main" systemMenu="main" id="90" userLabel="Main Menu">
             <items>
                 <menuItem title="XBolo" id="43">
@@ -601,7 +601,7 @@
             <rect key="contentRect" x="10" y="32" width="994" height="768"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="636">
-                <rect key="frame" x="1" y="9" width="994" height="768"/>
+                <rect key="frame" x="0.0" y="0.0" width="994" height="768"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="1315">
@@ -609,7 +609,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="FWw-gD-7vS">
                             <rect key="frame" x="0.0" y="0.0" width="994" height="768"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView id="1314" customClass="GSBoloView">
                                     <rect key="frame" x="0.0" y="0.0" width="4096" height="4096"/>
@@ -625,7 +625,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="2060">
-                            <rect key="frame" x="978" y="0.0" width="16" height="768"/>
+                            <rect key="frame" x="979" y="0.0" width="15" height="768"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
@@ -999,7 +999,7 @@
             <rect key="contentRect" x="497" y="378" width="286" height="97"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="732">
-                <rect key="frame" x="1" y="1" width="286" height="97"/>
+                <rect key="frame" x="0.0" y="0.0" width="286" height="97"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" id="733">
@@ -1034,7 +1034,7 @@ Gw
             <rect key="contentRect" x="320" y="187" width="640" height="480"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="1043">
-                <rect key="frame" x="1" y="9" width="640" height="480"/>
+                <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tabView id="1126">
@@ -1045,7 +1045,7 @@ Gw
                             <tabViewItem label="Host" identifier="0" id="1127">
                                 <view key="view" id="1129">
                                     <rect key="frame" x="10" y="33" width="594" height="418"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" id="1044">
                                             <rect key="frame" x="237" y="360" width="240" height="22"/>
@@ -1081,7 +1081,7 @@ Gw
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="Domination" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1055" id="1943">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="1057">
                                                     <items>
                                                         <menuItem title="Domination" state="on" id="1055">
@@ -1157,7 +1157,7 @@ DQ
                                                 <tabViewItem label="Domination" identifier="1" id="1050">
                                                     <view key="view" id="1072">
                                                         <rect key="frame" x="10" y="7" width="349" height="133"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField verticalHuggingPriority="750" id="1175">
                                                                 <rect key="frame" x="22" y="25" width="88" height="17"/>
@@ -1719,7 +1719,7 @@ Gw
                     <autoresizingMask key="autoresizingMask"/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="42" height="42"/>
-                    <buttonCell key="prototype" type="square" bezelStyle="shadowlessSquare" image="3AFAD3AE-EA1C-46DC-B1A0-C4C9284D814E" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="2048">
+                    <buttonCell key="prototype" type="square" bezelStyle="shadowlessSquare" image="981C1C20-0275-4F52-B842-857EC26C5207" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="2048">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -1767,7 +1767,7 @@ Gw
             <rect key="contentRect" x="1072" y="532" width="198" height="274"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="1360">
-                <rect key="frame" x="1" y="1" width="198" height="274"/>
+                <rect key="frame" x="0.0" y="0.0" width="198" height="274"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView id="1361" customClass="GSStatusView">
@@ -2078,7 +2078,7 @@ Gw
             <rect key="contentRect" x="1014" y="32" width="256" height="256"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="1418">
-                <rect key="frame" x="1" y="1" width="256" height="256"/>
+                <rect key="frame" x="0.0" y="0.0" width="256" height="256"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="1436">
@@ -2098,7 +2098,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="b7l-s6-Hhb">
                             <rect key="frame" x="1" y="1" width="254" height="174"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" continuousSpellChecking="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1425">
                                     <rect key="frame" x="0.0" y="306" width="254" height="174"/>
@@ -2179,18 +2179,18 @@ DQ
             <rect key="contentRect" x="1014" y="314" width="256" height="192"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="1622">
-                <rect key="frame" x="1" y="1" width="256" height="192"/>
+                <rect key="frame" x="0.0" y="0.0" width="256" height="192"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1625">
                         <rect key="frame" x="0.0" y="34" width="256" height="158"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="L8a-jc-Gpf">
-                            <rect key="frame" x="1" y="23" width="254" height="134"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <rect key="frame" x="1" y="0.0" width="254" height="157"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" headerView="2067" id="1626">
-                                    <rect key="frame" x="0.0" y="0.0" width="254" height="134"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="93" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2262,7 +2262,7 @@ DQ
         </window>
     </objects>
     <resources>
-        <image name="3AFAD3AE-EA1C-46DC-B1A0-C4C9284D814E" width="1" height="1">
+        <image name="981C1C20-0275-4F52-B842-857EC26C5207" width="1" height="1">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
