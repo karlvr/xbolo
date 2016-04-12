@@ -808,7 +808,7 @@ END
   }];
 }
 
-- (IBAction)hostUPnPSwitch:(id)sender {
+- (IBAction)hostUPnPSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setHostUPnPBool:aBool];
@@ -821,7 +821,7 @@ END
   [self setHostPortNumber:[sender intValue]];
 }
 
-- (IBAction)hostPasswordSwitch:(id)sender {
+- (IBAction)hostPasswordSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setHostPasswordBool:aBool];
@@ -834,7 +834,7 @@ END
   [self setHostPasswordString:[sender stringValue]];
 }
 
-- (IBAction)hostTimeLimitSwitch:(id)sender {
+- (IBAction)hostTimeLimitSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setHostTimeLimitBool:aBool];
@@ -865,13 +865,13 @@ END
   [hostTimeLimitField selectText:self];
 }
 
-- (IBAction)hostHiddenMinesSwitch:(id)sender {
+- (IBAction)hostHiddenMinesSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setHostHiddenMinesBool:aBool];
 }
 
-- (IBAction)hostTrackerSwitch:(id)sender {
+- (IBAction)hostTrackerSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setHostTrackerBool:aBool];
@@ -1089,7 +1089,7 @@ END
   [self setJoinPortNumber:[sender intValue]];
 }
 
-- (IBAction)joinPasswordSwitch:(id)sender {
+- (IBAction)joinPasswordSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = [sender state] == NSOnState;
   [self setJoinPasswordBool:aBool];
@@ -1269,7 +1269,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x;
     cgpoint.y = [screen frame].size.height - nspoint.y + 64.0;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1287,7 +1287,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x;
     cgpoint.y = [screen frame].size.height - nspoint.y - 64.0;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1305,7 +1305,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x + 64.0;
     cgpoint.y = [screen frame].size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1323,7 +1323,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x - 64.0;
     cgpoint.y = [screen frame].size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);

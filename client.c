@@ -1262,7 +1262,7 @@ int printmessage(int type, const char *body) {
 
 TRY
   if (client.printmessage) {
-    if (asprintf(&text, body) == -1) LOGFAIL(errno)
+    if (asprintf(&text, "%s", body) == -1) LOGFAIL(errno)
     client.printmessage(type, text);
     free(text);
     text = NULL;
@@ -3065,7 +3065,7 @@ TRY
         text = NULL;
       }
       else {
-        if (asprintf(&text, "Time Limit Reached!", seconds, seconds > 1 ? "s" : "") == -1) LOGFAIL(errno)
+        if (asprintf(&text, "Time Limit Reached!") == -1) LOGFAIL(errno)
         client.printmessage(MSGGAME, text);
         free(text);
         text = NULL;
@@ -3123,7 +3123,7 @@ TRY
         text = NULL;
       }
       else {
-        if (asprintf(&text, "Base Control Reached!", seconds, seconds > 1 ? "s" : "") == -1) LOGFAIL(errno)
+        if (asprintf(&text, "Base Control Reached!") == -1) LOGFAIL(errno)
         client.printmessage(MSGGAME, text);
         free(text);
         text = NULL;
