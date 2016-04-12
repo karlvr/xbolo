@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>XBolo</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Version 0.4.1</string>
 	<key>CFBundleIconFile</key>
@@ -74,7 +74,9 @@
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>com.apple.ostype</key>
-				<string>BMAP</string>
+				<array>
+					<string>BMAP</string>
+				</array>
 				<key>public.filename-extension</key>
 				<array>
 					<string>map</string>

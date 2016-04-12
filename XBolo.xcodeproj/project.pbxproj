@@ -326,7 +326,7 @@
 		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
 		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tree.aiff; path = Sounds/tree.aiff; sourceTree = "<group>"; };
 		F562278002981B17012C88AB /* MainMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MainMenu.nib; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
 		FD969DCD07441F9C009568EF /* rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rect.h; sourceTree = "<group>"; };
 		FD969DCE07441F9C009568EF /* rect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rect.c; sourceTree = "<group>"; };
@@ -1043,38 +1043,29 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		404367A50F77EFB700B24B31 /* Development */ = {
+		404367A50F77EFB700B24B31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
-				GCC_VERSION = 4.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
-			name = Development;
+			name = Debug;
 		};
-		404367A60F77EFB700B24B31 /* Deployment */ = {
+		404367A60F77EFB700B24B31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		404367A70F77EFB700B24B31 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
-			};
-			name = Default;
-		};
-		404D42600FF84FEA00589EA2 /* Development */ = {
+		404D42600FF84FEA00589EA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1096,9 +1087,9 @@
 				PRODUCT_NAME = iPhone;
 				SDKROOT = iphoneos;
 			};
-			name = Development;
+			name = Debug;
 		};
-		404D42610FF84FEA00589EA2 /* Deployment */ = {
+		404D42610FF84FEA00589EA2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1120,30 +1111,9 @@
 				SDKROOT = iphoneos;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		404D42620FF84FEA00589EA2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/UIKit.framework/Headers/UIKit.h";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_NAME = iPhone;
-				SDKROOT = iphoneos;
-			};
-			name = Default;
-		};
-		407C8B3C0FDC73BA006A71F7 /* Development */ = {
+		407C8B3C0FDC73BA006A71F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1156,9 +1126,9 @@
 				PRODUCT_NAME = "XBolo Tracker";
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		407C8B3D0FDC73BA006A71F7 /* Deployment */ = {
+		407C8B3D0FDC73BA006A71F7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1169,20 +1139,9 @@
 				PRODUCT_NAME = "XBolo Tracker";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		407C8B3E0FDC73BA006A71F7 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PRODUCT_NAME = "XBolo Tracker";
-				ZERO_LINK = YES;
-			};
-			name = Default;
-		};
-		4081875B1080C81300E4D4CA /* Development */ = {
+		4081875B1080C81300E4D4CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
@@ -1196,9 +1155,9 @@
 				PRODUCT_NAME = "Dedicated Host";
 				WARNING_CFLAGS = "-Wall";
 			};
-			name = Development;
+			name = Debug;
 		};
-		4081875C1080C81300E4D4CA /* Deployment */ = {
+		4081875C1080C81300E4D4CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1210,20 +1169,9 @@
 				PRODUCT_NAME = "Dedicated Host";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		4081875D1080C81300E4D4CA /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INSTALL_PATH = /usr/local/bin;
-				PRODUCT_NAME = "Dedicated Host";
-			};
-			name = Default;
-		};
-		40A593720FBE78FC00F3E650 /* Development */ = {
+		40A593720FBE78FC00F3E650 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -1272,6 +1220,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
@@ -1281,13 +1230,14 @@
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = app;
 			};
-			name = Development;
+			name = Debug;
 		};
-		40A593730FBE78FC00F3E650 /* Deployment */ = {
+		40A593730FBE78FC00F3E650 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1299,6 +1249,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
@@ -1311,36 +1262,7 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
-		};
-		40A593740FBE78FC00F3E650 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
-				);
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "XBolo-Info.plist";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = XBolo;
-				SDKROOT = macosx;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Default;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1348,52 +1270,47 @@
 		404367A40F77EFB700B24B31 /* Build configuration list for PBXProject "XBolo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				404367A50F77EFB700B24B31 /* Development */,
-				404367A60F77EFB700B24B31 /* Deployment */,
-				404367A70F77EFB700B24B31 /* Default */,
+				404367A50F77EFB700B24B31 /* Debug */,
+				404367A60F77EFB700B24B31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		404D42630FF84FEB00589EA2 /* Build configuration list for PBXNativeTarget "iPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				404D42600FF84FEA00589EA2 /* Development */,
-				404D42610FF84FEA00589EA2 /* Deployment */,
-				404D42620FF84FEA00589EA2 /* Default */,
+				404D42600FF84FEA00589EA2 /* Debug */,
+				404D42610FF84FEA00589EA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		407C8B3B0FDC73BA006A71F7 /* Build configuration list for PBXNativeTarget "XBolo Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				407C8B3C0FDC73BA006A71F7 /* Development */,
-				407C8B3D0FDC73BA006A71F7 /* Deployment */,
-				407C8B3E0FDC73BA006A71F7 /* Default */,
+				407C8B3C0FDC73BA006A71F7 /* Debug */,
+				407C8B3D0FDC73BA006A71F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		4081875F1080C81500E4D4CA /* Build configuration list for PBXNativeTarget "Dedicated Host" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4081875B1080C81300E4D4CA /* Development */,
-				4081875C1080C81300E4D4CA /* Deployment */,
-				4081875D1080C81300E4D4CA /* Default */,
+				4081875B1080C81300E4D4CA /* Debug */,
+				4081875C1080C81300E4D4CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		40A593710FBE78FC00F3E650 /* Build configuration list for PBXNativeTarget "Mac OS X" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40A593720FBE78FC00F3E650 /* Development */,
-				40A593730FBE78FC00F3E650 /* Deployment */,
-				40A593740FBE78FC00F3E650 /* Default */,
+				40A593720FBE78FC00F3E650 /* Debug */,
+				40A593730FBE78FC00F3E650 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

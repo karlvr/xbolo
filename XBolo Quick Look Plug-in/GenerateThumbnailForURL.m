@@ -444,7 +444,7 @@ static CGColorRef myGetRedColor(void) {
 
   if (red == NULL) {
     // R,G,B,A
-    float opaqueRed[4] = { 1, 0, 0, 1 };
+    CGFloat opaqueRed[4] = { 1, 0, 0, 1 };
     red = CGColorCreate(myGetGenericRGBSpace(), opaqueRed);
   }
 
@@ -457,7 +457,7 @@ static CGColorRef myGetGreenColor(void) {
 
   if (green == NULL) {
     // R,G,B,A
-    float opaqueGreen[4] = { 0, 1, 0, 1 };
+    CGFloat opaqueGreen[4] = { 0, 1, 0, 1 };
     green = CGColorCreate(myGetGenericRGBSpace(), opaqueGreen);
   }
 
@@ -470,7 +470,7 @@ static CGColorRef myGetDarkGreenColor(void) {
 
   if (darkGreen == NULL) {
     // R,G,B,A
-    float opaqueDarkGreen[4] = { 0, 0.502, 0, 1 };
+    CGFloat opaqueDarkGreen[4] = { 0, 0.502, 0, 1 };
     darkGreen = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkGreen);
   }
 
@@ -482,7 +482,7 @@ static CGColorRef myGetBlueColor(void) {
   static CGColorRef blue = NULL;
   if (blue == NULL) {
     // R,G,B,A
-    float opaqueBlue[4] = { 0, 0, 1, 1 };
+    CGFloat opaqueBlue[4] = { 0, 0, 1, 1 };
     blue = CGColorCreate(myGetGenericRGBSpace(), opaqueBlue);
   }
 
@@ -494,7 +494,7 @@ static CGColorRef myGetDarkBlueColor(void) {
   static CGColorRef darkBlue = NULL;
   if (darkBlue == NULL) {
     // R,G,B,A
-    float opaqueDarkBlue[4] = { 0, 0, 0.475, 1 };
+    CGFloat opaqueDarkBlue[4] = { 0, 0, 0.475, 1 };
     darkBlue = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkBlue);
   }
 
@@ -507,7 +507,7 @@ static CGColorRef myGetYellowColor(void) {
 
   if (yellow == NULL) {
     // R,G,B,A
-    float opaqueYellow[4] = { 1, 1, 0, 1 };
+    CGFloat opaqueYellow[4] = { 1, 1, 0, 1 };
     yellow = CGColorCreate(myGetGenericRGBSpace(), opaqueYellow);
   }
 
@@ -520,7 +520,7 @@ static CGColorRef myGetCyanColor(void) {
 
   if (cyan == NULL) {
     // R,G,B,A
-    float opaqueCyan[4] = { 0, 1, 1, 1 };
+    CGFloat opaqueCyan[4] = { 0, 1, 1, 1 };
     cyan = CGColorCreate(myGetGenericRGBSpace(), opaqueCyan);
   }
 
@@ -533,7 +533,7 @@ static CGColorRef myGetDarkCyanColor(void) {
 
   if (darkCyan == NULL) {
     // R,G,B,A
-    float opaqueDarkCyan[4] = { 0, 0.502, 0.502, 1 };
+    CGFloat opaqueDarkCyan[4] = { 0, 0.502, 0.502, 1 };
     darkCyan = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkCyan);
   }
 
@@ -546,7 +546,7 @@ static CGColorRef myGetBrownColor(void) {
 
   if (brown == NULL) {
     // R,G,B,A
-    float opaqueBrown[4] = { 0.702, 0.475, 0.059, 1 };
+    CGFloat opaqueBrown[4] = { 0.702, 0.475, 0.059, 1 };
     brown = CGColorCreate(myGetGenericRGBSpace(), opaqueBrown);
   }
 
@@ -559,7 +559,7 @@ static CGColorRef myGetLightBrownColor(void) {
 
   if (lightBrown == NULL) {
     // R,G,B,A
-    float opaqueLightBrown[4] = { 0.875, 0.596, 0.075, 1 };
+    CGFloat opaqueLightBrown[4] = { 0.875, 0.596, 0.075, 1 };
     lightBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueLightBrown);
   }
 
@@ -572,7 +572,7 @@ static CGColorRef myGetVeryLightBrownColor(void) {
 
   if (veryLightBrown == NULL) {
     // R,G,B,A
-    float opaqueVeryLightBrown[4] = { 0.918, 0.647, 0.482, 1 };
+    CGFloat opaqueVeryLightBrown[4] = { 0.918, 0.647, 0.482, 1 };
     veryLightBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueVeryLightBrown);
   }
 
@@ -585,7 +585,7 @@ static CGColorRef myGetDarkBrownColor(void) {
 
   if (darkBrown == NULL) {
     // R,G,B,A
-    float opaqueDarkBrown[4] = { 0.502, 0.251, 0.0, 1 };
+    CGFloat opaqueDarkBrown[4] = { 0.502, 0.251, 0.0, 1 };
     darkBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkBrown);
   }
 
@@ -598,7 +598,7 @@ static CGColorRef myGetGreyColor(void) {
 
   if (grey == NULL) {
     // R,G,B,A
-    float opaqueGrey[4] = { 0.502, 0.502, 0.502, 1 };
+    CGFloat opaqueGrey[4] = { 0.502, 0.502, 0.502, 1 };
     grey = CGColorCreate(myGetGenericRGBSpace(), opaqueGrey);
   }
 
@@ -611,7 +611,7 @@ static CGColorRef myGetBlackColor(void) {
 
   if (black == NULL) {
     // R,G,B,A
-    float opaqueBlack[4] = { 0, 0, 0, 1 };
+    CGFloat opaqueBlack[4] = { 0, 0, 0, 1 };
     black = CGColorCreate(myGetGenericRGBSpace(), opaqueBlack);
   }
 
