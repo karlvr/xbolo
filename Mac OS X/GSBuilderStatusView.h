@@ -16,10 +16,10 @@ typedef NS_ENUM(int, GSBuilderStatusViewState) {
 
 @interface GSBuilderStatusView : NSView {
   GSBuilderStatusViewState state;
-  float dir;
+  CGFloat dir;
 }
 
 @property (nonatomic) GSBuilderStatusViewState state;
-@property (nonatomic) float dir;
+@property (nonatomic) CGFloat dir;
 
 @end

@@ -47,7 +47,7 @@
   }
 }
 
-- (void)setDir:(float)aDir {
+- (void)setDir:(CGFloat)aDir {
   if (dir != aDir) {
     dir = aDir;
 

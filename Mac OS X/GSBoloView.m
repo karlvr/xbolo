@@ -14,6 +14,7 @@
 #include <Carbon/Carbon.h>
 #include <pthread.h>
 #include <math.h>
+#include <tgmath.h>
 
 static NSMutableArray *boloViews = nil;
 static NSImage *tiles = nil;
@@ -27,7 +28,7 @@ static int dirtytiles(struct ListNode *list, Recti rect);
 - (void)eraseSprites;
 - (void)refreshTiles;
 - (void)drawSprites;
-- (void)drawSprite:(int)tile at:(Vec2f)point fraction:(float)fraction;
+- (void)drawSprite:(int)tile at:(Vec2f)point fraction:(CGFloat)fraction;
 - (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary *)attr;
 - (void)dirtyTiles:(NSRect)rect;
 @end
@@ -452,13 +453,13 @@ CLEANUP
 END
 }
 
-- (void)drawSprite:(int)tile at:(Vec2f)point fraction:(float)fraction {
+- (void)drawSprite:(int)tile at:(Vec2f)point fraction:(CGFloat)fraction {
   NSRect srcRect;
   NSRect dstRect;
 
   if (fraction > 0.00001) {
     srcRect = NSMakeRect((tile%16)*16, (tile/16)*16, 16.0, 16.0);
-    dstRect = NSMakeRect(floorf(point.x*16.0 - 8.0), floorf((FWIDTH - point.y)*16.0 - 8.0), 16.0, 16.0);
+    dstRect = NSMakeRect(floor(point.x*16.0 - 8.0), floor((FWIDTH - point.y)*16.0 - 8.0), 16.0, 16.0);
     [sprites drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:fraction];
     [self dirtyTiles:dstRect];
   }

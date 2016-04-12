@@ -96,12 +96,12 @@ static CGColorRef myGetGreyColor(void);
 static CGColorRef myGetBlackColor(void);
 
 OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options) {
-  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+@autoreleasepool {
   NSData *data;
   const void *buf;
   size_t nbytes;
 
-  data = [NSData dataWithContentsOfURL:(NSURL *)url];
+  data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
   buf = [data bytes];
   nbytes = [data length];
 
@@ -308,9 +308,9 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     CFRelease(context);
   }
 
-  [pool release];
 
   return noErr;
+}
 }
 
 void CancelPreviewGeneration(void* thisInterface, QLPreviewRequestRef preview) {

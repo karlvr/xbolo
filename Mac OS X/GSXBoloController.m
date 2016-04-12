@@ -61,7 +61,7 @@ static NSString * const GSMuteBool                   = @"GSMuteBool";
 // bolo toolbar prefs
 static NSString * const GSBuilderToolInteger         = @"GSBuilderToolInteger";
 
-static NSString * const GSPlayerInfoImage            = @"PlayerInfo";
+//static NSString * const GSPlayerInfoImage            = @"PlayerInfo";
 static NSString * const GSKeyConfigImage             = @"KeyConfig";
 
 static NSString * const GSTankCenterImage            = @"TankCenter";
@@ -132,7 +132,7 @@ static NSMutableArray *speechSynthesizers;
 
 static struct ListNode trackerlist;
 
-static const float kZoomLevels[] = {
+static const CGFloat kZoomLevels[] = {
     0.5,
     0.75,
     1.0,
@@ -1511,7 +1511,7 @@ END
 
   if (zoomLevel < MAX_ZOOM) {
     zoomLevel++;
-    float zoom = kZoomLevels[zoomLevel];
+    CGFloat zoom = kZoomLevels[zoomLevel];
     visRect = [boloView visibleRect];
     size.width = 4096.0*zoom;
     size.height = 4096.0*zoom;
@@ -1528,7 +1528,7 @@ END
 
   if (zoomLevel > 0) {
     zoomLevel--;
-    float zoom = kZoomLevels[zoomLevel];
+    CGFloat zoom = kZoomLevels[zoomLevel];
     visRect = [boloView visibleRect];
     size.width = 4096.0*zoom;
     size.height = 4096.0*zoom;
@@ -2571,16 +2571,16 @@ END
 - (void)setTankStatusBars {
   [playerKillsTextField setStringValue:[NSString stringWithFormat:@"%d", client.kills]];
   [playerDeathsTextField setStringValue:[NSString stringWithFormat:@"%d", client.deaths]];
-  [playerShellsStatusBar setValue:((float)client.shells)/MAXSHELLS];
-  [playerMinesStatusBar setValue:((float)client.mines)/MAXMINES];
-  [playerArmourStatusBar setValue:((float)client.armour)/MAXARMOUR];
-  [playerTreesStatusBar setValue:((float)client.trees)/MAXTREES];
+  [playerShellsStatusBar setValue:((CGFloat)client.shells)/MAXSHELLS];
+  [playerMinesStatusBar setValue:((CGFloat)client.mines)/MAXMINES];
+  [playerArmourStatusBar setValue:((CGFloat)client.armour)/MAXARMOUR];
+  [playerTreesStatusBar setValue:((CGFloat)client.trees)/MAXTREES];
 }
 
 - (void)refresh:(NSTimer *)aTimer {
   int i;
   int base = -1;
-  float dist = 8.0, dist2;
+  CGFloat dist = 8.0, dist2;
   int gotlock = 0;
   static int counter = 0;
 
@@ -2667,9 +2667,9 @@ TRY
         }
       
         if (base != -1) {
-          [baseArmourStatusBar setValue:(float)client.bases[base].armour/(float)MAXBASEARMOUR];
-          [baseShellsStatusBar setValue:(float)client.bases[base].shells/(float)MAXBASESHELLS];
-          [baseMinesStatusBar setValue:(float)client.bases[base].mines/(float)MAXBASEMINES];
+          [baseArmourStatusBar setValue:(CGFloat)client.bases[base].armour/(CGFloat)MAXBASEARMOUR];
+          [baseShellsStatusBar setValue:(CGFloat)client.bases[base].shells/(CGFloat)MAXBASESHELLS];
+          [baseMinesStatusBar setValue:(CGFloat)client.bases[base].mines/(CGFloat)MAXBASEMINES];
         }
         else {
           [baseShellsStatusBar setValue:0.0];

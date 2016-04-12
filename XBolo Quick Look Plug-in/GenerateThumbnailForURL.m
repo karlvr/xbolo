@@ -95,12 +95,12 @@ static CGColorRef myGetGreyColor(void);
 static CGColorRef myGetBlackColor(void);
 
 OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thumbnail, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options, CGSize maxSize) {
-  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+@autoreleasepool {
   NSData *data;
   const void *buf;
   size_t nbytes;
 
-  data = [NSData dataWithContentsOfURL:(NSURL *)url];
+  data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
   buf = [data bytes];
   nbytes = [data length];
 
@@ -117,7 +117,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     int offset;
     int minx = 256, maxx = 0, miny = 256, maxy = 0;
 
-    /* turn of antialiasing */
+    /* turn off antialiasing */
     CGContextSetShouldAntialias(context, 0);
 
     /* draw deep sea */
@@ -307,9 +307,9 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     CFRelease(context);
   }
 
-  [pool release];
 
   return noErr;
+}
 }
 
 void CancelThumbnailGeneration(void* thisInterface, QLThumbnailRequestRef thumbnail) {

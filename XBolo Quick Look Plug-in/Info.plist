@@ -65,8 +65,6 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>XBolo Map</string>
-			<key>UTTypeIconFile</key>
-			<string>public.jpeg.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.gengasw.xbolo.map</string>
 			<key>UTTypeReferenceURL</key>
