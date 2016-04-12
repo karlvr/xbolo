@@ -35,8 +35,6 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Version 0.4.1</string>
-	<key>CFBundleIconFile</key>
-	<string>XBolo.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -66,7 +64,7 @@
 			<key>UTTypeDescription</key>
 			<string>XBolo Map</string>
 			<key>UTTypeIconFile</key>
-			<string>public.jpeg.icns</string>
+			<string>XBoloMap</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.gengasw.xbolo.map</string>
 			<key>UTTypeReferenceURL</key>

@@ -23,9 +23,9 @@
 #define LOG(...) (void)0
 #endif
 
-@interface GSRobot (internal)
+@interface GSRobot ()
 
-- (id)initWithBundle: (NSBundle *)bundle;
+- (instancetype)initWithBundle: (NSBundle *)bundle;
 
 @end
 

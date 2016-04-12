@@ -8,17 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, GSStatusBarType) {
   GSHorizontalBar,
   GSVerticalBar,
-} GSStatusBarType;
+};
 
 @interface GSStatusBar : NSView {
   GSStatusBarType type;
-  float value;
+  CGFloat value;
 }
-- (GSStatusBarType)type;
-- (void)setType:(GSStatusBarType)aType;
-- (float)value;
-- (void)setValue:(float)aValue;
+@property (nonatomic) GSStatusBarType type;
+@property (nonatomic) CGFloat value;
 @end

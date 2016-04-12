@@ -10,6 +10,8 @@
 
 
 @implementation GSStatusBar
+@synthesize type;
+@synthesize value;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -37,10 +39,6 @@
   }
 }
 
-- (GSStatusBarType)type {
-  return type;
-}
-
 - (void)setType:(GSStatusBarType)aType {
   switch (aType) {
   case GSHorizontalBar:
@@ -58,11 +56,7 @@
   }
 }
 
-- (float)value {
-  return value;
-}
-
-- (void)setValue:(float)aValue {
+- (void)setValue:(CGFloat)aValue {
   if (value != aValue) {
     value = aValue;
     [self setNeedsDisplay:YES];

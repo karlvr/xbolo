@@ -9,110 +9,110 @@ NSMutableDictionary *nameDictionary;
 + (void)initialize {
   if (self == [GSKeyCodeFieldCell class]) {
     nameDictionary = [[NSMutableDictionary alloc] init];
-    [nameDictionary setObject:@"A" forKey:[NSString stringWithFormat:@"%hu", 0]];
-    [nameDictionary setObject:@"S" forKey:[NSString stringWithFormat:@"%hu", 1]];
-    [nameDictionary setObject:@"D" forKey:[NSString stringWithFormat:@"%hu", 2]];
-    [nameDictionary setObject:@"F" forKey:[NSString stringWithFormat:@"%hu", 3]];
-    [nameDictionary setObject:@"H" forKey:[NSString stringWithFormat:@"%hu", 4]];
-    [nameDictionary setObject:@"G" forKey:[NSString stringWithFormat:@"%hu", 5]];
-    [nameDictionary setObject:@"Z" forKey:[NSString stringWithFormat:@"%hu", 6]];
-    [nameDictionary setObject:@"X" forKey:[NSString stringWithFormat:@"%hu", 7]];
-    [nameDictionary setObject:@"C" forKey:[NSString stringWithFormat:@"%hu", 8]];
-    [nameDictionary setObject:@"V" forKey:[NSString stringWithFormat:@"%hu", 9]];
+    [nameDictionary setObject:@"A" forKey:[NSString stringWithFormat:@"%d", 0]];
+    [nameDictionary setObject:@"S" forKey:[NSString stringWithFormat:@"%d", 1]];
+    [nameDictionary setObject:@"D" forKey:[NSString stringWithFormat:@"%d", 2]];
+    [nameDictionary setObject:@"F" forKey:[NSString stringWithFormat:@"%d", 3]];
+    [nameDictionary setObject:@"H" forKey:[NSString stringWithFormat:@"%d", 4]];
+    [nameDictionary setObject:@"G" forKey:[NSString stringWithFormat:@"%d", 5]];
+    [nameDictionary setObject:@"Z" forKey:[NSString stringWithFormat:@"%d", 6]];
+    [nameDictionary setObject:@"X" forKey:[NSString stringWithFormat:@"%d", 7]];
+    [nameDictionary setObject:@"C" forKey:[NSString stringWithFormat:@"%d", 8]];
+    [nameDictionary setObject:@"V" forKey:[NSString stringWithFormat:@"%d", 9]];
 
-    [nameDictionary setObject:@"B" forKey:[NSString stringWithFormat:@"%hu", 11]];
-    [nameDictionary setObject:@"Q" forKey:[NSString stringWithFormat:@"%hu", 12]];
-    [nameDictionary setObject:@"W" forKey:[NSString stringWithFormat:@"%hu", 13]];
-    [nameDictionary setObject:@"E" forKey:[NSString stringWithFormat:@"%hu", 14]];
-    [nameDictionary setObject:@"R" forKey:[NSString stringWithFormat:@"%hu", 15]];
-    [nameDictionary setObject:@"Y" forKey:[NSString stringWithFormat:@"%hu", 16]];
-    [nameDictionary setObject:@"T" forKey:[NSString stringWithFormat:@"%hu", 17]];
-    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%hu", 18]];
-    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%hu", 19]];
-    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%hu", 20]];
-    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%hu", 21]];
-    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%hu", 22]];
-    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%hu", 23]];
-    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%hu", 24]];
-    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%hu", 25]];
-    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%hu", 26]];
-    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%hu", 27]];
-    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%hu", 28]];
-    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%hu", 29]];
-    [nameDictionary setObject:@"]" forKey:[NSString stringWithFormat:@"%hu", 30]];
-    [nameDictionary setObject:@"O" forKey:[NSString stringWithFormat:@"%hu", 31]];
-    [nameDictionary setObject:@"U" forKey:[NSString stringWithFormat:@"%hu", 32]];
-    [nameDictionary setObject:@"[" forKey:[NSString stringWithFormat:@"%hu", 33]];
-    [nameDictionary setObject:@"I" forKey:[NSString stringWithFormat:@"%hu", 34]];
-    [nameDictionary setObject:@"P" forKey:[NSString stringWithFormat:@"%hu", 35]];
-    [nameDictionary setObject:@"Return" forKey:[NSString stringWithFormat:@"%hu", 36]];
-    [nameDictionary setObject:@"L" forKey:[NSString stringWithFormat:@"%hu", 37]];
-    [nameDictionary setObject:@"J" forKey:[NSString stringWithFormat:@"%hu", 38]];
-    [nameDictionary setObject:@"'" forKey:[NSString stringWithFormat:@"%hu", 39]];
-    [nameDictionary setObject:@"K" forKey:[NSString stringWithFormat:@"%hu", 40]];
-    [nameDictionary setObject:@";" forKey:[NSString stringWithFormat:@"%hu", 41]];
-    [nameDictionary setObject:@"\\" forKey:[NSString stringWithFormat:@"%hu", 42]];
-    [nameDictionary setObject:@"," forKey:[NSString stringWithFormat:@"%hu", 43]];
-    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%hu", 44]];
-    [nameDictionary setObject:@"N" forKey:[NSString stringWithFormat:@"%hu", 45]];
-    [nameDictionary setObject:@"M" forKey:[NSString stringWithFormat:@"%hu", 46]];
-    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%hu", 47]];
-    [nameDictionary setObject:@"Tab" forKey:[NSString stringWithFormat:@"%hu", 48]];
-    [nameDictionary setObject:@"Spacebar" forKey:[NSString stringWithFormat:@"%hu", 49]];
-    [nameDictionary setObject:@"`" forKey:[NSString stringWithFormat:@"%hu", 50]];
-    [nameDictionary setObject:@"Delete" forKey:[NSString stringWithFormat:@"%hu", 51]];
-    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%hu", 52]];
-    [nameDictionary setObject:@"Escape" forKey:[NSString stringWithFormat:@"%hu", 53]];
+    [nameDictionary setObject:@"B" forKey:[NSString stringWithFormat:@"%d", 11]];
+    [nameDictionary setObject:@"Q" forKey:[NSString stringWithFormat:@"%d", 12]];
+    [nameDictionary setObject:@"W" forKey:[NSString stringWithFormat:@"%d", 13]];
+    [nameDictionary setObject:@"E" forKey:[NSString stringWithFormat:@"%d", 14]];
+    [nameDictionary setObject:@"R" forKey:[NSString stringWithFormat:@"%d", 15]];
+    [nameDictionary setObject:@"Y" forKey:[NSString stringWithFormat:@"%d", 16]];
+    [nameDictionary setObject:@"T" forKey:[NSString stringWithFormat:@"%d", 17]];
+    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%d", 18]];
+    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%d", 19]];
+    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%d", 20]];
+    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%d", 21]];
+    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%d", 22]];
+    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%d", 23]];
+    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%d", 24]];
+    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%d", 25]];
+    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%d", 26]];
+    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%d", 27]];
+    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%d", 28]];
+    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%d", 29]];
+    [nameDictionary setObject:@"]" forKey:[NSString stringWithFormat:@"%d", 30]];
+    [nameDictionary setObject:@"O" forKey:[NSString stringWithFormat:@"%d", 31]];
+    [nameDictionary setObject:@"U" forKey:[NSString stringWithFormat:@"%d", 32]];
+    [nameDictionary setObject:@"[" forKey:[NSString stringWithFormat:@"%d", 33]];
+    [nameDictionary setObject:@"I" forKey:[NSString stringWithFormat:@"%d", 34]];
+    [nameDictionary setObject:@"P" forKey:[NSString stringWithFormat:@"%d", 35]];
+    [nameDictionary setObject:@"Return" forKey:[NSString stringWithFormat:@"%d", 36]];
+    [nameDictionary setObject:@"L" forKey:[NSString stringWithFormat:@"%d", 37]];
+    [nameDictionary setObject:@"J" forKey:[NSString stringWithFormat:@"%d", 38]];
+    [nameDictionary setObject:@"'" forKey:[NSString stringWithFormat:@"%d", 39]];
+    [nameDictionary setObject:@"K" forKey:[NSString stringWithFormat:@"%d", 40]];
+    [nameDictionary setObject:@";" forKey:[NSString stringWithFormat:@"%d", 41]];
+    [nameDictionary setObject:@"\\" forKey:[NSString stringWithFormat:@"%d", 42]];
+    [nameDictionary setObject:@"," forKey:[NSString stringWithFormat:@"%d", 43]];
+    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%d", 44]];
+    [nameDictionary setObject:@"N" forKey:[NSString stringWithFormat:@"%d", 45]];
+    [nameDictionary setObject:@"M" forKey:[NSString stringWithFormat:@"%d", 46]];
+    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%d", 47]];
+    [nameDictionary setObject:@"Tab" forKey:[NSString stringWithFormat:@"%d", 48]];
+    [nameDictionary setObject:@"Spacebar" forKey:[NSString stringWithFormat:@"%d", 49]];
+    [nameDictionary setObject:@"`" forKey:[NSString stringWithFormat:@"%d", 50]];
+    [nameDictionary setObject:@"Delete" forKey:[NSString stringWithFormat:@"%d", 51]];
+    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%d", 52]];
+    [nameDictionary setObject:@"Escape" forKey:[NSString stringWithFormat:@"%d", 53]];
 
-    [nameDictionary setObject:@"Command" forKey:[NSString stringWithFormat:@"%hu", 55]];
-    [nameDictionary setObject:@"Shift" forKey:[NSString stringWithFormat:@"%hu", 56]];
-    [nameDictionary setObject:@"Caps Lock" forKey:[NSString stringWithFormat:@"%hu", 57]];
-    [nameDictionary setObject:@"Option" forKey:[NSString stringWithFormat:@"%hu", 58]];
-    [nameDictionary setObject:@"Control" forKey:[NSString stringWithFormat:@"%hu", 59]];
-    [nameDictionary setObject:@"Fn Shift" forKey:[NSString stringWithFormat:@"%hu", 60]];
-
-
-    [nameDictionary setObject:@"Function" forKey:[NSString stringWithFormat:@"%hu", 63]];
-
-    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%hu", 65]];
-
-    [nameDictionary setObject:@"*" forKey:[NSString stringWithFormat:@"%hu", 67]];
-
-    [nameDictionary setObject:@"+" forKey:[NSString stringWithFormat:@"%hu", 69]];
-
-    [nameDictionary setObject:@"Clear" forKey:[NSString stringWithFormat:@"%hu", 71]];
+    [nameDictionary setObject:@"Command" forKey:[NSString stringWithFormat:@"%d", 55]];
+    [nameDictionary setObject:@"Shift" forKey:[NSString stringWithFormat:@"%d", 56]];
+    [nameDictionary setObject:@"Caps Lock" forKey:[NSString stringWithFormat:@"%d", 57]];
+    [nameDictionary setObject:@"Option" forKey:[NSString stringWithFormat:@"%d", 58]];
+    [nameDictionary setObject:@"Control" forKey:[NSString stringWithFormat:@"%d", 59]];
+    [nameDictionary setObject:@"Fn Shift" forKey:[NSString stringWithFormat:@"%d", 60]];
 
 
+    [nameDictionary setObject:@"Function" forKey:[NSString stringWithFormat:@"%d", 63]];
 
-    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%hu", 75]];
-    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%hu", 76]];
+    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%d", 65]];
 
-    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%hu", 78]];
+    [nameDictionary setObject:@"*" forKey:[NSString stringWithFormat:@"%d", 67]];
 
+    [nameDictionary setObject:@"+" forKey:[NSString stringWithFormat:@"%d", 69]];
 
-    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%hu", 81]];
-    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%hu", 82]];
-    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%hu", 83]];
-    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%hu", 84]];
-    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%hu", 85]];
-    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%hu", 86]];
-    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%hu", 87]];
-    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%hu", 88]];
-    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%hu", 89]];
-
-    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%hu", 91]];
-    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%hu", 92]];
+    [nameDictionary setObject:@"Clear" forKey:[NSString stringWithFormat:@"%d", 71]];
 
 
 
-    [nameDictionary setObject:@"F5" forKey:[NSString stringWithFormat:@"%hu", 96]];
-    [nameDictionary setObject:@"F6" forKey:[NSString stringWithFormat:@"%hu", 97]];
-    [nameDictionary setObject:@"F7" forKey:[NSString stringWithFormat:@"%hu", 98]];
-    [nameDictionary setObject:@"F3" forKey:[NSString stringWithFormat:@"%hu", 99]];
-    [nameDictionary setObject:@"F8" forKey:[NSString stringWithFormat:@"%hu", 100]];
-    [nameDictionary setObject:@"F9" forKey:[NSString stringWithFormat:@"%hu", 101]];
+    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%d", 75]];
+    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%d", 76]];
+
+    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%d", 78]];
+
+
+    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%d", 81]];
+    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%d", 82]];
+    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%d", 83]];
+    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%d", 84]];
+    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%d", 85]];
+    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%d", 86]];
+    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%d", 87]];
+    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%d", 88]];
+    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%d", 89]];
+
+    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%d", 91]];
+    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%d", 92]];
+
+
+
+    [nameDictionary setObject:@"F5" forKey:[NSString stringWithFormat:@"%d", 96]];
+    [nameDictionary setObject:@"F6" forKey:[NSString stringWithFormat:@"%d", 97]];
+    [nameDictionary setObject:@"F7" forKey:[NSString stringWithFormat:@"%d", 98]];
+    [nameDictionary setObject:@"F3" forKey:[NSString stringWithFormat:@"%d", 99]];
+    [nameDictionary setObject:@"F8" forKey:[NSString stringWithFormat:@"%d", 100]];
+    [nameDictionary setObject:@"F9" forKey:[NSString stringWithFormat:@"%d", 101]];
     
-    [nameDictionary setObject:@"F11" forKey:[NSString stringWithFormat:@"%hu", 103]];
+    [nameDictionary setObject:@"F11" forKey:[NSString stringWithFormat:@"%d", 103]];
 
 
 
@@ -120,25 +120,25 @@ NSMutableDictionary *nameDictionary;
 
 
 
-    [nameDictionary setObject:@"F10" forKey:[NSString stringWithFormat:@"%hu", 109]];
-    [nameDictionary setObject:@"Fn Enter" forKey:[NSString stringWithFormat:@"%hu", 110]];
-    [nameDictionary setObject:@"F12" forKey:[NSString stringWithFormat:@"%hu", 111]];
+    [nameDictionary setObject:@"F10" forKey:[NSString stringWithFormat:@"%d", 109]];
+    [nameDictionary setObject:@"Fn Enter" forKey:[NSString stringWithFormat:@"%d", 110]];
+    [nameDictionary setObject:@"F12" forKey:[NSString stringWithFormat:@"%d", 111]];
     
     
     
-    [nameDictionary setObject:@"Home" forKey:[NSString stringWithFormat:@"%hu", 115]];
-    [nameDictionary setObject:@"Page Up" forKey:[NSString stringWithFormat:@"%hu", 116]];
-    [nameDictionary setObject:@"Fn Delete" forKey:[NSString stringWithFormat:@"%hu", 117]];
-    [nameDictionary setObject:@"F4" forKey:[NSString stringWithFormat:@"%hu", 118]];
-    [nameDictionary setObject:@"End" forKey:[NSString stringWithFormat:@"%hu", 119]];
-    [nameDictionary setObject:@"F2" forKey:[NSString stringWithFormat:@"%hu", 120]];
-    [nameDictionary setObject:@"Page Down" forKey:[NSString stringWithFormat:@"%hu", 121]];
-    [nameDictionary setObject:@"F1" forKey:[NSString stringWithFormat:@"%hu", 122]];
-    [nameDictionary setObject:@"Left Arrow" forKey:[NSString stringWithFormat:@"%hu", 123]];
-    [nameDictionary setObject:@"Right Arrow" forKey:[NSString stringWithFormat:@"%hu", 124]];
-    [nameDictionary setObject:@"Down Arrow" forKey:[NSString stringWithFormat:@"%hu", 125]];
-    [nameDictionary setObject:@"Up Arrow" forKey:[NSString stringWithFormat:@"%hu", 126]];
-    [nameDictionary setObject:@"Num Lock" forKey:[NSString stringWithFormat:@"%hu", 127]];
+    [nameDictionary setObject:@"Home" forKey:[NSString stringWithFormat:@"%d", 115]];
+    [nameDictionary setObject:@"Page Up" forKey:[NSString stringWithFormat:@"%d", 116]];
+    [nameDictionary setObject:@"Fn Delete" forKey:[NSString stringWithFormat:@"%d", 117]];
+    [nameDictionary setObject:@"F4" forKey:[NSString stringWithFormat:@"%d", 118]];
+    [nameDictionary setObject:@"End" forKey:[NSString stringWithFormat:@"%d", 119]];
+    [nameDictionary setObject:@"F2" forKey:[NSString stringWithFormat:@"%d", 120]];
+    [nameDictionary setObject:@"Page Down" forKey:[NSString stringWithFormat:@"%d", 121]];
+    [nameDictionary setObject:@"F1" forKey:[NSString stringWithFormat:@"%d", 122]];
+    [nameDictionary setObject:@"Left Arrow" forKey:[NSString stringWithFormat:@"%d", 123]];
+    [nameDictionary setObject:@"Right Arrow" forKey:[NSString stringWithFormat:@"%d", 124]];
+    [nameDictionary setObject:@"Down Arrow" forKey:[NSString stringWithFormat:@"%d", 125]];
+    [nameDictionary setObject:@"Up Arrow" forKey:[NSString stringWithFormat:@"%d", 126]];
+    [nameDictionary setObject:@"Num Lock" forKey:[NSString stringWithFormat:@"%d", 127]];
   }
 }
 

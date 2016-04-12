@@ -29,17 +29,17 @@ extern NSString * const TCMNATPMPPortMapProtocol;
 extern NSString * const TCMUPNPPortMapProtocol;  
 extern NSString * const TCMNoPortMapProtocol;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, TCMPortMappingStatus) {
     TCMPortMappingStatusUnmapped = 0,
     TCMPortMappingStatusTrying   = 1,
     TCMPortMappingStatusMapped   = 2
-} TCMPortMappingStatus;
+};
 
-typedef enum {
+typedef NS_ENUM(NSInteger, TCMPortMappingTransportProtocol) {
     TCMPortMappingTransportProtocolUDP  = 1,
     TCMPortMappingTransportProtocolTCP  = 2,
     TCMPortMappingTransportProtocolBoth = 3
-} TCMPortMappingTransportProtocol;
+};
 
 
 @interface TCMPortMapping : NSObject {
@@ -88,10 +88,12 @@ typedef enum {
     NSTimer *_upnpPortMapperTimer;
     BOOL _ignoreNetworkChanges;
     BOOL _refreshIsScheduled;
+    NSString *_appIdentifier;
 }
 
 + (TCMPortMapper *)sharedInstance;
 + (NSString *)manufacturerForHardwareAddress:(NSString *)aMACAddress;
++ (NSString *)sizereducableHashOfString:(NSString *)inString;
 
 - (NSSet *)portMappings;
 - (NSMutableSet *)removeMappingQueue;
@@ -104,6 +106,8 @@ typedef enum {
 - (void)start;
 - (void)stop;
 - (void)stopBlocking;
+
+@property (nonatomic, copy) NSString *appIdentifier;
 
 // will request the complete UPNPMappingTable and deliver it using a TCMPortMapperDidReceiveUPNPMappingTableNotification with "mappingTable" in the userInfo Dictionary (if current router is a UPNP router)
 - (void)requestUPNPMappingTable;

@@ -16,13 +16,14 @@
     id <GSRobot> _robot;
     
     NSConditionLock *_condLock;
-    NSData *_gamestateData;
+    NSMutableData *_gamestateData;
     NSMutableArray *_messages;
     BOOL _halt;
 }
 
-+ (NSArray *)availableRobots;
++ (NSArray<id <GSRobot>> *)availableRobots;
 
+@property (readonly) NSString *name;
 - (NSString *)name;
 
 - (NSError *)load;

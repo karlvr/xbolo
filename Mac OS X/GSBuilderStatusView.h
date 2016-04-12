@@ -8,20 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {
+typedef NS_ENUM(int, GSBuilderStatusViewState) {
   GSBuilderStatusViewStateReady,
   GSBuilderStatusViewStateDirection,
   GSBuilderStatusViewStateDead,
-} GSBuilderStatusViewState;
+};
 
 @interface GSBuilderStatusView : NSView {
   GSBuilderStatusViewState state;
   float dir;
 }
 
-- (GSBuilderStatusViewState)state;
-- (void)setState:(GSBuilderStatusViewState)newState;
-- (float)dir;
-- (void)setDir:(float)newDir;
+@property (nonatomic) GSBuilderStatusViewState state;
+@property (nonatomic) float dir;
 
 @end

@@ -152,7 +152,7 @@ struct GSRobotCommandState
     int buildercommand;
     int builderx, buildery;
     
-    NSArray *playersToAllyWith; // NSStrings containing player names
+    NSArray<NSString*> *playersToAllyWith; // NSStrings containing player names
 };
 
 #define GS_ROBOT_CURRENT_INTERFACE_VERSION 1
@@ -160,7 +160,7 @@ struct GSRobotCommandState
 @protocol GSRobot <NSObject>
 
 + (int)minimumRobotInterfaceVersionRequired;
-- (id)init; // designated initializer
+- (instancetype)init; // designated initializer
 - (struct GSRobotCommandState)stepXBoloRobotWithGameState: (struct GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
 
 @end

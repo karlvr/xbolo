@@ -102,7 +102,6 @@
 		40A5932E0FBE78FC00F3E650 /* client.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C27A5D0FA6A01A00647706 /* client.h */; };
 		40A5932F0FBE78FC00F3E650 /* bmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C27AAC0FA6A22600647706 /* bmap.h */; };
 		40A593310FBE78FC00F3E650 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		40A593320FBE78FC00F3E650 /* XBolo.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5068218029195BE01A80102 /* XBolo.icns */; };
 		40A593340FBE78FC00F3E650 /* builderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197603E5088801924B91 /* builderdeath.aiff */; };
 		40A593350FBE78FC00F3E650 /* explosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197703E5088801924B91 /* explosion.aiff */; };
 		40A593360FBE78FC00F3E650 /* tankshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197803E5088801924B91 /* tankshot.aiff */; };
@@ -357,8 +356,10 @@
 				40A593750FBE78FD00F3E650 /* XBolo-Info.plist */,
 				404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */,
 			);
+			indentWidth = 2;
 			name = XBolo;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
@@ -764,7 +765,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				40A593310FBE78FC00F3E650 /* InfoPlist.strings in Resources */,
-				40A593320FBE78FC00F3E650 /* XBolo.icns in Resources */,
 				40A593340FBE78FC00F3E650 /* builderdeath.aiff in Resources */,
 				40A593350FBE78FC00F3E650 /* explosion.aiff in Resources */,
 				40A593360FBE78FC00F3E650 /* tankshot.aiff in Resources */,
@@ -1089,7 +1089,8 @@
 		40A593720FBE78FC00F3E650 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = NO;
@@ -1151,7 +1152,8 @@
 		40A593730FBE78FC00F3E650 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

@@ -795,26 +795,17 @@ END
 }
 
 - (IBAction)hostChoose:(id)sender {
+  NSOpenPanel *panel = [NSOpenPanel openPanel];
+  panel.allowedFileTypes = @[NSFileTypeForHFSTypeCode('BMAP'), @"map", @"com.gengasw.xbolo.map"];
   if ([hostMapString length] > 0) {
-    [[NSOpenPanel openPanel]
-      beginSheetForDirectory:[hostMapString stringByDeletingLastPathComponent]
-      file:[hostMapString lastPathComponent]
-      types:[NSArray arrayWithObjects:@"map", NSFileTypeForHFSTypeCode('BMAP'), nil]
-      modalForWindow:newGameWindow
-      modalDelegate:self
-      didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-      contextInfo:NULL];
+    panel.directoryURL = [NSURL fileURLWithPath:[hostMapString stringByDeletingLastPathComponent]];
   }
-  else {
-    [[NSOpenPanel openPanel]
-      beginSheetForDirectory:nil
-      file:nil
-      types:[NSArray arrayWithObjects:@"map", NSFileTypeForHFSTypeCode('BMAP'), nil]
-      modalForWindow:newGameWindow
-      modalDelegate:self
-      didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-      contextInfo:NULL];
-  }
+  
+  [panel beginSheetModalForWindow:newGameWindow completionHandler:^(NSInteger returnCode) {
+    if (returnCode == NSOKButton) {
+      [self setHostMapString:[[[panel URLs] objectAtIndex:0] path]];
+    }
+  }];
 }
 
 - (IBAction)hostUPnPSwitch:(id)sender {
@@ -1814,7 +1805,7 @@ END
 
 // validate menu items method
 
-- (BOOL)validateMenuItem:(id)menuItem {
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   SEL action;
   action = [menuItem action];
 	if (action == @selector(newGame:)) {
@@ -2033,14 +2024,6 @@ END
   }
 
   unlockserver();
-}
-
-// NSSheet delegate methods
-
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-  if (returnCode == NSOKButton) {
-    [self setHostMapString:[[[sheet URLs] objectAtIndex:0] path]];
-  }
 }
 
 // NSToolbar methods

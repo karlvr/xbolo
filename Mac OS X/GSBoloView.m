@@ -408,7 +408,7 @@ TRY
   /* draw selector */
   {
     NSPoint aPoint;
-    aPoint = [self convertPoint:[[self window] convertScreenToBase:[NSEvent mouseLocation]] fromView:nil];
+    aPoint = [self convertPoint:[[self window] convertRectFromScreen:(NSRect){[NSEvent mouseLocation], NSMakeSize(1, 1)}].origin fromView:nil];
     if ([self mouse:aPoint inRect:[self visibleRect]]) {
       [self drawSprite:SELETRIMAGE at:make2f(floorf(aPoint.x/16.0) + 0.5, floorf(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
     }

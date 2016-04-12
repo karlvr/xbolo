@@ -14,6 +14,8 @@
 #include "errchk.h"
 
 @implementation GSBuilderStatusView
+@synthesize state;
+@synthesize dir;
 
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
@@ -25,10 +27,6 @@
   }
 
   return self;
-}
-
-- (GSBuilderStatusViewState)state {
-  return state;
 }
 
 - (void)setState:(GSBuilderStatusViewState)aState {
@@ -47,10 +45,6 @@
     assert(0);
     break;
   }
-}
-
-- (float)dir {
-  return dir;
 }
 
 - (void)setDir:(float)aDir {
