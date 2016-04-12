@@ -10,8 +10,11 @@
 
 #include <sys/time.h>
 #include <time.h>
+#if defined(__MACH__)
+#include <ConditionalMacros.h>
+#endif
 
-#ifdef __MACH__
+#if defined(__MACH__) && !TARGET_OS_IPHONE
 #include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
@@ -23,7 +26,7 @@ static struct timespec timebase;
 void initializegetcurrenttime(void) __attribute__ ((constructor)); // get it to be called automatically at startup
 
 void initializegetcurrenttime(void) {
-#ifdef __MACH__
+#if defined(__MACH__) && !TARGET_OS_IPHONE
   mach_timebase_info(&gMachTimebase);
 #elif _POSIX_TIMERS
   clock_gettime(CLOCK_MONOTONIC, &timebase);
@@ -33,7 +36,7 @@ void initializegetcurrenttime(void) {
 }
 
 uint64_t getcurrenttime(void) {  // in nanoseconds from system boot
-#ifdef __MACH__
+#if defined(__MACH__) && !TARGET_OS_IPHONE
   uint64_t absolute = mach_absolute_time();
   Nanoseconds nano = AbsoluteToNanoseconds(*(AbsoluteTime *)&absolute);
   return *(uint64_t *)&nano;
