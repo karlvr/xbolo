@@ -22,7 +22,7 @@ static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
 static int dirtytiles(struct ListNode *list, Recti rect);
 
-@interface GSBoloView (Private)
+@interface GSBoloView ()
 - (void)drawTileAtPoint:(Pointi)point;
 - (void)drawTilesInRect:(NSRect)rect;
 - (void)eraseSprites;
