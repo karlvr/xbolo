@@ -59,13 +59,13 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
       return noErr;
     }
 
-    if (preamble->npills > MAXPILLS) {
+    if (preamble->npills > MAX_PILLS) {
       QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
 
-    if (preamble->nbases > MAXBASES) {
+    if (preamble->nbases > MAX_BASES) {
       QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;

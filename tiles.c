@@ -9,7 +9,7 @@
 
 #include "tiles.h"
 
-int isForestLikeTile(int tiles[][256], int x, int y) {
+int isForestLikeTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -26,7 +26,7 @@ int isForestLikeTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isCraterLikeTile(int tiles[][256], int x, int y) {
+int isCraterLikeTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -46,7 +46,7 @@ int isCraterLikeTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isRoadLikeTile(int tiles[][256], int x, int y) {
+int isRoadLikeTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -98,7 +98,7 @@ int isRoadLikeTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isWaterLikeToLandTile(int tiles[][256], int x, int y) {
+int isWaterLikeToLandTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -117,7 +117,7 @@ int isWaterLikeToLandTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isWaterLikeToWaterTile(int tiles[][256], int x, int y) {
+int isWaterLikeToWaterTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -175,7 +175,7 @@ int isWaterLikeToWaterTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isWallLikeTile(int tiles[][256], int x, int y) {
+int isWallLikeTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -194,7 +194,7 @@ int isWallLikeTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isSeaLikeTile(int tiles[][256], int x, int y) {
+int isSeaLikeTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }
@@ -211,7 +211,7 @@ int isSeaLikeTile(int tiles[][256], int x, int y) {
   }
 }
 
-int isMinedTile(int tiles[][256], int x, int y) {
+int isMinedTile(GSTile tiles[][256], int x, int y) {
   if (x < 0 || x >= 256 || y < 0 || y >= 256) {
     return 1;
   }

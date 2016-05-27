@@ -20,10 +20,10 @@ static NSMutableArray *boloViews = nil;
 static NSImage *tiles = nil;
 static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
-static int dirtytiles(struct ListNode *list, Recti rect);
+static int dirtytiles(struct ListNode *list, GSRect rect);
 
 @interface GSBoloView ()
-- (void)drawTileAtPoint:(Pointi)point;
+- (void)drawTileAtPoint:(GSPoint)point;
 - (void)drawTilesInRect:(NSRect)rect;
 - (void)eraseSprites;
 - (void)refreshTiles;
@@ -133,7 +133,7 @@ CLEANUP
 END
 }
 
-- (void)drawTileAtPoint:(Pointi)point {
+- (void)drawTileAtPoint:(GSPoint)point {
   int image;
   NSRect dstRect, srcRect;
 
@@ -226,23 +226,23 @@ END
   struct ListNode *node;
   int min_x, max_x, min_y, max_y;
   int y, x;
-  Recti *rect;
+  GSRect *rect;
 
 //  [NSGraphicsContext saveGraphicsState];
 //  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
 
   for (node = nextlist(&rectlist); node != NULL; node = nextlist(node)) {
-    rect = (Recti *)ptrlist(node);
+    rect = (GSRect *)ptrlist(node);
 
-    min_x = minxrect(*rect);
-    max_x = maxxrect(*rect);
+    min_x = GSMinX(*rect);
+    max_x = GSMaxX(*rect);
 
-    min_y = minyrect(*rect);
-    max_y = maxyrect(*rect);
+    min_y = GSMinY(*rect);
+    max_y = GSMaxY(*rect);
 
     for (y = min_y; y <= max_y; y++) {
       for (x = min_x; x <= max_x; x++) {
-        [self drawTileAtPoint:makepoint(x, y)];
+        [self drawTileAtPoint:GSMakePoint(x, y)];
       }
     }
   }
@@ -259,12 +259,12 @@ END
 //  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
 
   for (node = nextlist(&client.changedtiles); node != NULL; node = nextlist(node)) {
-    Pointi *p;
+    GSPoint *p;
     int image;
     NSRect dstRect;
     NSRect srcRect;
 
-    p = (Pointi *)ptrlist(node);
+    p = (GSPoint *)ptrlist(node);
     image = client.images[p->y][p->x];
     dstRect = NSMakeRect(16.0*p->x, 16.0*(255 - p->y), 16.0, 16.0);
     srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
@@ -306,7 +306,7 @@ END
 TRY
 
   /* draw builders */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       switch (client.players[i].builderstatus) {
       case kBuilderGoto:
@@ -323,7 +323,7 @@ TRY
   }
 
   /* draw other players */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected && i != client.player && !client.players[i].dead) {
       float vis;
 
@@ -353,7 +353,7 @@ TRY
   }
 
   /* draw shells */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       struct ListNode *node;
 
@@ -380,7 +380,7 @@ TRY
     node = nextlist(node);
   }
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       node = nextlist(&client.players[i].explosions);
 
@@ -398,7 +398,7 @@ TRY
   }
 
   /* draw parachuting builders */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       if (client.players[i].builderstatus == kBuilderParachute) {
         [self drawSprite:BUILD2IMAGE at:client.players[i].builder fraction:fogvis(client.players[i].builder)];
@@ -528,7 +528,7 @@ END
     NSPoint point;
 
     point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    [boloController mouseEvent:makepoint(point.x/16.0, 255 - (int)(point.y/16.0))];
+    [boloController mouseEvent:GSMakePoint(point.x/16.0, 255 - (int)(point.y/16.0))];
   }
 }
 
@@ -537,16 +537,16 @@ END
 }
 
 - (void)dirtyTiles:(NSRect)rect {
-  Recti recti;
+  GSRect GSRect;
 
 TRY
-  recti.origin.x = NSMinX(rect)/16.0;
-  recti.origin.y = NSMinY(rect)/16.0;
-  recti.size.width = ((int)((NSMaxX(rect) + 16.0)/16.0)) - recti.origin.x;
-  recti.size.height = ((int)((NSMaxY(rect) + 16.0)/16.0)) - recti.origin.y;
-  recti.origin.y = WIDTH - (recti.origin.y + recti.size.height);
+  GSRect.origin.x = NSMinX(rect)/16.0;
+  GSRect.origin.y = NSMinY(rect)/16.0;
+  GSRect.size.width = ((int)((NSMaxX(rect) + 16.0)/16.0)) - GSRect.origin.x;
+  GSRect.size.height = ((int)((NSMaxY(rect) + 16.0)/16.0)) - GSRect.origin.y;
+  GSRect.origin.y = WIDTH - (GSRect.origin.y + GSRect.size.height);
 
-  if (dirtytiles(&rectlist, recti)) LOGFAIL(errno)
+  if (dirtytiles(&rectlist, GSRect)) LOGFAIL(errno)
 
 CLEANUP
   switch (ERROR) {
@@ -569,29 +569,29 @@ END
 
 @end
 
-int dirtytiles(struct ListNode *list, Recti rect) {
-  Recti *rectptr = NULL;
+int dirtytiles(struct ListNode *list, GSRect rect) {
+  GSRect *rectptr = NULL;
   struct ListNode *node = NULL;
 
 TRY
-  if (isemptyrect(rect)) {
+  if (GSIsEmptyRect(rect)) {
     SUCCESS
   }
 
   for (node = nextlist(list); node != NULL; node = nextlist(node)) {
-    Recti *oldrect;
+    GSRect *oldrect;
 
     oldrect = ptrlist(node);
 
-    if (intersectsrect(*oldrect, rect)) {
-      if (containsrect(rect, *oldrect)) {
+    if (GSIntersectsRect(*oldrect, rect)) {
+      if (GSContainsRect(rect, *oldrect)) {
         *oldrect = rect;
       }
-      else if (!containsrect(*oldrect, rect)) {
-        Recti rectsub[4];
+      else if (!GSContainsRect(*oldrect, rect)) {
+        GSRect rectsub[4];
         int i;
 
-        subtractrect(rect, *oldrect, rectsub);
+        GSSubtractRect(rect, *oldrect, rectsub);
 
         for (i = 0; i < 4; i++) {
           if (dirtytiles(node, rectsub[i])) LOGFAIL(errno)
@@ -603,7 +603,7 @@ TRY
   }
 
   if (node == NULL) {
-    if ((rectptr = (Recti *)malloc(sizeof(Recti))) == NULL) LOGFAIL(errno)
+    if ((rectptr = (GSRect *)malloc(sizeof(GSRect))) == NULL) LOGFAIL(errno)
     *rectptr = rect;
     if (addlist(list, rectptr) == -1) LOGFAIL(errno)
     rectptr = NULL;

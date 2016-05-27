@@ -60,13 +60,13 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
       return noErr;
     }
 
-    if (preamble->npills > MAXPILLS) {
+    if (preamble->npills > MAX_PILLS) {
       QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
 
-    if (preamble->nbases > MAXBASES) {
+    if (preamble->nbases > MAX_BASES) {
       QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;

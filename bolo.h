@@ -25,11 +25,12 @@
 
 #define CURRENT_MAP_VERSION (1)
 #define NET_GAME_VERSION    (1)
-#define MAXPLAYERS          (16)
-#define MAXPILLS            (16)
-#define MAXBASES            (16)
+#define MAX_PLAYERS         (16)
+#define MAX_PILLS           (16)
+#define MAX_BASES           (16)
 #define MAX_STARTS          (16)
-#define MINEWIDTH           (10)
+#define MAX_PILL_SPEED      (50)
+#define MINE_WIDTH          (10)
 #define X_MIN_MINE          (10)
 #define Y_MIN_MINE          (10)
 #define X_MAX_MINE          (245)
@@ -98,7 +99,7 @@
 #define RESPAWN_TICKS       (150)
 #define EXPLOSIONTICKS      (24)
 
-#define MAXPILLARMOUR       (15)
+#define MAX_PILL_ARMOUR     (15)
 
 #define FORRESTTREES        (4)
 #define ROADTREES           (2)
@@ -106,9 +107,9 @@
 #define BOATTREES           (20)
 #define PILLTREES           (4)
 
-#define MAXBASEARMOUR       (90)
-#define MAXBASESHELLS       (90)
-#define MAXBASEMINES        (90)
+#define MAX_BASE_ARMOUR     (90)
+#define MAX_BASE_SHELLS     (90)
+#define MAX_BASE_MINES      (90)
 #define MINBASEARMOUR       (5)
 #define MINBASESHELLS       (1)
 #define MINBASEMINES        (1)
@@ -501,6 +502,34 @@ float calcvis(Vec2f v);
 
 float vec2dir(Vec2f v);
 Vec2f dir2vec(float f);
+
+
+struct BOLO_Preamble {
+  uint8_t ident[8];  /* "XBOLOGAM" */
+  uint8_t version;   /* currently 0 */
+  uint8_t player;    /* your player id */
+  uint8_t hiddenmines;
+  uint8_t pause;
+  uint8_t gametype;
+  
+  union {
+    struct {
+      uint8_t type;
+      uint8_t basecontrol;
+    } domination;
+  } __attribute__((__packed__)) game;
+  
+  struct {
+    uint8_t used;
+    uint8_t connected;
+    uint32_t seq;
+    uint8_t name[MAXNAME];
+    uint8_t host[MAXHOST];
+    uint16_t alliance;
+  } __attribute__((__packed__)) players[MAX_PLAYERS];
+  uint32_t maplen;   /* the map length */
+} __attribute__((__packed__));
+
 
 #ifndef MIN
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))

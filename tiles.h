@@ -10,7 +10,10 @@
 #ifndef __TILES__
 #define __TILES__
 
-enum {
+#include <stdint.h>
+#include <CoreFoundation/CFBase.h>
+
+typedef CF_ENUM(uint8_t, GSTile) {
   kWallTile         = 0,
   kRiverTile        = 1,
   kSwampTile        = 2,
@@ -67,16 +70,19 @@ enum {
   kHostilePill14Tile,
   kHostilePill15Tile,
   kUnknownTile,
+  /// used in flood fill algorithm
+  kTokenTile        = 18,
+
 } ;
 
-int isForestLikeTile(int tiles[][256], int x, int y);
-int isCraterLikeTile(int tiles[][256], int x, int y);
-int isRoadLikeTile(int tiles[][256], int x, int y);
-int isWaterLikeToLandTile(int tiles[][256], int x, int y);
-int isWaterLikeToWaterTile(int tiles[][256], int x, int y);
-int isWallLikeTile(int tiles[][256], int x, int y);
-int isSeaLikeTile(int tiles[][256], int x, int y);
+int isForestLikeTile(GSTile tiles[][256], int x, int y);
+int isCraterLikeTile(GSTile tiles[][256], int x, int y);
+int isRoadLikeTile(GSTile tiles[][256], int x, int y);
+int isWaterLikeToLandTile(GSTile tiles[][256], int x, int y);
+int isWaterLikeToWaterTile(GSTile tiles[][256], int x, int y);
+int isWallLikeTile(GSTile tiles[][256], int x, int y);
+int isSeaLikeTile(GSTile tiles[][256], int x, int y);
 
-int isMinedTile(int tiles[][256], int x, int y);
+int isMinedTile(GSTile tiles[][256], int x, int y);
 
 #endif  /* __TILES__ */

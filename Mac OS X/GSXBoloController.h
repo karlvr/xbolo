@@ -311,7 +311,7 @@
 - (void)keyEvent:(BOOL)event forKey:(unsigned short)keyCode;
 
 // mouse event method
-- (void)mouseEvent:(Pointi)point;
+- (void)mouseEvent:(GSPoint)point;
 
 // accessor methods
 - (void)setHostMapString:(NSString *)aString;

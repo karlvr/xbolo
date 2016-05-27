@@ -162,7 +162,7 @@ TRY
   if (initbuf(&server.joiningplayer.sendbuf)) LOGFAIL(errno)
 
   /* alloc and initialize player buffers */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     server.players[i].used = 0;
     server.players[i].cntlsock = -1;
     server.players[i].seq = 0;
@@ -477,7 +477,7 @@ int kickplayer(int player) {
   int gotlock = 0;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (lockserver()) LOGFAIL(errno)
@@ -509,7 +509,7 @@ int banplayer(int player) {
   struct BannedPlayer *bannedplayer = NULL;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (lockserver()) LOGFAIL(errno)
@@ -586,7 +586,7 @@ int removeplayer(int player) {
   uint16_t pills;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(server.players[player].cntlsock != -1);
 
 TRY
@@ -651,7 +651,7 @@ TRY
     else if (  /* sanity check the size */
         r < sizeof(clupdate.hdr) ||
         r != sizeof(clupdate.hdr) + clupdate.hdr.nshells*sizeof(struct CLUpdateShell) + clupdate.hdr.nexplosions*sizeof(struct CLUpdateExplosion) ||
-        clupdate.hdr.player >= MAXPLAYERS
+        clupdate.hdr.player >= MAX_PLAYERS
       ) {
       continue;
     }
@@ -678,7 +678,7 @@ TRY
         }
 
         /* send update to all other players */
-        for (i = 0; i < MAXPLAYERS; i++) {
+        for (i = 0; i < MAX_PLAYERS; i++) {
           if (i != clupdate.hdr.player && server.players[i].cntlsock != -1) {
             if (sendto(server.dgramsock, &clupdate, r, 0, (void *)&server.players[i].dgramaddr, INET_ADDRSTRLEN) == -1) {
               if (errno != EAGAIN) LOGFAIL(errno)
@@ -775,33 +775,33 @@ TRY
   }
 
   /* see if this ip has already joined once */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].used && server.players[i].cntlsock == -1 && !strncmp(server.players[i].name, joinpreamble->name, MAXNAME)) {
       break;
     }
   }
 
   /* not a rejoin */
-  if (!(i < MAXPLAYERS)) {
+  if (!(i < MAX_PLAYERS)) {
     /* find an open slot that has never been used */
-    for (i = 0; i < MAXPLAYERS; i++) {
+    for (i = 0; i < MAX_PLAYERS; i++) {
       if (!server.players[i].used && server.players[i].cntlsock == -1) {
         break;
       }
     }
 
     /* all slots have been used once or are in use, see if we can find a slot that was used but player is not connected */
-    if (!(i < MAXPLAYERS)) {
+    if (!(i < MAX_PLAYERS)) {
       int p, age;
 
       /* find first disconnected player */
-      for (p = 0; p < MAXPLAYERS; p++) {
+      for (p = 0; p < MAX_PLAYERS; p++) {
         if (server.players[p].cntlsock == -1) {
           i = p;
           age = server.ticks - server.players[p].lastupdate;
 
           /* looking for the oldest disconnected player */
-          for (p++; p < MAXPLAYERS; p++) {
+          for (p++; p < MAX_PLAYERS; p++) {
             if (server.players[p].cntlsock == -1) {
               if (age < server.ticks - server.players[p].lastupdate) {
                 i = p;
@@ -816,7 +816,7 @@ TRY
     }
 
     /* server is full */
-    if (!(i < MAXPLAYERS)) {
+    if (!(i < MAX_PLAYERS)) {
       type = kServerFullJOIN;
       if (writebuf(&server.joiningplayer.sendbuf, &type, sizeof(type)) == -1) LOGFAIL(errno)
       if (discjoiningplayerserver()) LOGFAIL(errno)
@@ -870,7 +870,7 @@ TRY
   bolopreamble.game.domination.type = server.game.domination.type;
   bolopreamble.game.domination.basecontrol = server.game.domination.basecontrol;
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     bolopreamble.players[i].used = server.players[i].used;
     bolopreamble.players[i].connected = server.players[i].cntlsock != -1;
     bolopreamble.players[i].seq = htonl(server.players[i].seq);
@@ -929,7 +929,7 @@ TRY
   nfds = MAX(nfds, server.dgramsock);
   
   /* read/write player control socks */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].cntlsock != -1) {
       FD_SET(server.players[i].cntlsock, readfds);
       nfds = MAX(nfds, server.players[i].cntlsock);
@@ -982,7 +982,7 @@ END
 
 int recvplayerserver(int player) {
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   for (;;) {
@@ -1186,7 +1186,7 @@ TRY
   nplayers = 0;
 
   /* disconnect lagged players */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].cntlsock != -1) {
       if (server.ticks - server.players[i].lastupdate >= 9*TICKSPERSEC) {
         if (removeplayer(i)) LOGFAIL(errno)
@@ -1224,16 +1224,16 @@ TRY
     server.bases[i].counter += nplayers;
 
     if (server.bases[i].counter >= REPLENISHBASETICKS) {
-      if (++server.bases[i].armour > MAXBASEARMOUR) {
-        server.bases[i].armour = MAXBASEARMOUR;
+      if (++server.bases[i].armour > MAX_BASE_ARMOUR) {
+        server.bases[i].armour = MAX_BASE_ARMOUR;
       }
 
-      if (++server.bases[i].mines > MAXBASEMINES) {
-        server.bases[i].mines = MAXBASEMINES;
+      if (++server.bases[i].mines > MAX_BASE_MINES) {
+        server.bases[i].mines = MAX_BASE_MINES;
       }
 
-      if (++server.bases[i].shells > MAXBASESHELLS) {
-        server.bases[i].shells = MAXBASESHELLS;
+      if (++server.bases[i].shells > MAX_BASE_SHELLS) {
+        server.bases[i].shells = MAX_BASE_SHELLS;
       }
 
       sendsrreplenishbase(i);
@@ -1535,7 +1535,7 @@ TRY
   if (readbuf(&server.joiningplayer.sendbuf, NULL, server.joiningplayer.sendbuf.nbytes) == -1) LOGFAIL(errno)
 
   /* close player socks and clear buffers */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     server.players[i].used = 0;
     server.players[i].seq = 0;
 
@@ -1645,7 +1645,7 @@ TRY
 
       /* time to quit */
       if (FD_ISSET(server.mainpipe[0], &readfds)) {
-        for (i = 0; i < MAXPLAYERS; i++) {
+        for (i = 0; i < MAX_PLAYERS; i++) {
           if (server.players[i].cntlsock != -1) {
             if (removeplayer(i)) LOGFAIL(errno)
           }
@@ -1662,7 +1662,7 @@ TRY
         }
 
         /* read player socks */
-        for (i = 0; i < MAXPLAYERS; i++) {
+        for (i = 0; i < MAX_PLAYERS; i++) {
           if (server.players[i].cntlsock != -1) {
             if (FD_ISSET(server.players[i].cntlsock, &readfds)) {
               ssize_t r;
@@ -1742,7 +1742,7 @@ TRY
         }
 
         /* write player socks */
-        for (i = 0; i < MAXPLAYERS; i++) {
+        for (i = 0; i < MAX_PLAYERS; i++) {
           if (server.players[i].cntlsock != -1 && server.players[i].sendbuf.nbytes > 0) {
             if (sendbuf(&server.players[i].sendbuf, server.players[i].cntlsock) == -1) {
               if (errno != EPIPE) {  /* receving data code will disconnect player next time through the loop */
@@ -1986,7 +1986,7 @@ void droppills(int player, float x, float y, uint16_t pills) {
   float lx, hx, ly, hy;
   int minx, miny, maxx, maxy;
 
-  assert(player >= 0 && player < MAXPLAYERS);
+  assert(player >= 0 && player < MAX_PLAYERS);
 
   if (x < 0.0) {
     x = 0.0;
@@ -2062,7 +2062,7 @@ int recvclsendmesg(int player) {
   char *text;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   /* check for whole struct */
@@ -2101,7 +2101,7 @@ int recvcldropboat(int player) {
   struct CLDropBoat *cldropboat;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   /* receive message */
@@ -2109,7 +2109,7 @@ TRY
 
   cldropboat = (struct CLDropBoat *)server.players[player].recvbuf.ptr;
 
-  if (ispointinrect(kSeaRect, makepoint(cldropboat->x, cldropboat->y))) {
+  if (GSPointInRect(kSeaRect, GSMakePoint(cldropboat->x, cldropboat->y))) {
     if (server.terrain[cldropboat->y][cldropboat->x] == kRiverTerrain) {
       server.terrain[cldropboat->y][cldropboat->x] = kBoatTerrain;
       sendsrdropboat(cldropboat->x, cldropboat->y);
@@ -2130,7 +2130,7 @@ int recvcldroppills(int player) {
   float x, y;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLDropPills)) FAIL(EAGAIN)
@@ -2165,14 +2165,14 @@ int recvcldropmine(int player) {
   struct CLDropMine *cldropmine;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLDropMine)) FAIL(EAGAIN)
 
   cldropmine = (struct CLDropMine *)server.players[player].recvbuf.ptr;
 
-  if (ispointinrect(kSeaRect, makepoint(cldropmine->x, cldropmine->y))) {
+  if (GSPointInRect(kSeaRect, GSMakePoint(cldropmine->x, cldropmine->y))) {
     switch (server.terrain[cldropmine->y][cldropmine->x]) {
     case kSwampTerrain0:
     case kSwampTerrain1:
@@ -2237,7 +2237,7 @@ int recvcltouch(int player) {
   struct CLTouch *cltouch;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLTouch)) FAIL(EAGAIN)
@@ -2273,7 +2273,7 @@ int recvclgrabtile(int player) {
   int pill, base;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLGrabTile)) FAIL(EAGAIN)
@@ -2291,9 +2291,9 @@ TRY
   if ((base = findbase(clgrabtile->x, clgrabtile->y)) != -1) {
     if (server.bases[base].owner == NEUTRAL) {
       server.bases[base].owner = player;
-      server.bases[base].armour = MAXBASEARMOUR;
-      server.bases[base].shells = MAXBASESHELLS;
-      server.bases[base].mines = MAXBASEMINES;
+      server.bases[base].armour = MAX_BASE_ARMOUR;
+      server.bases[base].shells = MAX_BASE_SHELLS;
+      server.bases[base].mines = MAX_BASE_MINES;
       sendsrcapturebase(base);
     }
     else if (
@@ -2348,7 +2348,7 @@ int recvclgrabtrees(int player) {
   struct CLGrabTrees *clgrabtrees;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLGrabTrees)) FAIL(EAGAIN)
@@ -2394,7 +2394,7 @@ int recvclbuildroad(int player) {
   struct CLBuildRoad *clbuildroad;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildRoad)) FAIL(EAGAIN)
@@ -2454,7 +2454,7 @@ int recvclbuildwall(int player) {
   struct CLBuildWall *clbuildwall;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildWall)) FAIL(EAGAIN)
@@ -2518,7 +2518,7 @@ int recvclbuildboat(int player) {
   struct CLBuildBoat *clbuildboat;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildBoat)) FAIL(EAGAIN)
@@ -2559,7 +2559,7 @@ int recvclbuildpill(player) {
   struct CLBuildPill *clbuildpill;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildPill)) FAIL(EAGAIN)
@@ -2590,9 +2590,9 @@ TRY
       server.pills[clbuildpill->pill].owner = player;
       server.pills[clbuildpill->pill].armour = clbuildpill->trees*4;
 
-      if (server.pills[clbuildpill->pill].armour > MAXPILLARMOUR) {
-        clbuildpill->trees = (server.pills[clbuildpill->pill].armour - MAXPILLARMOUR)/4;
-        server.pills[clbuildpill->pill].armour = MAXPILLARMOUR;
+      if (server.pills[clbuildpill->pill].armour > MAX_PILL_ARMOUR) {
+        clbuildpill->trees = (server.pills[clbuildpill->pill].armour - MAX_PILL_ARMOUR)/4;
+        server.pills[clbuildpill->pill].armour = MAX_PILL_ARMOUR;
       }
       else {
         clbuildpill->trees = 0;
@@ -2635,7 +2635,7 @@ int recvclrepairpill(int player) {
   int pill;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLRepairPill)) FAIL(EAGAIN)
@@ -2663,9 +2663,9 @@ TRY
     case kDamagedWallTerrain3:
       server.pills[pill].armour += clrepairpill->trees*4;
 
-      if (server.pills[pill].armour > MAXPILLARMOUR) {
-        clrepairpill->trees = (server.pills[pill].armour - MAXPILLARMOUR)/4;
-        server.pills[pill].armour = MAXPILLARMOUR;
+      if (server.pills[pill].armour > MAX_PILL_ARMOUR) {
+        clrepairpill->trees = (server.pills[pill].armour - MAX_PILL_ARMOUR)/4;
+        server.pills[pill].armour = MAX_PILL_ARMOUR;
       }
       else {
         clrepairpill->trees = 0;
@@ -2707,7 +2707,7 @@ int recvclplacemine(int player) {
   struct CLPlaceMine *clplacemine;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLPlaceMine)) FAIL(EAGAIN)
@@ -2806,7 +2806,7 @@ int recvcldamage(int player) {
   int pill, base, i;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLDamage)) FAIL(EAGAIN)
@@ -3037,7 +3037,7 @@ int recvclsmallboom(int player) {
   struct CLSmallBoom *clsmallboom;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLSmallBoom)) FAIL(EAGAIN)
@@ -3057,7 +3057,7 @@ int recvclsuperboom(int player) {
   struct CLSuperBoom *clsuperboom;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLSuperBoom)) FAIL(EAGAIN)
@@ -3077,7 +3077,7 @@ int recvclrefuel(int player) {
   struct CLRefuel *clrefuel;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLRefuel)) FAIL(EAGAIN)
@@ -3102,13 +3102,13 @@ int recvclhittank(int player) {
   struct CLHitTank *clhittank;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLHitTank)) FAIL(EAGAIN)
   clhittank = (struct CLHitTank *)server.players[player].recvbuf.ptr;
 
-  if (clhittank->player < MAXPLAYERS) {
+  if (clhittank->player < MAX_PLAYERS) {
     sendsrhittank(clhittank->player, clhittank->dir);
   }
 
@@ -3124,7 +3124,7 @@ int recvclsetalliance(int player) {
   struct CLSetAlliance *clsettalliance;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLSetAlliance)) FAIL(EAGAIN)
@@ -3150,7 +3150,7 @@ int sendsrsendmesg(int player, int to, uint16_t mask, const char *text) {
   size_t len;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(text != NULL);
 
 TRY
@@ -3159,7 +3159,7 @@ TRY
   srsendmesg.to = to;
   len = strlen(text) + 1;
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].cntlsock != -1 && (mask & (1 << i))) {
       if (writebuf(&server.players[i].sendbuf, &srsendmesg, sizeof(srsendmesg)) == -1) LOGFAIL(errno)
       if (writebuf(&server.players[i].sendbuf, text, len) == -1) LOGFAIL(errno)
@@ -3176,7 +3176,7 @@ int sendsrdamage(int player, int x, int y) {
   struct SRDamage srdamage;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(x >= 0);
   assert(x < WIDTH);
   assert(y >= 0);
@@ -3282,7 +3282,7 @@ int sendsrplacemine(int player, int x, int y) {
   struct SRPlaceMine srplacemine;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(x >= 0);
   assert(x < WIDTH);
   assert(y >= 0);
@@ -3305,7 +3305,7 @@ int sendsrdropmine(int player, int x, int y) {
   struct SRDropMine srdropmine;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(x >= 0);
   assert(x < WIDTH);
   assert(y >= 0);
@@ -3348,7 +3348,7 @@ int sendsrplayerjoin(int player) {
   struct SRPlayerJoin srplayerjoin;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerjoin.type = SRPLAYERJOIN;
@@ -3369,7 +3369,7 @@ int sendsrplayerrejoin(int player) {
   struct SRPlayerRejoin srplayerrejoin;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerrejoin.type = SRPLAYERREJOIN;
@@ -3388,7 +3388,7 @@ int sendsrplayerexit(int player) {
   struct SRPlayerExit srplayerexit;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerexit.type = SRPLAYEREXIT;
@@ -3414,7 +3414,7 @@ int sendsrplayerdisc(int player) {
   struct SRPlayerDisc srplayerdisc;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerdisc.type = SRPLAYERDISC;
@@ -3431,7 +3431,7 @@ int sendsrplayerkick(int player) {
   struct SRPlayerKick srplayerkick;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerkick.type = SRPLAYERKICK;
@@ -3448,7 +3448,7 @@ int sendsrplayerban(int player) {
   struct SRPlayerBan srplayerban;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srplayerban.type = SRPLAYERBAN;
@@ -3614,7 +3614,7 @@ int sendsrrefuel(int player, int base, int armour, int shells, int mines) {
   struct SRRefuel srrefuel;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(server.players[player].cntlsock != -1);
   assert(base >= 0);
   assert(base < server.nbases);
@@ -3643,7 +3643,7 @@ int sendsrgrabboat(int player, int x, int y) {
   struct SRGrabBoat srgrabboat;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(x >= 0);
   assert(x < WIDTH);
   assert(y >= 0);
@@ -3666,7 +3666,7 @@ int sendsrmineack(int player, int success) {
   struct SRMineAck srmineack;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srmineack.type = SRMINEACK;
@@ -3683,7 +3683,7 @@ int sendsrbuilderack(int player, int mines, int trees, int pill) {
   struct SRBuilderAck srbuilderack;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(mines >= 0);
   assert(mines < 256);
   assert(trees >= 0);
@@ -3709,7 +3709,7 @@ int sendsrsmallboom(int player, int x, int y) {
   struct SRSmallBoom srsmallboom;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS || player == NEUTRAL);
+  assert(player < MAX_PLAYERS || player == NEUTRAL);
   assert(x >= 0);
   assert(x < 256);
   assert(y >= 0);
@@ -3732,7 +3732,7 @@ int sendsrsuperboom(int player, int x, int y) {
   struct SRSuperBoom srsuperboom;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
   assert(x >= 0);
   assert(x < 256);
   assert(y >= 0);
@@ -3755,7 +3755,7 @@ int sendsrhittank(int player, uint32_t dir) {
   struct SRHitTank srhittank;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srhittank.type = SRHITTANK;
@@ -3773,7 +3773,7 @@ int sendsrsetalliance(int player, uint16_t alliance) {
   struct SRSetAlliance srsetalliance;
 
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   srsetalliance.type = SRSETALLIANCE;
@@ -3821,7 +3821,7 @@ int sendtoall(const void *data, size_t nbytes) {
   assert(data != NULL);
 
 TRY
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].cntlsock != -1) {
       if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) LOGFAIL(errno)
 //      if (sendplayerbufserver(i)) LOGFAIL(errno)
@@ -3838,10 +3838,10 @@ int sendtoallex(const void *data, size_t nbytes, int player) {
 
   assert(data != NULL);
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (player != i && server.players[i].cntlsock != -1) {
       if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) LOGFAIL(errno)
 //      if (sendplayerbufserver(i)) LOGFAIL(errno)
@@ -3856,7 +3856,7 @@ END
 int sendtoone(const void *data, size_t nbytes, int player) {
   assert(data != NULL);
   assert(player >= 0);
-  assert(player < MAXPLAYERS);
+  assert(player < MAX_PLAYERS);
 
 TRY
   if (server.players[player].cntlsock != -1) {
@@ -4036,7 +4036,7 @@ END
 }
 
 int floodat(int x, int y) {
-  Pointi *flood = NULL;
+  GSPoint *flood = NULL;
 
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
@@ -4054,7 +4054,7 @@ TRY
   case kCraterTerrain:
     server.terrain[y][x] = kRiverTerrain;
     sendsrflood(x, y);
-    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if ((flood = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
     flood->x = x;
     flood->y = y;
     if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) LOGFAIL(errno)
@@ -4081,7 +4081,7 @@ END
 }
 
 int floodtest(int x, int y) {
-  Pointi *flood;
+  GSPoint *flood;
 
   flood = NULL;
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
@@ -4092,7 +4092,7 @@ TRY
   case kSeaTerrain:
   case kMinedSeaTerrain:
   case kBoatTerrain:
-    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if ((flood = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
     flood->x = x;
     flood->y = y;
     if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) LOGFAIL(errno)
@@ -4119,9 +4119,9 @@ END
 }
 
 static int explosionat(int player, int x, int y) {
-  Pointi *chain = NULL;
+  GSPoint *chain = NULL;
 
-  assert(((player >= 0 && player < MAXPLAYERS) || player == NEUTRAL) && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
+  assert(((player >= 0 && player < MAX_PLAYERS) || player == NEUTRAL) && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
 TRY
   switch (server.terrain[y][x]) {
@@ -4158,7 +4158,7 @@ TRY
     if (floodtest(x - 1, y)) LOGFAIL(errno)
     if (floodtest(x + 1, y)) LOGFAIL(errno)
     if (floodtest(x, y + 1)) LOGFAIL(errno)
-    if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if ((chain = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
     chain->x = x;
     chain->y = y;
     if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
@@ -4190,9 +4190,9 @@ END
 }
 
 static int superboomat(int player, int x, int y) {
-  Pointi *chain = NULL;
+  GSPoint *chain = NULL;
 
-  assert(player >= 0 && player < MAXPLAYERS && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
+  assert(player >= 0 && player < MAX_PLAYERS && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
 TRY
   /* turn terrain to crater */
@@ -4220,19 +4220,19 @@ TRY
   if (floodtest(x + 1, y + 2)) LOGFAIL(errno)
 
   /* begin chain explosions */
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if ((chain = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
   chain->x = x;
   chain->y = y;
   if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if ((chain = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
   chain->x = x + 1;
   chain->y = y;
   if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if ((chain = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
   chain->x = x;
   chain->y = y + 1;
   if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if ((chain = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
   chain->x = x + 1;
   chain->y = y + 1;
   if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
@@ -4261,7 +4261,7 @@ int chain() {
 
 TRY
   for (node = nextlist(server.chains + server.ticks%(CHAINTICKS + 1)); node != NULL; node = nextlist(node)) {
-    Pointi *chain;
+    GSPoint *chain;
 
     chain = ptrlist(node);
     if (chainat(chain->x, chain->y - 1)) LOGFAIL(errno)
@@ -4282,7 +4282,7 @@ int flood() {
 
 TRY
   for (node = nextlist(server.floods + server.ticks%(FLOODTICKS + 1)); node != NULL; node = nextlist(node)) {
-    Pointi *flood;
+    GSPoint *flood;
 
     flood = ptrlist(node);
     if (floodat(flood->x, flood->y - 1)) LOGFAIL(errno)
@@ -4412,7 +4412,7 @@ int getserverudpport() {
 int nplayers() {
   int i, nplayers;
 
-  for (i = 0, nplayers = 0; i < MAXPLAYERS; i++) {
+  for (i = 0, nplayers = 0; i < MAX_PLAYERS; i++) {
     if (server.players[i].cntlsock != -1) {
       nplayers++;
     }

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include "bmap.h"
+#include "images.h"
 
 
 @class GSXBoloMapView, GSTileRect;

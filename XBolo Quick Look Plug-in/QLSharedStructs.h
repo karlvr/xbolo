@@ -15,8 +15,8 @@
 #define MAPFILEIDENT        ("BMAPBOLO")
 #define MAPFILEIDENTLEN     (8)
 #define CURRENTMAPVERSION   (1)
-#define MAXPILLS            (16)
-#define MAXBASES            (16)
+#define MAX_PILLS            (16)
+#define MAX_BASES            (16)
 #define MAXSTARTS           (16)
 
 /* terrain types */

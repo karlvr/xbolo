@@ -47,16 +47,16 @@ struct Client {
   char pass[MAXPASS];
 
   int npills;
-  struct Pill pills[MAXPILLS];
+  struct Pill pills[MAX_PILLS];
 
   int nbases;
-  struct Base bases[MAXBASES];
+  struct Base bases[MAX_BASES];
 
   int nstarts;
   struct Start starts[MAX_STARTS];
 
-  int terrain[WIDTH][WIDTH];
-  int seentiles[WIDTH][WIDTH];
+  GSTile terrain[WIDTH][WIDTH];
+  GSTile seentiles[WIDTH][WIDTH];
   int images[WIDTH][WIDTH];
   int fog[WIDTH][WIDTH];
 
@@ -80,7 +80,7 @@ struct Client {
     /* builder */
     int builderstatus;
     Vec2f builder;
-    Pointi buildertarget;
+    GSPoint buildertarget;
     int builderwait;
 
     /* other */
@@ -88,7 +88,7 @@ struct Client {
     int32_t inputflags;
     struct ListNode shells;
     struct ListNode explosions;
-  } players[MAXPLAYERS];
+  } players[MAX_PLAYERS];
 
   /* player id */
   int player;
@@ -124,7 +124,7 @@ struct Client {
   /* builder */
 //  int nextbuildertask;
   int nextbuildercommand;
-  Pointi nextbuildertarget;
+  GSPoint nextbuildertarget;
   int buildertask;
   int buildermines;
   int buildertrees;
@@ -309,7 +309,7 @@ struct CLUpdate {
   /* header */
   struct {
     uint8_t player;
-    int32_t seq[MAXPLAYERS];
+    int32_t seq[MAX_PLAYERS];
     uint8_t tankstatus;
     uint32_t tankx;
     uint32_t tanky;
@@ -352,7 +352,7 @@ int unlockclient();
 int keyevent(int mask, int set);
 
 /* builder commands */
-void buildercommand(int type, Pointi p);
+void buildercommand(int type, GSPoint p);
 
 /* alliance requests */
 int requestalliance(uint16_t withplayers);

@@ -12,7 +12,7 @@
 
 #include <assert.h>
 
-int mapimage(int tiles[][256], int x, int y) {
+GSTile mapImage(GSTile tiles[][256], int x, int y) {
   assert(x >= 0 && x < 256 && y >= 0 && y < 256);
 
 	switch (tiles[y][x]) {

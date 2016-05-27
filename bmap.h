@@ -10,36 +10,37 @@
 #ifndef __BMAP__
 #define __BMAP__
 
-#include "rect.h"
-#include "bolo.h"
-
 #include <stdint.h>
 
-struct BOLO_Preamble {
-  uint8_t ident[8];  /* "XBOLOGAM" */
-  uint8_t version;   /* currently 0 */
-  uint8_t player;    /* your player id */
-  uint8_t hiddenmines;
-  uint8_t pause;
-  uint8_t gametype;
 
-  union {
-    struct {
-      uint8_t type;
-      uint8_t basecontrol;
-    } domination;
-  } __attribute__((__packed__)) game;
+#define CURRENT_MAP_VERSION (1)
 
-  struct {
-    uint8_t used;
-    uint8_t connected;
-    uint32_t seq;
-    uint8_t name[MAXNAME];
-    uint8_t host[MAXHOST];
-    uint16_t alliance;
-  } __attribute__((__packed__)) players[MAXPLAYERS];
-  uint32_t maplen;   /* the map length */
-} __attribute__((__packed__));
+#define MAX_PLAYERS         (16)
+#define MAX_PILLS           (16)
+#define MAX_BASES           (16)
+#define MAX_STARTS          (16)
+
+#define MAX_PILL_ARMOUR     (15)
+#define MAX_PILL_SPEED      (50)
+
+#define MAX_BASE_ARMOUR     (90)
+#define MAX_BASE_SHELLS     (90)
+#define MAX_BASE_MINES      (90)
+
+#define MINE_BORDER_WIDTH   (10)
+
+#define X_MIN_MINE          (10)
+#define Y_MIN_MINE          (10)
+#define X_MAX_MINE          (245)
+#define Y_MAX_MINE          (245)
+
+#define MAP_FILE_IDENT      ("BMAPBOLO")
+#define MAP_FILE_IDENT_LEN  (8)
+
+#define WIDTH               (256)
+#define FWIDTH              (256.0)
+
+#define NEUTRAL             (0xff)
 
 struct BMAP_Preamble {
   uint8_t ident[8];  /* "BMAPBOLO" */
@@ -83,11 +84,30 @@ struct BMAP_Run {
 /*	uint8_t data[0xFF];*/  /* actual length of data is always much less than 0xFF */
 } __attribute__((__packed__));
 
-extern const Recti kWorldRect;
-extern const Recti kSeaRect;
+#include "rect.h"
+#include "tiles.h"
+#include "tiles.h"
 
-int readrun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, int terrain[][WIDTH]);
-int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]);
+extern const GSRect kWorldRect;
+extern const GSRect kSeaRect;
+
+GSTile defaultTile(int x, int y);
+
+int readRun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, GSTile terrain[][WIDTH]);
+int writeRun(struct BMAP_Run run, const void *buf, GSTile terrain[][WIDTH]);
+
+// load/save map
+int loadMap(const void *buf, size_t nbytes, struct BMAP_Preamble *preamble,
+            struct BMAP_PillInfo pills[], struct BMAP_BaseInfo bases[],
+            struct BMAP_StartInfo starts[], GSTile tiles[][WIDTH]);
+
+ssize_t saveMap(void **data, struct BMAP_Preamble *preamble,
+                struct BMAP_PillInfo pills[], struct BMAP_BaseInfo bases[],
+                struct BMAP_StartInfo starts[], GSTile tiles[][WIDTH]);
+
+GSTile appropriateTileForPill(GSTile tile);
+GSTile appropriateTileForBase(GSTile tile);
+GSTile appropriateTileForStart(GSTile tile);
 
 /* returns the default terrain type for x, y */
 int defaultterrain(int x, int y);

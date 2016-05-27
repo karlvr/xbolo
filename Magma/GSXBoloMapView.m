@@ -11,6 +11,7 @@
 #import "GSToolsController.h"
 #import "GSPaletteController.h"
 #import "GSTileRect.h"
+#include "vector.h"
 
 
 static NSImage *sprites = nil;
@@ -72,7 +73,7 @@ static NSMutableArray *boloMapViews = nil;
   return self;
 }
 
-- (void)release {
+- (oneway void)release {
   if ([self retainCount] == 2) {
     [boloMapViews removeObject:self];
   }

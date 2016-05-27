@@ -45,9 +45,9 @@ TRY
 
   if (preamble->version != CURRENT_MAP_VERSION) LOGFAIL(EINCMPAT)
 
-  if (preamble->npills > MAXPILLS) LOGFAIL(ECORFILE)
+  if (preamble->npills > MAX_PILLS) LOGFAIL(ECORFILE)
 
-  if (preamble->nbases > MAXBASES) LOGFAIL(ECORFILE)
+  if (preamble->nbases > MAX_BASES) LOGFAIL(ECORFILE)
 
   if (preamble->nstarts > MAX_STARTS) LOGFAIL(ECORFILE)
 
@@ -127,7 +127,7 @@ TRY
     }
 
     if (offset + run.datalen > runDataLen) LOGFAIL(ECORFILE)
-    if (writerun(run, runData + offset + sizeof(struct BMAP_Run), server.terrain) == -1) LOGFAIL(errno)
+    if (writeRun(run, runData + offset + sizeof(struct BMAP_Run), server.terrain) == -1) LOGFAIL(errno)
     offset += run.datalen;
   }
 
@@ -328,7 +328,7 @@ TRY
     int r;
 
     run = runData + offset;
-    if ((r = readrun(&y, &x, run, run + 1, server.terrain)) == -1) LOGFAIL(errno)
+    if ((r = readRun(&y, &x, run, run + 1, server.terrain)) == -1) LOGFAIL(errno)
     if (r == 1) break;
     offset += run->datalen;
   }
@@ -362,7 +362,7 @@ TRY
     struct BMAP_Run run;
     char buf[256];
     
-    if ((r = readrun(&y, &x, &run, buf, server.terrain)) == -1) LOGFAIL(errno)
+    if ((r = readRun(&y, &x, &run, buf, server.terrain)) == -1) LOGFAIL(errno)
     len += run.datalen;
     /* if this is the last run */
     if (r == 1) SUCCESS

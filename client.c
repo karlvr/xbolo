@@ -47,7 +47,7 @@ static struct {
   pthread_mutex_t mutex;
 } iclient;
 
-static Pointi target;
+static GSPoint target;
 int buildertask;
 int collisionowner;
 
@@ -123,21 +123,21 @@ static float buildertargetspeed(int x, int y);
 
 /* visibility routines */
 
-static int decreasevis(Recti r);
-static int increasevis(Recti r);
+static int decreasevis(GSRect r);
+static int increasevis(GSRect r);
 
 /* refreshes a changed square */
 static int refresh(int x, int y);
 
 /* terrain physics */
-static int enter(Pointi new, Pointi old);
+static int enter(GSPoint new, GSPoint old);
 
 /* starts the player */
 static int spawn();
 
 /* game logic routines */
 static int tankmovelogic(int player);
-static int tanklocallogic(Pointi old);
+static int tanklocallogic(GSPoint old);
 static int builderlogic(int player);
 static int pilllogic(Vec2f old);
 static int shelllogic(int player);
@@ -152,12 +152,12 @@ static int w2t(float f);
 static float rounddir(float dir);
 
 /*  */
-static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(Pointi square));
-static int tankcollision(Pointi square);
-static int buildercollision(Pointi square);
+static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(GSPoint square));
+static int tankcollision(GSPoint square);
+static int buildercollision(GSPoint square);
 
 /* kill builder routines */
-static int killsquarebuilder(Pointi p);
+static int killsquarebuilder(GSPoint p);
 static int killpointbuilder(Vec2f p);
 static int killbuilder();
 
@@ -181,9 +181,9 @@ static int shellcollisiontest(struct Shell *shell, int player);
 static int tanktest(int x, int y);
 static int tankonaboattest(int x, int y);
 static int testalliance(int p1, int p2);
-static int circlesquare(Vec2f point, float radius, Pointi square);
+static int circlesquare(Vec2f point, float radius, GSPoint square);
 
-static int getbuildertaskforcommand(int command, Pointi at);
+static int getbuildertaskforcommand(int command, GSPoint at);
 
 /* client pthread routines */
 static void *clientmainthread(void *);
@@ -245,7 +245,7 @@ TRY
   client.builderpill = NOPILL;
 
   /* initialize the players */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     client.players[i].used = 0;
     client.players[i].connected = 0;
 
@@ -264,7 +264,7 @@ TRY
     client.players[i].kickspeed = 0.0;
     client.players[i].builderstatus = kBuilderReady;
     client.players[i].builder = make2f(0.0, 0.0);
-    client.players[i].buildertarget = makepoint(0, 0);
+    client.players[i].buildertarget = GSMakePoint(0, 0);
     client.players[i].builderwait = 0;
     client.players[i].alliance = 0;
     client.players[i].inputflags = 0;
@@ -391,7 +391,7 @@ TRY
   if (closesock(&client.dgramsock)) LOGFAIL(errno)
   clearlist(&client.changedtiles, free);
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     client.players[i].builderstatus = kBuilderReady;
   }
 
@@ -436,7 +436,7 @@ TRY
 
   /* update status of lagged players */
   if (client.setplayerstatus) {
-    for (i = 0; i < MAXPLAYERS; i++) {
+    for (i = 0; i < MAX_PLAYERS; i++) {
       if (client.players[client.player].seq - client.players[i].lastupdate == 3*TICKSPERSEC) {
         client.setplayerstatus(i);
       }
@@ -447,26 +447,26 @@ TRY
   }
 
   /* move tanks */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected && client.players[i].seq != 0) {
-      Pointi old, new;
+      GSPoint old, new;
 
-      old = makepoint(client.players[i].tank.x, client.players[i].tank.y);
+      old = GSMakePoint(client.players[i].tank.x, client.players[i].tank.y);
       if (tankmovelogic(i)) LOGFAIL(errno)
-      new = makepoint(client.players[i].tank.x, client.players[i].tank.y);
+      new = GSMakePoint(client.players[i].tank.x, client.players[i].tank.y);
 
-      if (!isequalpoint(new, old) && testalliance(client.player, i)) {
-        if (increasevis(makerect(new.x - 14, new.y - 14, 29, 29))) LOGFAIL(errno)
-        if (decreasevis(makerect(old.x - 14, old.y - 14, 29, 29))) LOGFAIL(errno)
+      if (!GSEqualPoints(new, old) && testalliance(client.player, i)) {
+        if (increasevis(GSMakeRect(new.x - 14, new.y - 14, 29, 29))) LOGFAIL(errno)
+        if (decreasevis(GSMakeRect(old.x - 14, old.y - 14, 29, 29))) LOGFAIL(errno)
       }
     }
   }
 
   /* local tank logic */
-  if (tanklocallogic(makepoint(old.x, old.y))) LOGFAIL(errno)
+  if (tanklocallogic(GSMakePoint(old.x, old.y))) LOGFAIL(errno)
 
   /* builder logic */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (builderlogic(i)) LOGFAIL(errno)
   }
 
@@ -474,12 +474,12 @@ TRY
   if (pilllogic(old)) LOGFAIL(errno)
 
   /* perform shell logic */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (shelllogic(i)) LOGFAIL(errno)
   }
 
   /* perform explosion logic */
-  for (i = -1; i < MAXPLAYERS; i++) {
+  for (i = -1; i < MAX_PLAYERS; i++) {
     if (explosionlogic(i)) LOGFAIL(errno)
   }
 
@@ -724,7 +724,7 @@ TRY
   }
 
   /* initialize the players */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     client.players[i].used = bolopreamble.players[i].used;
     client.players[i].connected = bolopreamble.players[i].connected;
     client.players[i].seq = ntohl(bolopreamble.players[i].seq);
@@ -745,8 +745,8 @@ TRY
   if (readbuf(&client.recvbuf, NULL, bolopreamble.maplen) == -1) LOGFAIL(errno)
 
   spawn();
-  if (increasevis(makerect(((int)client.players[bolopreamble.player].tank.x) - 14, ((int)client.players[bolopreamble.player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
-//  if (increasevis(makerect(0, 0, WIDTH, WIDTH)) == -1) LOGFAIL(errno) /* for cheaters */
+  if (increasevis(GSMakeRect(((int)client.players[bolopreamble.player].tank.x) - 14, ((int)client.players[bolopreamble.player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+//  if (increasevis(GSMakeRect(0, 0, WIDTH, WIDTH)) == -1) LOGFAIL(errno) /* for cheaters */
 
   if (unlockclient()) LOGFAIL(errno)
   gotlock = 0;
@@ -1284,7 +1284,7 @@ int dgramclient() {
   ssize_t r;
   int i;
   int oldseq;
-  Pointi oldsqr, newsqr;
+  GSPoint oldsqr, newsqr;
 
 TRY
   for (;;) {
@@ -1303,14 +1303,14 @@ TRY
     if (  /* sanity check psize */
       r < sizeof(clupdate.hdr) ||
       r != sizeof(clupdate.hdr) + clupdate.hdr.nshells*sizeof(struct CLUpdateShell) + clupdate.hdr.nexplosions*sizeof(struct CLUpdateExplosion) ||
-      clupdate.hdr.player >= MAXPLAYERS ||
+      clupdate.hdr.player >= MAX_PLAYERS ||
       clupdate.hdr.player == client.player
     ) {
       continue;
     }
 
     /* network to host byte order */
-    for (i = 0; i < MAXPLAYERS; i++) {
+    for (i = 0; i < MAX_PLAYERS; i++) {
       clupdate.hdr.seq[i] = ntohl(clupdate.hdr.seq[i]);
     }
 
@@ -1342,7 +1342,7 @@ TRY
         }
 
         oldseq = client.players[clupdate.hdr.player].seq;
-        oldsqr = makepoint(client.players[clupdate.hdr.player].tank.x, client.players[clupdate.hdr.player].tank.y);
+        oldsqr = GSMakePoint(client.players[clupdate.hdr.player].tank.x, client.players[clupdate.hdr.player].tank.y);
 
         client.players[clupdate.hdr.player].lastupdate = client.players[client.player].seq;
         client.players[clupdate.hdr.player].seq = clupdate.hdr.seq[clupdate.hdr.player];
@@ -1453,13 +1453,13 @@ TRY
           }
         }
 
-        newsqr = makepoint(client.players[clupdate.hdr.player].tank.x, client.players[clupdate.hdr.player].tank.y);
+        newsqr = GSMakePoint(client.players[clupdate.hdr.player].tank.x, client.players[clupdate.hdr.player].tank.y);
 
-        if (!isequalpoint(newsqr, oldsqr) && testalliance(client.player, clupdate.hdr.player)) {
-          if (increasevis(makerect(newsqr.x - 14, newsqr.y - 14, 29, 29))) LOGFAIL(errno)
+        if (!GSEqualPoints(newsqr, oldsqr) && testalliance(client.player, clupdate.hdr.player)) {
+          if (increasevis(GSMakeRect(newsqr.x - 14, newsqr.y - 14, 29, 29))) LOGFAIL(errno)
 
           if (oldseq != 0) {
-            if (decreasevis(makerect(oldsqr.x - 14, oldsqr.y - 14, 29, 29))) LOGFAIL(errno)
+            if (decreasevis(GSMakeRect(oldsqr.x - 14, oldsqr.y - 14, 29, 29))) LOGFAIL(errno)
           }
         }
       }
@@ -1546,7 +1546,7 @@ TRY
       if (client.pills[pill].armour == 0) {
         if (testalliance(client.pills[pill].owner, client.player)) {
           if (refresh(srdamage->x, srdamage->y)) LOGFAIL(errno)
-          if (decreasevis(makerect(client.pills[pill].x - 7, client.pills[pill].y - 7, 15, 15))) LOGFAIL(errno)
+          if (decreasevis(GSMakeRect(client.pills[pill].x - 7, client.pills[pill].y - 7, 15, 15))) LOGFAIL(errno)
         }
 
         if (client.setpillstatus) {
@@ -1612,7 +1612,7 @@ TRY
     explosion->point.y = srdamage->y + 0.5;
     explosion->counter = 0;
     addlist(&client.explosions, explosion);
-    if (killsquarebuilder(makepoint(srdamage->x, srdamage->y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srdamage->x, srdamage->y))) LOGFAIL(errno)
   }
 
   /* refresh seen tiles */
@@ -2010,7 +2010,7 @@ TRY
     for (i = 0; i < client.npills; i++) {
       if (testalliance(client.player, client.pills[i].owner)) {
         if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
-          if (increasevis(makerect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
+          if (increasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
         }
 
         if (client.setpillstatus) {
@@ -2058,7 +2058,7 @@ TRY
   }
 
   if (client.players[srplayerexit->player].seq != 0 && testalliance(client.player, srplayerexit->player)) {
-    if (decreasevis(makerect(((int)client.players[srplayerexit->player].tank.x) - 14, ((int)client.players[srplayerexit->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+    if (decreasevis(GSMakeRect(((int)client.players[srplayerexit->player].tank.x) - 14, ((int)client.players[srplayerexit->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
   }
 
   client.players[srplayerexit->player].connected = 0;
@@ -2095,7 +2095,7 @@ TRY
   }
 
   if (srplayerdisc->player != client.player && client.players[srplayerdisc->player].seq != 0 && testalliance(client.player, srplayerdisc->player)) {
-    if (decreasevis(makerect(((int)client.players[srplayerdisc->player].tank.x) - 14, ((int)client.players[srplayerdisc->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+    if (decreasevis(GSMakeRect(((int)client.players[srplayerdisc->player].tank.x) - 14, ((int)client.players[srplayerdisc->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
   }
 
   client.players[srplayerdisc->player].connected = 0;
@@ -2132,7 +2132,7 @@ TRY
   }
 
   if (srplayerkick->player != client.player && client.players[srplayerkick->player].seq != 0 && testalliance(client.player, srplayerkick->player)) {
-    if (decreasevis(makerect(((int)client.players[srplayerkick->player].tank.x) - 14, ((int)client.players[srplayerkick->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+    if (decreasevis(GSMakeRect(((int)client.players[srplayerkick->player].tank.x) - 14, ((int)client.players[srplayerkick->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
   }
 
   client.players[srplayerkick->player].connected = 0;
@@ -2169,7 +2169,7 @@ TRY
   }
 
   if (srplayerban->player != client.player && client.players[srplayerban->player].seq != 0 && testalliance(client.player, srplayerban->player)) {
-    if (decreasevis(makerect(((int)client.players[srplayerban->player].tank.x) - 14, ((int)client.players[srplayerban->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+    if (decreasevis(GSMakeRect(((int)client.players[srplayerban->player].tank.x) - 14, ((int)client.players[srplayerban->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
   }
 
   client.players[srplayerban->player].connected = 0;
@@ -2202,7 +2202,7 @@ TRY
     testalliance(client.pills[srrepairpill->pill].owner, client.player) &&
     client.pills[srrepairpill->pill].armour == 0 && srrepairpill->armour != 0 && srrepairpill->armour != ONBOARD
   ) {
-    if (increasevis(makerect(client.pills[srrepairpill->pill].x - 7, client.pills[srrepairpill->pill].y - 7, 15, 15))) LOGFAIL(errno)
+    if (increasevis(GSMakeRect(client.pills[srrepairpill->pill].x - 7, client.pills[srrepairpill->pill].y - 7, 15, 15))) LOGFAIL(errno)
   }
 
   client.pills[srrepairpill->pill].armour = srrepairpill->armour;
@@ -2380,7 +2380,7 @@ TRY
 
   /* fog of war */
   if (testalliance(client.pills[srbuildpill->pill].owner, client.player) && srbuildpill->armour != 0 && srbuildpill->armour != ONBOARD) {
-    if (increasevis(makerect(client.pills[srbuildpill->pill].x - 7, client.pills[srbuildpill->pill].y - 7, 15, 15))) LOGFAIL(errno)
+    if (increasevis(GSMakeRect(client.pills[srbuildpill->pill].x - 7, client.pills[srbuildpill->pill].y - 7, 15, 15))) LOGFAIL(errno)
   }
 
   /* update and status */
@@ -2429,16 +2429,16 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRReplenishBase)) FAIL(EAGAIN)
   srreplenishbase = (struct SRReplenishBase *)client.recvbuf.ptr;
 
-  if (++client.bases[srreplenishbase->base].armour > MAXBASEARMOUR) {
-    client.bases[srreplenishbase->base].armour = MAXBASEARMOUR;
+  if (++client.bases[srreplenishbase->base].armour > MAX_BASE_ARMOUR) {
+    client.bases[srreplenishbase->base].armour = MAX_BASE_ARMOUR;
   }
 
-  if (++client.bases[srreplenishbase->base].shells > MAXBASESHELLS) {
-    client.bases[srreplenishbase->base].shells = MAXBASESHELLS;
+  if (++client.bases[srreplenishbase->base].shells > MAX_BASE_SHELLS) {
+    client.bases[srreplenishbase->base].shells = MAX_BASE_SHELLS;
   }
 
-  if (++client.bases[srreplenishbase->base].mines > MAXBASEMINES) {
-    client.bases[srreplenishbase->base].mines = MAXBASEMINES;
+  if (++client.bases[srreplenishbase->base].mines > MAX_BASE_MINES) {
+    client.bases[srreplenishbase->base].mines = MAX_BASE_MINES;
   }
 
   if (client.setbasestatus) {
@@ -2468,9 +2468,9 @@ TRY
       text = NULL;
     }
 
-    client.bases[srcapturebase->base].shells = MAXBASESHELLS;
-    client.bases[srcapturebase->base].armour = MAXBASEARMOUR;
-    client.bases[srcapturebase->base].mines = MAXBASEMINES;
+    client.bases[srcapturebase->base].shells = MAX_BASE_SHELLS;
+    client.bases[srcapturebase->base].armour = MAX_BASE_ARMOUR;
+    client.bases[srcapturebase->base].mines = MAX_BASE_MINES;
   }
   else {
     if (client.printmessage) {
@@ -2654,7 +2654,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(srsmallboom->x, srsmallboom->y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srsmallboom->x, srsmallboom->y))) LOGFAIL(errno)
   }
 
   /* check for damage to tank */
@@ -2741,7 +2741,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(srsuperboom->x, srsuperboom->y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srsuperboom->x, srsuperboom->y))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = srsuperboom->x + 1.5;
@@ -2749,7 +2749,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(srsuperboom->x + 1, srsuperboom->y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srsuperboom->x + 1, srsuperboom->y))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = srsuperboom->x + 0.5;
@@ -2757,7 +2757,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(srsuperboom->x, srsuperboom->y + 1))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srsuperboom->x, srsuperboom->y + 1))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = srsuperboom->x + 1.5;
@@ -2765,7 +2765,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(srsuperboom->x + 1, srsuperboom->y + 1))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(srsuperboom->x + 1, srsuperboom->y + 1))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     point.x = srsuperboom->x + 0.25;
@@ -2951,7 +2951,7 @@ TRY
 
             /* fog of war */
             if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
-              if (increasevis(makerect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
+              if (increasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
             if (client.setpillstatus) {
@@ -2960,7 +2960,7 @@ TRY
           }
         }
 
-        if (increasevis(makerect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (increasevis(GSMakeRect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
       }
       /* their alliance bit is unset */
       else {
@@ -2990,7 +2990,7 @@ TRY
             /* fog of war */
             if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
               if (refresh(client.pills[i].x, client.pills[i].y)) LOGFAIL(errno)
-              if (decreasevis(makerect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
+              if (decreasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
             if (client.setpillstatus) {
@@ -2999,7 +2999,7 @@ TRY
           }
         }
 
-        if (decreasevis(makerect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (decreasevis(GSMakeRect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
 
         if (leavealliance(1 << srsetalliance->player)) LOGFAIL(errno)
       }
@@ -3518,7 +3518,7 @@ TRY
 
   clupdate.hdr.player = client.player;
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     clupdate.hdr.seq[i] = htonl(client.players[i].seq);
   }
 
@@ -3847,20 +3847,20 @@ float buildertargetspeed(int x, int y) {
   }
 }
 
-int decreasevis(Recti r) {
+int decreasevis(GSRect r) {
   int x, y;
 
   assert(r.size.width > 0 && r.size.height > 0);
 
 TRY
-  r = intersectionrect(makerect(0, 0, WIDTH, WIDTH), r);
+  r = GSIntersectionRect(GSMakeRect(0, 0, WIDTH, WIDTH), r);
 
-  for (y = minyrect(r); y <= maxyrect(r); y++) {
-    for (x = minxrect(r); x <= maxxrect(r); x++) {
+  for (y = GSMinY(r); y <= GSMaxY(r); y++) {
+    for (x = GSMinX(r); x <= GSMaxX(r); x++) {
       if (--client.fog[y][x] == 0) {
-        Pointi *p;
+        GSPoint *p;
 
-        if ((p = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+        if ((p = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
         p->x = x;
         p->y = y;
         if (addlist(&client.changedtiles, p) == -1) LOGFAIL(errno)
@@ -3873,41 +3873,41 @@ ERRHANDLER(0, -1)
 END
 }
 
-int increasevis(Recti r) {
+int increasevis(GSRect r) {
   int x, y;
 
   assert(r.size.width > 0 && r.size.height > 0);
 
 TRY
-  r = intersectionrect(makerect(0, 0, WIDTH, WIDTH), r);
+  r = GSIntersectionRect(GSMakeRect(0, 0, WIDTH, WIDTH), r);
 
-  for (y = minyrect(r); y <= maxyrect(r); y++) {
-    for (x = minxrect(r); x <= maxxrect(r); x++) {
+  for (y = GSMinY(r); y <= GSMaxY(r); y++) {
+    for (x = GSMinX(r); x <= GSMaxX(r); x++) {
       client.fog[y][x]++;
     }
   }
 
-  r = insetrect(r, -1, -1);
-  r = intersectionrect(makerect(0, 0, WIDTH, WIDTH), r);
+  r = GSInsetRect(r, -1, -1);
+  r = GSIntersectionRect(GSMakeRect(0, 0, WIDTH, WIDTH), r);
 
-  for (y = minyrect(r); y <= maxyrect(r); y++) {
-    for (x = minxrect(r); x <= maxxrect(r); x++) {
+  for (y = GSMinY(r); y <= GSMaxY(r); y++) {
+    for (x = GSMinX(r); x <= GSMaxX(r); x++) {
       if (client.fog[y][x] <= 1) {
         client.seentiles[y][x] = fogtilefor(x, y, client.seentiles[y][x]);
       }
     }
   }
 
-  for (y = minyrect(r); y <= maxyrect(r); y++) {
-    for (x = minxrect(r); x <= maxxrect(r); x++) {
-      Pointi *p;
+  for (y = GSMinY(r); y <= GSMaxY(r); y++) {
+    for (x = GSMinX(r); x <= GSMaxX(r); x++) {
+      GSPoint *p;
       int image;
 
-      image = mapimage(client.seentiles, x, y);
+      image = mapImage(client.seentiles, x, y);
 
       if (image != client.images[y][x] || client.fog[y][x] == 1) {
         client.images[y][x] = image;
-        if ((p = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+        if ((p = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
         p->x = x;
         p->y = y;
         if (addlist(&client.changedtiles, p) == -1) LOGFAIL(errno)
@@ -4223,9 +4223,9 @@ ERRHANDLER(0, -1)
 END
 }
 
-int tanklocallogic(Pointi old) {
+int tanklocallogic(GSPoint old) {
   int pill, base, i, j, x, y;
-  Pointi new;
+  GSPoint new;
 
 TRY
 
@@ -4236,12 +4236,12 @@ TRY
   /* local tank logic */
   if (client.players[client.player].connected) {
     if (!client.players[client.player].dead) {
-      Pointi tmp;
+      GSPoint tmp;
 
-      tmp = makepoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
+      tmp = GSMakePoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
 
       /* collisions with tanks */
-      for (i = 0; i < MAXPLAYERS; i++) {
+      for (i = 0; i < MAX_PLAYERS; i++) {
         if (i != client.player && client.players[i].connected && !client.players[i].dead) {
           Vec2f diff;
           float mag;
@@ -4259,15 +4259,15 @@ TRY
         }
       }
 
-      new = makepoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
+      new = GSMakePoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
 
-      if (!isequalpoint(new, tmp)) {
-        if (increasevis(makerect(new.x - 14, new.y - 14, 29, 29))) LOGFAIL(errno)
-        if (decreasevis(makerect(tmp.x - 14, tmp.y - 14, 29, 29))) LOGFAIL(errno)
+      if (!GSEqualPoints(new, tmp)) {
+        if (increasevis(GSMakeRect(new.x - 14, new.y - 14, 29, 29))) LOGFAIL(errno)
+        if (decreasevis(GSMakeRect(tmp.x - 14, tmp.y - 14, 29, 29))) LOGFAIL(errno)
       }
     }
     else {
-      new = makepoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
+      new = GSMakePoint(client.players[client.player].tank.x, client.players[client.player].tank.y);
     }
 
     /* show hidden mines within 1 square */
@@ -4338,7 +4338,7 @@ TRY
           client.refuelingcounter = 0;
         }
       }
-      else if (isequalpoint(new, old)) {
+      else if (GSEqualPoints(new, old)) {
         int armour;
 
         client.refuelingcounter++;
@@ -4503,7 +4503,7 @@ int tanktest(int x, int y) {
 
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected && !client.players[i].dead && (int)client.players[i].tank.x == x && (int)client.players[i].tank.y == y) {
       return 1;
     }
@@ -4517,7 +4517,7 @@ int tankonaboattest(int x, int y) {
   
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
   
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       if (!client.players[i].dead && client.players[i].boat && (int)client.players[i].tank.x == x && (int)client.players[i].tank.y == y) {
         return 1;
@@ -4550,7 +4550,7 @@ TRY
 
       case kBuilderGetTree:
         client.players[player].buildertarget = client.nextbuildertarget;
-        client.nextbuildertarget = makepoint(0, 0);
+        client.nextbuildertarget = GSMakePoint(0, 0);
         diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
         mag = mag2f(diff);
         client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));
@@ -4568,7 +4568,7 @@ TRY
       case kBuilderBuildRoad:
         if (client.trees >= ROADTREES) {
           client.players[player].buildertarget = client.nextbuildertarget;
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
           diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
           mag = mag2f(diff);
           client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));
@@ -4583,7 +4583,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more trees.");
@@ -4595,7 +4595,7 @@ TRY
       case kBuilderBuildWall:
         if (client.trees >= WALLTREES) {
           client.players[player].buildertarget = client.nextbuildertarget;
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
           diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
           mag = mag2f(diff);
           client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));            
@@ -4610,7 +4610,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more trees.");
@@ -4622,7 +4622,7 @@ TRY
       case kBuilderBuildBoat:
         if (client.trees >= BOATTREES) {
           client.players[player].buildertarget = client.nextbuildertarget;
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
           diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
           mag = mag2f(diff);
           client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));
@@ -4637,7 +4637,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more trees.");
@@ -4651,7 +4651,7 @@ TRY
           for (i = 0; i < client.npills; i++) {
             if (client.pills[i].owner == player && client.pills[i].armour == ONBOARD) {
               client.players[player].buildertarget = client.nextbuildertarget;
-              client.nextbuildertarget = makepoint(0, 0);
+              client.nextbuildertarget = GSMakePoint(0, 0);
               diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
               mag = mag2f(diff);
               client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));
@@ -4678,7 +4678,7 @@ TRY
           }
 
           if (i == client.npills) {
-            client.nextbuildertarget = makepoint(0, 0);
+            client.nextbuildertarget = GSMakePoint(0, 0);
 
             if (client.printmessage) {
               client.printmessage(MSGGAME, "You need a pill.");
@@ -4686,7 +4686,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more trees.");
@@ -4700,7 +4700,7 @@ TRY
           int needed;
 
           client.players[player].buildertarget = client.nextbuildertarget;
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
           diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
           mag = mag2f(diff);
           client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));
@@ -4765,7 +4765,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more trees.");
@@ -4777,7 +4777,7 @@ TRY
       case kBuilderPlaceMine:
         if (client.mines > 0) {
           client.players[player].buildertarget = client.nextbuildertarget;
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
           diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].tank);
           mag = mag2f(diff);
           client.players[player].builder = mag <= (TANKRADIUS - BUILDERRADIUS) ? make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5) : add2f(client.players[player].tank, mul2f(diff, (TANKRADIUS - BUILDERRADIUS)/mag));            
@@ -4791,7 +4791,7 @@ TRY
           }
         }
         else {
-          client.nextbuildertarget = makepoint(0, 0);
+          client.nextbuildertarget = GSMakePoint(0, 0);
 
           if (client.printmessage) {
             client.printmessage(MSGGAME, "You need more mines.");
@@ -4887,7 +4887,7 @@ TRY
     else {
       float speed;
 
-      if (isequalpoint(makepoint(client.players[player].builder.x, client.players[player].builder.y), client.players[player].buildertarget)) {
+      if (GSEqualPoints(GSMakePoint(client.players[player].builder.x, client.players[player].builder.y), client.players[player].buildertarget)) {
         speed = buildertargetspeed(client.players[player].builder.x, client.players[player].builder.y);
       }
       else {
@@ -4943,7 +4943,7 @@ TRY
         col = 0;
       }
       else {
-        if (isequalpoint(makepoint(client.players[player].builder.x, client.players[player].builder.y), client.players[player].buildertarget)) {
+        if (GSEqualPoints(GSMakePoint(client.players[player].builder.x, client.players[player].builder.y), client.players[player].buildertarget)) {
           speed = buildertargetspeed(client.players[player].builder.x, client.players[player].builder.y);
         }
         else {
@@ -4957,7 +4957,7 @@ TRY
       /* builder enters tank */
       if (mag2f(diff) <= TANKRADIUS - BUILDERRADIUS) {
         client.players[player].builderstatus = kBuilderReady;
-        client.players[player].buildertarget = makepoint(0, 0);
+        client.players[player].buildertarget = GSMakePoint(0, 0);
 
         if (player == client.player) {
           client.buildertask = kBuilderDoNothing;
@@ -5009,7 +5009,7 @@ TRY
     diff = sub2f(make2f(client.players[player].buildertarget.x + 0.5, client.players[player].buildertarget.y + 0.5), client.players[player].builder);
 
     if (mag2f(diff) < 0.001) {
-      client.players[player].buildertarget = makepoint(0, 0);
+      client.players[player].buildertarget = GSMakePoint(0, 0);
       client.players[player].builderstatus = kBuilderReturn;
     }
     else {
@@ -5056,7 +5056,7 @@ TRY
         if ((mag <= 2.0 || forestvis(client.players[client.player].tank) > 0.25) && mag <= 8.0) {
           int j;
 
-          for (j = 0; j < MAXPLAYERS; j++) {
+          for (j = 0; j < MAX_PLAYERS; j++) {
             if (
               j != client.player &&
               client.players[j].connected &&
@@ -5069,7 +5069,7 @@ TRY
             }
           }
 
-          if (!(j < MAXPLAYERS)) {
+          if (!(j < MAX_PLAYERS)) {
             client.pills[i].counter++;
 
             if (client.pills[i].counter >= client.pills[i].speed) {
@@ -5124,7 +5124,7 @@ END
 }
 
 int shellcollisiontest(struct Shell *shell, int player) {
-  Pointi p;
+  GSPoint p;
   int pill, base, ret;
   struct Explosion *explosion = NULL;
 
@@ -5135,7 +5135,7 @@ int shellcollisiontest(struct Shell *shell, int player) {
   assert(shell->point.y < FWIDTH);
 
 TRY
-  p = makepoint(shell->point.x, shell->point.y);
+  p = GSMakePoint(shell->point.x, shell->point.y);
 
   if ((pill = findpill(p.x, p.y)) != -1) {
     if (client.pills[pill].armour > 0) {
@@ -5676,7 +5676,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(x, y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(x, y))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = x + 1.5;
@@ -5684,7 +5684,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(x + 1, y))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(x + 1, y))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = x + 0.5;
@@ -5692,7 +5692,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(x, y + 1))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(x, y + 1))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     explosion->point.x = x + 1.5;
@@ -5700,7 +5700,7 @@ TRY
     explosion->counter = 0;
     if (addlist(&client.explosions, explosion)) LOGFAIL(errno)
     explosion = NULL;
-    if (killsquarebuilder(makepoint(x + 1, y + 1))) LOGFAIL(errno)
+    if (killsquarebuilder(GSMakePoint(x + 1, y + 1))) LOGFAIL(errno)
 
     if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
     point.x = x + 0.25;
@@ -5782,7 +5782,7 @@ ERRHANDLER(0, -1)
 END
 }
 
-int enter(Pointi new, Pointi old) {
+int enter(GSPoint new, GSPoint old) {
   int pill, base;
 
   assert(new.x >= 0 && new.x < WIDTH && new.y >= 0 && new.y < WIDTH && old.x >= 0 && old.x < WIDTH && old.y >= 0 && old.y < WIDTH);
@@ -5798,7 +5798,7 @@ TRY
     }
     else {
       if (!client.players[client.player].dead) {
-        if (!isequalpoint(new, old)) {
+        if (!GSEqualPoints(new, old)) {
           if (sendclgrabtile(new.x, new.y)) LOGFAIL(errno)
         }
 
@@ -5819,7 +5819,7 @@ TRY
         case kGrassTerrain2:  /* grass */
         case kGrassTerrain3:  /* grass */
           /* drop boat */
-          if (client.players[client.player].boat && !isequalpoint(new, old)) {
+          if (client.players[client.player].boat && !GSEqualPoints(new, old)) {
             client.players[client.player].boat = 0;
             sendcldropboat(old.x, old.y);
           }
@@ -5837,7 +5837,7 @@ TRY
 
   if ((base = findbase(new.x, new.y)) != -1) {
     if (!client.players[client.player].dead) {  /* if not dead */
-      if (!isequalpoint(new, old)) {  /* if entered square */
+      if (!GSEqualPoints(new, old)) {  /* if entered square */
         if /* if base is neutral or not in alliance */
           (
             client.bases[base].owner == NEUTRAL ||
@@ -5876,7 +5876,7 @@ TRY
     SUCCESS
 
   case kForestTerrain:  /* forest */
-    if (client.players[client.player].dead && client.respawncounter < EXPLODETICKS && !isequalpoint(new, old)) {
+    if (client.players[client.player].dead && client.respawncounter < EXPLODETICKS && !GSEqualPoints(new, old)) {
       struct Explosion *explosion;
       if (sendcldamage(new.x, new.y, 0)) LOGFAIL(errno)
       if ((explosion = (struct Explosion *)malloc(sizeof(struct Explosion))) == NULL) LOGFAIL(errno)
@@ -5902,13 +5902,13 @@ TRY
   case kGrassTerrain2:  /* grass */
   case kGrassTerrain3:  /* grass */
     /* drop boat */
-    if (!client.players[client.player].dead && client.players[client.player].boat && !isequalpoint(new, old)) {
+    if (!client.players[client.player].dead && client.players[client.player].boat && !GSEqualPoints(new, old)) {
       client.players[client.player].boat = 0;
       sendcldropboat(old.x, old.y);
     }
   
     /* plant mines */
-    if (!client.players[client.player].dead && client.players[client.player].inputflags & LMINEMASK && client.mines > 0 && !isequalpoint(new, old)) {
+    if (!client.players[client.player].dead && client.players[client.player].inputflags & LMINEMASK && client.mines > 0 && !GSEqualPoints(new, old)) {
       client.mines--;
       if (sendcldropmine(new.x, new.y) == -1) LOGFAIL(errno)
     }
@@ -5916,7 +5916,7 @@ TRY
     SUCCESS
 
   case kBoatTerrain:  /* river w/boat */
-    if (!isequalpoint(new, old)) {
+    if (!GSEqualPoints(new, old)) {
       if (client.players[client.player].boat) {
         struct Explosion *explosion;
         if (sendcldamage(new.x, new.y, 0)) LOGFAIL(errno)
@@ -5935,7 +5935,7 @@ TRY
     SUCCESS
 
   case kMinedSeaTerrain:  /* mined sea */
-    if (!isequalpoint(new, old)) {
+    if (!GSEqualPoints(new, old)) {
       if (sendclgrabtile(new.x, new.y)) LOGFAIL(errno)
     }
 
@@ -5948,7 +5948,7 @@ TRY
   case kMinedForestTerrain:  /* mined forest */
   case kMinedRubbleTerrain:  /* mined rubble */
   case kMinedGrassTerrain:  /* mined grass */
-    if (!isequalpoint(new, old)) {
+    if (!GSEqualPoints(new, old)) {
       if (sendclgrabtile(new.x, new.y)) LOGFAIL(errno)
     }
 
@@ -6271,9 +6271,9 @@ int fogtilefor(int x, int y, int tile) {
 
 int refresh(int x, int y) {
   int i, j;
-  Recti rect;
+  GSRect rect;
   int image;
-  Pointi *p;
+  GSPoint *p;
   int seentile;
 
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
@@ -6286,13 +6286,13 @@ TRY
 
     if (seentile != client.seentiles[y][x]) {
       client.seentiles[y][x] = seentile;
-      rect = intersectionrect(makerect(x - 1, y - 1, 3, 3), makerect(0, 0, WIDTH, WIDTH));
+      rect = GSIntersectionRect(GSMakeRect(x - 1, y - 1, 3, 3), GSMakeRect(0, 0, WIDTH, WIDTH));
 
-      for (i = minxrect(rect); i <= maxxrect(rect); i++) {
-        for (j = minyrect(rect); j <= maxyrect(rect); j++) {
-          if (((image = mapimage(client.seentiles, i, j)) != client.images[j][i]) || (i == x && j == y)) {
+      for (i = GSMinX(rect); i <= GSMaxX(rect); i++) {
+        for (j = GSMinY(rect); j <= GSMaxY(rect); j++) {
+          if (((image = mapImage(client.seentiles, i, j)) != client.images[j][i]) || (i == x && j == y)) {
             client.images[j][i] = image;
-            if ((p = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+            if ((p = (GSPoint *)malloc(sizeof(GSPoint))) == NULL) LOGFAIL(errno)
             p->x = i;
             p->y = j;
             if (addlist(&client.changedtiles, p) == -1) LOGFAIL(errno)
@@ -6326,7 +6326,7 @@ TRY
   if (sendbuf(&client.sendbuf, client.cntlsock) == -1) LOGFAIL(errno)
 
   /* their alliance bit has changed */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     /* my alliance bit is set */
     if (client.players[i].connected && (xor & (1 << i))) {
       /* their alliance bit is set */
@@ -6356,7 +6356,7 @@ TRY
           if (client.pills[j].owner == i) {
             /* fog of war */
             if (client.pills[j].armour != ONBOARD && client.pills[j].armour > 0) {
-              if (increasevis(makerect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
+              if (increasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
             refresh(client.pills[j].x, client.pills[j].y);
@@ -6367,7 +6367,7 @@ TRY
           }
         }
 
-        if (increasevis(makerect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (increasevis(GSMakeRect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
       }
       /* their alliance bit is unset */
       else {
@@ -6401,7 +6401,7 @@ TRY
   if (sendbuf(&client.sendbuf, client.cntlsock) == -1) LOGFAIL(errno)
 
   /* their alliance bit has changed */
-  for (i = 0; i < MAXPLAYERS; i++) {
+  for (i = 0; i < MAX_PLAYERS; i++) {
     /* my alliance bit is unset */
     if (client.players[i].connected && (xor & (1 << i))) {
       /* their alliance bit is set */
@@ -6433,7 +6433,7 @@ TRY
               if (refresh(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
 
               if (client.pills[j].armour > 0) {
-                if (decreasevis(makerect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
+                if (decreasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
               }
             }
 
@@ -6443,7 +6443,7 @@ TRY
           }
         }
 
-        if (decreasevis(makerect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (decreasevis(GSMakeRect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
       }
     }
   }
@@ -6454,7 +6454,7 @@ END
 }
 
 int keyevent(int mask, int set) {
-  Pointi tanksqr;
+  GSPoint tanksqr;
   int gotlock = 0;
 
 TRY
@@ -6468,7 +6468,7 @@ TRY
     client.players[client.player].inputflags &= ~mask;
   }
 
-  tanksqr = makepoint(w2t(client.players[client.player].tank.x), w2t(client.players[client.player].tank.y));
+  tanksqr = GSMakePoint(w2t(client.players[client.player].tank.x), w2t(client.players[client.player].tank.y));
 
   if (!client.players[client.player].dead) {
     int i;
@@ -6530,14 +6530,14 @@ ERRHANDLER(0, -1)
 END
 }
 
-void buildercommand(int command, Pointi p) {
+void buildercommand(int command, GSPoint p) {
   if (client.players[client.player].builderstatus != kBuilderParachute && client.nextbuildercommand == BUILDERNILL && !client.players[client.player].dead) {
     client.nextbuildercommand = command;
     client.nextbuildertarget = p;
   }
 }
 
-int getbuildertaskforcommand(int command, Pointi at) {
+int getbuildertaskforcommand(int command, GSPoint at) {
   switch (command) {
   case BUILDERNILL:
     return kBuilderDoNothing;
@@ -6727,7 +6727,7 @@ TRY
   case MSGNEARBY:
     clsendmesg.mask = htons(0x00);  /* ok */
 
-    for (i = 0; i < MAXPLAYERS; i++) {
+    for (i = 0; i < MAX_PLAYERS; i++) {
       if (mag2f(sub2f(client.players[client.player].tank, client.players[i].tank)) < 8.5) {
         clsendmesg.mask |= 1 << i;
       }
@@ -6766,7 +6766,7 @@ float rounddir(float dir) {
   return (kPif/8.0)*floor(dir/(kPif/8.0) + 0.5);
 }
 
-int tankcollision(Pointi square) {
+int tankcollision(GSPoint square) {
   int i;
 
   if (square.x < 0 || square.x >= WIDTH || square.y < 0 || square.y >= WIDTH) {
@@ -6828,7 +6828,7 @@ int tankcollision(Pointi square) {
   }
 }
 
-int buildercollision(Pointi square) {
+int buildercollision(GSPoint square) {
   int pill, base;
 
   if (square.x < 0 || square.x >= WIDTH || square.y < 0 || square.y >= WIDTH) {
@@ -6836,7 +6836,7 @@ int buildercollision(Pointi square) {
   }
 
   if ((pill = findpill(square.x, square.y)) != -1) {
-    return !((isequalpoint(square, target) && buildertask == kBuilderRepairPill) || (client.pills[pill].armour == 0));
+    return !((GSEqualPoints(square, target) && buildertask == kBuilderRepairPill) || (client.pills[pill].armour == 0));
   }
 
   if ((base = findbase(square.x, square.y)) != -1) {
@@ -6849,10 +6849,10 @@ int buildercollision(Pointi square) {
   case kDamagedWallTerrain1:  /* damaged wall */
   case kDamagedWallTerrain2:  /* damaged wall */
   case kDamagedWallTerrain3:  /* damaged wall */
-    return !isequalpoint(square, target) || buildertask != kBuilderBuildWall;
+    return !GSEqualPoints(square, target) || buildertask != kBuilderBuildWall;
 
   case kRiverTerrain:  /* river */
-    return !isequalpoint(square, target) || (buildertask != kBuilderBuildBoat && buildertask != kBuilderBuildRoad);
+    return !GSEqualPoints(square, target) || (buildertask != kBuilderBuildBoat && buildertask != kBuilderBuildRoad);
 
   case kSeaTerrain:  /* sea */
   case kMinedSeaTerrain:  /* mined sea */
@@ -6888,7 +6888,7 @@ int buildercollision(Pointi square) {
   }
 }
 
-static int circlesquare(Vec2f point, float radius, Pointi square) {
+static int circlesquare(Vec2f point, float radius, GSPoint square) {
   if (point.x < square.x) {
     if (point.y < square.y) {
       return mag2f(sub2f(make2f(square.x, square.y), point)) < radius;
@@ -6924,7 +6924,7 @@ static int circlesquare(Vec2f point, float radius, Pointi square) {
   }
 }
 
-static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(Pointi square)) {
+static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(GSPoint square)) {
   int ix, iy;
   int lxc, hxc, lyc, hyc;
   float lx, hx, ly, hy, fx, fy;
@@ -6940,10 +6940,10 @@ static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(Pointi square)) 
   hy = 1.0 - ly;
   r2 = radius*radius;
 
-  lxc = lx < radius && func(makepoint(ix - 1, iy));
-  hxc = hx < radius && func(makepoint(ix + 1, iy));
-  lyc = ly < radius && func(makepoint(ix, iy - 1));
-  hyc = hy < radius && func(makepoint(ix, iy + 1));
+  lxc = lx < radius && func(GSMakePoint(ix - 1, iy));
+  hxc = hx < radius && func(GSMakePoint(ix + 1, iy));
+  lyc = ly < radius && func(GSMakePoint(ix, iy - 1));
+  hyc = hy < radius && func(GSMakePoint(ix, iy + 1));
 
   if (lxc) {
     if (hxc) {
@@ -6969,25 +6969,25 @@ static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(Pointi square)) 
     p.y = fy + (1.0 - radius);
   }
 
-  if (!lxc && !lyc && (sqr = lx*lx + ly*ly) < r2 && func(makepoint(ix - 1, iy - 1))) {
+  if (!lxc && !lyc && (sqr = lx*lx + ly*ly) < r2 && func(GSMakePoint(ix - 1, iy - 1))) {
     sca = radius/sqrtf(sqr);
     p.x = fx + sca*lx;
     p.y = fy + sca*ly;
   }
 
-  if (!hxc && !lyc && (sqr = hx*hx + ly*ly) < r2 && func(makepoint(ix + 1, iy - 1))) {
+  if (!hxc && !lyc && (sqr = hx*hx + ly*ly) < r2 && func(GSMakePoint(ix + 1, iy - 1))) {
     sca = radius/sqrtf(sqr);
     p.x = fx + (1.0 - sca*hx);
     p.y = fy + sca*ly;
   }
 
-  if (!lxc && !hyc && (sqr = lx*lx + hy*hy) < r2 && func(makepoint(ix - 1, iy + 1))) {
+  if (!lxc && !hyc && (sqr = lx*lx + hy*hy) < r2 && func(GSMakePoint(ix - 1, iy + 1))) {
     sca = radius/sqrtf(sqr);
     p.x = fx + sca*lx;
     p.y = fy + (1.0 - sca*hy);
   }
 
-  if (!hxc && !hyc && (sqr = hx*hx + hy*hy) < r2 && func(makepoint(ix + 1, iy + 1))) {
+  if (!hxc && !hyc && (sqr = hx*hx + hy*hy) < r2 && func(GSMakePoint(ix + 1, iy + 1))) {
     sca = radius/sqrtf(sqr);
     p.x = fx + (1.0 - sca*hx);
     p.y = fy + (1.0 - sca*hy);
@@ -6996,14 +6996,14 @@ static Vec2f collisiondetect(Vec2f p, float radius, int (*func)(Pointi square)) 
   return p;
 }
 
-int killsquarebuilder(Pointi p) {
+int killsquarebuilder(GSPoint p) {
 TRY
   switch (client.players[client.player].builderstatus) {
   case kBuilderGoto:
   case kBuilderWork:
   case kBuilderWait:
   case kBuilderReturn:
-    if (isequalpoint(makepoint(w2t(client.players[client.player].builder.x), w2t(client.players[client.player].builder.y)), p)) {
+    if (GSEqualPoints(GSMakePoint(w2t(client.players[client.player].builder.x), w2t(client.players[client.player].builder.y)), p)) {
       killbuilder();
     }
 
@@ -7059,11 +7059,11 @@ TRY
   client.players[client.player].builder.x = client.starts[start].x + 0.5;
   client.players[client.player].builder.y = client.starts[start].y + 0.5;
   client.nextbuildercommand = BUILDERNILL;
-  client.nextbuildertarget = makepoint(0, 0);
+  client.nextbuildertarget = GSMakePoint(0, 0);
   client.buildertask = kBuilderDoNothing;
   client.buildermines = 0;
   client.buildertrees = 0;
-  client.players[client.player].buildertarget = makepoint(0, 0);
+  client.players[client.player].buildertarget = GSMakePoint(0, 0);
 
   client.players[client.player].buildertarget.x = client.players[client.player].tank.x;
   client.players[client.player].buildertarget.y = client.players[client.player].tank.y;

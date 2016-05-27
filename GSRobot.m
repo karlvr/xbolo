@@ -170,9 +170,9 @@
         }
     }
     
-    struct Tank tanks[MAXPLAYERS];
+    struct Tank tanks[MAX_PLAYERS];
     int readi, writei;
-    for(readi = 0, writei = 0; readi < MAXPLAYERS; readi++)
+    for(readi = 0, writei = 0; readi < MAX_PLAYERS; readi++)
     {
         if(readi != client.player) // don't include self
         {
@@ -194,7 +194,7 @@
     // FIXME: should make this be variable
     const int maxShellPositions = 256;
     struct ExternalShell shells[maxShellPositions];
-    for(readi = 0, writei = 0; readi < MAXPLAYERS; readi++)
+    for(readi = 0, writei = 0; readi < MAX_PLAYERS; readi++)
     {
         if(client.players[readi].connected)
         {
@@ -214,8 +214,8 @@
     }
     gameState.shellscount = writei;
     
-    struct Builder builders[MAXPLAYERS];
-    for(readi = 0, writei = 0; readi < MAXPLAYERS; readi++)
+    struct Builder builders[MAX_PLAYERS];
+    for(readi = 0, writei = 0; readi < MAX_PLAYERS; readi++)
     {
         if(client.players[readi].connected)
         {
@@ -324,7 +324,7 @@
         
         if(commandState.buildercommand != BUILDERNILL)
         {
-            Pointi p = { commandState.builderx, commandState.buildery };
+            GSPoint p = { commandState.builderx, commandState.buildery };
             buildercommand(commandState.buildercommand, p);
         }
         
@@ -337,7 +337,7 @@
             {
                 NSString *name = [commandState.playersToAllyWith objectAtIndex: j];
                 const char *cname = [name UTF8String];
-                for(i = 0; i < MAXPLAYERS; i++)
+                for(i = 0; i < MAX_PLAYERS; i++)
                 {
                     if(client.players[i].connected)
                         if(strncmp(client.players[i].name, cname, MAXNAME) == 0)

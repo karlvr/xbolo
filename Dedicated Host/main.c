@@ -490,7 +490,7 @@ TRY
           tracker ? tracker : "N/A"
         );
 
-      for (i = 0; i < MAXPLAYERS; i++) {
+      for (i = 0; i < MAX_PLAYERS; i++) {
         if (server.players[i].used) {
           int j;
 
@@ -504,7 +504,7 @@ TRY
 
           printf("\tBases:");
 
-          for (j = 0; j < MAXBASES; j++) {
+          for (j = 0; j < MAX_BASES; j++) {
             if (server.bases[j].owner == i) {
               printf(" %d", j);
             }
@@ -512,7 +512,7 @@ TRY
 
           printf("\n\tPills:");
 
-          for (j = 0; j < MAXPILLS; j++) {
+          for (j = 0; j < MAX_PILLS; j++) {
             if (server.pills[j].owner == i) {
               printf(" %d", j);
             }
@@ -649,7 +649,7 @@ TRY
       /* probably should do some error checking here */
       player = strtol(buf + pmatch[1].rm_so, NULL, 10);
 
-      if (player < 0 || player >= MAXPLAYERS) {
+      if (player < 0 || player >= MAX_PLAYERS) {
         printf("Input Player ID in range of [0, 15]\n");
         continue;
       }
@@ -670,7 +670,7 @@ TRY
       /* probably should do some error checking here */
       player = strtol(buf + pmatch[1].rm_so, NULL, 10);
 
-      if (player < 0 || player >= MAXPLAYERS) {
+      if (player < 0 || player >= MAX_PLAYERS) {
         printf("Input Player ID in range of [0, 15]\n");
         continue;
       }

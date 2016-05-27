@@ -1589,7 +1589,7 @@ END
 }
 
 - (IBAction)pillCenter:(id)sender {
-  Pointi square;
+  GSPoint square;
   NSRect rect;
   int i, j;
   int gotlock = 0;
@@ -1768,11 +1768,11 @@ END
 }
 
 // mouse event method
-- (void)mouseEvent:(Pointi)point {
+- (void)mouseEvent:(GSPoint)point {
   int gotlock = 0;
 
 TRY
-  if (ispointinrect(makerect(0, 0, WIDTH, WIDTH), point)) {
+  if (GSPointInRect(GSMakeRect(0, 0, WIDTH, WIDTH), point)) {
     // lock client
     if (lockclient()) LOGFAIL(errno)
     gotlock = 1;
@@ -2667,9 +2667,9 @@ TRY
         }
       
         if (base != -1) {
-          [baseArmourStatusBar setValue:(CGFloat)client.bases[base].armour/(CGFloat)MAXBASEARMOUR];
-          [baseShellsStatusBar setValue:(CGFloat)client.bases[base].shells/(CGFloat)MAXBASESHELLS];
-          [baseMinesStatusBar setValue:(CGFloat)client.bases[base].mines/(CGFloat)MAXBASEMINES];
+          [baseArmourStatusBar setValue:(CGFloat)client.bases[base].armour/(CGFloat)MAX_BASE_ARMOUR];
+          [baseShellsStatusBar setValue:(CGFloat)client.bases[base].shells/(CGFloat)MAX_BASE_SHELLS];
+          [baseMinesStatusBar setValue:(CGFloat)client.bases[base].mines/(CGFloat)MAX_BASE_MINES];
         }
         else {
           [baseShellsStatusBar setValue:0.0];
@@ -3597,7 +3597,7 @@ END
 
 void setplayerstatus(int player) {
   NSAutoreleasePool *pool;
-  assert(player >= 0 && player < MAXPLAYERS);
+  assert(player >= 0 && player < MAX_PLAYERS);
   pool = [[NSAutoreleasePool alloc] init];
   [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
   [pool release];
@@ -3605,7 +3605,7 @@ void setplayerstatus(int player) {
 
 void setpillstatus(int pill) {
   NSAutoreleasePool *pool;
-  assert(pill >= 0 && pill < MAXPILLS);
+  assert(pill >= 0 && pill < MAX_PILLS);
   pool = [[NSAutoreleasePool alloc] init];
   [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
   [pool release];
@@ -3613,7 +3613,7 @@ void setpillstatus(int pill) {
 
 void setbasestatus(int base) {
   NSAutoreleasePool *pool;
-  assert(base >= 0 && base < MAXBASES);
+  assert(base >= 0 && base < MAX_BASES);
   pool = [[NSAutoreleasePool alloc] init];
   [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
   [pool release];

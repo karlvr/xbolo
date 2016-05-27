@@ -13,7 +13,7 @@
 #include "errchk.h"
 #include "io.h"
 
-#define MAXPLAYERS             (16)
+#define MAX_PLAYERS             (16)
 #define CLUPDATEMAXSHELLS      (255)
 #define CLUPDATEMAXEXPLOSIONS  (255)
 #define NUDP                   (5)  /* number of udp ping packets to send */
@@ -49,7 +49,7 @@ struct CLUpdate {
   /* header */
   struct {
     uint8_t player;
-    uint32_t seq[MAXPLAYERS];
+    uint32_t seq[MAX_PLAYERS];
     uint8_t tankstatus;
     uint32_t tankx;
     uint32_t tanky;

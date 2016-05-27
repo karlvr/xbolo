@@ -10,6 +10,8 @@
 #ifndef __IMAGES__
 #define __IMAGES__
 
+#include "bmap.h"
+
 #define WALL46IMAGE (0x00)
 #define WALL17IMAGE (0x01)
 #define WALL01IMAGE (0x02)
@@ -310,7 +312,9 @@
 #define CROSSHIMAGE (0x90)
 #define SELETRIMAGE (0x91)
 
+typedef uint16_t GSImage;
+
 /* returns the image tile for x, y */
-int mapimage(int tiles[][256], int x, int y);
+GSTile mapImage(GSTile tiles[][256], int x, int y);
 
 #endif  /* __IMAGES__ */

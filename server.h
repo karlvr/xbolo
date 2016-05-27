@@ -71,13 +71,13 @@ struct Server {
     struct Domination domination;
   } game;
   
-  int terrain[WIDTH][WIDTH];
+  GSTile terrain[WIDTH][WIDTH];
 
   int npills;
-  struct Pill pills[MAXPILLS];
+  struct Pill pills[MAX_PILLS];
 
   int nbases;
-  struct Base bases[MAXBASES];
+  struct Base bases[MAX_BASES];
 
   int nstarts;
   struct Start starts[MAX_STARTS];
@@ -113,7 +113,7 @@ struct Server {
 
     struct Buf recvbuf;
     struct Buf sendbuf;
-  } players[MAXPLAYERS];
+  } players[MAX_PLAYERS];
 
   /* banned players list */
   struct ListNode bannedplayers;

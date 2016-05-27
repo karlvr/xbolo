@@ -40,9 +40,9 @@ TRY
   /* initialize the preamble pointer */
   preamble = buf;
 
-  if (preamble->npills > MAXPILLS) LOGFAIL(ECORFILE)
+  if (preamble->npills > MAX_PILLS) LOGFAIL(ECORFILE)
 
-  if (preamble->nbases > MAXBASES) LOGFAIL(ECORFILE)
+  if (preamble->nbases > MAX_BASES) LOGFAIL(ECORFILE)
 
   if (preamble->nstarts > MAX_STARTS) LOGFAIL(ECORFILE)
 
@@ -121,7 +121,7 @@ TRY
       LOGFAIL(ECORFILE)
     }
 
-    if (writerun(run, runData + offset + sizeof(struct BMAP_Run), client.terrain) == -1) {
+    if (writeRun(run, runData + offset + sizeof(struct BMAP_Run), client.terrain) == -1) {
       LOGFAIL(errno)
     }
 
@@ -177,7 +177,7 @@ TRY
 
   for (y = 0; y < WIDTH; y++) {
     for (x = 0; x < WIDTH; x++) {
-      client.images[y][x] = mapimage(client.seentiles, x, y);
+      client.images[y][x] = mapImage(client.seentiles, x, y);
     }
   }
 
