@@ -13,7 +13,7 @@ static GSToolsController *controller = nil;
 
 @implementation GSToolsController
 
-+ (int)tool {
++ (NSInteger)tool {
   return [controller tool];
 }
 
@@ -35,7 +35,7 @@ static GSToolsController *controller = nil;
   [super dealloc];
 }
 
-- (int)tool {
+- (NSInteger)tool {
   return [[toolMatrix selectedCell] tag];
 }
 

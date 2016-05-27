@@ -124,7 +124,7 @@ static NSMutableArray *boloMapViews = nil;
 - (void)fillTool {
   int palette;
 
-  palette = [GSPaletteController palette];
+  palette = (int)[GSPaletteController palette];
 
   if ([boloMap tileAtPoint:firstMouseEvent] != palette) {
     GSTileRect *tileRect;
@@ -260,7 +260,7 @@ static NSMutableArray *boloMapViews = nil;
 }
 
 - (void)deleteTool {
-  int i;
+  NSInteger i;
 
   if ((i = [self pillAtPoint:firstMouseEvent]) != -1) {
     [boloMap removePillAtIndex:i];

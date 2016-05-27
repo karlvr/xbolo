@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-typedef enum {
+typedef NS_ENUM(NSInteger, Tool) {
   /* pencil and fill tools*/
   kPencilTool           = 0,
 
@@ -31,13 +31,13 @@ typedef enum {
   kBaseTool             = 9,
   kStartTool            = 10,
   kDeleteTool           = 11
-} Tool;
+};
 
 @interface GSToolsController : NSWindowController {
   IBOutlet NSMatrix *toolMatrix;
 }
 
-+ (int)tool;
-- (int)tool;
++ (NSInteger)tool;
+- (NSInteger)tool;
 
 @end

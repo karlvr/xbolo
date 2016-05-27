@@ -27,6 +27,10 @@ static int readnibble(const void *buf, size_t i);
 static void writenibble(void *buf, size_t i, int nibble);
 
 //static int defaultTile(int x, int y);
+#ifdef XBOLO_MAGMA
+#define tiletoterrain(x) x
+#define terraintotile(x) x
+#endif
 
 int readRun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, GSTile terrain[][WIDTH]) {
   int nibs, len, i, retval;
@@ -101,10 +105,6 @@ CLEANUP
 END
 }
 
-#ifdef XBOLO_MAGMA
-#define tiletoterrain(x) x
-#endif
-
 int writeRun(struct BMAP_Run run, const void *buf, GSTile terrain[WIDTH][WIDTH]) {
   int i;
   int x;
@@ -165,6 +165,9 @@ CLEANUP
 ERRHANDLER(0, -1)
 END
 }
+
+#undef tiletoterrain
+#undef terraintotile
 
 int readnibble(const void *buf, size_t i) {
   return i%2 ? *(uint8_t *)(buf + i/2) & 0x0f : (*(uint8_t *)(buf + i/2) & 0xf0) >> 4;

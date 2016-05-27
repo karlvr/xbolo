@@ -153,7 +153,7 @@ int selectreadwrite(int readsock, int writesock) {
   int nfds;
   fd_set readfds;
   fd_set writefds;
-  int ret;
+  int ret = 0;
 
 TRY
   /* select until we have success */
@@ -192,7 +192,7 @@ END
 int selectreadread(int readsock1, int readsock2) {
   int nfds;
   fd_set readfds;
-  int ret;
+  int ret = 0;
 
 TRY
   /* select until we have success */
@@ -253,7 +253,7 @@ END
 }
 
 int cntlrecv(int cntlsock, int sock, struct Buf *buf, size_t nbytes) {
-  int ret;
+  int ret = 0;
 
   assert(cntlsock != -1);
   assert(sock != -1);

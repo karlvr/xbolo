@@ -34,19 +34,18 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
   if (self) {
     NSDictionary *temp;
     NSPropertyListFormat format;
-    NSString *errorDesc = nil;
+    NSError *errorDesc = nil;
     NSDictionary *origin;
     NSDictionary *size;
     NSData *data;
 
-    temp = (NSDictionary *)[NSPropertyListSerialization
-            propertyListFromData:propertyList
-            mutabilityOption:NSPropertyListMutableContainersAndLeaves
-            format:&format
-            errorDescription:&errorDesc];
+    temp = [NSPropertyListSerialization
+            propertyListWithData:propertyList
+            options:NSPropertyListMutableContainersAndLeaves
+            format:&format error:&errorDesc];
 
     if (!temp) {
-      NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+      NSLog(@"Error reading plist: %@, format: %lu", errorDesc, (unsigned long)format);
     }
 
     origin = [temp objectForKey:@"origin"];
@@ -74,7 +73,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
 - (id)pasteboardPropertyListForType:(NSString *)type {
   if ([type isEqual:GSUTIString]) {
-    NSString *error;
+    NSError *error;
     NSDictionary *plistDict;
     NSData *plistData;
 
@@ -87,11 +86,10 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
       forKeys:[NSArray arrayWithObjects:
         @"origin", @"size", @"tiles", nil]];
 
-    plistData = [NSPropertyListSerialization dataFromPropertyList:plistDict format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
+    plistData = [NSPropertyListSerialization dataWithPropertyList:plistDict format:NSPropertyListXMLFormat_v1_0 options:0 error:&error];
 
     if(!plistData) {
       NSLog(@"%@", error);
-      [error release];
     }
 
     return plistData;

@@ -13,7 +13,7 @@ static GSPaletteController *controller = nil;
 
 @implementation GSPaletteController
 
-+ (int)palette {
++ (NSInteger)palette {
   return [controller palette];
 }
 
@@ -35,7 +35,7 @@ static GSPaletteController *controller = nil;
   [super dealloc];
 }
 
-- (int)palette {
+- (NSInteger)palette {
   return [[paletteMatrix selectedCell] tag];
 }
 

@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-enum {
+typedef NS_ENUM(NSInteger, GSPalette) {
   kWallPalette        = 0,
   kRiverPalette       = 1,
   kSwampPalette       = 2,
@@ -33,7 +33,7 @@ enum {
   IBOutlet NSMatrix *paletteMatrix;
 }
 
-+ (int)palette;
-- (int)palette;
++ (NSInteger)palette;
+- (NSInteger)palette;
 
 @end
