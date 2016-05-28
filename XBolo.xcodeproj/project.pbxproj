@@ -131,7 +131,7 @@
 		55712BA51CF8EEEA00326A27 /* GSTileRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA21CF8EEEA00326A27 /* GSTileRect.m */; };
 		55712BA61CF8EEEA00326A27 /* GSXBoloMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA41CF8EEEA00326A27 /* GSXBoloMap.m */; };
 		55712BAB1CF8EF0300326A27 /* GSPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA81CF8EF0300326A27 /* GSPanel.m */; };
-		55712BAC1CF8EF0300326A27 /* GSXBoloMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAA1CF8EF0300326A27 /* GSXBoloMapView.m */; };
+		55712BAC1CF8EF0300326A27 /* GSXBoloMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAA1CF8EF0300326A27 /* GSXBoloMapView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55712BB11CF8EF1800326A27 /* GSPaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAE1CF8EF1800326A27 /* GSPaletteController.m */; };
 		55712BB21CF8EF1800326A27 /* GSToolsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BB01CF8EF1800326A27 /* GSToolsController.m */; };
 		55712C041CF8F00100326A27 /* mouseEyeDropper.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 55712BF61CF8F00100326A27 /* mouseEyeDropper.tiff */; };
@@ -1485,7 +1485,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1529,7 +1529,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;

@@ -102,15 +102,15 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
 
 + (id)tileRectWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTiles:aTiles inRect:aRect] autorelease];
+  return [[self alloc] initWithTiles:aTiles inRect:aRect];
 }
 
 + (id)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTile:tile inRect:aRect] autorelease];
+  return [[self alloc] initWithTile:tile inRect:aRect];
 }
 
 + (id)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTileRect:tileRect inRect:aRect] autorelease];
+  return [[self alloc] initWithTileRect:tileRect inRect:aRect];
 }
 
 // Init Methods
@@ -197,8 +197,6 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
   if (tiles) {
     free(tiles);
   }
-
-  [super dealloc];
 }
 
 // Accessor Methods

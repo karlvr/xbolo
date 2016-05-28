@@ -34,8 +34,8 @@ static NSImage *sprites = nil;
 
 + (void)initialize {
   if (self == [GSXBoloMap class]) {
-    assert((img = [[NSImage imageNamed:@"Tiles"] retain]) != nil);
-    assert((sprites = [[NSImage imageNamed:@"Sprites"] retain]) != nil);
+    assert((img = [NSImage imageNamed:@"Tiles"]) != nil);
+    assert((sprites = [NSImage imageNamed:@"Sprites"]) != nil);
   }
 }
 
