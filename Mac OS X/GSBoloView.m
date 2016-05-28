@@ -39,8 +39,8 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
   if (self == [GSBoloView class]) {
     boloViews = [[NSMutableArray alloc] init];
 
-    assert((tiles = [[NSImage imageNamed:@"Tiles"] retain]) != nil);
-    assert((sprites = [[NSImage imageNamed:@"Sprites"] retain]) != nil);
+    assert((tiles = [NSImage imageNamed:@"Tiles"]) != nil);
+    assert((sprites = [NSImage imageNamed:@"Sprites"]) != nil);
     assert((cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Cursor"] hotSpot:NSMakePoint(8.0, 8.0)]) != nil);
   }
 }

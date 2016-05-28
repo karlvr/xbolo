@@ -343,7 +343,6 @@ NSMutableDictionary *nameDictionary;
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [super dealloc];
 }
 
 - (void)performClick:(id)sender {

@@ -356,19 +356,16 @@ static void getlisttrackerstatus(int status);
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bubbles" ofType:@"aiff"] byReference:NO];
   bubblessounds = [[NSMutableArray alloc] init];
   [bubblessounds addObject:sound];
-  [bubblessounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"build" ofType:@"aiff"] byReference:NO];
   buildsounds = [[NSMutableArray alloc] init];
   [buildsounds addObject:sound];
   [buildsounds addObject:[sound copy]];
-  [buildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"builderdeath" ofType:@"aiff"] byReference:NO];
   builderdeathsounds = [[NSMutableArray alloc] init];
   [builderdeathsounds addObject:sound];
   [builderdeathsounds addObject:[sound copy]];
-  [builderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"explosion" ofType:@"aiff"] byReference:NO];
   explosionsounds = [[NSMutableArray alloc] init];
@@ -378,19 +375,16 @@ static void getlisttrackerstatus(int status);
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
-  [explosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuild" ofType:@"aiff"] byReference:NO];
   farbuildsounds = [[NSMutableArray alloc] init];
   [farbuildsounds addObject:sound];
   [farbuildsounds addObject:[sound copy]];
-  [farbuildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuilderdeath" ofType:@"aiff"] byReference:NO];
   farbuilderdeathsounds = [[NSMutableArray alloc] init];
   [farbuilderdeathsounds addObject:sound];
   [farbuilderdeathsounds addObject:[sound copy]];
-  [farbuilderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fexplosion" ofType:@"aiff"] byReference:NO];
   farexplosionsounds = [[NSMutableArray alloc] init];
@@ -400,81 +394,68 @@ static void getlisttrackerstatus(int status);
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
-  [farexplosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittank" ofType:@"aiff"] byReference:NO];
   farhittanksounds = [[NSMutableArray alloc] init];
   [farhittanksounds addObject:sound];
   [farhittanksounds addObject:[sound copy]];
-  [farhittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhitterrain" ofType:@"aiff"] byReference:NO];
   farhitterrainsounds = [[NSMutableArray alloc] init];
   [farhitterrainsounds addObject:sound];
   [farhitterrainsounds addObject:[sound copy]];
-  [farhitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittree" ofType:@"aiff"] byReference:NO];
   farhittreesounds = [[NSMutableArray alloc] init];
   [farhittreesounds addObject:sound];
   [farhittreesounds addObject:[sound copy]];
-  [farhittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fshot" ofType:@"aiff"] byReference:NO];
   farshotsounds = [[NSMutableArray alloc] init];
   [farshotsounds addObject:sound];
   [farshotsounds addObject:[sound copy]];
-  [farshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsink" ofType:@"aiff"] byReference:NO];
   farsinksounds = [[NSMutableArray alloc] init];
   [farsinksounds addObject:sound];
   [farsinksounds addObject:[sound copy]];
-  [farsinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsuperboom" ofType:@"aiff"] byReference:NO];
   farsuperboomsounds = [[NSMutableArray alloc] init];
   [farsuperboomsounds addObject:sound];
   [farsuperboomsounds addObject:[sound copy]];
-  [farsuperboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ftree" ofType:@"aiff"] byReference:NO];
   fartreesounds = [[NSMutableArray alloc] init];
   [fartreesounds addObject:sound];
   [fartreesounds addObject:[sound copy]];
-  [fartreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittank" ofType:@"aiff"] byReference:NO];
   hittanksounds = [[NSMutableArray alloc] init];
   [hittanksounds addObject:sound];
   [hittanksounds addObject:[sound copy]];
-  [hittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hitterrain" ofType:@"aiff"] byReference:NO];
   hitterrainsounds = [[NSMutableArray alloc] init];
   [hitterrainsounds addObject:sound];
   [hitterrainsounds addObject:[sound copy]];
   [hitterrainsounds addObject:[sound copy]];
-  [hitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittree" ofType:@"aiff"] byReference:NO];
   hittreesounds = [[NSMutableArray alloc] init];
   [hittreesounds addObject:sound];
   [hittreesounds addObject:[sound copy]];
-  [hittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"mine" ofType:@"aiff"] byReference:NO];
   minesounds = [[NSMutableArray alloc] init];
   [minesounds addObject:sound];
   [minesounds addObject:[sound copy]];
-  [minesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"msgreceived" ofType:@"aiff"] byReference:NO];
   msgreceivedsounds = [[NSMutableArray alloc] init];
   [msgreceivedsounds addObject:sound];
   [msgreceivedsounds addObject:[sound copy]];
   [msgreceivedsounds addObject:[sound copy]];
-  [msgreceivedsounds makeObjectsPerformSelector:@selector(release)];
 	
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pillshot" ofType:@"aiff"] byReference:NO];
   pillshotsounds = [[NSMutableArray alloc] init];
@@ -484,17 +465,14 @@ static void getlisttrackerstatus(int status);
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
-  [pillshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"sink" ofType:@"aiff"] byReference:NO];
   sinksounds = [[NSMutableArray alloc] init];
   [sinksounds addObject:sound];
-  [sinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"superboom" ofType:@"aiff"] byReference:NO];
   superboomsounds = [[NSMutableArray alloc] init];
   [superboomsounds addObject:sound];
-  [superboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tankshot" ofType:@"aiff"] byReference:NO];
   tankshotsounds = [[NSMutableArray alloc] init];
@@ -503,19 +481,16 @@ static void getlisttrackerstatus(int status);
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
-  [tankshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tree" ofType:@"aiff"] byReference:NO];
   treesounds = [[NSMutableArray alloc] init];
   [treesounds addObject:sound];
   [treesounds addObject:[sound copy]];
   [treesounds addObject:[sound copy]];
-  [treesounds makeObjectsPerformSelector:@selector(release)];
 
   speechSynthesizers = [[NSMutableArray alloc] init];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
-  [speechSynthesizers makeObjectsPerformSelector:@selector(release)];
 
   zoomLevel = DEFAULT_ZOOM;
 
@@ -544,7 +519,6 @@ static void getlisttrackerstatus(int status);
 // accessor methods
 
 - (void)setHostMapString:(NSString *)aString {
-  [hostMapString release];
   hostMapString = [aString copy];
   [hostMapField setStringValue:[[NSFileManager defaultManager] displayNameAtPath:aString]];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMapString];
@@ -571,7 +545,6 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setHostPasswordString:(NSString *)aString {
-  [hostPasswordString release];
   hostPasswordString = [aString copy];
   [hostPasswordField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostPasswordString];
@@ -594,7 +567,6 @@ static void getlisttrackerstatus(int status);
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostTimeLimitString release];
   hostTimeLimitString = [aString copy];
   [hostTimeLimitSlider setIntValue:hours*3600 + minutes*60 + seconds];
   [hostTimeLimitField setStringValue:aString];
@@ -643,7 +615,6 @@ static void getlisttrackerstatus(int status);
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostDominationBaseControlString release];
   hostDominationBaseControlString = [aString copy];
   [hostDominationBaseControlSlider setIntValue:hours*3600 + minutes*60 + seconds];
   [hostDominationBaseControlField setStringValue:aString];
@@ -651,7 +622,6 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinAddressString:(NSString *)newJoinAddressString {
-  [joinAddressString release];
   joinAddressString = [newJoinAddressString copy];
   [joinAddressField setStringValue:newJoinAddressString];
   [[NSUserDefaults standardUserDefaults] setObject:newJoinAddressString forKey:GSJoinAddressString];
@@ -671,21 +641,18 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinPasswordString:(NSString *)aString {
-  [joinPasswordString release];
   joinPasswordString = [aString copy];
   [joinPasswordField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSJoinPasswordString];
 }
 
 - (void)setJoinTrackerArray:(NSArray *)aArray {
-  [joinTrackerArray release];
   joinTrackerArray = [aArray mutableCopy];
   [joinTrackerArray sortUsingDescriptors:[joinTrackerTableView sortDescriptors]];
   [joinTrackerTableView reloadData];
 }
 
 - (void)setTrackerString:(NSString *)aString {
-  [trackerString release];
   trackerString = [aString copy];
   [hostTrackerField setStringValue:aString];
   [joinTrackerField setStringValue:aString];
@@ -699,14 +666,12 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setPlayerNameString:(NSString *)aString {
-  [playerNameString release];
   playerNameString = [aString copy];
   [prefPlayerNameField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPlayerNameString];
 }
 
 - (void)setKeyConfigDict:(NSDictionary *)aDict {
-  [keyConfigDict release];
   keyConfigDict = [aDict copy];
   [[NSUserDefaults standardUserDefaults] setObject:aDict forKey:GSKeyConfigDict];
 }
@@ -2017,7 +1982,6 @@ END
       [menuItem setTarget:self];
       [menuItem setTag:i];
       [menu addItem:menuItem];
-      [menuItem release];
       i++;
       node = nextlist(node);
     }
@@ -2217,7 +2181,6 @@ TRY
     if (playerRecord == nil) {
       playerRecord = [[NSMutableDictionary alloc] init];
       [playerInfoArray addObject:playerRecord];
-      [playerRecord release];
     }
 
     [playerRecord setObject:indexString forKey:@"Index"];
@@ -2233,7 +2196,6 @@ TRY
     }
 
     [playerRecord setObject:name forKey:@"Player"];
-    [name release];
 
     if (client.player == player) {
       [imageView setImage:[NSImage imageNamed:@"PlayerStatFriendly"]];
@@ -2725,7 +2687,6 @@ END
 //    }
 //  }
 	
-  [newline release];
 }
 
 
@@ -3529,8 +3490,7 @@ END
         else
         {
             [robot unload];
-            [robot release];
-            robot = [newRobot retain];
+            robot = newRobot;
         }
     }
     [robotLock unlock];
@@ -3548,7 +3508,6 @@ END
         NSMenu *menu = [[NSMenu alloc] initWithTitle: @"Robots"];
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: @"Manual Control" action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
         [menu addItem: item];
-        [item release];
         
         [menu addItem: [NSMenuItem separatorItem]];
         
@@ -3561,14 +3520,11 @@ END
             [menu addItem: item];
             if(autoName && [[r name] hasPrefix: autoName])
                 autoMenu = item;
-            [item release];
         }
         
         NSMenuItem *robotItem = [[NSMenuItem alloc] initWithTitle: @"Robots" action: NULL keyEquivalent: @""];
         [robotItem setSubmenu: menu];
         [[NSApp mainMenu] addItem: robotItem];
-        [robotItem release];
-        [menu release];
     }
     
     if(autoMenu)
@@ -3577,11 +3533,11 @@ END
 
 - (void)clientLoopUpdate
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [robotLock lock];
-    [robot step];
-    [robotLock unlock];
-    [pool release];
+    @autoreleasepool {
+        [robotLock lock];
+        [robot step];
+        [robotLock unlock];
+    }
 }
 
 - (void)sendMessageToRobot: (NSString *)string
@@ -3596,448 +3552,435 @@ END
 @end
 
 void setplayerstatus(int player) {
-  NSAutoreleasePool *pool;
   assert(player >= 0 && player < MAX_PLAYERS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
+  }
 }
 
 void setpillstatus(int pill) {
-  NSAutoreleasePool *pool;
   assert(pill >= 0 && pill < MAX_PILLS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
+  }
 }
 
 void setbasestatus(int base) {
-  NSAutoreleasePool *pool;
   assert(base >= 0 && base < MAX_BASES);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
+  }
 }
 
 void settankstatus() {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
+  }
 }
 
 void playsound(int snd) {
   if (!muteBool) {
     int i;
-    NSAutoreleasePool *pool;
     NSArray *array;
 
-    pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
-    switch (snd) {
-    case kBubblesSound:
-      array = bubblessounds;
-      break;
+      switch (snd) {
+      case kBubblesSound:
+        array = bubblessounds;
+        break;
 
-    case kBuildSound:
-      array = buildsounds;
-      break;
+      case kBuildSound:
+        array = buildsounds;
+        break;
 
-    case kBuilderDeathSound:
-      array = builderdeathsounds;
-      break;
+      case kBuilderDeathSound:
+        array = builderdeathsounds;
+        break;
 
-    case kExplosionSound:
-      array = explosionsounds;
-      break;
+      case kExplosionSound:
+        array = explosionsounds;
+        break;
 
-    case kFarBuildSound:
-      array = farbuildsounds;
-      break;
+      case kFarBuildSound:
+        array = farbuildsounds;
+        break;
 
-    case kFarBuilderDeathSound:
-      array = farbuilderdeathsounds;
-      break;
+      case kFarBuilderDeathSound:
+        array = farbuilderdeathsounds;
+        break;
 
-    case kFarExplosionSound:
-      array = farexplosionsounds;
-      break;
+      case kFarExplosionSound:
+        array = farexplosionsounds;
+        break;
 
-    case kFarHitTankSound:
-      array = farhittanksounds;
-      break;
+      case kFarHitTankSound:
+        array = farhittanksounds;
+        break;
 
-    case kFarHitTerrainSound:
-      array = farhitterrainsounds;
-      break;
+      case kFarHitTerrainSound:
+        array = farhitterrainsounds;
+        break;
 
-    case kFarHitTreeSound:
-      array = farhittreesounds;
-      break;
+      case kFarHitTreeSound:
+        array = farhittreesounds;
+        break;
 
-    case kFarShotSound:
-      array = farshotsounds;
-      break;
+      case kFarShotSound:
+        array = farshotsounds;
+        break;
 
-    case kFarSinkSound:
-      array = farsinksounds;
-      break;
+      case kFarSinkSound:
+        array = farsinksounds;
+        break;
 
-    case kFarSuperBoomSound:
-      array = farsuperboomsounds;
-      break;
+      case kFarSuperBoomSound:
+        array = farsuperboomsounds;
+        break;
 
-    case kFarTreeSound:
-      array = fartreesounds;
-      break;
+      case kFarTreeSound:
+        array = fartreesounds;
+        break;
 
-    case kHitTankSound:
-      array = hittanksounds;
-      break;
+      case kHitTankSound:
+        array = hittanksounds;
+        break;
 
-    case kHitTerrainSound:
-      array = hitterrainsounds;
-      break;
+      case kHitTerrainSound:
+        array = hitterrainsounds;
+        break;
 
-    case kHitTreeSound:
-      array = hittreesounds;
-      break;
+      case kHitTreeSound:
+        array = hittreesounds;
+        break;
 
-    case kMineSound:
-      array = minesounds;
-      break;
+      case kMineSound:
+        array = minesounds;
+        break;
 			
 	case kMsgReceivedSound:
 	  array = msgreceivedsounds;
 	  break;
 
-    case kPillShotSound:
-      array = pillshotsounds;
-      break;
+      case kPillShotSound:
+        array = pillshotsounds;
+        break;
 
-    case kSinkSound:
-      array = sinksounds;
-      break;
+      case kSinkSound:
+        array = sinksounds;
+        break;
 
-    case kSuperBoomSound:
-      array = superboomsounds;
-      break;
+      case kSuperBoomSound:
+        array = superboomsounds;
+        break;
 
-    case kTankShotSound:
-      array = tankshotsounds;
-      break;
+      case kTankShotSound:
+        array = tankshotsounds;
+        break;
 
-    case kTreeSound:
-      array = treesounds;
-      break;
+      case kTreeSound:
+        array = treesounds;
+        break;
 
-    default:
-      array = nil;
-      break;
-    }
-
-    // start playing sound
-    for (i = 0; i < [array count]; i++) {
-      if (![[array objectAtIndex:i] isPlaying]) {
-        [[array objectAtIndex:i] play];
+      default:
+        array = nil;
         break;
       }
-    }
 
-    [pool release];
+      // start playing sound
+      for (i = 0; i < [array count]; i++) {
+        if (![[array objectAtIndex:i] isPlaying]) {
+          [[array objectAtIndex:i] play];
+          break;
+        }
+      }
+
+    }
   }
 }
 
 void printmessage(int type, const char *text) {
-  NSAutoreleasePool *pool;
   NSDictionary *attr;
   NSAttributedString *attrstring;
 
   assert(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY || type == MSGGAME);
 
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
 
-  switch (type) {
-  case MSGEVERYONE:
-    attr = [[NSDictionary alloc] init];
-    break;
+    switch (type) {
+    case MSGEVERYONE:
+      attr = [[NSDictionary alloc] init];
+      break;
 
-  case MSGALLIES:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor purpleColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGALLIES:
+      attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor purpleColor], NSForegroundColorAttributeName, nil];
+      break;
 
-  case MSGNEARBY:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGNEARBY:
+      attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSForegroundColorAttributeName, nil];
+      break;
 
-  case MSGGAME:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor blueColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGGAME:
+      attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor blueColor], NSForegroundColorAttributeName, nil];
+      break;
 
-  default:
-    assert(0);
-    break;
-  }
+    default:
+      assert(0);
+      break;
+    }
 
-  NSString *string = [NSString stringWithCString:text encoding:NSUTF8StringEncoding];
-  attrstring = [[NSAttributedString alloc] initWithString:string attributes:attr];
-  [controller performSelectorOnMainThread:@selector(printMessage:) withObject:attrstring waitUntilDone:NO];
+    NSString *string = [NSString stringWithCString:text encoding:NSUTF8StringEncoding];
+    attrstring = [[NSAttributedString alloc] initWithString:string attributes:attr];
+    [controller performSelectorOnMainThread:@selector(printMessage:) withObject:attrstring waitUntilDone:NO];
 
-  if(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY) {
+    if(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY) {
 	playsound(kMsgReceivedSound);
 	[controller sendMessageToRobot: string];
+    }
+    
   }
-  
-  [attrstring release];
-  [attr release];
-  [pool release];
 }
 
 void joinprogress(int statuscode, float progress) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (statuscode) {
+    /* status udpates */
+    case kJoinRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Hostname..." waitUntilDone:NO];
+      break;
 
-  switch (statuscode) {
-  /* status udpates */
-  case kJoinRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Hostname..." waitUntilDone:NO];
-    break;
+    case kJoinCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting..." waitUntilDone:NO];
+      break;
 
-  case kJoinCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting..." waitUntilDone:NO];
-    break;
+    case kJoinSENDJOIN:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Client Data" waitUntilDone:NO];
+      break;
 
-  case kJoinSENDJOIN:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Client Data" waitUntilDone:NO];
-    break;
+    case kJoinRECVPREAMBLE:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receiving Server Data" waitUntilDone:NO];
+      break;
 
-  case kJoinRECVPREAMBLE:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receiving Server Data" waitUntilDone:NO];
-    break;
+    case kJoinRECVMAP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Map Data" waitUntilDone:NO];
+      [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:[NSString stringWithFormat:@"%f", progress] waitUntilDone:NO];
+      break;
 
-  case kJoinRECVMAP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Map Data" waitUntilDone:NO];
-    [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:[NSString stringWithFormat:@"%f", progress] waitUntilDone:NO];
-    break;
+    case kJoinSUCCESS:
+      [controller performSelectorOnMainThread:@selector(joinSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinSUCCESS:
-    [controller performSelectorOnMainThread:@selector(joinSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    /* errors */
+    case kJoinEHOSTNOTFOUND:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  /* errors */
-  case kJoinEHOSTNOTFOUND:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinETIMEOUT:
+      [controller performSelectorOnMainThread:@selector(joinTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinETIMEOUT:
-    [controller performSelectorOnMainThread:@selector(joinTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(joinConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(joinConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinENETUNREACH:
+      [controller performSelectorOnMainThread:@selector(joinNetUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinENETUNREACH:
-    [controller performSelectorOnMainThread:@selector(joinNetUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(joinHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(joinHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(joinBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(joinBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEDISALLOW:
+      [controller performSelectorOnMainThread:@selector(joinDisallow) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEDISALLOW:
-    [controller performSelectorOnMainThread:@selector(joinDisallow) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBADPASS:
+      [controller performSelectorOnMainThread:@selector(joinBadPassword) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBADPASS:
-    [controller performSelectorOnMainThread:@selector(joinBadPassword) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinESERVERFULL:
+      [controller performSelectorOnMainThread:@selector(joinServerFull) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinESERVERFULL:
-    [controller performSelectorOnMainThread:@selector(joinServerFull) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinETIMELIMIT:
+      [controller performSelectorOnMainThread:@selector(joinTimeLimit) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinETIMELIMIT:
-    [controller performSelectorOnMainThread:@selector(joinTimeLimit) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBANNEDPLAYER:
+      [controller performSelectorOnMainThread:@selector(joinBannedPlayer) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBANNEDPLAYER:
-    [controller performSelectorOnMainThread:@selector(joinBannedPlayer) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinESERVERERROR:
+      [controller performSelectorOnMainThread:@selector(joinServerError) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinESERVERERROR:
-    [controller performSelectorOnMainThread:@selector(joinServerError) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinECONNRESET:
+      [controller performSelectorOnMainThread:@selector(joinConnectionReset) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinECONNRESET:
-    [controller performSelectorOnMainThread:@selector(joinConnectionReset) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
 void registercallback(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (status) {
+    case kRegisterRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
+      break;
 
-  switch (status) {
-  case kRegisterRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
-    break;
+    case kRegisterCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
+      break;
 
-  case kRegisterCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
-    break;
+    case kRegisterSENDINGDATA:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Data..." waitUntilDone:NO];
+      break;
 
-  case kRegisterSENDINGDATA:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Data..." waitUntilDone:NO];
-    break;
+    case kRegisterTESTINGTCP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing TCP Port..." waitUntilDone:NO];
+      break;
 
-  case kRegisterTESTINGTCP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing TCP Port..." waitUntilDone:NO];
-    break;
+    case kRegisterTESTINGUDP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing UDP Port..." waitUntilDone:NO];
+      break;
 
-  case kRegisterTESTINGUDP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing UDP Port..." waitUntilDone:NO];
-    break;
+    case kRegisterSUCCESS:
+      [controller performSelectorOnMainThread:@selector(registerSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterSUCCESS:
-    [controller performSelectorOnMainThread:@selector(registerSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
+    
+    case kRegisterEHOSTNOTFOUND:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
-  
-  case kRegisterEHOSTNOTFOUND:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kRegisterETIMEOUT:
+      [controller performSelectorOnMainThread:@selector(registerTrackerTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterETIMEOUT:
-    [controller performSelectorOnMainThread:@selector(registerTrackerTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTDOWN:
+      [controller performSelectorOnMainThread:@selector(registerTrackerHostDown) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTDOWN:
-    [controller performSelectorOnMainThread:@selector(registerTrackerHostDown) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(registerTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(registerTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(registerTrackerBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(registerTrackerBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterETCPCLOSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerTCPPortBlocked) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterETCPCLOSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerTCPPortBlocked) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEUDPCLOSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerUDPPortBlocked) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEUDPCLOSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerUDPPortBlocked) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterECONNRESET:
+      [controller performSelectorOnMainThread:@selector(registerTrackerConnectionReset) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterECONNRESET:
-    [controller performSelectorOnMainThread:@selector(registerTrackerConnectionReset) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
 void getlisttrackerstatus(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (status) {
+    case kGetListTrackerRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
+      break;
 
-  switch (status) {
-  case kGetListTrackerRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerGETTINGLIST:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Game List..." waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerGETTINGLIST:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Game List..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerSUCCESS:
+      [controller performSelectorOnMainThread:@selector(getListTrackerSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerSUCCESS:
-    [controller performSelectorOnMainThread:@selector(getListTrackerSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerECONNABORTED:  // error caused by user cancel
+      break;
 
-  case kGetListTrackerECONNABORTED:  // error caused by user cancel
-    break;
+    case kGetListTrackerEPIPE:
+      break;
 
-  case kGetListTrackerEPIPE:
-    break;
+    case kGetListTrackerEHOSTNOTFOUND:  // error from dns lookup
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNOTFOUND:  // error from dns lookup
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerETIMEOUT:  // error caused by other factors
+      [controller performSelectorOnMainThread:@selector(getListTrackerTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerETIMEOUT:  // error caused by other factors
-    [controller performSelectorOnMainThread:@selector(getListTrackerTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(getListTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(getListTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTDOWN:
+      [controller performSelectorOnMainThread:@selector(getListTrackerHostDown) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTDOWN:
-    [controller performSelectorOnMainThread:@selector(getListTrackerHostDown) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(getListTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(getListTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(getListTrackerBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(getListTrackerBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
 int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {
