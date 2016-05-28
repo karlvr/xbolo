@@ -153,6 +153,14 @@
 		55712C321CF903D900326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
 		55712C341CF9064600326A27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		55712C371CF9068700326A27 /* XBolo Quick Look Plug-in.qlgenerator in Embed QuickLook PlugIn */ = {isa = PBXBuildFile; fileRef = 40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55712C6A1CF9744B00326A27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55712C691CF9744B00326A27 /* AppDelegate.swift */; };
+		55712C6C1CF9744B00326A27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C6B1CF9744B00326A27 /* Assets.xcassets */; };
+		55712C6F1CF9744B00326A27 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55712C6D1CF9744B00326A27 /* MainMenu.xib */; };
+		55712C741CF9745900326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
+		55712C751CF9746400326A27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712B8C1CF8ED7B00326A27 /* Assets.xcassets */; };
+		55712C771CF9748500326A27 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55712C761CF9748500326A27 /* Vector.swift */; };
+		55712C791CF9763A00326A27 /* BuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55712C781CF9763A00326A27 /* BuilderStatusView.swift */; };
+		55712C7B1CFA0D9100326A27 /* rect.c in Sources */ = {isa = PBXBuildFile; fileRef = FD969DCE07441F9C009568EF /* rect.c */; };
 		558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558243611CBD7A63006BDC14 /* MainMenu.xib */; };
 		558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
 		55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
@@ -342,6 +350,14 @@
 		55712C231CF8F0D000326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		55712C301CF903D900326A27 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		55712C351CF9065800326A27 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		55712C671CF9744B00326A27 /* SwiftBolo Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftBolo Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55712C691CF9744B00326A27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		55712C6B1CF9744B00326A27 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		55712C6E1CF9744B00326A27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		55712C701CF9744B00326A27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55712C761CF9748500326A27 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		55712C781CF9763A00326A27 /* BuilderStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderStatusView.swift; sourceTree = "<group>"; };
+		55712C7C1CFA0DAE00326A27 /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
@@ -412,6 +428,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55712C641CF9744B00326A27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -423,6 +446,7 @@
 				404D425D0FF84FEA00589EA2 /* iPhone.app */,
 				408187591080C81200E4D4CA /* Dedicated Host */,
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
+				55712C671CF9744B00326A27 /* SwiftBolo Map.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -437,6 +461,7 @@
 				408187641080C83B00E4D4CA /* Dedicated Host */,
 				55712B851CF8ED7B00326A27 /* Magma */,
 				55712C2F1CF903A600326A27 /* Shared */,
+				55712C681CF9744B00326A27 /* SwiftBolo Map */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -701,6 +726,22 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		55712C681CF9744B00326A27 /* SwiftBolo Map */ = {
+			isa = PBXGroup;
+			children = (
+				55712C691CF9744B00326A27 /* AppDelegate.swift */,
+				55712C761CF9748500326A27 /* Vector.swift */,
+				55712C781CF9763A00326A27 /* BuilderStatusView.swift */,
+				55712C6B1CF9744B00326A27 /* Assets.xcassets */,
+				55712C6D1CF9744B00326A27 /* MainMenu.xib */,
+				55712C701CF9744B00326A27 /* Info.plist */,
+				55712C7C1CFA0DAE00326A27 /* Bridge.h */,
+			);
+			indentWidth = 4;
+			path = "SwiftBolo Map";
+			sourceTree = "<group>";
+			usesTabs = 1;
+		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -904,16 +945,37 @@
 			productReference = 55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
+		55712C661CF9744B00326A27 /* SwiftBolo Map */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55712C711CF9744B00326A27 /* Build configuration list for PBXNativeTarget "SwiftBolo Map" */;
+			buildPhases = (
+				55712C631CF9744B00326A27 /* Sources */,
+				55712C641CF9744B00326A27 /* Frameworks */,
+				55712C651CF9744B00326A27 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftBolo Map";
+			productName = "SwiftBolo Map";
+			productReference = 55712C671CF9744B00326A27 /* SwiftBolo Map.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
 					55712B831CF8ED7B00326A27 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					55712C661CF9744B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
 				};
@@ -944,6 +1006,7 @@
 				407C8B380FDC739B006A71F7 /* XBolo Tracker */,
 				408187581080C81200E4D4CA /* Dedicated Host */,
 				55712B831CF8ED7B00326A27 /* XBolo Map Editor */,
+				55712C661CF9744B00326A27 /* SwiftBolo Map */,
 			);
 		};
 /* End PBXProject section */
@@ -1026,6 +1089,17 @@
 				55712C1F1CF8F0C300326A27 /* GSXBoloMap.xib in Resources */,
 				55712C1C1CF8F05600326A27 /* Credits.rtf in Resources */,
 				55712C041CF8F00100326A27 /* mouseEyeDropper.tiff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55712C651CF9744B00326A27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55712C741CF9745900326A27 /* Images.xcassets in Resources */,
+				55712C6C1CF9744B00326A27 /* Assets.xcassets in Resources */,
+				55712C751CF9746400326A27 /* Assets.xcassets in Resources */,
+				55712C6F1CF9744B00326A27 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1146,6 +1220,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55712C631CF9744B00326A27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55712C791CF9763A00326A27 /* BuilderStatusView.swift in Sources */,
+				55712C7B1CFA0D9100326A27 /* rect.c in Sources */,
+				55712C771CF9748500326A27 /* Vector.swift in Sources */,
+				55712C6A1CF9744B00326A27 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1198,6 +1283,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				55712C231CF8F0D000326A27 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		55712C6D1CF9744B00326A27 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				55712C6E1CF9744B00326A27 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1558,6 +1651,89 @@
 			};
 			name = Release;
 		};
+		55712C721CF9744B00326A27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "SwiftBolo Map/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.SwiftBolo-Map";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftBolo Map/Bridge.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		55712C731CF9744B00326A27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "SwiftBolo Map/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.SwiftBolo-Map";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftBolo Map/Bridge.h";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1611,6 +1787,15 @@
 			buildConfigurations = (
 				55712B921CF8ED7B00326A27 /* Debug */,
 				55712B931CF8ED7B00326A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55712C711CF9744B00326A27 /* Build configuration list for PBXNativeTarget "SwiftBolo Map" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55712C721CF9744B00326A27 /* Debug */,
+				55712C731CF9744B00326A27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
