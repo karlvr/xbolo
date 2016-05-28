@@ -11,6 +11,7 @@
 #define __VECTOR__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define INT16RADIX     (256)
 #define INT32RADIX     (65536)
@@ -61,7 +62,7 @@ float mag2f(Vec2f v);
 Vec2f unit2f(Vec2f v);
 Vec2f prj2f(Vec2f v1, Vec2f v2);
 float cmp2f(Vec2f v1, Vec2f v2);
-int isequal2f(Vec2f v1, Vec2f v2);
+bool isequal2f(Vec2f v1, Vec2f v2);
 Vec2f tan2f(float theta);
 float _atan2f(Vec2f dir);
 
@@ -75,7 +76,7 @@ int32_t dot2i32(Vec2i32 v1, Vec2i32 v2);
 int32_t mag2i32(Vec2i32 v);
 Vec2i32 prj2i32(Vec2i32 v1, Vec2i32 v2);
 int32_t cmp2i32(Vec2i32 v1, Vec2i32 v2);
-int isequal2i32(Vec2i32 v1, Vec2i32 v2);
+bool isequal2i32(Vec2i32 v1, Vec2i32 v2);
 Vec2i32 tan2i32(uint8_t dir);
 Vec2i32 scale2i32(uint8_t dir, int32_t scale);
 Vec2i16 c2i32to2i16(Vec2i32 v);
@@ -90,13 +91,13 @@ int16_t dot2i16(Vec2i16 v1, Vec2i16 v2);
 int16_t mag2i16(Vec2i16 v);
 Vec2i16 prj2i16(Vec2i16 v1, Vec2i16 v2);
 int16_t cmp2i16(Vec2i16 v1, Vec2i16 v2);
-int isequal2i16(Vec2i16 v1, Vec2i16 v2);
+bool isequal2i16(Vec2i16 v1, Vec2i16 v2);
 Vec2i16 tan2i16(uint8_t dir);
 Vec2i16 scale2i16(uint8_t dir, int16_t scale);
 Vec2i8 c2i16to2i8(Vec2i16 v);
 
 Vec2i8 make2i8(int8_t x, int8_t y);
-int isequal2i8(Vec2i8 v1, Vec2i8 v2);
+bool isequal2i8(Vec2i8 v1, Vec2i8 v2);
 
 extern const float kPif;
 extern const float k2Pif;

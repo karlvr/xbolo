@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <float.h>
+#include <tgmath.h>
 #include <math.h>
 
 const float kPif =  3.14159265358979;
@@ -95,7 +96,7 @@ float cmp2f(Vec2f v1, Vec2f v2) {
   return dot2f(v1, v2)/mag2f(v1);
 }
 
-int isequal2f(Vec2f v1, Vec2f v2) {
+bool isequal2f(Vec2f v1, Vec2f v2) {
   return v1.x == v2.x && v1.y == v2.y;
 }
 
@@ -150,7 +151,7 @@ int32_t cmp2i32(Vec2i32 v1, Vec2i32 v2) {
   return dot2i32(v1, v2)/mag2i32(v1);
 }
 
-int isequal2i32(Vec2i32 v1, Vec2i32 v2) {
+bool isequal2i32(Vec2i32 v1, Vec2i32 v2) {
   return v1.x == v2.x && v1.y == v2.y;
 }
 
@@ -272,7 +273,7 @@ int16_t cmp2i16(Vec2i16 v1, Vec2i16 v2) {
  * returns 0 if v1 != v2
  */
 
-int isequal2i16(Vec2i16 v1, Vec2i16 v2) {
+bool isequal2i16(Vec2i16 v1, Vec2i16 v2) {
   return v1.x == v2.x && v1.y == v2.y;
 }
 
@@ -299,6 +300,6 @@ Vec2i8 make2i8(int8_t x, int8_t y) {
   return r;
 }
 
-int isequal2i8(Vec2i8 v1, Vec2i8 v2) {
+bool isequal2i8(Vec2i8 v1, Vec2i8 v2) {
   return v1.x == v2.x && v1.y == v2.y;
 }

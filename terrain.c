@@ -9,7 +9,7 @@
 
 #include "terrain.h"
 
-int isWaterLikeTerrain(int terrain) {
+bool isWaterLikeTerrain(int terrain) {
   switch (terrain) {
   case kRiverTerrain:
   case kSeaTerrain:

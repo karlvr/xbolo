@@ -68,7 +68,7 @@ ssize_t mapdatasize = 0;
 int main(int argc, const char *argv[]) {
   regex_t mapname_preg;
   regmatch_t pmatch[NMATCH];
-  int len;
+  off_t len;
   int err;
 
   parsecommandline(argc, argv);
@@ -184,7 +184,7 @@ void parsecommandline(int argc, const char *argv[]) {
       break;
 
     case 'l':
-      if ((timelimit = strtol(optarg, NULL, 10)) == 0) {
+      if ((timelimit = (int)strtol(optarg, NULL, 10)) == 0) {
         usage(argv[0]);
       }
 
@@ -647,7 +647,7 @@ TRY
       int player;
 
       /* probably should do some error checking here */
-      player = strtol(buf + pmatch[1].rm_so, NULL, 10);
+      player = (int)strtol(buf + pmatch[1].rm_so, NULL, 10);
 
       if (player < 0 || player >= MAX_PLAYERS) {
         printf("Input Player ID in range of [0, 15]\n");
@@ -668,7 +668,7 @@ TRY
       int player;
 
       /* probably should do some error checking here */
-      player = strtol(buf + pmatch[1].rm_so, NULL, 10);
+      player = (int)strtol(buf + pmatch[1].rm_so, NULL, 10);
 
       if (player < 0 || player >= MAX_PLAYERS) {
         printf("Input Player ID in range of [0, 15]\n");
@@ -689,7 +689,7 @@ TRY
       int player;
 
       /* probably should do some error checking here */
-      player = strtol(buf + pmatch[1].rm_so, NULL, 10);
+      player = (int)strtol(buf + pmatch[1].rm_so, NULL, 10);
 
       if (player < 0) {
         printf("Input Ban ID in range of [0, +infinity)\n");
