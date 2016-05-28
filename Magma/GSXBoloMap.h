@@ -26,13 +26,13 @@
 }
 
 // accessors
-- (NSUInteger)pillCount;
+@property (readonly) NSUInteger pillCount;
 - (struct BMAP_PillInfo)pillAtIndex:(NSUInteger)i;
 
-- (NSUInteger)baseCount;
+@property (readonly) NSUInteger baseCount;
 - (struct BMAP_BaseInfo)baseAtIndex:(NSUInteger)i;
 
-- (NSUInteger)startCount;
+@property (readonly) NSUInteger startCount;
 - (struct BMAP_StartInfo)startAtIndex:(NSUInteger)i;
 
 - (GSTile)tileAtX:(NSUInteger)x y:(NSUInteger)y;
@@ -67,7 +67,7 @@
 - (void)deleteObjectsInRect:(GSRect)rect;
 - (void)setAppropriateTilesForObjectsInRect:(GSRect)rect;
 
-- (GSRect)mapRect;
+@property (readonly) GSRect mapRect;
 
 // draw methods
 - (void)drawRect:(NSRect)rect;

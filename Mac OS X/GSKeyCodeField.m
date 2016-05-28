@@ -9,110 +9,110 @@ NSMutableDictionary *nameDictionary;
 + (void)initialize {
   if (self == [GSKeyCodeFieldCell class]) {
     nameDictionary = [[NSMutableDictionary alloc] init];
-    [nameDictionary setObject:@"A" forKey:[NSString stringWithFormat:@"%d", 0]];
-    [nameDictionary setObject:@"S" forKey:[NSString stringWithFormat:@"%d", 1]];
-    [nameDictionary setObject:@"D" forKey:[NSString stringWithFormat:@"%d", 2]];
-    [nameDictionary setObject:@"F" forKey:[NSString stringWithFormat:@"%d", 3]];
-    [nameDictionary setObject:@"H" forKey:[NSString stringWithFormat:@"%d", 4]];
-    [nameDictionary setObject:@"G" forKey:[NSString stringWithFormat:@"%d", 5]];
-    [nameDictionary setObject:@"Z" forKey:[NSString stringWithFormat:@"%d", 6]];
-    [nameDictionary setObject:@"X" forKey:[NSString stringWithFormat:@"%d", 7]];
-    [nameDictionary setObject:@"C" forKey:[NSString stringWithFormat:@"%d", 8]];
-    [nameDictionary setObject:@"V" forKey:[NSString stringWithFormat:@"%d", 9]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 0]] = @"A";
+    nameDictionary[[NSString stringWithFormat:@"%d", 1]] = @"S";
+    nameDictionary[[NSString stringWithFormat:@"%d", 2]] = @"D";
+    nameDictionary[[NSString stringWithFormat:@"%d", 3]] = @"F";
+    nameDictionary[[NSString stringWithFormat:@"%d", 4]] = @"H";
+    nameDictionary[[NSString stringWithFormat:@"%d", 5]] = @"G";
+    nameDictionary[[NSString stringWithFormat:@"%d", 6]] = @"Z";
+    nameDictionary[[NSString stringWithFormat:@"%d", 7]] = @"X";
+    nameDictionary[[NSString stringWithFormat:@"%d", 8]] = @"C";
+    nameDictionary[[NSString stringWithFormat:@"%d", 9]] = @"V";
 
-    [nameDictionary setObject:@"B" forKey:[NSString stringWithFormat:@"%d", 11]];
-    [nameDictionary setObject:@"Q" forKey:[NSString stringWithFormat:@"%d", 12]];
-    [nameDictionary setObject:@"W" forKey:[NSString stringWithFormat:@"%d", 13]];
-    [nameDictionary setObject:@"E" forKey:[NSString stringWithFormat:@"%d", 14]];
-    [nameDictionary setObject:@"R" forKey:[NSString stringWithFormat:@"%d", 15]];
-    [nameDictionary setObject:@"Y" forKey:[NSString stringWithFormat:@"%d", 16]];
-    [nameDictionary setObject:@"T" forKey:[NSString stringWithFormat:@"%d", 17]];
-    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%d", 18]];
-    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%d", 19]];
-    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%d", 20]];
-    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%d", 21]];
-    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%d", 22]];
-    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%d", 23]];
-    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%d", 24]];
-    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%d", 25]];
-    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%d", 26]];
-    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%d", 27]];
-    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%d", 28]];
-    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%d", 29]];
-    [nameDictionary setObject:@"]" forKey:[NSString stringWithFormat:@"%d", 30]];
-    [nameDictionary setObject:@"O" forKey:[NSString stringWithFormat:@"%d", 31]];
-    [nameDictionary setObject:@"U" forKey:[NSString stringWithFormat:@"%d", 32]];
-    [nameDictionary setObject:@"[" forKey:[NSString stringWithFormat:@"%d", 33]];
-    [nameDictionary setObject:@"I" forKey:[NSString stringWithFormat:@"%d", 34]];
-    [nameDictionary setObject:@"P" forKey:[NSString stringWithFormat:@"%d", 35]];
-    [nameDictionary setObject:@"Return" forKey:[NSString stringWithFormat:@"%d", 36]];
-    [nameDictionary setObject:@"L" forKey:[NSString stringWithFormat:@"%d", 37]];
-    [nameDictionary setObject:@"J" forKey:[NSString stringWithFormat:@"%d", 38]];
-    [nameDictionary setObject:@"'" forKey:[NSString stringWithFormat:@"%d", 39]];
-    [nameDictionary setObject:@"K" forKey:[NSString stringWithFormat:@"%d", 40]];
-    [nameDictionary setObject:@";" forKey:[NSString stringWithFormat:@"%d", 41]];
-    [nameDictionary setObject:@"\\" forKey:[NSString stringWithFormat:@"%d", 42]];
-    [nameDictionary setObject:@"," forKey:[NSString stringWithFormat:@"%d", 43]];
-    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%d", 44]];
-    [nameDictionary setObject:@"N" forKey:[NSString stringWithFormat:@"%d", 45]];
-    [nameDictionary setObject:@"M" forKey:[NSString stringWithFormat:@"%d", 46]];
-    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%d", 47]];
-    [nameDictionary setObject:@"Tab" forKey:[NSString stringWithFormat:@"%d", 48]];
-    [nameDictionary setObject:@"Spacebar" forKey:[NSString stringWithFormat:@"%d", 49]];
-    [nameDictionary setObject:@"`" forKey:[NSString stringWithFormat:@"%d", 50]];
-    [nameDictionary setObject:@"Delete" forKey:[NSString stringWithFormat:@"%d", 51]];
-    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%d", 52]];
-    [nameDictionary setObject:@"Escape" forKey:[NSString stringWithFormat:@"%d", 53]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 11]] = @"B";
+    nameDictionary[[NSString stringWithFormat:@"%d", 12]] = @"Q";
+    nameDictionary[[NSString stringWithFormat:@"%d", 13]] = @"W";
+    nameDictionary[[NSString stringWithFormat:@"%d", 14]] = @"E";
+    nameDictionary[[NSString stringWithFormat:@"%d", 15]] = @"R";
+    nameDictionary[[NSString stringWithFormat:@"%d", 16]] = @"Y";
+    nameDictionary[[NSString stringWithFormat:@"%d", 17]] = @"T";
+    nameDictionary[[NSString stringWithFormat:@"%d", 18]] = @"1";
+    nameDictionary[[NSString stringWithFormat:@"%d", 19]] = @"2";
+    nameDictionary[[NSString stringWithFormat:@"%d", 20]] = @"3";
+    nameDictionary[[NSString stringWithFormat:@"%d", 21]] = @"4";
+    nameDictionary[[NSString stringWithFormat:@"%d", 22]] = @"6";
+    nameDictionary[[NSString stringWithFormat:@"%d", 23]] = @"5";
+    nameDictionary[[NSString stringWithFormat:@"%d", 24]] = @"=";
+    nameDictionary[[NSString stringWithFormat:@"%d", 25]] = @"9";
+    nameDictionary[[NSString stringWithFormat:@"%d", 26]] = @"7";
+    nameDictionary[[NSString stringWithFormat:@"%d", 27]] = @"-";
+    nameDictionary[[NSString stringWithFormat:@"%d", 28]] = @"8";
+    nameDictionary[[NSString stringWithFormat:@"%d", 29]] = @"0";
+    nameDictionary[[NSString stringWithFormat:@"%d", 30]] = @"]";
+    nameDictionary[[NSString stringWithFormat:@"%d", 31]] = @"O";
+    nameDictionary[[NSString stringWithFormat:@"%d", 32]] = @"U";
+    nameDictionary[[NSString stringWithFormat:@"%d", 33]] = @"[";
+    nameDictionary[[NSString stringWithFormat:@"%d", 34]] = @"I";
+    nameDictionary[[NSString stringWithFormat:@"%d", 35]] = @"P";
+    nameDictionary[[NSString stringWithFormat:@"%d", 36]] = @"Return";
+    nameDictionary[[NSString stringWithFormat:@"%d", 37]] = @"L";
+    nameDictionary[[NSString stringWithFormat:@"%d", 38]] = @"J";
+    nameDictionary[[NSString stringWithFormat:@"%d", 39]] = @"'";
+    nameDictionary[[NSString stringWithFormat:@"%d", 40]] = @"K";
+    nameDictionary[[NSString stringWithFormat:@"%d", 41]] = @";";
+    nameDictionary[[NSString stringWithFormat:@"%d", 42]] = @"\\";
+    nameDictionary[[NSString stringWithFormat:@"%d", 43]] = @",";
+    nameDictionary[[NSString stringWithFormat:@"%d", 44]] = @"/";
+    nameDictionary[[NSString stringWithFormat:@"%d", 45]] = @"N";
+    nameDictionary[[NSString stringWithFormat:@"%d", 46]] = @"M";
+    nameDictionary[[NSString stringWithFormat:@"%d", 47]] = @".";
+    nameDictionary[[NSString stringWithFormat:@"%d", 48]] = @"Tab";
+    nameDictionary[[NSString stringWithFormat:@"%d", 49]] = @"Spacebar";
+    nameDictionary[[NSString stringWithFormat:@"%d", 50]] = @"`";
+    nameDictionary[[NSString stringWithFormat:@"%d", 51]] = @"Delete";
+    nameDictionary[[NSString stringWithFormat:@"%d", 52]] = @"Enter";
+    nameDictionary[[NSString stringWithFormat:@"%d", 53]] = @"Escape";
 
-    [nameDictionary setObject:@"Command" forKey:[NSString stringWithFormat:@"%d", 55]];
-    [nameDictionary setObject:@"Shift" forKey:[NSString stringWithFormat:@"%d", 56]];
-    [nameDictionary setObject:@"Caps Lock" forKey:[NSString stringWithFormat:@"%d", 57]];
-    [nameDictionary setObject:@"Option" forKey:[NSString stringWithFormat:@"%d", 58]];
-    [nameDictionary setObject:@"Control" forKey:[NSString stringWithFormat:@"%d", 59]];
-    [nameDictionary setObject:@"Fn Shift" forKey:[NSString stringWithFormat:@"%d", 60]];
-
-
-    [nameDictionary setObject:@"Function" forKey:[NSString stringWithFormat:@"%d", 63]];
-
-    [nameDictionary setObject:@"." forKey:[NSString stringWithFormat:@"%d", 65]];
-
-    [nameDictionary setObject:@"*" forKey:[NSString stringWithFormat:@"%d", 67]];
-
-    [nameDictionary setObject:@"+" forKey:[NSString stringWithFormat:@"%d", 69]];
-
-    [nameDictionary setObject:@"Clear" forKey:[NSString stringWithFormat:@"%d", 71]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 55]] = @"Command";
+    nameDictionary[[NSString stringWithFormat:@"%d", 56]] = @"Shift";
+    nameDictionary[[NSString stringWithFormat:@"%d", 57]] = @"Caps Lock";
+    nameDictionary[[NSString stringWithFormat:@"%d", 58]] = @"Option";
+    nameDictionary[[NSString stringWithFormat:@"%d", 59]] = @"Control";
+    nameDictionary[[NSString stringWithFormat:@"%d", 60]] = @"Fn Shift";
 
 
+    nameDictionary[[NSString stringWithFormat:@"%d", 63]] = @"Function";
 
-    [nameDictionary setObject:@"/" forKey:[NSString stringWithFormat:@"%d", 75]];
-    [nameDictionary setObject:@"Enter" forKey:[NSString stringWithFormat:@"%d", 76]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 65]] = @".";
 
-    [nameDictionary setObject:@"-" forKey:[NSString stringWithFormat:@"%d", 78]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 67]] = @"*";
 
+    nameDictionary[[NSString stringWithFormat:@"%d", 69]] = @"+";
 
-    [nameDictionary setObject:@"=" forKey:[NSString stringWithFormat:@"%d", 81]];
-    [nameDictionary setObject:@"0" forKey:[NSString stringWithFormat:@"%d", 82]];
-    [nameDictionary setObject:@"1" forKey:[NSString stringWithFormat:@"%d", 83]];
-    [nameDictionary setObject:@"2" forKey:[NSString stringWithFormat:@"%d", 84]];
-    [nameDictionary setObject:@"3" forKey:[NSString stringWithFormat:@"%d", 85]];
-    [nameDictionary setObject:@"4" forKey:[NSString stringWithFormat:@"%d", 86]];
-    [nameDictionary setObject:@"5" forKey:[NSString stringWithFormat:@"%d", 87]];
-    [nameDictionary setObject:@"6" forKey:[NSString stringWithFormat:@"%d", 88]];
-    [nameDictionary setObject:@"7" forKey:[NSString stringWithFormat:@"%d", 89]];
-
-    [nameDictionary setObject:@"8" forKey:[NSString stringWithFormat:@"%d", 91]];
-    [nameDictionary setObject:@"9" forKey:[NSString stringWithFormat:@"%d", 92]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 71]] = @"Clear";
 
 
 
-    [nameDictionary setObject:@"F5" forKey:[NSString stringWithFormat:@"%d", 96]];
-    [nameDictionary setObject:@"F6" forKey:[NSString stringWithFormat:@"%d", 97]];
-    [nameDictionary setObject:@"F7" forKey:[NSString stringWithFormat:@"%d", 98]];
-    [nameDictionary setObject:@"F3" forKey:[NSString stringWithFormat:@"%d", 99]];
-    [nameDictionary setObject:@"F8" forKey:[NSString stringWithFormat:@"%d", 100]];
-    [nameDictionary setObject:@"F9" forKey:[NSString stringWithFormat:@"%d", 101]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 75]] = @"/";
+    nameDictionary[[NSString stringWithFormat:@"%d", 76]] = @"Enter";
+
+    nameDictionary[[NSString stringWithFormat:@"%d", 78]] = @"-";
+
+
+    nameDictionary[[NSString stringWithFormat:@"%d", 81]] = @"=";
+    nameDictionary[[NSString stringWithFormat:@"%d", 82]] = @"0";
+    nameDictionary[[NSString stringWithFormat:@"%d", 83]] = @"1";
+    nameDictionary[[NSString stringWithFormat:@"%d", 84]] = @"2";
+    nameDictionary[[NSString stringWithFormat:@"%d", 85]] = @"3";
+    nameDictionary[[NSString stringWithFormat:@"%d", 86]] = @"4";
+    nameDictionary[[NSString stringWithFormat:@"%d", 87]] = @"5";
+    nameDictionary[[NSString stringWithFormat:@"%d", 88]] = @"6";
+    nameDictionary[[NSString stringWithFormat:@"%d", 89]] = @"7";
+
+    nameDictionary[[NSString stringWithFormat:@"%d", 91]] = @"8";
+    nameDictionary[[NSString stringWithFormat:@"%d", 92]] = @"9";
+
+
+
+    nameDictionary[[NSString stringWithFormat:@"%d", 96]] = @"F5";
+    nameDictionary[[NSString stringWithFormat:@"%d", 97]] = @"F6";
+    nameDictionary[[NSString stringWithFormat:@"%d", 98]] = @"F7";
+    nameDictionary[[NSString stringWithFormat:@"%d", 99]] = @"F3";
+    nameDictionary[[NSString stringWithFormat:@"%d", 100]] = @"F8";
+    nameDictionary[[NSString stringWithFormat:@"%d", 101]] = @"F9";
     
-    [nameDictionary setObject:@"F11" forKey:[NSString stringWithFormat:@"%d", 103]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 103]] = @"F11";
 
 
 
@@ -120,25 +120,25 @@ NSMutableDictionary *nameDictionary;
 
 
 
-    [nameDictionary setObject:@"F10" forKey:[NSString stringWithFormat:@"%d", 109]];
-    [nameDictionary setObject:@"Fn Enter" forKey:[NSString stringWithFormat:@"%d", 110]];
-    [nameDictionary setObject:@"F12" forKey:[NSString stringWithFormat:@"%d", 111]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 109]] = @"F10";
+    nameDictionary[[NSString stringWithFormat:@"%d", 110]] = @"Fn Enter";
+    nameDictionary[[NSString stringWithFormat:@"%d", 111]] = @"F12";
     
     
     
-    [nameDictionary setObject:@"Home" forKey:[NSString stringWithFormat:@"%d", 115]];
-    [nameDictionary setObject:@"Page Up" forKey:[NSString stringWithFormat:@"%d", 116]];
-    [nameDictionary setObject:@"Fn Delete" forKey:[NSString stringWithFormat:@"%d", 117]];
-    [nameDictionary setObject:@"F4" forKey:[NSString stringWithFormat:@"%d", 118]];
-    [nameDictionary setObject:@"End" forKey:[NSString stringWithFormat:@"%d", 119]];
-    [nameDictionary setObject:@"F2" forKey:[NSString stringWithFormat:@"%d", 120]];
-    [nameDictionary setObject:@"Page Down" forKey:[NSString stringWithFormat:@"%d", 121]];
-    [nameDictionary setObject:@"F1" forKey:[NSString stringWithFormat:@"%d", 122]];
-    [nameDictionary setObject:@"Left Arrow" forKey:[NSString stringWithFormat:@"%d", 123]];
-    [nameDictionary setObject:@"Right Arrow" forKey:[NSString stringWithFormat:@"%d", 124]];
-    [nameDictionary setObject:@"Down Arrow" forKey:[NSString stringWithFormat:@"%d", 125]];
-    [nameDictionary setObject:@"Up Arrow" forKey:[NSString stringWithFormat:@"%d", 126]];
-    [nameDictionary setObject:@"Num Lock" forKey:[NSString stringWithFormat:@"%d", 127]];
+    nameDictionary[[NSString stringWithFormat:@"%d", 115]] = @"Home";
+    nameDictionary[[NSString stringWithFormat:@"%d", 116]] = @"Page Up";
+    nameDictionary[[NSString stringWithFormat:@"%d", 117]] = @"Fn Delete";
+    nameDictionary[[NSString stringWithFormat:@"%d", 118]] = @"F4";
+    nameDictionary[[NSString stringWithFormat:@"%d", 119]] = @"End";
+    nameDictionary[[NSString stringWithFormat:@"%d", 120]] = @"F2";
+    nameDictionary[[NSString stringWithFormat:@"%d", 121]] = @"Page Down";
+    nameDictionary[[NSString stringWithFormat:@"%d", 122]] = @"F1";
+    nameDictionary[[NSString stringWithFormat:@"%d", 123]] = @"Left Arrow";
+    nameDictionary[[NSString stringWithFormat:@"%d", 124]] = @"Right Arrow";
+    nameDictionary[[NSString stringWithFormat:@"%d", 125]] = @"Down Arrow";
+    nameDictionary[[NSString stringWithFormat:@"%d", 126]] = @"Up Arrow";
+    nameDictionary[[NSString stringWithFormat:@"%d", 127]] = @"Num Lock";
   }
 }
 
@@ -146,20 +146,20 @@ NSMutableDictionary *nameDictionary;
 //  Initialization
 // ---------------------------------------------------------
 
-- (id)init {
+- (instancetype)init {
   return [self initWithKeyCode:(unsigned short)-1];
 }
 
-- (id)initWithKeyCode:(unsigned short)aKeyCode {
+- (instancetype)initWithKeyCode:(unsigned short)aKeyCode {
   if ((self = [super init]) != nil) {
     keyCode = aKeyCode;
   }
   return self;
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
   self = [super initWithCoder:decoder];
-  if ([decoder allowsKeyedCoding]) {
+  if (decoder.allowsKeyedCoding) {
     keyCode = [decoder decodeIntForKey:@"GSKeyCode"];
   }
   else {
@@ -170,7 +170,7 @@ NSMutableDictionary *nameDictionary;
 
 - (void)encodeWithCoder:(NSCoder *)coder {
   [super encodeWithCoder:coder];
-  if ([coder allowsKeyedCoding]) {
+  if (coder.allowsKeyedCoding) {
     [coder encodeInt:keyCode forKey:@"GSKeyCode"];
   }
   else {
@@ -179,12 +179,12 @@ NSMutableDictionary *nameDictionary;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-  return [[GSKeyCodeFieldCell allocWithZone:zone] initWithKeyCode:[self keyCode]];
+  return [[GSKeyCodeFieldCell allocWithZone:zone] initWithKeyCode:self.keyCode];
 }
 
 - (void)sendActionToTarget {
-  if ([self target] && [self action]) {
-    [(NSControl *)[self controlView] sendAction:[self action] to:[self target]];
+  if (self.target && self.action) {
+    [(NSControl *)self.controlView sendAction:self.action to:self.target];
   }
 }
 
@@ -195,14 +195,14 @@ NSMutableDictionary *nameDictionary;
 - (void)setKeyCode:(unsigned short)aKeyCode {
   if (keyCode != aKeyCode) {
     keyCode = aKeyCode;
-    [(NSControl *)[self controlView] updateCell:self];
+    [(NSControl *)self.controlView updateCell:self];
     [self sendActionToTarget];
   }
 }
 
 - (void)setObjectValue:(id)object {
   if ([object isMemberOfClass:[NSString class]]) {
-    [self setStringValue:object];
+    self.stringValue = object;
   }
   else {
     [NSException raise: NSInvalidArgumentException format: @"%@ Invalid object %@", NSStringFromSelector(_cmd), object];
@@ -210,15 +210,15 @@ NSMutableDictionary *nameDictionary;
 }
 
 - (id)objectValue {
-  return [self stringValue];
+  return self.stringValue;
 }
 
 - (void)setStringValue:(NSString *)string {
   int aKeyCode;
   NSScanner *scanner;
   scanner = [NSScanner scannerWithString:string];
-  if ([scanner scanInt:&aKeyCode] && [scanner isAtEnd]) {
-    [self setKeyCode:aKeyCode];
+  if ([scanner scanInt:&aKeyCode] && scanner.atEnd) {
+    self.keyCode = aKeyCode;
   }
   else {
     [NSException raise: NSInvalidArgumentException format: @"%@ Invalid string %@", NSStringFromSelector(_cmd), string];
@@ -235,10 +235,10 @@ NSMutableDictionary *nameDictionary;
 
 - (IBAction)takeKeyValueFrom:(id)sender {
   if ([sender isMemberOfClass:[GSKeyCodeFieldCell class]]) {
-    [self setKeyCode:[sender keyCode]];
+    self.keyCode = [sender keyCode];
   }
   else {
-    [self setStringValue:[sender stringValue]];
+    self.stringValue = [sender stringValue];
   }
 }
 
@@ -256,7 +256,7 @@ NSMutableDictionary *nameDictionary;
     string = [NSString string];
   }
   else {
-    string = [nameDictionary objectForKey:[NSString stringWithFormat:@"%hu", keyCode]];
+    string = nameDictionary[[NSString stringWithFormat:@"%hu", keyCode]];
     if (string == nil) {
       string = [NSString stringWithFormat:@"%hu", keyCode];
     }
@@ -264,8 +264,8 @@ NSMutableDictionary *nameDictionary;
 
   NSDrawWhiteBezel(cellFrame, cellFrame);
 
-  if ([self showsFirstResponder]) {
-    if ([string length] == 0) {
+  if (self.showsFirstResponder) {
+    if (string.length == 0) {
       [[NSColor selectedTextBackgroundColor] set];
       NSRectFill(insetRect);
     }
@@ -273,7 +273,7 @@ NSMutableDictionary *nameDictionary;
       NSDictionary *attributes;
       NSSize textSize;
       NSRect textRect, drawRect;
-      attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName, [NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, [NSColor selectedTextColor], NSForegroundColorAttributeName, nil];
+      attributes = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:self.controlSize]], NSBackgroundColorAttributeName: [NSColor selectedTextBackgroundColor], NSForegroundColorAttributeName: [NSColor selectedTextColor]};
       textSize = [string sizeWithAttributes:attributes];
       textRect = NSMakeRect(NSMinX(insetRect), NSMaxY(insetRect) - textSize.height + 5.0, textSize.width, textSize.height);
       drawRect = NSIntersectionRect(NSUnionRect(insetRect, textRect), insetRect);
@@ -289,7 +289,7 @@ NSMutableDictionary *nameDictionary;
     NSDictionary *attributes;
     NSSize textSize;
     NSRect textRect, drawRect;
-    attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName, [NSColor textBackgroundColor], NSBackgroundColorAttributeName, [NSColor selectedTextColor], NSForegroundColorAttributeName, nil];
+    attributes = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:self.controlSize]], NSBackgroundColorAttributeName: [NSColor textBackgroundColor], NSForegroundColorAttributeName: [NSColor selectedTextColor]};
     textSize = [string sizeWithAttributes:attributes];
     textRect = NSMakeRect(NSMinX(insetRect), NSMaxY(insetRect) - textSize.height + 5.0, textSize.width, textSize.height);
     drawRect = NSIntersectionRect(NSUnionRect(insetRect, textRect), insetRect);
@@ -335,7 +335,7 @@ NSMutableDictionary *nameDictionary;
   return [GSKeyCodeFieldCell class];
 }
 
-- (id)initWithFrame:(NSRect)frameRect {
+- (instancetype)initWithFrame:(NSRect)frameRect {
   if ((self = [super initWithFrame:frameRect]) != nil) {
   }
   return self;
@@ -346,19 +346,19 @@ NSMutableDictionary *nameDictionary;
 }
 
 - (void)performClick:(id)sender {
-  [[self cell] performClick:sender];
+  [self.cell performClick:sender];
 }
 
 - (void)setKeyCode:(unsigned short)aKeyCode {
-  [[self cell] setKeyCode:aKeyCode];
+  self.cell.keyCode = aKeyCode;
 }
 
 - (unsigned short)keyCode {
-  return [[self cell] keyCode];
+  return self.cell.keyCode;
 }
 
 - (IBAction)takeKeyValueFrom:(id)sender {
-  [[self cell] takeKeyValueFrom:sender];
+  [self.cell takeKeyValueFrom:sender];
 }
 
 // ---------------------------------------------------------
@@ -369,7 +369,7 @@ NSMutableDictionary *nameDictionary;
   BOOL okToChange;
   if ((okToChange = [super becomeFirstResponder])) {
     UInt32 carbonModifiers;
-    [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
+    [super setKeyboardFocusRingNeedsDisplayInRect:self.bounds];
     carbonModifiers = GetCurrentKeyModifiers();
     modifiers =
       (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
@@ -388,14 +388,14 @@ NSMutableDictionary *nameDictionary;
   BOOL okToChange;
   okToChange = [super resignFirstResponder];
   if (okToChange) {
-    [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
+    [super setKeyboardFocusRingNeedsDisplayInRect:self.bounds];
   }
   return okToChange;
 }
 
 - (void)windowKeyStateDidChange:(NSNotification *)notif {
-  if ([[self window] firstResponder] == self) {
-    [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
+  if (self.window.firstResponder == self) {
+    [super setKeyboardFocusRingNeedsDisplayInRect:self.bounds];
   }
 }
 
@@ -407,8 +407,8 @@ NSMutableDictionary *nameDictionary;
   [notifCenter removeObserver:self];
 
   // ... then register for notifications in the new window.
-  [notifCenter addObserver:self selector:callback name:NSWindowDidBecomeKeyNotification object:[self window]];
-  [notifCenter addObserver:self selector:callback name:NSWindowDidResignKeyNotification object:[self window]];
+  [notifCenter addObserver:self selector:callback name:NSWindowDidBecomeKeyNotification object:self.window];
+  [notifCenter addObserver:self selector:callback name:NSWindowDidResignKeyNotification object:self.window];
 }
 
 - (BOOL)acceptsFirstResponder {
@@ -420,14 +420,14 @@ NSMutableDictionary *nameDictionary;
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
-  if (![theEvent isARepeat]) {
-    [[self cell] setKeyCode:[theEvent keyCode]];
-    [[self window] selectNextKeyView:self];
+  if (!theEvent.ARepeat) {
+    self.cell.keyCode = theEvent.keyCode;
+    [self.window selectNextKeyView:self];
   }
 }
 
 - (void)keyUp:(NSEvent *)theEvent {
-  if (![theEvent isARepeat]) {
+  if (!theEvent.ARepeat) {
     // do nothing
   }
 }
@@ -435,10 +435,10 @@ NSMutableDictionary *nameDictionary;
 - (void)flagsChanged:(NSEvent *)theEvent {
   unsigned int oldModifiers;
   oldModifiers = modifiers;
-  modifiers = [theEvent modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
   if (modifiers & (oldModifiers ^ modifiers)) {
-    [[self cell] setKeyCode:[theEvent keyCode]];
-    [[self window] selectNextKeyView:self];
+    self.cell.keyCode = theEvent.keyCode;
+    [self.window selectNextKeyView:self];
   }
   else {
     // do nothing

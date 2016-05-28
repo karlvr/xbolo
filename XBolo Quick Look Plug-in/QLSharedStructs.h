@@ -88,6 +88,9 @@ struct BMAP_Run {
 #endif
 
 __private_extern int drawrun(CGContextRef context, struct BMAP_Run run, const void *buf);
+
+CF_IMPLICIT_BRIDGING_ENABLED
+
 __private_extern CGColorRef myGetRedColor(void);
 __private_extern CGColorRef myGetGreenColor(void);
 __private_extern CGColorRef myGetDarkGreenColor(void);
@@ -102,5 +105,8 @@ __private_extern CGColorRef myGetVeryLightBrownColor(void);
 __private_extern CGColorRef myGetDarkBrownColor(void);
 __private_extern CGColorRef myGetGreyColor(void);
 __private_extern CGColorRef myGetBlackColor(void);
+
+CF_IMPLICIT_BRIDGING_DISABLED
+
 
 #endif /* QLSharedStructs_h */

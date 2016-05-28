@@ -39,7 +39,7 @@ static NSImage *sprites = nil;
   }
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
 
   if (self) {
@@ -171,7 +171,7 @@ static NSImage *sprites = nil;
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-  if (loadMap([data bytes], [data length], &preamble, pills, bases, starts, tiles) == -1) {
+  if (loadMap(data.bytes, data.length, &preamble, pills, bases, starts, tiles) == -1) {
     if (outError != NULL) {
       *outError = [NSError errorWithDomain:GSXBoloErrorDomain code:errno userInfo:NULL];
     }
@@ -350,7 +350,7 @@ static NSImage *sprites = nil;
     GSRect rect;
     int x, y;
 
-    [[[self undoManager] prepareWithInvocationTarget:self] setTile:tiles[point.y][point.x] at:point];
+    [[self.undoManager prepareWithInvocationTarget:self] setTile:tiles[point.y][point.x] at:point];
 
     tiles[point.y][point.x] = tile;
 
@@ -367,7 +367,7 @@ static NSImage *sprites = nil;
 }
 
 - (void)setTileRect:(GSTileRect *)tileRect {
-  NSUndoManager *undoManager = [self undoManager];
+  NSUndoManager *undoManager = self.undoManager;
   [undoManager registerUndoWithTarget:self selector:@selector(setTileRect:) object:[GSTileRect tileRectWithTiles:(GSTile *)tiles inRect:[tileRect rect]]];
   [tileRect copyToTiles:(void *)tiles];
   [self remapImagesInRect:GSIntersectionRect(GSInsetRect([tileRect rect], -1, -1), kSeaRect)];
@@ -396,7 +396,7 @@ static NSImage *sprites = nil;
   NSAssert(pill.armour <= MAX_PILL_ARMOUR, @"Pill Armour Value Out of Bounds");
   NSAssert(pill.speed <= MAX_PILL_SPEED, @"Pill Speed Value Out of Bounds");
 
-  [[[self undoManager] prepareWithInvocationTarget:self] removePillAtIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] removePillAtIndex:i];
 
   for (j = preamble.npills; j > i; j--) {
     pills[j] = pills[j - 1];
@@ -410,7 +410,7 @@ static NSImage *sprites = nil;
 
 - (void)removePillAtIndex:(NSUInteger)i {
   NSAssert(i < preamble.npills, @"Pill Out of Bounds");
-  [[[self undoManager] prepareWithInvocationTarget:self] insertPill:pills[i] atIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] insertPill:pills[i] atIndex:i];
   [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(pills[i].x, pills[i].y, 1, 1))];
   preamble.npills--;
 
@@ -430,7 +430,7 @@ static NSImage *sprites = nil;
     !GSEqualPoints(GSMakePoint(pills[i].x, pills[i].y), GSMakePoint(pill.x, pill.y)) ||
     pills[i].owner != pill.owner || pills[i].armour != pill.armour || pills[i].speed != pill.speed
   ) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setPillAtIndex:i toPill:pills[i]];
+    [[self.undoManager prepareWithInvocationTarget:self] setPillAtIndex:i toPill:pills[i]];
 
     if (!GSEqualPoints(GSMakePoint(pills[i].x, pills[i].y), GSMakePoint(pill.x, pill.y))) {
       [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(pills[i].x, pills[i].y, 1, 1))];
@@ -466,7 +466,7 @@ static NSImage *sprites = nil;
   NSAssert(base.shells <= MAX_BASE_SHELLS, @"Base Shell Value Out of Bounds");
   NSAssert(base.mines <= MAX_BASE_MINES, @"Base Mine Value Out of Bounds");
 
-  [[[self undoManager] prepareWithInvocationTarget:self] removeBaseAtIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] removeBaseAtIndex:i];
 
   for (j = preamble.nbases; j > i; j--) {
     bases[j] = bases[j - 1];
@@ -480,7 +480,7 @@ static NSImage *sprites = nil;
 
 - (void)removeBaseAtIndex:(NSUInteger)i {
   NSAssert(i < preamble.nbases, @"Base Out of Bounds");
-  [[[self undoManager] prepareWithInvocationTarget:self] insertBase:bases[i] atIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] insertBase:bases[i] atIndex:i];
   [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(bases[i].x, bases[i].y, 1, 1))];
   preamble.nbases--;
 
@@ -501,7 +501,7 @@ static NSImage *sprites = nil;
     !GSEqualPoints(GSMakePoint(bases[i].x, bases[i].y), GSMakePoint(base.x, base.y)) ||
     bases[i].owner != base.owner || bases[i].armour != base.armour || bases[i].shells != base.shells || bases[i].mines != base.mines
   ) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setBaseAtIndex:i toBase:bases[i]];
+    [[self.undoManager prepareWithInvocationTarget:self] setBaseAtIndex:i toBase:bases[i]];
 
     if (!GSEqualPoints(GSMakePoint(bases[i].x, bases[i].y), GSMakePoint(base.x, base.y))) {
       [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(bases[i].x, bases[i].y, 1, 1))];
@@ -531,7 +531,7 @@ static NSImage *sprites = nil;
   NSAssert(GSPointInRect(kSeaRect, GSMakePoint(start.x, start.y)), @"Start Location Out of Bounds");
   NSAssert(start.dir < 16, @"Start Direction Out of Bounds");
 
-  [[[self undoManager] prepareWithInvocationTarget:self] removeStartAtIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] removeStartAtIndex:i];
 
   for (j = preamble.nstarts; j > i; j--) {
     starts[j] = starts[j - 1];
@@ -545,7 +545,7 @@ static NSImage *sprites = nil;
 
 - (void)removeStartAtIndex:(NSUInteger)i {
   NSAssert(i < preamble.nstarts, @"Start Out of Bounds");
-  [[[self undoManager] prepareWithInvocationTarget:self] insertStart:starts[i] atIndex:i];
+  [[self.undoManager prepareWithInvocationTarget:self] insertStart:starts[i] atIndex:i];
   [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(starts[i].x, starts[i].y, 1, 1))];
   preamble.nstarts--;
 
@@ -560,7 +560,7 @@ static NSImage *sprites = nil;
   NSAssert(start.dir < 16, @"Start Direction Out of Bounds");
 
   if (starts[i].dir != start.dir || !GSEqualPoints(GSMakePoint(starts[i].x, starts[i].y), GSMakePoint(start.x, start.y))) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setStartAtIndex:i toStart:starts[i]];
+    [[self.undoManager prepareWithInvocationTarget:self] setStartAtIndex:i toStart:starts[i]];
 
     if (!GSEqualPoints(GSMakePoint(bases[i].x, bases[i].y), GSMakePoint(start.x, start.y))) {
       [boloView setNeedsDisplayInRect:GSRect2NSRect(GSMakeRect(starts[i].x, starts[i].y, 1, 1))];

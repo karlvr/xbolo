@@ -13,8 +13,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
   size_t nbytes;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
-  buf = [data bytes];
-  nbytes = [data length];
+  buf = data.bytes;
+  nbytes = data.length;
 
   CGContextRef context = QLPreviewRequestCreateContext(preview, CGSizeMake(256, 256), false, NULL);
 

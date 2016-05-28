@@ -42,8 +42,8 @@
     {
         robots = [NSMutableArray array];
         
-        NSString *myPath = [[NSBundle mainBundle] bundlePath];
-        NSString *enclosingPath = [myPath stringByDeletingLastPathComponent];
+        NSString *myPath = [NSBundle mainBundle].bundlePath;
+        NSString *enclosingPath = myPath.stringByDeletingLastPathComponent;
         NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
         NSEnumerator *enumerator = [[[NSFileManager defaultManager] directoryContentsAtPath:botsPath] objectEnumerator];
         NSString *name;
@@ -70,7 +70,7 @@
     return robots;
 }
 
-- (id)initWithBundle: (NSBundle *)bundle
+- (instancetype)initWithBundle: (NSBundle *)bundle
 {
     if((self = [self init]))
     {
@@ -91,18 +91,16 @@
 
 - (NSString *)name
 {
-    return [[_bundle bundlePath] lastPathComponent];
+    return _bundle.bundlePath.lastPathComponent;
 }
 
 - (NSError *)load
 {
-    Class class = [_bundle principalClass];
+    Class class = _bundle.principalClass;
     if([class minimumRobotInterfaceVersionRequired] > GS_ROBOT_CURRENT_INTERFACE_VERSION)
     {
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"The robot could not be loaded because it requires a newer version of XBolo.", NSLocalizedDescriptionKey,
-                                  @"Check to see if a newer version of XBolo is available, and try again.", NSLocalizedRecoverySuggestionErrorKey,
-                                  nil];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The robot could not be loaded because it requires a newer version of XBolo.",
+                                  NSLocalizedRecoverySuggestionErrorKey: @"Check to see if a newer version of XBolo is available, and try again."};
         return [NSError errorWithDomain: NSPOSIXErrorDomain code: EINVAL userInfo: userInfo];
     }
     
@@ -239,7 +237,7 @@
                        gameState.builderscount * sizeof(*gameState.builders));
     
     NSMutableData *data = [NSMutableData dataWithLength: totalLength];
-    void *ptr = [data mutableBytes];
+    void *ptr = data.mutableBytes;
     memcpy(ptr, &gameState, sizeof(gameState));
     struct GSRobotGameState *gsp = ptr;
     ptr += sizeof(gameState);
@@ -266,7 +264,7 @@
     ptr += size;
     
     [_condLock lock];
-    if([_condLock condition] == THREAD_EXITED)
+    if(_condLock.condition == THREAD_EXITED)
     {
         [_condLock unlock];
     }
@@ -299,12 +297,12 @@
         NSMutableData *gsdata = [_gamestateData retain];
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
-        ((struct GSRobotGameState *)[gsdata mutableBytes])->messages = messages;
+        ((struct GSRobotGameState *)gsdata.mutableBytes)->messages = messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
         
-        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)[gsdata bytes] freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
+        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)gsdata.bytes freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
         
         [gsdata release];
         [messages release];
@@ -328,15 +326,15 @@
             buildercommand(commandState.buildercommand, p);
         }
         
-        if([commandState.playersToAllyWith count])
+        if(commandState.playersToAllyWith.count)
         {
             lockclient();
             uint16_t players = 0;
             int i, j;
-            for(j = 0; j < [commandState.playersToAllyWith count]; j++)
+            for(j = 0; j < commandState.playersToAllyWith.count; j++)
             {
-                NSString *name = [commandState.playersToAllyWith objectAtIndex: j];
-                const char *cname = [name UTF8String];
+                NSString *name = commandState.playersToAllyWith[j];
+                const char *cname = name.UTF8String;
                 for(i = 0; i < MAX_PLAYERS; i++)
                 {
                     if(client.players[i].connected)

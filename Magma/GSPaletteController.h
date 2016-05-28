@@ -34,6 +34,6 @@ typedef NS_ENUM(NSInteger, GSPalette) {
 }
 
 + (NSInteger)palette;
-- (NSInteger)palette;
+@property (readonly) NSInteger palette;
 
 @end

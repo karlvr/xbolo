@@ -17,7 +17,7 @@ static __weak GSPaletteController *controller = nil;
   return [controller palette];
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
 
   if (self) {
@@ -28,7 +28,7 @@ static __weak GSPaletteController *controller = nil;
 }
 
 - (NSInteger)palette {
-  return [[paletteMatrix selectedCell] tag];
+  return [paletteMatrix.selectedCell tag];
 }
 
 - (NSString *)windowFrameAutosaveName {

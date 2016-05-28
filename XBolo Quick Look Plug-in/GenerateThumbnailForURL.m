@@ -12,8 +12,8 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
   size_t nbytes;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
-  buf = [data bytes];
-  nbytes = [data length];
+  buf = data.bytes;
+  nbytes = data.length;
 
   CGContextRef context = QLThumbnailRequestCreateContext(thumbnail, CGSizeMake(256, 256), false, NULL);
 

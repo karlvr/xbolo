@@ -30,7 +30,7 @@ static NSMutableArray *boloMapViews = nil;
 - (void)pillTool;
 - (void)baseTool;
 - (void)deleteTool;
-- (GSRect)getSelection;
+@property (getter=getSelection, readonly) GSRect selection;
 - (NSInteger)pillAtPoint:(GSPoint)point;
 - (NSInteger)baseAtPoint:(GSPoint)point;
 - (NSInteger)startAtPoint:(GSPoint)point;
@@ -52,7 +52,7 @@ static NSMutableArray *boloMapViews = nil;
   [self center:self];
 }
 
-- (id)initWithFrame:(NSRect)frameRect {
+- (instancetype)initWithFrame:(NSRect)frameRect {
   self = [super initWithFrame:frameRect];
 
   if (self) {
@@ -144,7 +144,7 @@ static NSMutableArray *boloMapViews = nil;
 
     [boloMap setTileRect:tileRect];
     [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-    [[boloMap undoManager] setActionName:@"Fill"];
+    [boloMap.undoManager setActionName:@"Fill"];
   }
 }
 
@@ -159,7 +159,7 @@ static NSMutableArray *boloMapViews = nil;
 
   [boloMap setTileRect:tileRect];
   [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-  [[boloMap undoManager] setActionName:@"Draw Ellipse"];
+  [boloMap.undoManager setActionName:@"Draw Ellipse"];
 }
 
 - (void)filledRectangleTool {
@@ -171,7 +171,7 @@ static NSMutableArray *boloMapViews = nil;
 
   [boloMap setTileRect:tileRect];
   [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-  [[boloMap undoManager] setActionName:@"Draw Rectangle"];
+  [boloMap.undoManager setActionName:@"Draw Rectangle"];
 }
 
 - (void)ellipseTool {
@@ -184,7 +184,7 @@ static NSMutableArray *boloMapViews = nil;
 
   [boloMap setTileRect:tileRect];
   [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-  [[boloMap undoManager] setActionName:@"Draw Ellipse"];
+  [boloMap.undoManager setActionName:@"Draw Ellipse"];
 }
 
 - (void)rectangleTool {
@@ -197,7 +197,7 @@ static NSMutableArray *boloMapViews = nil;
 
   [boloMap setTileRect:tileRect];
   [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-  [[boloMap undoManager] setActionName:@"Draw Rectangle"];
+  [boloMap.undoManager setActionName:@"Draw Rectangle"];
 }
 
 - (void)mineTool {
@@ -244,7 +244,7 @@ static NSMutableArray *boloMapViews = nil;
       [self startAtPoint:firstMouseEvent] == -1) {
     [boloMap setTile:appropriateTileForPill([boloMap tileAtX:firstMouseEvent.x y:firstMouseEvent.y]) at:GSMakePoint(firstMouseEvent.x, firstMouseEvent.y)];
     [boloMap createPillAt:firstMouseEvent];
-    [[boloMap undoManager] setActionName:@"Add Pill"];
+    [boloMap.undoManager setActionName:@"Add Pill"];
   }
 }
 
@@ -255,7 +255,7 @@ static NSMutableArray *boloMapViews = nil;
       [self startAtPoint:firstMouseEvent] == -1) {
     [boloMap setTile:appropriateTileForBase([boloMap tileAtX:firstMouseEvent.x y:firstMouseEvent.y]) at:GSMakePoint(firstMouseEvent.x, firstMouseEvent.y)];
     [boloMap createBaseAt:firstMouseEvent];
-    [[boloMap undoManager] setActionName:@"Add Base"];
+    [boloMap.undoManager setActionName:@"Add Base"];
   }
 }
 
@@ -325,7 +325,7 @@ static NSMutableArray *boloMapViews = nil;
 }
 
 - (void)setUnderSelection:(GSTileRect *)newUnderSelection {
-  [[boloMap undoManager] registerUndoWithTarget:self selector:@selector(setUnderSelection:) object:underSelection];
+  [boloMap.undoManager registerUndoWithTarget:self selector:@selector(setUnderSelection:) object:underSelection];
 
   [self setNeedsDisplayInSelectionRect];
   [underSelection release];
@@ -374,7 +374,7 @@ static NSMutableArray *boloMapViews = nil;
 }
 
 - (void)mouseDown:(NSEvent *)event {
-  GSPoint mouseEvent = [self convertScreenToWorld:[event locationInWindow]];
+  GSPoint mouseEvent = [self convertScreenToWorld:event.locationInWindow];
 
   if (GSPointInRect(kWorldRect, mouseEvent)) {
     firstMouseEvent = mouseEvent;
@@ -383,7 +383,7 @@ static NSMutableArray *boloMapViews = nil;
     switch ([GSToolsController tool]) {
     case kPencilTool:
       {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
 
         [undoManager setGroupsByEvent:NO];
         [undoManager beginUndoGrouping];
@@ -406,11 +406,11 @@ static NSMutableArray *boloMapViews = nil;
     case kSelectTool:
       if (underSelection && GSPointInRect([underSelection rect], firstMouseEvent)) {
         move = TRUE;
-        [[boloMap undoManager] setActionName:@"Move"];
+        [boloMap.undoManager setActionName:@"Move"];
       }
       else {
         [self setUnderSelection:nil];
-        [[boloMap undoManager] setActionName:@"Clear Selection"];
+        [boloMap.undoManager setActionName:@"Clear Selection"];
       }
 
       break;
@@ -445,7 +445,7 @@ static NSMutableArray *boloMapViews = nil;
 
     case kMineTool:
       {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
 
         [undoManager setGroupsByEvent:NO];
         [undoManager beginUndoGrouping];
@@ -477,7 +477,7 @@ static NSMutableArray *boloMapViews = nil;
           [self startAtPoint:firstMouseEvent] == -1 &&
           [self pillAtPoint:firstMouseEvent] == -1 &&
           [self baseAtPoint:firstMouseEvent] == -1) {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
         [undoManager setGroupsByEvent:NO];
         [undoManager beginUndoGrouping];
 
@@ -511,7 +511,7 @@ static NSMutableArray *boloMapViews = nil;
 - (void)mouseDragged:(NSEvent *)event {
   // only if first click was accepted
   if (!GSEqualPoints(firstMouseEvent, GSMakePoint(-1, -1))) {
-    GSPoint mouseEvent = [self convertScreenToWorld:[event locationInWindow]];
+    GSPoint mouseEvent = [self convertScreenToWorld:event.locationInWindow];
 
     switch ([GSToolsController tool]) {
     case kStartTool:
@@ -520,7 +520,7 @@ static NSMutableArray *boloMapViews = nil;
         float dirf;
         int dir;
 
-        view = [self convertPoint:[event locationInWindow] fromView:nil];
+        view = [self convertPoint:event.locationInWindow fromView:nil];
         startp.x = start.x * TILE_WIDTH + (TILE_WIDTH*0.5f);
         startp.y = (WIDTH - start.y - 1) * TILE_WIDTH + (TILE_WIDTH*0.5f);
         vect.x = view.x - startp.x;
@@ -559,22 +559,22 @@ static NSMutableArray *boloMapViews = nil;
           break;
 
         case kFilledEllipseTool:
-          [[boloMap undoManager] undo];
+          [boloMap.undoManager undo];
           [self filledEllipseTool];
           break;
 
         case kFilledRectangleTool:
-          [[boloMap undoManager] undo];
+          [boloMap.undoManager undo];
           [self filledRectangleTool];
           break;
 
         case kEllipseTool:
-          [[boloMap undoManager] undo];
+          [boloMap.undoManager undo];
           [self ellipseTool];
           break;
 
         case kRectangleTool:
-          [[boloMap undoManager] undo];
+          [boloMap.undoManager undo];
           [self rectangleTool];
           break;
 
@@ -587,7 +587,7 @@ static NSMutableArray *boloMapViews = nil;
 
         case kSelectTool:
           // undo last move from mouse drag
-          [[boloMap undoManager] undo];
+          [boloMap.undoManager undo];
 
           if (move) {
             int dX = lastMouseEvent.x - firstMouseEvent.x;
@@ -607,11 +607,11 @@ static NSMutableArray *boloMapViews = nil;
             // for objects that entered
             [boloMap setAppropriateTilesForObjectsInRect:[over rect]];
             // set undo name
-            [[boloMap undoManager] setActionName:@"Move"];
+            [boloMap.undoManager setActionName:@"Move"];
           }
           else {
             [self setUnderSelection:[GSTileRect tileRectWithTile:kSeaTile inRect:[self getSelection]]];
-            [[boloMap undoManager] setActionName:@"Select"];
+            [boloMap.undoManager setActionName:@"Select"];
           }
 
           break;
@@ -631,7 +631,7 @@ static NSMutableArray *boloMapViews = nil;
     switch ([GSToolsController tool]) {
     case kPencilTool:
       {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
         NSString *actionName;
 
         switch ([GSPaletteController palette]) {
@@ -717,7 +717,7 @@ static NSMutableArray *boloMapViews = nil;
 
     case kMineTool:
       {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
         [undoManager setActionName:@"Draw Mines"];
         [undoManager endUndoGrouping];
         [undoManager setGroupsByEvent:YES];
@@ -727,7 +727,7 @@ static NSMutableArray *boloMapViews = nil;
 
     case kStartTool:
       if (startTool) {
-        NSUndoManager *undoManager = [boloMap undoManager];
+        NSUndoManager *undoManager = boloMap.undoManager;
         [boloMap insertStart:start atIndex:[boloMap startCount]];
         [undoManager setActionName:@"Create Start"];
         [undoManager endUndoGrouping];
@@ -756,30 +756,30 @@ static NSMutableArray *boloMapViews = nil;
     switch ([GSToolsController tool]) {
     case kSelectTool:
       if (underSelection) {
-        [[boloMap undoManager] undo];
+        [boloMap.undoManager undo];
         [self setUnderSelection:[GSTileRect tileRectWithTile:kSeaTile inRect:[self getSelection]]];
-        [[boloMap undoManager] setActionName:@"Select"];
+        [boloMap.undoManager setActionName:@"Select"];
       }
 
       break;
 
     case kFilledEllipseTool:
-      [[boloMap undoManager] undo];
+      [boloMap.undoManager undo];
       [self filledEllipseTool];
       break;
 
     case kFilledRectangleTool:
-      [[boloMap undoManager] undo];
+      [boloMap.undoManager undo];
       [self filledRectangleTool];
       break;
 
     case kEllipseTool:
-      [[boloMap undoManager] undo];
+      [boloMap.undoManager undo];
       [self ellipseTool];
       break;
 
     case kRectangleTool:
-      [[boloMap undoManager] undo];
+      [boloMap.undoManager undo];
       [self rectangleTool];
       break;
 
@@ -798,12 +798,12 @@ static NSMutableArray *boloMapViews = nil;
     [pasteboard clearContents];
 
     // copy selection to pasteboard
-    [pasteboard writeObjects:[NSArray arrayWithObject:[boloMap tilesInRect:[underSelection rect]]]];
+    [pasteboard writeObjects:@[[boloMap tilesInRect:[underSelection rect]]]];
 
     // overwrite selection with kSeaTile
     [boloMap setTileRect:[GSTileRect tileRectWithTile:kSeaTile inRect:[underSelection rect]]];
     [boloMap setAppropriateTilesForObjectsInRect:[underSelection rect]];
-    [[boloMap undoManager] setActionName:@"Cut"];
+    [boloMap.undoManager setActionName:@"Cut"];
   }
 }
 
@@ -816,7 +816,7 @@ static NSMutableArray *boloMapViews = nil;
     [pasteboard clearContents];
 
     // copy selection to pasteboard
-    [pasteboard writeObjects:[NSArray arrayWithObject:[boloMap tilesInRect:[underSelection rect]]]];
+    [pasteboard writeObjects:@[[boloMap tilesInRect:[underSelection rect]]]];
   }
 }
 
@@ -826,37 +826,37 @@ static NSMutableArray *boloMapViews = nil;
   NSDictionary *options;
 
   pasteboard = [NSPasteboard generalPasteboard];
-  classArray = [NSArray arrayWithObject:[GSTileRect class]];
-  options = [NSDictionary dictionary];
+  classArray = @[[GSTileRect class]];
+  options = @{};
 
   if ([pasteboard canReadObjectForClasses:classArray options:options]) {
     NSArray *objectsToPaste;
     GSTileRect *tileRect;
 
     objectsToPaste = [pasteboard readObjectsForClasses:classArray options:options];
-    tileRect = [objectsToPaste objectAtIndex:0];
+    tileRect = objectsToPaste[0];
 
     [self setUnderSelection:[boloMap tilesInRect:[tileRect rect]]];
     [boloMap setTileRect:tileRect];
     [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
-    [[boloMap undoManager] setActionName:@"Paste"];
+    [boloMap.undoManager setActionName:@"Paste"];
   }
 }
 
 - (IBAction)delete:(id)sender {
   [boloMap setTileRect:[GSTileRect tileRectWithTile:kSeaTile inRect:underSelection == nil ? kSeaRect : [underSelection rect]]];
   [boloMap deleteObjectsInRect:underSelection == nil ? kSeaRect : [underSelection rect]];
-  [[boloMap undoManager] setActionName:@"Delete"];
+  [boloMap.undoManager setActionName:@"Delete"];
 }
 
 - (IBAction)selectAll:(id)sender {
   [self setUnderSelection:[GSTileRect tileRectWithTile:kSeaTile inRect:[boloMap mapRect]]];
-  [[boloMap undoManager] setActionName:@"Select All"];
+  [boloMap.undoManager setActionName:@"Select All"];
 }
 
 - (IBAction)clearSelection:(id)sender {
   [self setUnderSelection:nil];
-  [[boloMap undoManager] setActionName:@"Clear Selection"];
+  [boloMap.undoManager setActionName:@"Clear Selection"];
 }
 
 - (IBAction)rotateLeft:(id)sender {
@@ -880,7 +880,7 @@ static NSMutableArray *boloMapViews = nil;
     [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
   }
 
-  [[boloMap undoManager] setActionName:@"Rotate Left"];
+  [boloMap.undoManager setActionName:@"Rotate Left"];
 }
 
 - (IBAction)rotateRight:(id)sender {
@@ -904,7 +904,7 @@ static NSMutableArray *boloMapViews = nil;
     [boloMap setAppropriateTilesForObjectsInRect:[tileRect rect]];
   }
 
-  [[boloMap undoManager] setActionName:@"Rotate Right"];
+  [boloMap.undoManager setActionName:@"Rotate Right"];
 }
 
 - (IBAction)flipHorizontal:(id)sender {
@@ -925,7 +925,7 @@ static NSMutableArray *boloMapViews = nil;
     [boloMap setTileRect:tileRect];
   }
 
-  [[boloMap undoManager] setActionName:@"Flip Horizontal"];
+  [boloMap.undoManager setActionName:@"Flip Horizontal"];
 }
 
 - (IBAction)flipVertical:(id)sender {
@@ -946,12 +946,12 @@ static NSMutableArray *boloMapViews = nil;
     [boloMap setTileRect:tileRect];
   }
 
-  [[boloMap undoManager] setActionName:@"Flip Vertical"];
+  [boloMap.undoManager setActionName:@"Flip Vertical"];
 }
 
 - (IBAction)center:(id)sender {
   NSRect rect = GSRect2NSRect([boloMap mapRect]);
-  NSSize size = [self visibleRect].size;
+  NSSize size = self.visibleRect.size;
   [self scrollRectToVisible:NSInsetRect(rect, (NSWidth(rect) - size.width) * 0.5f, (NSHeight(rect) - size.height) * 0.5f)];
 }
 
@@ -968,8 +968,8 @@ static NSMutableArray *boloMapViews = nil;
     NSDictionary *options;
 
     pasteboard = [NSPasteboard generalPasteboard];
-    classArray = [NSArray arrayWithObject:[GSTileRect class]];
-    options = [NSDictionary dictionary];
+    classArray = @[[GSTileRect class]];
+    options = @{};
 
     return [pasteboard canReadObjectForClasses:classArray options:options];
   }
@@ -1016,7 +1016,7 @@ static NSMutableArray *boloMapViews = nil;
 }
 
 - (NSUndoManager *)undoManager {
-  return [boloMap undoManager];
+  return boloMap.undoManager;
 }
 
 @end

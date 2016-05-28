@@ -52,7 +52,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
   /* disable flush window on a bolo view windows */
   enumerator = [boloViews objectEnumerator];
   while ((view = [enumerator nextObject]) != nil) {
-    [[view window] disableFlushWindow];
+    [view.window disableFlushWindow];
   }
 
   /* draw */
@@ -63,15 +63,15 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
       [view refreshTiles];
       [view drawSprites];
       [view unlockFocus];
-      [[view window] flushWindow];
+      [view.window flushWindow];
     }
   }
 
   /* enable flush window and flush if needed */
   enumerator = [boloViews objectEnumerator];
   while ((view = [enumerator nextObject]) != nil) {
-    [[view window] enableFlushWindow];
-    [[view window] flushWindowIfNeeded];
+    [view.window enableFlushWindow];
+    [view.window flushWindowIfNeeded];
   }
 
   clearchangedtiles();
@@ -81,7 +81,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
   [boloViews removeObject:view];
 }
 
-- (id)initWithFrame:(NSRect)frameRect {
+- (instancetype)initWithFrame:(NSRect)frameRect {
 TRY
 	if ((self = [super initWithFrame:frameRect]) != nil) {
     if (initlist(&rectlist) == -1) LOGFAIL(errno)
@@ -341,7 +341,7 @@ TRY
       }
 
       if (vis > 0.90) {
-        [self drawLabel:client.players[i].name at:client.players[i].tank withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor whiteColor], NSForegroundColorAttributeName, nil]];
+        [self drawLabel:client.players[i].name at:client.players[i].tank withAttributes:@{NSForegroundColorAttributeName: [NSColor whiteColor]}];
       }
     }
   }
@@ -409,8 +409,8 @@ TRY
   /* draw selector */
   {
     NSPoint aPoint;
-    aPoint = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
-    if ([self mouse:aPoint inRect:[self visibleRect]]) {
+    aPoint = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
+    if ([self mouse:aPoint inRect:self.visibleRect]) {
       [self drawSprite:SELETRIMAGE at:make2f(floorf(aPoint.x/16.0) + 0.5, floorf(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
     }
   }
@@ -422,14 +422,14 @@ TRY
 
   if (client.pause) {
     NSRect rect;
-    rect = [self visibleRect];
+    rect = self.visibleRect;
 
     if (client.pause == -1) {
-      [self drawLabel:"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:90], NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]];
+      [self drawLabel:"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
     }
     else {
       if (asprintf(&string, "Resume in %d", client.pause) == -1) LOGFAIL(errno)
-      [self drawLabel:string at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:90], NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]];
+      [self drawLabel:string at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
       free(string);
       string = NULL;
     }
@@ -469,7 +469,7 @@ END
   NSString *string;
   NSRect rect;
 
-  string = [NSString stringWithUTF8String:label];
+  string = @(label);
   rect.size = [string sizeWithAttributes:attr];
   rect.origin.x = point.x*16.0 - rect.size.width*0.5;
   rect.origin.y = FWIDTH*16.0 - point.y*16.0 + 8.0;
@@ -500,34 +500,34 @@ END
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
-  if (![theEvent isARepeat]) {
-    [boloController keyEvent:YES forKey:[theEvent keyCode]];
+  if (!theEvent.ARepeat) {
+    [boloController keyEvent:YES forKey:theEvent.keyCode];
   }
 }
 
 - (void)keyUp:(NSEvent *)theEvent {
-  if (![theEvent isARepeat]) {
-    [boloController keyEvent:NO forKey:[theEvent keyCode]];
+  if (!theEvent.ARepeat) {
+    [boloController keyEvent:NO forKey:theEvent.keyCode];
   }
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
   unsigned int oldModifiers;
   oldModifiers = modifiers;
-  modifiers = [theEvent modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
   if (modifiers & (oldModifiers ^ modifiers)) {
-    [boloController keyEvent:YES forKey:[theEvent keyCode]];
+    [boloController keyEvent:YES forKey:theEvent.keyCode];
   }
   else {
-    [boloController keyEvent:NO forKey:[theEvent keyCode]];
+    [boloController keyEvent:NO forKey:theEvent.keyCode];
   }
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-  if ([theEvent type] == NSLeftMouseUp) {
+  if (theEvent.type == NSLeftMouseUp) {
     NSPoint point;
 
-    point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    point = [self convertPoint:theEvent.locationInWindow fromView:nil];
     [boloController mouseEvent:GSMakePoint(point.x/16.0, 255 - (int)(point.y/16.0))];
   }
 }
@@ -563,7 +563,7 @@ END
 }
 
 - (void)resetCursorRects {
-	[self addCursorRect:[self visibleRect] cursor:cursor];
+	[self addCursorRect:self.visibleRect cursor:cursor];
   [cursor setOnMouseEntered:YES];
 }
 

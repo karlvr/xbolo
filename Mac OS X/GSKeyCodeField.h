@@ -3,13 +3,13 @@
 @interface GSKeyCodeFieldCell : NSActionCell {
   unsigned short keyCode;
 }
-- (id)initWithKeyCode:(unsigned short)aKeyCode;
+- (instancetype)initWithKeyCode:(unsigned short)aKeyCode NS_DESIGNATED_INITIALIZER;
 @property (nonatomic) unsigned short keyCode;
 - (IBAction)takeKeyValueFrom:(id)sender;
 @end
 
 @interface GSKeyCodeField : NSControl {
-  unsigned int modifiers;
+  NSEventModifierFlags modifiers;
 }
 @property unsigned short keyCode;
 - (IBAction)takeKeyValueFrom:(id)sender;

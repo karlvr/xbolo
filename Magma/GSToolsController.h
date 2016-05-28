@@ -38,6 +38,6 @@ typedef NS_ENUM(NSInteger, Tool) {
 }
 
 + (NSInteger)tool;
-- (NSInteger)tool;
+@property (readonly) NSInteger tool;
 
 @end

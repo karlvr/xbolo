@@ -17,7 +17,7 @@ static __weak GSToolsController *controller = nil;
   return [controller tool];
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
 
   if (self) {
@@ -28,7 +28,7 @@ static __weak GSToolsController *controller = nil;
 }
 
 - (NSInteger)tool {
-  return [[toolMatrix selectedCell] tag];
+  return [toolMatrix.selectedCell tag];
 }
 
 - (NSString *)windowFrameAutosaveName {
