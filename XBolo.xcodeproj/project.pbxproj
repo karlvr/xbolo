@@ -45,8 +45,6 @@
 		404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D43470FF85BAF00589EA2 /* XBoloViewController.xib */; };
 		404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 404D43490FF85BBB00589EA2 /* XBolo-Info.plist */; };
 		404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D434C0FF85BCC00589EA2 /* MainWindow.xib */; };
-		4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
-		40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
 		405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
 		405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
 		405E19390FC7E4A6008CDDF0 /* sink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19370FC7E4A5008CDDF0 /* sink.aiff */; };
@@ -153,6 +151,32 @@
 		55712C321CF903D900326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
 		55712C341CF9064600326A27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		55712C371CF9068700326A27 /* XBolo Quick Look Plug-in.qlgenerator in Embed QuickLook PlugIn */ = {isa = PBXBuildFile; fileRef = 40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55712C821CFA1AC300326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
+		55712C841CFA1B0800326A27 /* OS X-only.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C831CFA1B0800326A27 /* OS X-only.xcassets */; };
+		55712C851CFA1B9800326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
+		55712C861CFA1D9300326A27 /* bubbles.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A060FC81032008CDDF0 /* bubbles.aiff */; };
+		55712C871CFA1D9300326A27 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
+		55712C881CFA1D9300326A27 /* builderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197603E5088801924B91 /* builderdeath.aiff */; };
+		55712C891CFA1D9300326A27 /* explosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197703E5088801924B91 /* explosion.aiff */; };
+		55712C8A1CFA1D9300326A27 /* fbuild.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B70FC91E2F0018390E /* fbuild.aiff */; };
+		55712C8B1CFA1D9300326A27 /* fbuilderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B80FC91E2F0018390E /* fbuilderdeath.aiff */; };
+		55712C8C1CFA1D9300326A27 /* fexplosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B90FC91E2F0018390E /* fexplosion.aiff */; };
+		55712C8D1CFA1D9300326A27 /* fhittank.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BA0FC91E2F0018390E /* fhittank.aiff */; };
+		55712C8E1CFA1D9300326A27 /* fhitterrain.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BB0FC91E2F0018390E /* fhitterrain.aiff */; };
+		55712C8F1CFA1D9300326A27 /* fhittree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BC0FC91E2F0018390E /* fhittree.aiff */; };
+		55712C901CFA1D9300326A27 /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
+		55712C911CFA1D9300326A27 /* fsink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BE0FC91E2F0018390E /* fsink.aiff */; };
+		55712C921CFA1D9300326A27 /* fsuperboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BF0FC91E2F0018390E /* fsuperboom.aiff */; };
+		55712C931CFA1D9300326A27 /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
+		55712C941CFA1D9300326A27 /* hittank.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A070FC81032008CDDF0 /* hittank.aiff */; };
+		55712C951CFA1D9300326A27 /* hitterrain.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A080FC81032008CDDF0 /* hitterrain.aiff */; };
+		55712C961CFA1D9300326A27 /* hittree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A090FC81032008CDDF0 /* hittree.aiff */; };
+		55712C971CFA1D9300326A27 /* mine.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19380FC7E4A6008CDDF0 /* mine.aiff */; };
+		55712C981CFA1D9300326A27 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
+		55712C991CFA1D9300326A27 /* sink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19370FC7E4A5008CDDF0 /* sink.aiff */; };
+		55712C9A1CFA1D9300326A27 /* superboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1BF10FC8E26A008CDDF0 /* superboom.aiff */; };
+		55712C9B1CFA1D9300326A27 /* tankshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197803E5088801924B91 /* tankshot.aiff */; };
+		55712C9C1CFA1D9300326A27 /* tree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197B03E5088801924B91 /* tree.aiff */; };
 		558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558243611CBD7A63006BDC14 /* MainMenu.xib */; };
 		558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
 		55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
@@ -234,22 +258,22 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		35290DD21231E4FD009A579E /* msgreceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = msgreceived.aiff; path = Sounds/msgreceived.aiff; sourceTree = "<group>"; };
+		35290DD21231E4FD009A579E /* msgreceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = msgreceived.aiff; sourceTree = "<group>"; };
 		400A40CC0FDAD9AD00D38BF9 /* tracker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tracker.h; sourceTree = "<group>"; };
 		4014422410ACA4F6008487C8 /* resolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolver.h; sourceTree = "<group>"; };
 		4014422510ACA4F6008487C8 /* resolver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = resolver.c; sourceTree = "<group>"; };
-		402097B70FC91E2F0018390E /* fbuild.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fbuild.aiff; path = Sounds/fbuild.aiff; sourceTree = "<group>"; };
-		402097B80FC91E2F0018390E /* fbuilderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fbuilderdeath.aiff; path = Sounds/fbuilderdeath.aiff; sourceTree = "<group>"; };
-		402097B90FC91E2F0018390E /* fexplosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fexplosion.aiff; path = Sounds/fexplosion.aiff; sourceTree = "<group>"; };
-		402097BA0FC91E2F0018390E /* fhittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhittank.aiff; path = Sounds/fhittank.aiff; sourceTree = "<group>"; };
-		402097BB0FC91E2F0018390E /* fhitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhitterrain.aiff; path = Sounds/fhitterrain.aiff; sourceTree = "<group>"; };
-		402097BC0FC91E2F0018390E /* fhittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhittree.aiff; path = Sounds/fhittree.aiff; sourceTree = "<group>"; };
-		402097BE0FC91E2F0018390E /* fsink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fsink.aiff; path = Sounds/fsink.aiff; sourceTree = "<group>"; };
-		402097BF0FC91E2F0018390E /* fsuperboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fsuperboom.aiff; path = Sounds/fsuperboom.aiff; sourceTree = "<group>"; };
-		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = ftree.aiff; path = Sounds/ftree.aiff; sourceTree = "<group>"; };
-		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fshot.aiff; path = Sounds/fshot.aiff; sourceTree = "<group>"; };
+		402097B70FC91E2F0018390E /* fbuild.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fbuild.aiff; sourceTree = "<group>"; };
+		402097B80FC91E2F0018390E /* fbuilderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fbuilderdeath.aiff; sourceTree = "<group>"; };
+		402097B90FC91E2F0018390E /* fexplosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fexplosion.aiff; sourceTree = "<group>"; };
+		402097BA0FC91E2F0018390E /* fhittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhittank.aiff; sourceTree = "<group>"; };
+		402097BB0FC91E2F0018390E /* fhitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhitterrain.aiff; sourceTree = "<group>"; };
+		402097BC0FC91E2F0018390E /* fhittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhittree.aiff; sourceTree = "<group>"; };
+		402097BE0FC91E2F0018390E /* fsink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fsink.aiff; sourceTree = "<group>"; };
+		402097BF0FC91E2F0018390E /* fsuperboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fsuperboom.aiff; sourceTree = "<group>"; };
+		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ftree.aiff; sourceTree = "<group>"; };
+		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fshot.aiff; sourceTree = "<group>"; };
 		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
-		404D425D0FF84FEA00589EA2 /* iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		404D425D0FF84FEA00589EA2 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
 		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSBoloView.h; path = "Mac OS X/GSBoloView.h"; sourceTree = "<group>"; };
 		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSBoloView.m; path = "Mac OS X/GSBoloView.m"; sourceTree = "<group>"; };
@@ -275,16 +299,15 @@
 		404D43490FF85BBB00589EA2 /* XBolo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "XBolo-Info.plist"; path = "iPhone/XBolo-Info.plist"; sourceTree = "<group>"; };
 		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBolo_Prefix.pch; path = iPhone/XBolo_Prefix.pch; sourceTree = "<group>"; };
 		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = iPhone/MainWindow.xib; sourceTree = "<group>"; };
-		4050678E109533640037C3D3 /* PillStatIntAllied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntAllied.png; path = Images/PillStatIntAllied.png; sourceTree = "<group>"; };
-		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = pillshot.aiff; path = Sounds/pillshot.aiff; sourceTree = "<group>"; };
-		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = build.aiff; path = Sounds/build.aiff; sourceTree = "<group>"; };
-		405E19370FC7E4A5008CDDF0 /* sink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = sink.aiff; path = Sounds/sink.aiff; sourceTree = "<group>"; };
-		405E19380FC7E4A6008CDDF0 /* mine.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = mine.aiff; path = Sounds/mine.aiff; sourceTree = "<group>"; };
-		405E1A060FC81032008CDDF0 /* bubbles.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = bubbles.aiff; path = Sounds/bubbles.aiff; sourceTree = "<group>"; };
-		405E1A070FC81032008CDDF0 /* hittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hittank.aiff; path = Sounds/hittank.aiff; sourceTree = "<group>"; };
-		405E1A080FC81032008CDDF0 /* hitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hitterrain.aiff; path = Sounds/hitterrain.aiff; sourceTree = "<group>"; };
-		405E1A090FC81032008CDDF0 /* hittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hittree.aiff; path = Sounds/hittree.aiff; sourceTree = "<group>"; };
-		405E1BF10FC8E26A008CDDF0 /* superboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = superboom.aiff; path = Sounds/superboom.aiff; sourceTree = "<group>"; };
+		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = pillshot.aiff; sourceTree = "<group>"; };
+		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = build.aiff; sourceTree = "<group>"; };
+		405E19370FC7E4A5008CDDF0 /* sink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = sink.aiff; sourceTree = "<group>"; };
+		405E19380FC7E4A6008CDDF0 /* mine.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = mine.aiff; sourceTree = "<group>"; };
+		405E1A060FC81032008CDDF0 /* bubbles.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = bubbles.aiff; sourceTree = "<group>"; };
+		405E1A070FC81032008CDDF0 /* hittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hittank.aiff; sourceTree = "<group>"; };
+		405E1A080FC81032008CDDF0 /* hitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hitterrain.aiff; sourceTree = "<group>"; };
+		405E1A090FC81032008CDDF0 /* hittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hittree.aiff; sourceTree = "<group>"; };
+		405E1BF10FC8E26A008CDDF0 /* superboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = superboom.aiff; sourceTree = "<group>"; };
 		40644446108250E1008F913C /* terrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = terrain.h; sourceTree = "<group>"; };
 		40644447108250E1008F913C /* terrain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = terrain.c; sourceTree = "<group>"; };
 		4064445B108251E1008F913C /* tiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiles.h; sourceTree = "<group>"; };
@@ -342,6 +365,7 @@
 		55712C231CF8F0D000326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		55712C301CF903D900326A27 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		55712C351CF9065800326A27 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		55712C831CFA1B0800326A27 /* OS X-only.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "OS X-only.xcassets"; path = "Mac OS X/OS X-only.xcassets"; sourceTree = "<group>"; };
 		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
@@ -349,10 +373,10 @@
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
 		C2BFADE01055937F009A1EE7 /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
 		C2BFADE11055937F009A1EE7 /* timing.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = timing.c; sourceTree = "<group>"; usesTabs = 0; };
-		F553197603E5088801924B91 /* builderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = builderdeath.aiff; path = Sounds/builderdeath.aiff; sourceTree = "<group>"; };
-		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = explosion.aiff; path = Sounds/explosion.aiff; sourceTree = "<group>"; };
-		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
-		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tree.aiff; path = Sounds/tree.aiff; sourceTree = "<group>"; };
+		F553197603E5088801924B91 /* builderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = builderdeath.aiff; sourceTree = "<group>"; };
+		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = explosion.aiff; sourceTree = "<group>"; };
+		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = tankshot.aiff; sourceTree = "<group>"; };
+		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = tree.aiff; sourceTree = "<group>"; };
 		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
 		FD969DCD07441F9C009568EF /* rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rect.h; sourceTree = "<group>"; };
@@ -420,7 +444,7 @@
 			children = (
 				40A593760FBE78FD00F3E650 /* XBolo.app */,
 				407C8B390FDC739B006A71F7 /* XBolo Tracker */,
-				404D425D0FF84FEA00589EA2 /* iPhone.app */,
+				404D425D0FF84FEA00589EA2 /* XBolo.app */,
 				408187591080C81200E4D4CA /* Dedicated Host */,
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
 			);
@@ -491,7 +515,7 @@
 			isa = PBXGroup;
 			children = (
 				558243641CBD7ABB006BDC14 /* Images.xcassets */,
-				F55317CA03E5054901924B91 /* Images */,
+				55712C831CFA1B0800326A27 /* OS X-only.xcassets */,
 				F55317CB03E5055801924B91 /* Sounds */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				FD507B6E03EB7E6000360B11 /* Localizable.strings */,
@@ -737,14 +761,6 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		F55317CA03E5054901924B91 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				4050678E109533640037C3D3 /* PillStatIntAllied.png */,
-			);
-			name = Images;
-			sourceTree = "<group>";
-		};
 		F55317CB03E5055801924B91 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,7 +789,7 @@
 				F553197803E5088801924B91 /* tankshot.aiff */,
 				F553197B03E5088801924B91 /* tree.aiff */,
 			);
-			name = Sounds;
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -829,7 +845,7 @@
 			);
 			name = iPhone;
 			productName = iPhone;
-			productReference = 404D425D0FF84FEA00589EA2 /* iPhone.app */;
+			productReference = 404D425D0FF84FEA00589EA2 /* XBolo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		407C8B380FDC739B006A71F7 /* XBolo Tracker */ = {
@@ -963,11 +979,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55712C911CFA1D9300326A27 /* fsink.aiff in Resources */,
 				404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */,
+				55712C8A1CFA1D9300326A27 /* fbuild.aiff in Resources */,
+				55712C901CFA1D9300326A27 /* fshot.aiff in Resources */,
+				55712C8C1CFA1D9300326A27 /* fexplosion.aiff in Resources */,
+				55712C971CFA1D9300326A27 /* mine.aiff in Resources */,
+				55712C8F1CFA1D9300326A27 /* fhittree.aiff in Resources */,
+				55712C931CFA1D9300326A27 /* ftree.aiff in Resources */,
+				55712C871CFA1D9300326A27 /* build.aiff in Resources */,
+				55712C8E1CFA1D9300326A27 /* fhitterrain.aiff in Resources */,
+				55712C9A1CFA1D9300326A27 /* superboom.aiff in Resources */,
+				55712C8D1CFA1D9300326A27 /* fhittank.aiff in Resources */,
+				55712C921CFA1D9300326A27 /* fsuperboom.aiff in Resources */,
+				55712C951CFA1D9300326A27 /* hitterrain.aiff in Resources */,
+				55712C941CFA1D9300326A27 /* hittank.aiff in Resources */,
+				55712C961CFA1D9300326A27 /* hittree.aiff in Resources */,
 				404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */,
+				55712C891CFA1D9300326A27 /* explosion.aiff in Resources */,
+				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
-				40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */,
+				55712C991CFA1D9300326A27 /* sink.aiff in Resources */,
+				55712C821CFA1AC300326A27 /* Images.xcassets in Resources */,
+				55712C9C1CFA1D9300326A27 /* tree.aiff in Resources */,
 				35290DD41231E4FD009A579E /* msgreceived.aiff in Resources */,
+				55712C981CFA1D9300326A27 /* pillshot.aiff in Resources */,
+				55712C9B1CFA1D9300326A27 /* tankshot.aiff in Resources */,
+				55712C8B1CFA1D9300326A27 /* fbuilderdeath.aiff in Resources */,
+				55712C881CFA1D9300326A27 /* builderdeath.aiff in Resources */,
+				55712C861CFA1D9300326A27 /* bubbles.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -983,6 +1023,7 @@
 				40A593390FBE78FC00F3E650 /* tree.aiff in Resources */,
 				40A5933A0FBE78FC00F3E650 /* Credits.rtf in Resources */,
 				40A5933B0FBE78FC00F3E650 /* Localizable.strings in Resources */,
+				55712C841CFA1B0800326A27 /* OS X-only.xcassets in Resources */,
 				40A5934C0FBE78FC00F3E650 /* DefaultPreferences.plist in Resources */,
 				558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */,
 				405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */,
@@ -1005,7 +1046,6 @@
 				402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */,
 				402097CC0FC91E2F0018390E /* ftree.aiff in Resources */,
 				402098370FC926C00018390E /* fshot.aiff in Resources */,
-				4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */,
 				35290DD31231E4FD009A579E /* msgreceived.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1317,8 +1357,8 @@
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.${PRODUCT_NAME:identifier}";
-				PRODUCT_NAME = iPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
+				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1346,8 +1386,8 @@
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.${PRODUCT_NAME:identifier}";
-				PRODUCT_NAME = iPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
+				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
 				ZERO_LINK = NO;
 			};
