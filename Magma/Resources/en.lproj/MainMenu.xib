@@ -697,8 +697,8 @@
         <customObject id="419" customClass="NSFontManager"/>
         <window title="Tools" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="" animationBehavior="default" id="530" userLabel="Tools Panel" customClass="GSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
-            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
-            <rect key="contentRect" x="1325" y="650" width="78" height="212"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" topStrut="YES"/>
+            <rect key="contentRect" x="26" y="551" width="78" height="212"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="78" height="212"/>
             <value key="maxSize" type="size" width="78" height="212"/>
@@ -789,7 +789,7 @@
         </window>
         <window title="Palette" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="" animationBehavior="default" id="547" userLabel="Palette Panel" customClass="GSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
-            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
+            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="897" y="836" width="426" height="26"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="426" height="26"/>

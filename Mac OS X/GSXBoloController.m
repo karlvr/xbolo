@@ -733,18 +733,13 @@ END
 // IBAction methods
 
 - (IBAction)closeGame:(id)sender {
-  NSEnumerator *enumerator;
-  TCMPortMapping *portMapping;
-
   [boloWindow orderOut:self];
   [statusPanel orderOut:self];
   [allegiancePanel orderOut:self];
   [messagesPanel orderOut:self];
 
   /* remove port mapping */
-  enumerator = [[portMapper portMappings] objectEnumerator];
-
-  while ((portMapping = [enumerator nextObject])) {
+  for (TCMPortMapping *portMapping in [portMapper portMappings]) {
     [portMapper removePortMapping:portMapping];
   }
 
@@ -878,12 +873,9 @@ END
 
 - (void)portMapperDidFinishWork:(NSNotification *)aNotification {
   TCMPortMapping *mapping;
-  NSEnumerator *enumerator;
 
 TRY
-  enumerator = [[portMapper portMappings] objectEnumerator];
-
-  while ((mapping = [enumerator nextObject])) {
+  for (TCMPortMapping *mapping in [portMapper portMappings]) {
     if ([mapping localPort] == getservertcpport()) {
       if ([mapping mappingStatus] == TCMPortMappingStatusMapped && [mapping transportProtocol] == TCMPortMappingTransportProtocolBoth) {
         if (hostTrackerBool) {

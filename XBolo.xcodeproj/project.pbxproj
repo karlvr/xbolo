@@ -484,6 +484,7 @@
 				4014422510ACA4F6008487C8 /* resolver.c */,
 			);
 			name = "Other Sources";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
@@ -605,19 +606,11 @@
 		55712B851CF8ED7B00326A27 /* Magma */ = {
 			isa = PBXGroup;
 			children = (
+				55712B8A1CF8ED7B00326A27 /* main.m */,
 				55712B991CF8EE2B00326A27 /* Classes */,
 				55712B9F1CF8EEA700326A27 /* Resources */,
-				55712B891CF8ED7B00326A27 /* Other Sources */,
 			);
 			path = Magma;
-			sourceTree = "<group>";
-		};
-		55712B891CF8ED7B00326A27 /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				55712B8A1CF8ED7B00326A27 /* main.m */,
-			);
-			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 		55712B961CF8EDF700326A27 /* Controller */ = {
@@ -681,7 +674,6 @@
 			isa = PBXGroup;
 			children = (
 				404D42670FF850D400589EA2 /* Mac OS X */,
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 			);
 			name = XBolo;
@@ -703,6 +695,7 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				55712C301CF903D900326A27 /* Images.xcassets */,
 			);
 			path = Shared;

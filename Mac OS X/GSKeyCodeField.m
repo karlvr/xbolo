@@ -350,11 +350,11 @@ NSMutableDictionary *nameDictionary;
 }
 
 - (void)setKeyCode:(unsigned short)aKeyCode {
-  self.cell.keyCode = aKeyCode;
+  [self.cell setKeyCode:aKeyCode];
 }
 
 - (unsigned short)keyCode {
-  return self.cell.keyCode;
+  return [self.cell keyCode];
 }
 
 - (IBAction)takeKeyValueFrom:(id)sender {
@@ -421,7 +421,7 @@ NSMutableDictionary *nameDictionary;
 
 - (void)keyDown:(NSEvent *)theEvent {
   if (!theEvent.ARepeat) {
-    self.cell.keyCode = theEvent.keyCode;
+    [self.cell setKeyCode:theEvent.keyCode];
     [self.window selectNextKeyView:self];
   }
 }
@@ -437,7 +437,7 @@ NSMutableDictionary *nameDictionary;
   oldModifiers = modifiers;
   modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
   if (modifiers & (oldModifiers ^ modifiers)) {
-    self.cell.keyCode = theEvent.keyCode;
+    [self.cell setKeyCode:theEvent.keyCode];
     [self.window selectNextKeyView:self];
   }
   else {
