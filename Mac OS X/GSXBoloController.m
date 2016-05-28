@@ -872,8 +872,6 @@ END
 }
 
 - (void)portMapperDidFinishWork:(NSNotification *)aNotification {
-  TCMPortMapping *mapping;
-
 TRY
   for (TCMPortMapping *mapping in [portMapper portMappings]) {
     if ([mapping localPort] == getservertcpport()) {

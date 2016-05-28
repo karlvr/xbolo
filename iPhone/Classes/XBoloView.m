@@ -15,7 +15,7 @@
   UIImage *image;
   [super drawRect:rect];
   [[UIColor blueColor] set];
-  image = [UIImage imageNamed:@"BaseStatDead.tiff"];
+  image = [UIImage imageNamed:@"BaseStatDead"];
   [image drawAtPoint:CGPointMake(0.0, 0.0)];
 }
 
