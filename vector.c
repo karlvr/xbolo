@@ -55,6 +55,7 @@ Vec2f make2f(float x, float y) {
   return r;
 }
 
+#if !(defined(USE_SIMD_H) && USE_SIMD_H)
 Vec2f neg2f(Vec2f v) {
   return make2f(-v.x, -v.y);
 }
@@ -74,11 +75,13 @@ Vec2f mul2f(Vec2f v, float s) {
 Vec2f div2f(Vec2f v, float s) {
   return make2f(v.x/s, v.y/s);
 }
+#endif
 
 float dot2f(Vec2f v1, Vec2f v2) {
   return v1.x*v2.x + v1.y*v2.y;
 }
 
+#if !(defined(USE_SIMD_H) && USE_SIMD_H)
 float mag2f(Vec2f v) {
   return sqrt(dot2f(v, v));
 }
@@ -86,6 +89,7 @@ float mag2f(Vec2f v) {
 Vec2f unit2f(Vec2f v) {
   return div2f(v, mag2f(v));
 }
+#endif
 
 Vec2f prj2f(Vec2f v1, Vec2f v2) {
   return mul2f(v1, dot2f(v1, v2)/dot2f(v1, v1));
@@ -114,6 +118,7 @@ Vec2i32 make2i32(int32_t x, int32_t y) {
   return r;
 }
 
+#if !(defined(USE_SIMD_H) && USE_SIMD_H)
 Vec2i32 neg2i32(Vec2i32 v) {
   return make2i32(-v.x, -v.y);
 }
@@ -133,6 +138,7 @@ Vec2i32 mul2i32(Vec2i32 v, int32_t s) {
 Vec2i32 div2i32(Vec2i32 v, int32_t s) {
   return make2i32(v.x/s, v.y/s);
 }
+#endif
 
 int32_t dot2i32(Vec2i32 v1, Vec2i32 v2) {
   return v1.x*v2.x + v1.y*v2.y;
