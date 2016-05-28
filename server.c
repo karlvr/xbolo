@@ -1636,7 +1636,7 @@ TRY
       struct timeval timeout;
 
       timeout.tv_sec = 0;
-      timeout.tv_usec = (nexttick - currenttime)/1000;
+      timeout.tv_usec = (int)((nexttick - currenttime)/1000);
 
       if (lockserver()) LOGFAIL(errno)
       gotlock = 1;

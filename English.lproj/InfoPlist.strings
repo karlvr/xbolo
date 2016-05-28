@@ -3,5 +3,7 @@
 CFBundleName = "XBolo";
 CFBundleShortVersionString = "XBolo version 0.4.1";
 CFBundleGetInfoString = "XBolo version 0.4.1, Copyright 2009.";
-CFBundleIconFile = "XBolo.icns";
 NSHumanReadableCopyright = "Copyright 2009.";
+
+
+"XBolo Map" = "XBolo Map";

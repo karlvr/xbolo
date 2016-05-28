@@ -13,10 +13,6 @@
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>XBoloMap</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>BMAP</string>
-			</array>
 			<key>CFBundleTypeName</key>
 			<string>XBolo Map</string>
 			<key>CFBundleTypeOSTypes</key>
@@ -79,8 +75,6 @@
 				<array>
 					<string>map</string>
 				</array>
-				<key>public.mime-type</key>
-				<string>BMAP</string>
 			</dict>
 		</dict>
 	</array>

@@ -91,7 +91,7 @@ TRY
   }
 
 CLEANUP
-ERRHANDLER(b, -1)
+ERRHANDLER((int)b, -1)
 END
 }
 
@@ -102,7 +102,7 @@ TRY
   if ((bytes = sendblock(s, str, strlen(str) + 1)) == -1) LOGFAIL(errno)
 
 CLEANUP
-ERRHANDLER(bytes, -1)
+ERRHANDLER((int)bytes, -1)
 END
 }
 

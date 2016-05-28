@@ -301,22 +301,22 @@ static void getlisttrackerstatus(int status);
   if([defaults boolForKey:@"GSHostPortNumberRandom"])
     [self setHostPortNumber:(random() % 40000) + 2000];
   else
-    [self setHostPortNumber:[defaults integerForKey:GSHostPortNumber]];
+    [self setHostPortNumber:(int)[defaults integerForKey:GSHostPortNumber]];
   [self setHostPasswordBool:[defaults boolForKey:GSHostPasswordBool]];
   [self setHostPasswordString:[defaults stringForKey:GSHostPasswordString]];
   [self setHostTimeLimitBool:[defaults boolForKey:GSHostTimeLimitBool]];
   [self setHostTimeLimitString:[defaults stringForKey:GSHostTimeLimitString]];
   [self setHostHiddenMinesBool:[defaults boolForKey:GSHostHiddenMinesBool]];
   [self setHostTrackerBool:[defaults boolForKey:GSHostTrackerBool]];
-  [self setHostGameTypeNumber:[defaults integerForKey:GSHostGameTypeNumber]];
+  [self setHostGameTypeNumber:(int)[defaults integerForKey:GSHostGameTypeNumber]];
 
   // init host domination pane
-  [self setHostDominationTypeNumber:[defaults integerForKey:GSHostDominationTypeNumber]];
+  [self setHostDominationTypeNumber:(int)[defaults integerForKey:GSHostDominationTypeNumber]];
   [self setHostDominationBaseControlString:[defaults stringForKey:GSHostDominationBaseControlString]];
 
   // init the join pane
   [self setJoinAddressString:[defaults stringForKey:GSJoinAddressString]];
-  [self setJoinPortNumber:[defaults integerForKey:GSJoinPortNumber]];
+  [self setJoinPortNumber:(int)[defaults integerForKey:GSJoinPortNumber]];
   [self setJoinPasswordBool:[defaults boolForKey:GSJoinPasswordBool]];
   [self setJoinPasswordString:[defaults stringForKey:GSJoinPasswordString]];
 
@@ -335,13 +335,13 @@ static void getlisttrackerstatus(int status);
   [self setShowMessagesBool:[defaults boolForKey:GSShowMessagesBool]];
 
   // init bolo window
-  [self setBuilderToolInteger:[defaults integerForKey:GSBuilderToolInteger]];
+  [self setBuilderToolInteger:(int)[defaults integerForKey:GSBuilderToolInteger]];
 
   // init allegiance panel
   playerInfoArray = [[NSMutableArray alloc] init];
 
   // init messages panel
-  [self setMessageTargetInteger:[defaults integerForKey:GSMessageTarget]];
+  [self setMessageTargetInteger:(int)[defaults integerForKey:GSMessageTarget]];
 
   // init the key config
   [self setKeyConfigDict:[defaults dictionaryForKey:GSKeyConfigDict]];
@@ -881,11 +881,11 @@ END
 }
 
 - (IBAction)hostGameType:(id)sender {
-  [self setHostGameTypeNumber:[sender indexOfSelectedItem]];
+  [self setHostGameTypeNumber:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction)hostDominationType:(id)sender {
-  [self setHostDominationTypeNumber:[[hostDominationTypeMatrix selectedCell] tag]];
+  [self setHostDominationTypeNumber:(int)[[hostDominationTypeMatrix selectedCell] tag]];
 }
 
 - (IBAction)hostDominationBaseControl:(id)sender {
@@ -1247,15 +1247,15 @@ END
 }
 
 - (IBAction)kickPlayer:(id)sender {
-  kickplayer([sender tag]);
+  kickplayer((int)[sender tag]);
 }
 
 - (IBAction)banPlayer:(id)sender {
-  banplayer([sender tag]);
+  banplayer((int)[sender tag]);
 }
 
 - (IBAction)unbanPlayer:(id)sender {
-  unbanplayer([sender tag]);
+  unbanplayer((int)[sender tag]);
 }
 
 - (IBAction)scrollUp:(id)sender {
@@ -1331,7 +1331,7 @@ END
 }
 
 - (IBAction)requestAlliance:(id)sender {
-  int i;
+  NSInteger i;
   NSIndexSet *set;
   uint16_t players;
   int gotlock = 0;
@@ -1373,10 +1373,10 @@ END
 }
 
 - (IBAction)leaveAlliance:(id)sender {
-  int i;
+  NSInteger i;
   NSIndexSet *set;
   uint16_t players;
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
   players = 0;
@@ -1439,7 +1439,7 @@ END
   id cell;
 
   if ((cell = [sender selectedCell]) != nil) {
-    [self setMessageTargetInteger:[cell tag]];
+    [self setMessageTargetInteger:(int)[cell tag]];
   }
 }
 
@@ -1543,12 +1543,12 @@ END
   id cell;
 
   if ((cell = [sender selectedCell]) != nil) {
-    [self setBuilderToolInteger:[cell tag]];
+    [self setBuilderToolInteger:(int)[cell tag]];
   }
 }
 
 - (IBAction)builderToolMenu:(id)sender {
-	[self setBuilderToolInteger:[sender tag]];
+	[self setBuilderToolInteger:(int)[sender tag]];
 }
 
 - (IBAction)tankCenter:(id)sender {
@@ -1884,7 +1884,7 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = [menuItem tag];
+      player = (int)[menuItem tag];
 
       if (server.players[player].cntlsock != -1) {
         [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
@@ -1913,7 +1913,7 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = [menuItem tag];
+      player = (int)[menuItem tag];
 
       if (server.players[player].cntlsock != -1) {
         [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
@@ -1994,7 +1994,7 @@ END
 
 // NSMenu delegate methods
 - (void)menuNeedsUpdate:(NSMenu *)menu {
-  int i;
+  NSInteger i;
 
   for (i = [menu numberOfItems] - 1; i >= 0; i--) {
     [menu removeItemAtIndex:i];
@@ -2733,7 +2733,7 @@ END
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
   NSTableView *table;
-  int i;
+  NSInteger i;
   NSDictionary *row;
 
   table = [aNotification object];
@@ -2762,7 +2762,7 @@ END
 
 // NSTableView dataSource methods
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   if (aTableView == playerInfoTableView) {
     return [playerInfoArray count];
   }
@@ -2774,7 +2774,7 @@ END
   }
 }
 
-- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
     return [[playerInfoArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
@@ -2788,7 +2788,7 @@ END
   }
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
     [[playerInfoArray objectAtIndex:rowIndex] setObject:anObject forKey:[aTableColumn identifier]];
@@ -2797,7 +2797,7 @@ END
 
 - (void)tableView:(NSTableView *)aTableView sortDescriptorsDidChange:(NSArray *)oldDescriptors {
   if (aTableView == joinTrackerTableView) {  /* sorts joinTrackerArray */
-    int index;
+    NSInteger index;
     NSDictionary *selection;
 
     index = [[aTableView selectedRowIndexes] firstIndex];

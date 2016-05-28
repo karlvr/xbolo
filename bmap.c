@@ -38,7 +38,7 @@ int readRun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, GSTile terra
 TRY
   while (*y < WIDTH) {  /* find the beginning of a run */
     while (*x < WIDTH) {
-      if (terraintotile(terrain[*y][*x]) != defaultTile(*x, *y)) {
+      if (terraintotile(terrain[*y][*x]) != defaultTile((int)*x, (int)*y)) {
         nibs = 0;
         run->y = *y;
         run->startx = *x;
@@ -56,7 +56,7 @@ TRY
 
             while (
               (*x + len < WIDTH) && (len < 8) &&
-              (terraintotile(terrain[*y][*x + len]) != defaultTile(*x + len, *y)) &&
+              (terraintotile(terrain[*y][*x + len]) != defaultTile((int)*x + len, (int)*y)) &&
               (terraintotile(terrain[*y][*x + len]) != terraintotile(terrain[*y][*x + len + 1]))
             ) {
               len++;
@@ -70,7 +70,7 @@ TRY
           }
 
           *x += len;
-        } while (terraintotile(terrain[*y][*x]) != defaultTile(*x, *y));
+        } while (terraintotile(terrain[*y][*x]) != defaultTile((int)*x, (int)*y));
 
         run->endx = *x;
         run->datalen = sizeof(struct BMAP_Run) + (nibs + 1)/2;

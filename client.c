@@ -1012,7 +1012,7 @@ TRY
       struct timeval timeout;
 
       timeout.tv_sec = 0;
-      timeout.tv_usec = (nexttick - currenttime)/1000;
+      timeout.tv_usec = (int)((nexttick - currenttime)/1000);
 
       if ((nfds = selectclient(&readfds, &writefds, &timeout)) == -1) LOGFAIL(errno)
 
@@ -5079,7 +5079,7 @@ TRY
 
               vel = mul2f(sub2f(client.players[client.player].tank, old), TICKSPERSEC);
               compi = sub2f(vel, prj2f(diff, vel));
-              compj = mul2f(unit2f(diff), sqrtf(fabsf((SHELLVEL*SHELLVEL) - dot2f(compi, compi))));  /* fabsf is a cludge */
+              compj = mul2f(unit2f(diff), sqrtf(fabsf((float)(SHELLVEL*SHELLVEL) - dot2f(compi, compi))));  /* fabsf is a cludge */
 
               if ((shell = (struct Shell *)malloc(sizeof(struct Shell))) == NULL) LOGFAIL(errno)
               shell->owner = client.pills[i].owner;

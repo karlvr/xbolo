@@ -352,7 +352,7 @@ CLEANUP
       closesock(&testsock);
     }
 
-    PNONCRIT(ERROR)
+    PNONCRIT("Unknown", ERROR)
     printlineinfo();
     CLEARERRLOG
     break;

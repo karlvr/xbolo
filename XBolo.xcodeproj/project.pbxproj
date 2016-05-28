@@ -291,7 +291,6 @@
 		4064445C108251E1008F913C /* tiles.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tiles.c; sourceTree = "<group>"; };
 		406444621082520D008F913C /* images.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = images.h; sourceTree = "<group>"; };
 		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; };
-		407333AE10F10E5100A018A1 /* XBoloMap.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = XBoloMap.icns; sourceTree = "<group>"; };
 		407C8B2A0FDC72CA006A71F7 /* tracker.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tracker.c; sourceTree = "<group>"; };
 		407C8B390FDC739B006A71F7 /* XBolo Tracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XBolo Tracker"; sourceTree = BUILT_PRODUCTS_DIR; };
 		407ECEF91087C371002B43CB /* buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buf.h; sourceTree = "<group>"; };
@@ -350,7 +349,6 @@
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
 		C2BFADE01055937F009A1EE7 /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
 		C2BFADE11055937F009A1EE7 /* timing.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = timing.c; sourceTree = "<group>"; usesTabs = 0; };
-		F5068218029195BE01A80102 /* XBolo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = XBolo.icns; sourceTree = "<group>"; };
 		F553197603E5088801924B91 /* builderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = builderdeath.aiff; path = Sounds/builderdeath.aiff; sourceTree = "<group>"; };
 		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = explosion.aiff; path = Sounds/explosion.aiff; sourceTree = "<group>"; };
 		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
@@ -494,8 +492,6 @@
 				558243641CBD7ABB006BDC14 /* Images.xcassets */,
 				F55317CA03E5054901924B91 /* Images */,
 				F55317CB03E5055801924B91 /* Sounds */,
-				F5068218029195BE01A80102 /* XBolo.icns */,
-				407333AE10F10E5100A018A1 /* XBoloMap.icns */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				FD507B6E03EB7E6000360B11 /* Localizable.strings */,
 				FD968C270472BA17000001C9 /* DefaultPreferences.plist */,
@@ -1257,6 +1253,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -1288,6 +1285,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;

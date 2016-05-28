@@ -17,18 +17,18 @@ GSPoint GSMakePoint(int x, int y) {
   return p;
 }
 
-int GSEqualPoints(GSPoint p1, GSPoint p2) {
+bool GSEqualPoints(GSPoint p1, GSPoint p2) {
   return p1.x == p2.x && p1.y == p2.y;
 }
 
-Rangei GSMakeRange(int origin, unsigned size) {
-  Rangei n;
+GSRange GSMakeRange(int origin, unsigned size) {
+  GSRange n;
   n.origin = origin;
   n.size = size;
   return n;
 }
 
-int GSIntersectsRange(Rangei r1, Rangei r2) {
+bool GSIntersectsRange(GSRange r1, GSRange r2) {
   if (r1.origin < r2.origin) {
     if (r1.origin + r1.size > r2.origin) {
       return 1;
@@ -43,11 +43,11 @@ int GSIntersectsRange(Rangei r1, Rangei r2) {
   return 0;
 }
 
-int GSContainsRange(Rangei r1, Rangei r2) {
+bool GSContainsRange(GSRange r1, GSRange r2) {
   return r1.origin <= r2.origin && r1.origin + r1.size >= r2.origin + r2.size;
 }
 
-int GSLocationInRange(Rangei r, int x) {
+bool GSLocationInRange(GSRange r, int x) {
   return r.origin <= x && r.origin + r.size < x;
 }
 
@@ -58,7 +58,7 @@ GSSize GSMakeSize(unsigned w, unsigned h) {
   return s;
 }
 
-int GSEqualSizes(GSSize s1, GSSize s2) {
+bool GSEqualSizes(GSSize s1, GSSize s2) {
   return s1.width == s2.width && s1.height == s2.height;
 }
 
@@ -112,7 +112,7 @@ GSRect GSOffsetRect(GSRect r, int dx, int dy) {
   return n;
 }
 
-int GSPointInRect(GSRect r, GSPoint p) {
+bool GSPointInRect(GSRect r, GSPoint p) {
   return GSMinX(r) <= p.x && GSMinY(r) <= p.y && GSMaxX(r) >= p.x && GSMaxY(r) >= p.y;
 }
 
@@ -127,17 +127,17 @@ GSRect GSUnionRect(GSRect r1, GSRect r2) {
   return n;
 }
 
-int GSContainsRect(GSRect r1, GSRect r2) {
+bool GSContainsRect(GSRect r1, GSRect r2) {
   return
     GSContainsRange(GSMakeRange(r1.origin.x, r1.size.width), GSMakeRange(r2.origin.x, r2.size.width)) &&
     GSContainsRange(GSMakeRange(r1.origin.y, r1.size.height), GSMakeRange(r2.origin.y, r2.size.height));
 }
 
-int GSEqualRects(GSRect r1, GSRect r2) {
+bool GSEqualRects(GSRect r1, GSRect r2) {
   return r1.origin.x == r2.origin.x && r1.origin.y == r2.origin.y && r1.size.width == r2.size.width && r1.size.height == r2.size.height;
 }
 
-int GSIsEmptyRect(GSRect r) {
+bool GSIsEmptyRect(GSRect r) {
   return r.size.width <= 0 || r.size.height <= 0;
 }
 
@@ -161,7 +161,7 @@ GSRect GSIntersectionRect(GSRect r1, GSRect r2) {
   return n;
 }
 
-int GSIntersectsRect(GSRect r1, GSRect r2) {
+bool GSIntersectsRect(GSRect r1, GSRect r2) {
   return 
     GSIntersectsRange(GSMakeRange(r1.origin.x, r1.size.width), GSMakeRange(r2.origin.x, r2.size.width)) &&
     GSIntersectsRange(GSMakeRange(r1.origin.y, r1.size.height), GSMakeRange(r2.origin.y, r2.size.height));
