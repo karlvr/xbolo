@@ -3,3 +3,4 @@
 //
 
 #include "bolo.h"
+#import "XBoloAppDelegate.h"
