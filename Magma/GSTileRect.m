@@ -195,10 +195,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
 // Accessor Methods
 
-
-- (GSRect)rect {
-  return rect;
-}
+@synthesize rect;
 
 - (void)setOrigin:(GSPoint)origin {
   if (!GSEqualPoints(rect.origin, origin)) {

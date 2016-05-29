@@ -10,6 +10,8 @@
 #include "bmap.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GSTileRect : NSObject < NSPasteboardReading, NSPasteboardWriting > {
   GSRect rect;
   GSTile *tiles;
@@ -22,6 +24,7 @@
 - (instancetype)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithTile:(GSTile)tile inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type NS_DESIGNATED_INITIALIZER;
 
 @property (readonly) GSRect rect;
 - (void)setOrigin:(GSPoint)origin;
@@ -41,3 +44,5 @@
 - (void)copyToTiles:(GSTile *)aTiles;
 
 @end
+
+NS_ASSUME_NONNULL_END

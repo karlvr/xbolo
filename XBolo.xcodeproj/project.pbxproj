@@ -43,7 +43,6 @@
 		404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */; };
 		404D43460FF85B9C00589EA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43450FF85B9C00589EA2 /* main.m */; };
 		404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D43470FF85BAF00589EA2 /* XBoloViewController.xib */; };
-		404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 404D43490FF85BBB00589EA2 /* XBolo-Info.plist */; };
 		404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D434C0FF85BCC00589EA2 /* MainWindow.xib */; };
 		405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
 		405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
@@ -189,6 +188,7 @@
 		55C4A5581CBD72FA003A29B0 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE46EC806BD2C37004F79C3 /* vector.c */; };
 		55C4A5591CBD7312003A29B0 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
 		55C4A55A1CBD732D003A29B0 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
+		55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
@@ -288,17 +288,16 @@
 		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSXBoloController.h; path = "Mac OS X/GSXBoloController.h"; sourceTree = "<group>"; };
 		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSXBoloController.m; path = "Mac OS X/GSXBoloController.m"; sourceTree = "<group>"; };
 		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Main.m; path = "Mac OS X/Main.m"; sourceTree = "<group>"; };
-		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloView.m; path = iPhone/Classes/XBoloView.m; sourceTree = "<group>"; };
-		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloView.h; path = iPhone/Classes/XBoloView.h; sourceTree = "<group>"; };
-		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloViewController.h; path = iPhone/Classes/XBoloViewController.h; sourceTree = "<group>"; };
-		404D43380FF85B6B00589EA2 /* XBoloViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloViewController.m; path = iPhone/Classes/XBoloViewController.m; sourceTree = "<group>"; };
-		404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloAppDelegate.h; path = iPhone/Classes/XBoloAppDelegate.h; sourceTree = "<group>"; };
-		404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloAppDelegate.m; path = iPhone/Classes/XBoloAppDelegate.m; sourceTree = "<group>"; };
-		404D43450FF85B9C00589EA2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iPhone/main.m; sourceTree = "<group>"; };
-		404D43470FF85BAF00589EA2 /* XBoloViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = XBoloViewController.xib; path = iPhone/XBoloViewController.xib; sourceTree = "<group>"; };
-		404D43490FF85BBB00589EA2 /* XBolo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "XBolo-Info.plist"; path = "iPhone/XBolo-Info.plist"; sourceTree = "<group>"; };
-		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBolo_Prefix.pch; path = iPhone/XBolo_Prefix.pch; sourceTree = "<group>"; };
-		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = iPhone/MainWindow.xib; sourceTree = "<group>"; };
+		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloView.m; sourceTree = "<group>"; };
+		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloView.h; sourceTree = "<group>"; };
+		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloViewController.h; sourceTree = "<group>"; };
+		404D43380FF85B6B00589EA2 /* XBoloViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloViewController.m; sourceTree = "<group>"; };
+		404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloAppDelegate.h; sourceTree = "<group>"; };
+		404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloAppDelegate.m; sourceTree = "<group>"; };
+		404D43450FF85B9C00589EA2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		404D43470FF85BAF00589EA2 /* XBoloViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XBoloViewController.xib; sourceTree = "<group>"; };
+		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBolo_Prefix.pch; sourceTree = "<group>"; };
+		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = pillshot.aiff; sourceTree = "<group>"; };
 		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = build.aiff; sourceTree = "<group>"; };
 		405E19370FC7E4A5008CDDF0 /* sink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = sink.aiff; sourceTree = "<group>"; };
@@ -368,6 +367,7 @@
 		55712C831CFA1B0800326A27 /* OS X-only.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "OS X-only.xcassets"; path = "Mac OS X/OS X-only.xcassets"; sourceTree = "<group>"; };
 		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhone.xcassets; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -544,14 +544,10 @@
 			isa = PBXGroup;
 			children = (
 				404D43450FF85B9C00589EA2 /* main.m */,
-				404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */,
-				404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */,
-				404D42680FF8510100589EA2 /* Model */,
-				404D42690FF8510800589EA2 /* View */,
-				404D426A0FF8510F00589EA2 /* Controller */,
+				55D1E20E1CFB77BE003C0B00 /* Classes */,
 				404D430D0FF8593700589EA2 /* Resources */,
 			);
-			name = iPhone;
+			path = iPhone;
 			sourceTree = "<group>";
 		};
 		404D42670FF850D400589EA2 /* Mac OS X */ = {
@@ -584,6 +580,8 @@
 		404D426A0FF8510F00589EA2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */,
+				404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */,
 				404D43370FF85B6B00589EA2 /* XBoloViewController.h */,
 				404D43380FF85B6B00589EA2 /* XBoloViewController.m */,
 			);
@@ -604,9 +602,9 @@
 			children = (
 				404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */,
 				404D434C0FF85BCC00589EA2 /* MainWindow.xib */,
-				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
-				404D43490FF85BBB00589EA2 /* XBolo-Info.plist */,
 				404D43470FF85BAF00589EA2 /* XBoloViewController.xib */,
+				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
+				55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -723,6 +721,16 @@
 				55712C301CF903D900326A27 /* Images.xcassets */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		55D1E20E1CFB77BE003C0B00 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				404D42680FF8510100589EA2 /* Model */,
+				404D42690FF8510800589EA2 /* View */,
+				404D426A0FF8510F00589EA2 /* Controller */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
@@ -995,8 +1003,8 @@
 				55712C951CFA1D9300326A27 /* hitterrain.aiff in Resources */,
 				55712C941CFA1D9300326A27 /* hittank.aiff in Resources */,
 				55712C961CFA1D9300326A27 /* hittree.aiff in Resources */,
-				404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */,
 				55712C891CFA1D9300326A27 /* explosion.aiff in Resources */,
+				55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */,
 				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
 				55712C991CFA1D9300326A27 /* sink.aiff in Resources */,
@@ -1337,6 +1345,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1348,7 +1357,7 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
+				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = (
@@ -1367,6 +1376,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1377,7 +1387,7 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
+				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = (
