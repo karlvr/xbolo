@@ -189,6 +189,8 @@
 		55C4A5591CBD7312003A29B0 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
 		55C4A55A1CBD732D003A29B0 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 		55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */; };
+		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
+		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
@@ -368,6 +370,9 @@
 		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhone.xcassets; sourceTree = "<group>"; };
+		55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPhone-Bridging-Header.h"; sourceTree = "<group>"; };
+		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
+		55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XBuilderStatusView.swift; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -543,6 +548,7 @@
 		404D42660FF850B700589EA2 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */,
 				404D43450FF85B9C00589EA2 /* main.m */,
 				55D1E20E1CFB77BE003C0B00 /* Classes */,
 				404D430D0FF8593700589EA2 /* Resources */,
@@ -573,6 +579,8 @@
 			children = (
 				404D43100FF85B5700589EA2 /* XBoloView.h */,
 				404D430F0FF85B5700589EA2 /* XBoloView.m */,
+				55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */,
+				55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1104,6 +1112,8 @@
 				406444641082520D008F913C /* images.c in Sources */,
 				407ECEFE1087C371002B43CB /* buf.c in Sources */,
 				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
+				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
+				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1346,6 +1356,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1360,6 +1371,7 @@
 				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -1369,6 +1381,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPhone/iPhone-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1377,6 +1391,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1390,6 +1405,7 @@
 				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -1399,6 +1415,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPhone/iPhone-Bridging-Header.h";
 				ZERO_LINK = NO;
 			};
 			name = Release;

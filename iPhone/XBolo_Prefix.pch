@@ -4,6 +4,9 @@
 
 #include <math.h>
 #include <tgmath.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
