@@ -13,12 +13,46 @@
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
+#include <CoreFoundation/CFBase.h>
 
 /* additional errno types */
 
 #ifndef ELAST
 #define ELAST (1000)  /* a hack, hopefully big enough */
 #endif
+
+// This is here to make Swift happy.
+typedef CF_ENUM(int, BoloErrors) {
+  /*! No such host is known. */
+  EHOSTNOTFOUND  = (ELAST + 1),
+  /*! Some unexpected server failure was encountered. */
+  EHOSTNORECOVERY = (ELAST + 2),
+  /*! The requested name is valid but does not have an IP address. */
+  EHOSTNODATA     = (ELAST + 3),
+  /*! Corrupt file. */
+  ECORFILE        = (ELAST + 4),
+  /*! Incompatable file version. */
+  EINCMPAT        = (ELAST + 5),
+  /*! Incompatable server version. */
+  EBADVERSION     = (ELAST + 6),
+  /*! Incompatable server version. */
+  ETCPCLOSED      = (ELAST + 7),
+  /*! Incompatable server version. */
+  EUDPCLOSED      = (ELAST + 8),
+  /*! New players disallowed */
+  EDISSALLOW      = (ELAST + 9),
+  /*! Bad password. */
+  EBADPASS        = (ELAST + 10),
+  /*! Server is full. */
+  ESERVERFULL     = (ELAST + 11),
+  /*! Time limit reached. */
+  ETIMELIMIT      = (ELAST + 12),
+  /*! Player banned. */
+  EBANNEDPLAYER   = (ELAST + 13),
+  /*! Server error. */
+  ESERVERERROR    = (ELAST + 14),
+};
+
 
 #define EHOSTNOTFOUND   (ELAST + 1)   /* No such host is known. */
 #define EHOSTNORECOVERY (ELAST + 2)   /* Some unexpected server failure was encountered. */
@@ -57,6 +91,9 @@
 #define ERRHANDLER(success_code, failure_code) { switch (ERROR) { case 0: return success_code; default: errno = ERROR; return failure_code; } }
 
 /* returns with no error */
+#ifdef RETURN
+#undef RETURN
+#endif
 #define RETURN(code) { errchkcleanup(); return code; }
 
 /* returns with error */
