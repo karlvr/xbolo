@@ -94,6 +94,18 @@
     return _bundle.bundlePath.lastPathComponent;
 }
 
+- (BOOL)loadWithError:(NSError**)error
+{
+    NSError *err = [self load];
+    if (err) {
+        if (error) {
+            *error = err;
+        }
+        return NO;
+    }
+    return true;
+}
+
 - (NSError *)load
 {
     Class class = _bundle.principalClass;
@@ -302,7 +314,7 @@
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
         
-        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)gsdata.bytes freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
+        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)gsdata.mutableBytes freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
         
         [gsdata release];
         [messages release];

@@ -22,13 +22,21 @@
 }
 
 + (NSArray<id <GSRobot>> *)availableRobots;
+#if __has_feature(objc_class_property)
+@property (class, copy, readonly) NSArray<id <GSRobot>> *availableRobots;
+#endif
 
 @property (readonly) NSString *name;
 - (NSString *)name;
 
-- (NSError *)load;
-- (void)unload; // just cleans up memory, does not actually unload code (which is enormously dangerous)
-- (void)step; // call with client locked
+- (BOOL)loadWithError:(NSError**)error;
+- (NSError *)load NS_SWIFT_UNAVAILABLE("Use `load() throws` instead");
+
+/// just cleans up memory, does not actually unload code (which is enormously dangerous)
+- (void)unload;
+
+/// call with client locked
+- (void)step;
 - (void)receivedMessage: (NSString *)message;
 
 @end

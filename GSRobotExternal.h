@@ -132,7 +132,7 @@ struct GSRobotGameState
     int builderscount;
     struct Builder *builders;
     
-    NSArray *messages; // array of NSString, may be nil if no messages
+    CFArrayRef messages; // array of NSString, may be nil if no messages
 };
 #if INTERNAL_GSROBOT_INCLUDE
 #undef Shell
@@ -152,15 +152,16 @@ struct GSRobotCommandState
     int buildercommand;
     int builderx, buildery;
     
-    NSArray<NSString*> *playersToAllyWith; // NSStrings containing player names
+    CFArrayRef playersToAllyWith; // NSStrings containing player names
 };
 
 #define GS_ROBOT_CURRENT_INTERFACE_VERSION 1
 
+NS_SWIFT_NAME(GSRobotProtocol)
 @protocol GSRobot <NSObject>
 
 + (int)minimumRobotInterfaceVersionRequired;
 - (instancetype)init; // designated initializer
-- (struct GSRobotCommandState)stepXBoloRobotWithGameState: (struct GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
+- (struct GSRobotCommandState)stepXBoloRobotWithGameState: (const struct GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
 
 @end
