@@ -192,6 +192,7 @@
 		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
+		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
@@ -375,8 +376,12 @@
 		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
 		55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XBuilderStatusView.swift; sourceTree = "<group>"; };
 		55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = vector_Swift.swift; sourceTree = "<group>"; };
+		55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Standard Autopilot.xbolorobot"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
+		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
-		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
+		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
 		C2BFADE01055937F009A1EE7 /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
 		C2BFADE11055937F009A1EE7 /* timing.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = timing.c; sourceTree = "<group>"; usesTabs = 0; };
@@ -443,6 +448,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55F4E50E1D2877BC00CC90E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -454,6 +466,7 @@
 				404D425D0FF84FEA00589EA2 /* XBolo.app */,
 				408187591080C81200E4D4CA /* Dedicated Host */,
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
+				55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -468,6 +481,7 @@
 				408187641080C83B00E4D4CA /* Dedicated Host */,
 				55712B851CF8ED7B00326A27 /* Magma */,
 				55712C2F1CF903A600326A27 /* Shared */,
+				55F4E5121D2877BC00CC90E0 /* Standard Autopilot */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -744,6 +758,18 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		55F4E5121D2877BC00CC90E0 /* Standard Autopilot */ = {
+			isa = PBXGroup;
+			children = (
+				55F4E5131D2877BC00CC90E0 /* Info.plist */,
+				55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */,
+				55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */,
+			);
+			indentWidth = 4;
+			path = "Standard Autopilot";
+			sourceTree = "<group>";
+			usesTabs = 1;
+		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -939,6 +965,23 @@
 			productReference = 55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
+		55F4E5101D2877BC00CC90E0 /* Standard Autopilot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55F4E5141D2877BC00CC90E0 /* Build configuration list for PBXNativeTarget "Standard Autopilot" */;
+			buildPhases = (
+				55F4E50D1D2877BC00CC90E0 /* Sources */,
+				55F4E50E1D2877BC00CC90E0 /* Frameworks */,
+				55F4E50F1D2877BC00CC90E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Standard Autopilot";
+			productName = "Standard Autopilot";
+			productReference = 55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -949,6 +992,9 @@
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
 					55712B831CF8ED7B00326A27 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					55F4E5101D2877BC00CC90E0 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
 				};
@@ -979,6 +1025,7 @@
 				407C8B380FDC739B006A71F7 /* XBolo Tracker */,
 				408187581080C81200E4D4CA /* Dedicated Host */,
 				55712B831CF8ED7B00326A27 /* XBolo Map Editor */,
+				55F4E5101D2877BC00CC90E0 /* Standard Autopilot */,
 			);
 		};
 /* End PBXProject section */
@@ -1085,6 +1132,13 @@
 				55712C1F1CF8F0C300326A27 /* GSXBoloMap.xib in Resources */,
 				55712C1C1CF8F05600326A27 /* Credits.rtf in Resources */,
 				55712C041CF8F00100326A27 /* mouseEyeDropper.tiff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55F4E50F1D2877BC00CC90E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,6 +1259,14 @@
 				55712BAB1CF8EF0300326A27 /* GSPanel.m in Sources */,
 				55712BA51CF8EEEA00326A27 /* GSTileRect.m in Sources */,
 				55712C2E1CF9025D00326A27 /* terrain.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55F4E50D1D2877BC00CC90E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1636,6 +1698,91 @@
 			};
 			name = Release;
 		};
+		55F4E5151D2877BC00CC90E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Standard Autopilot/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Standard Autopilot/Standard Autopilot-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WRAPPER_EXTENSION = xbolorobot;
+			};
+			name = Debug;
+		};
+		55F4E5161D2877BC00CC90E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Standard Autopilot/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Standard Autopilot/Standard Autopilot-Bridging-Header.h";
+				WRAPPER_EXTENSION = xbolorobot;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1692,6 +1839,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		55F4E5141D2877BC00CC90E0 /* Build configuration list for PBXNativeTarget "Standard Autopilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55F4E5151D2877BC00CC90E0 /* Debug */,
+				55F4E5161D2877BC00CC90E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
