@@ -3486,7 +3486,7 @@ END
 
 - (void)setupRobotsMenu
 {
-    NSArray *robots = [GSRobot availableRobots];
+    NSArray<GSRobot*> *robots = [GSRobot availableRobots];
     
     NSMenuItem *autoMenu = nil;
     NSString *autoName = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSAutomaticallyLoadRobot"];
@@ -3499,9 +3499,7 @@ END
         
         [menu addItem: [NSMenuItem separatorItem]];
         
-        NSEnumerator *enumerator = [robots objectEnumerator];
-        GSRobot *r;
-        while((r = [enumerator nextObject]))
+        for(GSRobot *r in robots)
         {
             NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: r.name action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
             item.representedObject = r;

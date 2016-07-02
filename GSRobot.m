@@ -309,7 +309,7 @@
         NSMutableData *gsdata = [_gamestateData retain];
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
-        ((struct GSRobotGameState *)gsdata.mutableBytes)->messages = messages;
+        ((struct GSRobotGameState *)gsdata.mutableBytes)->messages = (CFArrayRef)messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
@@ -338,14 +338,14 @@
             buildercommand(commandState.buildercommand, p);
         }
         
-        if(commandState.playersToAllyWith.count)
+        if(((NSArray*)commandState.playersToAllyWith).count)
         {
             lockclient();
             uint16_t players = 0;
             int i, j;
-            for(j = 0; j < commandState.playersToAllyWith.count; j++)
+            for(j = 0; j < ((NSArray*)commandState.playersToAllyWith).count; j++)
             {
-                NSString *name = commandState.playersToAllyWith[j];
+                NSString *name = ((NSArray*)commandState.playersToAllyWith)[j];
                 const char *cname = name.UTF8String;
                 for(i = 0; i < MAX_PLAYERS; i++)
                 {

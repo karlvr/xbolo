@@ -21,7 +21,7 @@
     BOOL _halt;
 }
 
-+ (NSArray<id <GSRobot>> *)availableRobots;
++ (NSArray<GSRobot*> *)availableRobots;
 #if __has_feature(objc_class_property)
 @property (class, copy, readonly) NSArray<id <GSRobot>> *availableRobots;
 #endif
