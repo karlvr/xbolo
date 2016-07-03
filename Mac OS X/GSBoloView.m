@@ -506,7 +506,7 @@ END
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
-  unsigned int oldModifiers;
+  NSEventModifierFlags oldModifiers;
   oldModifiers = modifiers;
   modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
   if (modifiers & (oldModifiers ^ modifiers)) {

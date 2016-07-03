@@ -598,46 +598,48 @@
         <window title="XBolo" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="GSXBoloWindow" animationBehavior="default" id="639" userLabel="XBolo">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="10" y="32" width="994" height="768"/>
+            <rect key="contentRect" x="63" y="0.0" width="800" height="550"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <value key="minSize" type="size" width="800" height="550"/>
             <view key="contentView" id="636">
-                <rect key="frame" x="0.0" y="0.0" width="994" height="768"/>
+                <rect key="frame" x="0.0" y="0.0" width="800" height="550"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1315">
-                        <rect key="frame" x="0.0" y="0.0" width="994" height="768"/>
+                        <rect key="frame" x="-1" y="-1" width="802" height="552"/>
                         <clipView key="contentView" id="FWw-gD-7vS">
-                            <rect key="frame" x="0.0" y="0.0" width="994" height="768"/>
+                            <rect key="frame" x="0.0" y="0.0" width="802" height="552"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1314" customClass="GSBoloView">
-                                    <rect key="frame" x="0.0" y="0.0" width="4096" height="4096"/>
+                                    <rect key="frame" x="0.0" y="-216" width="4096" height="4096"/>
                                     <connections>
                                         <outlet property="boloController" destination="514" id="1317"/>
                                     </connections>
                                 </customView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="2059">
-                            <rect key="frame" x="0.0" y="752" width="994" height="16"/>
+                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2059">
+                            <rect key="frame" x="0.0" y="536" width="802" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="2060">
-                            <rect key="frame" x="978" y="0.0" width="16" height="768"/>
+                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.97686230248306993" horizontal="NO" id="2060">
+                            <rect key="frame" x="786" y="0.0" width="16" height="552"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="1315" secondAttribute="bottom" id="cqY-qZ-0SN"/>
-                    <constraint firstItem="1315" firstAttribute="top" secondItem="636" secondAttribute="top" id="cs3-85-9el"/>
-                    <constraint firstItem="1315" firstAttribute="leading" secondItem="636" secondAttribute="leading" id="frg-7K-kSp"/>
-                    <constraint firstAttribute="trailing" secondItem="1315" secondAttribute="trailing" id="jwy-lG-kKs"/>
+                    <constraint firstAttribute="bottom" secondItem="1315" secondAttribute="bottom" constant="-1" id="cqY-qZ-0SN"/>
+                    <constraint firstItem="1315" firstAttribute="top" secondItem="636" secondAttribute="top" constant="-1" id="cs3-85-9el"/>
+                    <constraint firstItem="1315" firstAttribute="leading" secondItem="636" secondAttribute="leading" constant="-1" id="frg-7K-kSp"/>
+                    <constraint firstAttribute="trailing" secondItem="1315" secondAttribute="trailing" constant="-1" id="jwy-lG-kKs"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="514" id="1310"/>
             </connections>
+            <point key="canvasLocation" x="895" y="-962"/>
         </window>
         <window title="XBolo Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="GSPreferencesWindow" animationBehavior="default" id="707" userLabel="Preferences">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
@@ -657,22 +659,22 @@
                                     <rect key="frame" x="0.0" y="0.0" width="444" height="330"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <box misplaced="YES" title="Attributes" translatesAutoresizingMaskIntoConstraints="NO" id="1275">
-                                            <rect key="frame" x="17" y="155" width="409" height="169"/>
+                                        <box title="Attributes" translatesAutoresizingMaskIntoConstraints="NO" id="1275">
+                                            <rect key="frame" x="17" y="155" width="418" height="169"/>
                                             <view key="contentView" id="eSd-FH-30p">
-                                                <rect key="frame" x="2" y="2" width="405" height="152"/>
+                                                <rect key="frame" x="2" y="2" width="414" height="152"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1242">
-                                                        <rect key="frame" x="23" y="113" width="84" height="17"/>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1242">
+                                                        <rect key="frame" x="27" y="113" width="84" height="17"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Player Name:" id="2045">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1243">
-                                                        <rect key="frame" x="113" y="110" width="180" height="22"/>
+                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1243">
+                                                        <rect key="frame" x="117" y="110" width="180" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="180" id="dpj-8l-nKt"/>
                                                         </constraints>
@@ -2633,18 +2635,18 @@ DQ
                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1625">
                         <rect key="frame" x="0.0" y="33" width="256" height="159"/>
                         <clipView key="contentView" id="L8a-jc-Gpf">
-                            <rect key="frame" x="1" y="0.0" width="238" height="158"/>
+                            <rect key="frame" x="1" y="0.0" width="254" height="158"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" headerView="2067" id="1626">
-                                    <rect key="frame" x="0.0" y="0.0" width="238" height="135"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="254" height="135"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="Player" editable="NO" width="235" minWidth="40" maxWidth="1000" id="1624">
+                                        <tableColumn identifier="Player" editable="NO" width="251" minWidth="40" maxWidth="1000" id="1624">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Player">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -2675,7 +2677,7 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="2067">
-                            <rect key="frame" x="0.0" y="0.0" width="238" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="254" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
