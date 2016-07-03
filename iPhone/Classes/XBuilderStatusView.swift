@@ -31,7 +31,7 @@ class XBuilderStatusView : UIView {
   }
   
   override func drawRect(dirtyRect: CGRect) {
-    switch (state) {
+    switch state {
     case .Direction:
       let bounds = self.bounds;
       UIColor.whiteColor().set()

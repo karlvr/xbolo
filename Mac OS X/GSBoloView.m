@@ -16,7 +16,7 @@
 #include <math.h>
 #include <tgmath.h>
 
-static NSMutableArray *boloViews = nil;
+static NSMutableArray<GSBoloView*> *boloViews = nil;
 static NSImage *tiles = nil;
 static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
@@ -46,18 +46,13 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 }
 
 + (void)refresh {
-  NSEnumerator *enumerator;
-  GSBoloView *view;
-
   /* disable flush window on a bolo view windows */
-  enumerator = [boloViews objectEnumerator];
-  while ((view = [enumerator nextObject]) != nil) {
+  for (GSBoloView *view in boloViews) {
     [view.window disableFlushWindow];
   }
 
   /* draw */
-  enumerator = [boloViews objectEnumerator];
-  while ((view = [enumerator nextObject]) != nil) {  
+  for (GSBoloView *view in boloViews) {
     if ([view lockFocusIfCanDraw]) {
       [view eraseSprites];
       [view refreshTiles];
@@ -68,8 +63,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
   }
 
   /* enable flush window and flush if needed */
-  enumerator = [boloViews objectEnumerator];
-  while ((view = [enumerator nextObject]) != nil) {
+  for (GSBoloView *view in boloViews) {
     [view.window enableFlushWindow];
     [view.window flushWindowIfNeeded];
   }
