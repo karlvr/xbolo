@@ -35,6 +35,38 @@
 #define NEW_DATA 1
 #define THREAD_EXITED 2
 
++ (NSArray<NSURL*>*) searchURLs
+{
+    static NSArray<NSURL*> *savedURLs = nil;
+    if (savedURLs == nil) {
+        @autoreleasepool {
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSMutableArray<NSURL*> *tmpURLs = [[NSMutableArray alloc] initWithCapacity:5];
+            NSURL *tmpURL = [NSBundle mainBundle].builtInPlugInsURL;
+            if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                [tmpURLs addObject:tmpURL];
+            }
+            tmpURL = [[NSBundle mainBundle].bundleURL URLByDeletingLastPathComponent];
+            tmpURL = [tmpURL URLByAppendingPathComponent:@"Robots" isDirectory:YES];
+            if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                [tmpURLs addObject:tmpURL];
+            }
+            NSArray *libURLs = [fm URLsForDirectory:NSApplicationSupportDirectory inDomains:NSAllDomainsMask & ~NSSystemDomainMask];
+            for (NSURL *url in libURLs) {
+                tmpURL = [url URLByAppendingPathComponent:@"XBolo"];
+                tmpURL = [tmpURL URLByAppendingPathComponent:@"Robots" isDirectory:YES];
+                if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                    [tmpURLs addObject:tmpURL];
+                }
+            }
+            
+            savedURLs = [tmpURLs copy];
+            [tmpURLs release];
+        }
+    }
+    return [[savedURLs retain] autorelease];
+}
+
 + (NSArray *)availableRobots
 {
     static NSMutableArray *robots = nil;
@@ -296,9 +328,7 @@
 - (void)_watcherThread
 {
     while(1)
-    {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
+    @autoreleasepool {
         [_condLock lockWhenCondition: NEW_DATA];
         if(_halt)
         {
@@ -342,10 +372,9 @@
         {
             lockclient();
             uint16_t players = 0;
-            int i, j;
-            for(j = 0; j < ((NSArray*)commandState.playersToAllyWith).count; j++)
+            int i;
+            for(NSString *name in ((NSArray*)commandState.playersToAllyWith))
             {
-                NSString *name = ((NSArray*)commandState.playersToAllyWith)[j];
                 const char *cname = name.UTF8String;
                 for(i = 0; i < MAX_PLAYERS; i++)
                 {
@@ -358,8 +387,6 @@
                 requestalliance(players);
             unlockclient();
         }
-        
-        [pool release];
     }
 }
 

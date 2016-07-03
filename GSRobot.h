@@ -10,6 +10,8 @@
 
 @protocol GSRobot;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GSRobot : NSObject
 {
     NSBundle *_bundle;
@@ -22,15 +24,17 @@
 }
 
 + (NSArray<GSRobot*> *)availableRobots;
++ (NSArray<NSURL*> *)searchURLs;
 #if __has_feature(objc_class_property)
-@property (class, copy, readonly) NSArray<id <GSRobot>> *availableRobots;
+@property (class, copy, readonly) NSArray<GSRobot*> *availableRobots;
+@property (class, copy, readonly) NSArray<NSURL*> *searchURLs;
 #endif
 
 @property (readonly) NSString *name;
 - (NSString *)name;
 
-- (BOOL)loadWithError:(NSError**)error;
-- (NSError *)load NS_SWIFT_UNAVAILABLE("Use `load() throws` instead");
+- (BOOL)loadWithError:(NSError*__nullable*__nullable)error;
+- (nullable NSError *)load NS_SWIFT_UNAVAILABLE("Use `load() throws` instead");
 
 /// just cleans up memory, does not actually unload code (which is enormously dangerous)
 - (void)unload;
@@ -40,3 +44,5 @@
 - (void)receivedMessage: (NSString *)message;
 
 @end
+
+NS_ASSUME_NONNULL_END
