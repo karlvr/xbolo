@@ -238,13 +238,13 @@ TRY
   int one = 1;
   if ((server.listensock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.listensock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK)) {};
   setsockopt(server.listensock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 
   /* initialize dgramsock */
   if ((server.dgramsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.dgramsock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK)) {};
 
   /* initialize name to INADDR_ANY port */
   addr.sin_family = AF_INET;
@@ -1299,7 +1299,7 @@ TRY
     /* initialize trackersock */
     if ((server.tracker.sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
     if ((flags = fcntl(server.tracker.sock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK));
+    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK)) {};
 
     if ((connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, INET_ADDRSTRLEN))) {
       if (errno != EINPROGRESS) LOGFAIL(errno)
