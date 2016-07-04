@@ -233,10 +233,10 @@ int loadMap(const void *buf, size_t nbytes, struct BMAP_Preamble *preamble, stru
   
   runData = buf;
   runDataLen =
-  nbytes - (sizeof(struct BMAP_Preamble) +
+  (int)(nbytes - (sizeof(struct BMAP_Preamble) +
             preamble->npills*sizeof(struct BMAP_PillInfo) +
             preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-            preamble->nstarts*sizeof(struct BMAP_StartInfo));
+            preamble->nstarts*sizeof(struct BMAP_StartInfo)));
   
   offset = 0;
   

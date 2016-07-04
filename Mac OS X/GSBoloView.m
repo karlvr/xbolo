@@ -59,6 +59,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
       [view refreshTiles];
       [view drawSprites];
       [view unlockFocus];
+      view.needsDisplay = YES;
       [view.window flushWindow];
     }
   }
@@ -98,7 +99,7 @@ END
 }
 
 - (void)drawRect:(NSRect)rect {
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
   if (lockclient()) LOGFAIL(errno)

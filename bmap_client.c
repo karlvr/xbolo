@@ -61,10 +61,10 @@ TRY
   baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);
   startInfos = (struct BMAP_StartInfo *)(baseInfos + preamble->nbases);
   runData = (void *)(startInfos + preamble->nstarts);
-  runDataLen = len - (sizeof(struct BMAP_Preamble) +
+  runDataLen = (int)(len - (sizeof(struct BMAP_Preamble) +
                       preamble->npills*sizeof(struct BMAP_PillInfo) +
                       preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-                      preamble->nstarts*sizeof(struct BMAP_StartInfo));
+                      preamble->nstarts*sizeof(struct BMAP_StartInfo)));
 
   /* load the pillinfo */
   client.npills = preamble->npills;
