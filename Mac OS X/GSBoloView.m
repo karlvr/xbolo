@@ -36,13 +36,14 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 @implementation GSBoloView
 
 + (void)initialize {
-  if (self == [GSBoloView class]) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     boloViews = [[NSMutableArray alloc] init];
 
     assert((tiles = [NSImage imageNamed:@"Tiles"]) != nil);
     assert((sprites = [NSImage imageNamed:@"Sprites"]) != nil);
     assert((cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Cursor"] hotSpot:NSMakePoint(8.0, 8.0)]) != nil);
-  }
+  });
 }
 
 + (void)refresh {
@@ -77,7 +78,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
 TRY
-	if ((self = [super initWithFrame:frameRect]) != nil) {
+	if (self = [super initWithFrame:frameRect]) {
     if (initlist(&rectlist) == -1) LOGFAIL(errno)
     [boloViews addObject:self];
 	}
@@ -167,11 +168,11 @@ END
   int y, x;
   NSRect dstRect, srcRect;
 
-  min_i = ((int)floorf(NSMinX(rect)))/16;
-  max_i = ((int)ceilf(NSMaxX(rect)))/16;
+  min_i = ((int)floor(NSMinX(rect)))/16;
+  max_i = ((int)ceil(NSMaxX(rect)))/16;
 
-  min_j = ((int)floorf(NSMinY(rect)))/16;
-  max_j = ((int)ceilf(NSMaxY(rect)))/16;
+  min_j = ((int)floor(NSMinY(rect)))/16;
+  max_j = ((int)ceil(NSMaxY(rect)))/16;
 
   min_x = min_i;
   max_x = max_i;
@@ -405,7 +406,7 @@ TRY
     NSPoint aPoint;
     aPoint = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
     if ([self mouse:aPoint inRect:self.visibleRect]) {
-      [self drawSprite:SELETRIMAGE at:make2f(floorf(aPoint.x/16.0) + 0.5, floorf(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
+      [self drawSprite:SELETRIMAGE at:make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
     }
   }
 
