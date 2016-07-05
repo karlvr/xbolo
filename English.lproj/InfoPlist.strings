@@ -1,8 +1,8 @@
 ﻿/* Localized versions of Info.plist keys */
 
 CFBundleName = "XBolo";
-CFBundleShortVersionString = "XBolo version 0.4.1";
-CFBundleGetInfoString = "XBolo version 0.4.1, Copyright 2009.";
+CFBundleShortVersionString = "XBolo version 0.4.2";
+CFBundleGetInfoString = "XBolo version 0.4.2, Copyright 2009.";
 NSHumanReadableCopyright = "Copyright 2009.";
 
 

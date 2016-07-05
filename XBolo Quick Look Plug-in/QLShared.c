@@ -6,7 +6,7 @@
 //  Copyright © 2016 Robert Chrzanowski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include "QLSharedStructs.h"
 
 static int setterraincolor(CGContextRef context, int tile);
@@ -314,4 +314,3 @@ CGColorRef myGetBlackColor(void) {
   
   return black;
 }
-

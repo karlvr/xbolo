@@ -13,10 +13,7 @@ typedef NS_ENUM(NSInteger, GSStatusBarType) {
   GSVerticalBar,
 };
 
-@interface GSStatusBar : NSView {
-  GSStatusBarType type;
-  CGFloat value;
-}
+@interface GSStatusBar : NSView
 @property (nonatomic) GSStatusBarType type;
 @property (nonatomic) CGFloat value;
 @end

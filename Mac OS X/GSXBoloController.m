@@ -3535,6 +3535,11 @@ END
     [robotLock unlock];
 }    
 
+- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port
+{
+    
+}
+
 @end
 
 void setplayerstatus(int player) {

@@ -14,11 +14,7 @@ typedef NS_ENUM(int, GSBuilderStatusViewState) {
   GSBuilderStatusViewStateDead,
 };
 
-@interface GSBuilderStatusView : NSView {
-  GSBuilderStatusViewState state;
-  CGFloat dir;
-}
-
+@interface GSBuilderStatusView : NSView
 @property (nonatomic) GSBuilderStatusViewState state;
 @property (nonatomic) CGFloat dir;
 

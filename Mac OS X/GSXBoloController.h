@@ -2,7 +2,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <sys/socket.h>
-#import "TCMPortMapper/TCMPortMapper.h"
+#import <TCMPortMapper/TCMPortMapper.h>
 
 #include "vector.h"
 #include "rect.h"
@@ -342,6 +342,8 @@
 - (void)setBuilderToolInteger:(int)anInt;
 - (void)setMessageTargetInteger:(int)anInt;
 - (void)setMuteBool:(BOOL)aBool;
+
+- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port;
 
 @end
 
