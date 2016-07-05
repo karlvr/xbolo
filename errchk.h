@@ -13,7 +13,9 @@
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
+#ifdef __MACH__
 #include <CoreFoundation/CFBase.h>
+#endif
 
 /* additional errno types */
 
@@ -21,6 +23,7 @@
 #define ELAST (1000)  /* a hack, hopefully big enough */
 #endif
 
+#ifdef __MACH__
 // This is here to make Swift happy.
 typedef CF_ENUM(int, BoloErrors) {
   /*! No such host is known. */
@@ -52,6 +55,7 @@ typedef CF_ENUM(int, BoloErrors) {
   /*! Server error. */
   ESERVERERROR    = (ELAST + 14),
 };
+#endif
 
 
 #define EHOSTNOTFOUND   (ELAST + 1)   /* No such host is known. */

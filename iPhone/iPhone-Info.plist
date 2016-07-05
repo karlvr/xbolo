@@ -26,5 +26,33 @@
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>XBolo Map</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.gengasw.xbolo.map</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.lgm.com/bolo/</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>com.apple.ostype</key>
+				<array>
+					<string>BMAP</string>
+				</array>
+				<key>public.filename-extension</key>
+				<array>
+					<string>map</string>
+					<string>bmap</string>
+					<string>bol</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

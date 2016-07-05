@@ -2533,7 +2533,7 @@ END
   int i;
   int base = -1;
   CGFloat dist = 8.0, dist2;
-  int gotlock = 0;
+  BOOL gotlock = 0;
   static int counter = 0;
 
 TRY

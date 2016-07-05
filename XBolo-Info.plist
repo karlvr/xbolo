@@ -54,7 +54,6 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.image</string>
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -74,6 +73,8 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>map</string>
+					<string>bmap</string>
+					<string>bol</string>
 				</array>
 			</dict>
 		</dict>
