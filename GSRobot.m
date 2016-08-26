@@ -104,8 +104,7 @@
 
 - (instancetype)initWithBundle: (NSBundle *)bundle
 {
-    if((self = [self init]))
-    {
+    if((self = [self init])) {
         _bundle = [bundle retain];
         _condLock = [[NSConditionLock alloc] initWithCondition: NO_NEW_DATA];
         _messages = [[NSMutableArray alloc] init];
@@ -117,6 +116,8 @@
 {
     [self unload];
     [_bundle release];
+    [_messages release];
+    [_condLock release];
     
     [super dealloc];
 }
@@ -135,7 +136,7 @@
         }
         return NO;
     }
-    return true;
+    return YES;
 }
 
 - (NSError *)load

@@ -12,6 +12,8 @@
 
 @class GSKeyCodeField, GSBoloView, GSRobot, GSStatusBar, GSBuilderStatusView;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GSXBoloController : NSObject <NSApplicationDelegate, NSToolbarDelegate, NSTableViewDataSource, NSTableViewDelegate> {
   IBOutlet NSWindow *newGameWindow;
   IBOutlet NSWindow *boloWindow;
@@ -231,81 +233,81 @@
 // IBAction methods
 
 // host game actions
-- (IBAction)hostUPnPSwitch:(id)sender;
-- (IBAction)hostPort:(id)sender;
-- (IBAction)hostPasswordSwitch:(id)sender;
-- (IBAction)hostPassword:(id)sender;
-- (IBAction)hostTimeLimitSwitch:(id)sender;
-- (IBAction)hostTimeLimit:(id)sender;
-- (IBAction)hostHiddenMinesSwitch:(id)sender;
-- (IBAction)hostTrackerSwitch:(id)sender;
+- (IBAction)hostUPnPSwitch:(nullable id)sender;
+- (IBAction)hostPort:(nullable id)sender;
+- (IBAction)hostPasswordSwitch:(nullable id)sender;
+- (IBAction)hostPassword:(nullable id)sender;
+- (IBAction)hostTimeLimitSwitch:(nullable id)sender;
+- (IBAction)hostTimeLimit:(nullable id)sender;
+- (IBAction)hostHiddenMinesSwitch:(nullable id)sender;
+- (IBAction)hostTrackerSwitch:(nullable id)sender;
 
 // domination controls
-- (IBAction)hostDominationType:(id)sender;
-- (IBAction)hostDominationBaseControl:(id)sender;
+- (IBAction)hostDominationType:(nullable id)sender;
+- (IBAction)hostDominationBaseControl:(nullable id)sender;
 
 // join game actions
-- (IBAction)joinPasswordSwitch:(id)sender;
-- (IBAction)joinPassword:(id)sender;
-- (IBAction)joinTrackerRefresh:(id)sender;
+- (IBAction)joinPasswordSwitch:(nullable id)sender;
+- (IBAction)joinPassword:(nullable id)sender;
+- (IBAction)joinTrackerRefresh:(nullable id)sender;
 
 // shared actions for host and join
-- (IBAction)tracker:(id)sender;
+- (IBAction)tracker:(nullable id)sender;
 
 // pref pane actions
-- (IBAction)showPrefs:(id)sender;
-- (IBAction)prefPane:(id)sender;
-- (IBAction)prefPlayerName:(id)sender;
-- (IBAction)revertKeyConfig:(id)sender;
-- (IBAction)applyKeyConfig:(id)sender;
+- (IBAction)showPrefs:(nullable id)sender;
+- (IBAction)prefPane:(nullable id)sender;
+- (IBAction)prefPlayerName:(nullable id)sender;
+- (IBAction)revertKeyConfig:(nullable id)sender;
+- (IBAction)applyKeyConfig:(nullable id)sender;
 
 // toolbar actions
-- (IBAction)builderTool:(id)sender;
-- (IBAction)builderToolMenu:(id)sender;
-- (IBAction)tankCenter:(id)sender;
-- (IBAction)pillCenter:(id)sender;
-- (IBAction)zoomIn:(id)sender;
-- (IBAction)zoomOut:(id)sender;
+- (IBAction)builderTool:(nullable id)sender;
+- (IBAction)builderToolMenu:(nullable id)sender;
+- (IBAction)tankCenter:(nullable id)sender;
+- (IBAction)pillCenter:(nullable id)sender;
+- (IBAction)zoomIn:(nullable id)sender;
+- (IBAction)zoomOut:(nullable id)sender;
 
 // menu actions
-- (IBAction)closeGame:(id)sender;
-- (IBAction)newGame:(id)sender;
-- (IBAction)toggleJoin:(id)sender;
-- (IBAction)toggleMute:(id)sender;
-- (IBAction)gamePauseResumeMenu:(id)sender;
-- (IBAction)kickPlayer:(id)sender;
-- (IBAction)banPlayer:(id)sender;
-- (IBAction)unbanPlayer:(id)sender;
+- (IBAction)closeGame:(nullable id)sender;
+- (IBAction)newGame:(nullable id)sender;
+- (IBAction)toggleJoin:(nullable id)sender;
+- (IBAction)toggleMute:(nullable id)sender;
+- (IBAction)gamePauseResumeMenu:(nullable id)sender;
+- (IBAction)kickPlayer:(nullable id)sender;
+- (IBAction)banPlayer:(nullable id)sender;
+- (IBAction)unbanPlayer:(nullable id)sender;
 
 // host actions
-- (IBAction)hostChoose:(id)sender;
-- (IBAction)hostOK:(id)sender;
+- (IBAction)hostChoose:(nullable id)sender;
+- (IBAction)hostOK:(nullable id)sender;
 
 // join actions
-- (IBAction)joinPort:(id)sender;
-- (IBAction)joinOK:(id)sender;
+- (IBAction)joinPort:(nullable id)sender;
+- (IBAction)joinOK:(nullable id)sender;
 
 // join progress actions
-- (IBAction)joinCancel:(id)sender;
+- (IBAction)joinCancel:(nullable id)sender;
 
 // game actions
-- (IBAction)statusPanel:(id)sender;
-- (IBAction)allegiancePanel:(id)sender;
-- (IBAction)messagesPanel:(id)sender;
+- (IBAction)statusPanel:(nullable id)sender;
+- (IBAction)allegiancePanel:(nullable id)sender;
+- (IBAction)messagesPanel:(nullable id)sender;
 
 // scroll view
-- (IBAction)scrollUp:(id)sender;
-- (IBAction)scrollDown:(id)sender;
-- (IBAction)scrollLeft:(id)sender;
-- (IBAction)scrollRight:(id)sender;
+- (IBAction)scrollUp:(nullable id)sender;
+- (IBAction)scrollDown:(nullable id)sender;
+- (IBAction)scrollLeft:(nullable id)sender;
+- (IBAction)scrollRight:(nullable id)sender;
 
 // allegiance panel actions
-- (IBAction)requestAlliance:(id)sender;
-- (IBAction)leaveAlliance:(id)sender;
+- (IBAction)requestAlliance:(nullable id)sender;
+- (IBAction)leaveAlliance:(nullable id)sender;
 
 // messages panel actions
-- (IBAction)sendMessage:(id)sender;
-- (IBAction)messageTarget:(id)sender;
+- (IBAction)sendMessage:(nullable id)sender;
+- (IBAction)messageTarget:(nullable id)sender;
 
 // key event method
 - (void)keyEvent:(BOOL)event forKey:(unsigned short)keyCode;
@@ -316,7 +318,7 @@
 // accessor methods
 - (void)setHostMapString:(NSString *)aString;
 - (void)setHostUPnPBool:(BOOL)aBool;
-- (void)setHostPortNumber:(int)aInt;
+@property (nonatomic) int hostPortNumber;
 - (void)setHostPasswordBool:(BOOL)aBool;
 - (void)setHostPasswordString:(NSString *)aString;
 - (void)setHostTimeLimitBool:(BOOL)aBool;
@@ -326,24 +328,31 @@
 - (void)setHostGameTypeNumber:(int)aInt;
 - (void)setHostDominationTypeNumber:(int)newHostDominationTypeNumber;
 - (void)setHostDominationBaseControlString:(NSString *)string;
-- (void)setJoinAddressString:(NSString *)newJoinAddressString;
-- (void)setJoinPortNumber:(int)newJoinPortNumber;
-- (void)setJoinPasswordBool:(BOOL)aBool;
-- (void)setJoinPasswordString:(NSString *)aString;
+@property (nonatomic, copy) NSString* joinAddressString;
+@property (nonatomic) int joinPortNumber;
+@property (nonatomic) BOOL joinPasswordEnabled;
+@property (nonatomic, copy) NSString *joinPassword;
 - (void)setJoinTrackerArray:(NSArray *)aArray;
 - (void)setTrackerString:(NSString *)aString;
 - (void)setPrefPaneIdentifierString:(NSString *)aString;
-- (void)setPlayerNameString:(NSString *)aString;
+@property (nonatomic, copy) NSString *playerName;
 - (void)setKeyConfigDict:(NSDictionary *)aDict;
-- (void)setAutoSlowdownBool:(BOOL)aBool;
+@property (nonatomic) BOOL autoSlowdown;
 - (void)setShowStatusBool:(BOOL)aBool;
 - (void)setShowAllegianceBool:(BOOL)aBool;
 - (void)setShowMessagesBool:(BOOL)aBool;
 - (void)setBuilderToolInteger:(int)anInt;
 - (void)setMessageTargetInteger:(int)anInt;
-- (void)setMuteBool:(BOOL)aBool;
+@property (getter=isMuted, nonatomic) BOOL mute;
 
-- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port;
+- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(nullable NSString*)pass;
+
+
+- (void)setMuteBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
+- (void)setPlayerNameString:(NSString *)aString DEPRECATED_ATTRIBUTE;
+- (void)setJoinPasswordBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
+- (void)setJoinPasswordString:(NSString *)aString DEPRECATED_ATTRIBUTE;
+- (void)setAutoSlowdownBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
 
 @end
 
@@ -357,3 +366,5 @@ void printmessage(int type, const char *text);
 void joinprogress(int statuscode, float progress);
 void trackerprogress(int statuscode);
 void clientloopupdate(void);
+
+NS_ASSUME_NONNULL_END

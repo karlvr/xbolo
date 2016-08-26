@@ -293,7 +293,7 @@
 		404D42870FF8525200589EA2 /* GSStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStatusView.h; sourceTree = "<group>"; };
 		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStatusView.m; sourceTree = "<group>"; };
 		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSXBoloController.h; sourceTree = "<group>"; };
-		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSXBoloController.m; sourceTree = "<group>"; };
+		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = GSXBoloController.m; sourceTree = "<group>"; };
 		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Main.m; sourceTree = "<group>"; };
 		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloView.m; sourceTree = "<group>"; };
 		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloView.h; sourceTree = "<group>"; };
@@ -403,7 +403,7 @@
 		FDA94E5E0736F27D00E4BF82 /* errchk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errchk.c; sourceTree = "<group>"; };
 		FDA94E5F0736F27D00E4BF82 /* errchk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errchk.h; sourceTree = "<group>"; };
 		FDA94E6A0736F2B600E4BF82 /* bolo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bolo.h; sourceTree = "<group>"; };
-		FDA94E6B0736F2B600E4BF82 /* bolo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bolo.c; sourceTree = "<group>"; wrapsLines = 0; };
+		FDA94E6B0736F2B600E4BF82 /* bolo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bolo.c; sourceTree = "<group>"; wrapsLines = 1; };
 		FDB3E70203E620A7000001CA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		FDCF83C4073DAA7C006B13CC /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
 		FDCF83C5073DAA7C006B13CC /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };

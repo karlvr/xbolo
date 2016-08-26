@@ -159,7 +159,7 @@ static void getlisttrackerstatus(int status);
 - (void)refresh:(NSTimer *)aTimer;
 - (void)printMessage:(NSAttributedString *)string;
 - (void)setJoinProgressStatusTextField:(NSString *)aString;
-- (void)setJoinProgressIndicator:(NSString *)aString;
+- (void)setJoinProgressIndicator:(NSNumber *)aString;
 
 // callbacks from client thread
 - (void)joinSuccess;
@@ -206,6 +206,14 @@ static void getlisttrackerstatus(int status);
 @end
 
 @implementation GSXBoloController
+@synthesize joinAddressString;
+@synthesize joinPortNumber;
+@synthesize hostPortNumber;
+@synthesize mute = muteBool;
+@synthesize playerName = playerNameString;
+@synthesize joinPasswordEnabled = joinPasswordBool;
+@synthesize joinPassword = joinPasswordString;
+@synthesize autoSlowdown = autoSlowdownBool;
 
 // NIB methods
 
@@ -317,16 +325,16 @@ static void getlisttrackerstatus(int status);
   // init the join pane
   [self setJoinAddressString:[defaults stringForKey:GSJoinAddressString]];
   [self setJoinPortNumber:(int)[defaults integerForKey:GSJoinPortNumber]];
-  [self setJoinPasswordBool:[defaults boolForKey:GSJoinPasswordBool]];
-  [self setJoinPasswordString:[defaults stringForKey:GSJoinPasswordString]];
+  [self setJoinPasswordEnabled:[defaults boolForKey:GSJoinPasswordBool]];
+  [self setJoinPassword:[defaults stringForKey:GSJoinPasswordString]];
 
   // init tracker string
   [self setTrackerString:[defaults stringForKey:GSTrackerString]];
 
   // init the pref panes
   [self setPrefPaneIdentifierString:[defaults stringForKey:GSPrefPaneIdentifierString]];
-  [self setPlayerNameString:[defaults stringForKey:GSPlayerNameString]];
-  [self setAutoSlowdownBool:[defaults boolForKey:GSAutoSlowdownBool]];
+  [self setPlayerName:[defaults stringForKey:GSPlayerNameString]];
+  [self setAutoSlowdown:[defaults boolForKey:GSAutoSlowdownBool]];
   [self revertKeyConfig:self];
 
   // init the show variables
@@ -350,7 +358,7 @@ static void getlisttrackerstatus(int status);
   [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
 
   // init sound
-  [self setMuteBool:[defaults boolForKey:GSMuteBool]];
+  [self setMute:[defaults boolForKey:GSMuteBool]];
 
   // allocate sounds
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bubbles" ofType:@"aiff"] byReference:NO];
@@ -608,9 +616,8 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setHostDominationBaseControlString:(NSString *)aString {
-  NSScanner *scanner;
   int hours, minutes, seconds;
-  scanner = [NSScanner scannerWithString:aString];
+  NSScanner *scanner = [NSScanner scannerWithString:aString];
   scanner.charactersToBeSkipped = [NSCharacterSet characterSetWithCharactersInString:@":"];
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
@@ -634,6 +641,10 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinPasswordBool:(BOOL)aBool {
+  self.joinPasswordEnabled = aBool;
+}
+
+- (void)setJoinPasswordEnabled:(BOOL)aBool {
   joinPasswordBool = aBool;
   joinPasswordSwitch.state = aBool ? NSOnState : NSOffState;
   joinPasswordField.enabled = aBool;
@@ -641,6 +652,10 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinPasswordString:(NSString *)aString {
+  self.joinPassword = aString;
+}
+
+- (void)setJoinPassword:(NSString *)aString {
   joinPasswordString = [aString copy];
   joinPasswordField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSJoinPasswordString];
@@ -666,6 +681,10 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setPlayerNameString:(NSString *)aString {
+  self.playerName = aString;
+}
+
+- (void)setPlayerName:(NSString *)aString {
   playerNameString = [aString copy];
   prefPlayerNameField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPlayerNameString];
@@ -677,6 +696,10 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setAutoSlowdownBool:(BOOL)aBool {
+  self.autoSlowdown = aBool;
+}
+
+- (void)setAutoSlowdown:(BOOL)aBool {
 TRY
   autoSlowdownBool = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSAutoSlowdownBool];
@@ -726,6 +749,10 @@ END
 }
 
 - (void)setMuteBool:(BOOL)aBool {
+  self.mute = aBool;
+}
+
+- (void)setMute:(BOOL)aBool {
   muteBool = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSMuteBool];
 }
@@ -1047,7 +1074,7 @@ END
 - (IBAction)joinPasswordSwitch:(NSButton*)sender {
   BOOL aBool;
   aBool = sender.state == NSOnState;
-  [self setJoinPasswordBool:aBool];
+  [self setJoinPasswordEnabled:aBool];
 
   if (aBool) {
     [joinPasswordField selectText:self];
@@ -1055,7 +1082,7 @@ END
 }
 
 - (IBAction)joinPassword:(id)sender {
-  [self setJoinPasswordString:[sender stringValue]];
+  self.joinPassword = [sender stringValue];
 }
 
 - (IBAction)tracker:(id)sender {
@@ -1194,7 +1221,7 @@ END
 }
 
 - (IBAction)toggleMute:(id)sender {
-  [self setMuteBool:!muteBool];
+  [self setMute:!muteBool];
 }
 
 - (IBAction)gamePauseResumeMenu:(id)sender {
@@ -1407,7 +1434,7 @@ END
 }
 
 - (IBAction)prefPlayerName:(id)sender {
-  [self setPlayerNameString:[sender stringValue]];
+  self.playerName = [sender stringValue];
 }
 
 - (IBAction)revertKeyConfig:(id)sender {
@@ -1454,7 +1481,7 @@ END
     )
   {
     [self setKeyConfigDict:dict];
-    [self setAutoSlowdownBool:prefAutoSlowdownSwitch.state == NSOnState];
+    [self setAutoSlowdown:prefAutoSlowdownSwitch.state == NSOnState];
   }
 }
 
@@ -2772,7 +2799,7 @@ END
   joinProgressStatusTextField.stringValue = aString;
 }
 
-- (void)setJoinProgressIndicator:(NSString *)aString {
+- (void)setJoinProgressIndicator:(NSNumber *)aString {
   [joinProgressIndicator setIndeterminate:NO];
   joinProgressIndicator.doubleValue = aString.doubleValue;
 }
@@ -3535,9 +3562,16 @@ END
     [robotLock unlock];
 }    
 
-- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port
+- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(NSString *)pass
 {
-    
+  self.joinPortNumber = port;
+  self.joinAddressString = [servStr copy];
+  if (pass) {
+    self.joinPasswordEnabled = YES;
+    self.joinPassword = pass;
+  } else {
+    self.joinPasswordEnabled = NO;
+  }
 }
 
 @end
@@ -3754,7 +3788,7 @@ void joinprogress(int statuscode, float progress) {
 
     case kJoinRECVMAP:
       [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Map Data" waitUntilDone:NO];
-      [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:[NSString stringWithFormat:@"%f", progress] waitUntilDone:NO];
+      [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:@(progress) waitUntilDone:NO];
       break;
 
     case kJoinSUCCESS:
