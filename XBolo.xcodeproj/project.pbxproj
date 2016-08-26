@@ -497,7 +497,7 @@
 			sourceTree = "<group>";
 			usesTabs = 0;
 		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+		29B97315FDCFA39411CA2CEA /* Main XBolo */ = {
 			isa = PBXGroup;
 			children = (
 				FDE46EC706BD2C37004F79C3 /* vector.h */,
@@ -535,7 +535,7 @@
 				4014422410ACA4F6008487C8 /* resolver.h */,
 				4014422510ACA4F6008487C8 /* resolver.c */,
 			);
-			name = "Other Sources";
+			name = "Main XBolo";
 			path = ..;
 			sourceTree = "<group>";
 		};
@@ -752,7 +752,7 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97315FDCFA39411CA2CEA /* Main XBolo */,
 				55712C301CF903D900326A27 /* Images.xcassets */,
 			);
 			path = Shared;

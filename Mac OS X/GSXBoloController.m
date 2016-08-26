@@ -19,6 +19,11 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+typedef NS_ENUM(NSInteger, GSServerSource) {
+  GSServerSourceTracker = 0,
+  GSServerSourceBonjour
+};
+
 static NSString * const GSHostMapString              = @"GSHostMapString";
 static NSString * const GSHostUPnPBool               = @"GSHostUPnPBool";
 static NSString * const GSHostPortNumber             = @"GSHostPortNumber";
@@ -86,6 +91,7 @@ static NSString * const GSShowAllegianceBool               = @"GSShowAllegianceB
 static NSString * const GSShowMessagesBool                 = @"GSShowMessagesBool";
 
 // tracker table view columns
+static NSString * const GSSourceColumn                     = @"GSSourceColumn";
 static NSString * const GSHostPlayerColumn                 = @"GSHostPlayerColumn";
 static NSString * const GSMapNameColumn                    = @"GSMapNameColumn";
 static NSString * const GSPlayersColumn                    = @"GSPlayersColumn";
@@ -97,6 +103,10 @@ static NSString * const GSPortColumn                       = @"GSPortColumn";
 
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
+
+// Bonjour type for XBolo.
+static NSString * const XBoloBonjourType = @"_xbolo._udp.";
+
 
 static GSXBoloController *controller = nil;
 
@@ -149,7 +159,7 @@ int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSSt
 static void registercallback(int status);
 static void getlisttrackerstatus(int status);
 
-@interface GSXBoloController (Private)
+@interface GSXBoloController ()
 
 // bolo callbacks
 - (void)setPlayerStatus:(NSString *)aString;
@@ -205,7 +215,20 @@ static void getlisttrackerstatus(int status);
 - (void)setupRobotsMenu;
 @end
 
-@implementation GSXBoloController
+@interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
+- (void)beginPublishing;
+- (void)updatePublishedInfo;
+- (void)stopPublishing;
+
+- (void)beginListening;
+- (void)endListening;
+- (void)clearBonjourEntries;
+@end
+
+@implementation GSXBoloController {
+  NSNetService *broadcaster;
+  NSNetServiceBrowser *listener;
+}
 @synthesize joinAddressString;
 @synthesize joinPortNumber;
 @synthesize hostPortNumber;
@@ -2759,6 +2782,14 @@ END
   }
   else if (aTableView == joinTrackerTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [joinTrackerArray count]);
+    if ([aTableColumn.identifier isEqualToString:GSSourceColumn]) {
+      NSNumber *servSource = joinTrackerArray[rowIndex][GSSourceColumn];
+      if (servSource.integerValue == GSServerSourceTracker) {
+        return [NSImage imageNamed:@"XBolo"];
+      } else /* GSServerSourceBonjour */{
+        return [NSImage imageNamed:NSImageNameBonjour];
+      }
+    }
     return joinTrackerArray[rowIndex][aTableColumn.identifier];
   }
   else {
@@ -2766,7 +2797,7 @@ END
   }
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
     playerInfoArray[rowIndex][aTableColumn.identifier] = anObject;
@@ -3457,7 +3488,8 @@ END
 
   // convert list to NSArray for displaying
   table = [NSMutableArray array];
-  keys = @[GSHostPlayerColumn, GSMapNameColumn, GSPlayersColumn, GSPasswordColumn, GSAllowJoinColumn, GSPausedColumn, GSHostnameColumn, GSPortColumn];
+  keys = @[GSHostPlayerColumn, GSMapNameColumn, GSPlayersColumn, GSPasswordColumn, GSAllowJoinColumn, GSPausedColumn, GSHostnameColumn, GSPortColumn, GSSourceColumn];
+  NSNumber *sourceTracker = @(GSServerSourceTracker);
 
   for (node = nextlist(&trackerlist); node; node = nextlist(node)) {
     struct TrackerHostList *hostlist;
@@ -3470,7 +3502,8 @@ END
       hostlist->game.allowjoin ? @"Yes" : @"No",
       hostlist->game.pause ? @"Yes" : @"No",
       @(inet_ntoa(hostlist->addr)),
-      [NSString stringWithFormat:@"%d", hostlist->game.port]];
+      [NSString stringWithFormat:@"%d", hostlist->game.port],
+      sourceTracker];
     [table addObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
   }
 
@@ -3572,6 +3605,125 @@ END
   } else {
     self.joinPasswordEnabled = NO;
   }
+}
+
+@end
+
+// Bonjour TXT keys
+#define XBoloBonjourPlayerName  @"PlayerName"
+#define XBoloMapName            @"MapName"
+#define XBoloReqiresPassword    @"PasswordNeeded"
+
+@implementation GSXBoloController (NetService)
+
+- (void)beginPublishing {
+  NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
+  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
+  broadcaster.delegate = self;
+  [self updatePublishedInfo];
+  [broadcaster publish];
+}
+
+- (void)updatePublishedInfo {
+  NSMutableDictionary<NSString *, NSData *> *ourTxtDict = [[NSMutableDictionary alloc] initWithCapacity:6];
+  ourTxtDict[XBoloBonjourPlayerName] = [playerNameString dataUsingEncoding:NSUTF8StringEncoding];
+  ourTxtDict[XBoloMapName] = [hostMapString dataUsingEncoding:NSUTF8StringEncoding];
+  ourTxtDict[XBoloReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
+  NSData *txtData = [NSNetService dataFromTXTRecordDictionary:ourTxtDict];
+
+  [broadcaster setTXTRecordData:txtData];
+}
+
+- (void)stopPublishing {
+  [broadcaster stop];
+  broadcaster = nil;
+}
+
+- (void)beginListening {
+  listener = [[NSNetServiceBrowser alloc] init];
+  listener.delegate = self;
+  [listener searchForServicesOfType:XBoloBonjourType inDomain:@""];
+}
+
+- (void)endListening {
+  [listener stop];
+  listener = nil;
+  [self clearBonjourEntries];
+}
+
+- (void)clearBonjourEntries {
+  NSMutableIndexSet *mutSet = [NSMutableIndexSet indexSet];
+  for (NSInteger i = 0; i < joinTrackerArray.count; i++) {
+    if ([joinTrackerArray[i][GSSourceColumn] isEqual:@(GSServerSourceBonjour)]) {
+      [mutSet addIndex:i];
+    }
+  }
+  [joinTrackerArray removeObjectsAtIndexes:mutSet];
+  [self setJoinTrackerArray:joinTrackerArray];
+}
+
+#define GSNetServiceKey @"NetService"
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
+{
+  dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    NSString *playerName = @"unknown";
+    NSString *mapName = @"unknown";
+    NSString *passReq = @"?";
+    NSData *txtData = [service TXTRecordData];
+    if (txtData) {
+      NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: txtData];
+      id val;
+      val = txtDict[XBoloBonjourPlayerName];
+      if (val) {
+        playerName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+      }
+      val = txtDict[XBoloMapName];
+      if (val) {
+        mapName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+      }
+      val = txtDict[XBoloReqiresPassword];
+      if (val) {
+        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+        if ([passBool isEqualToString:@"0"]) {
+          passReq = @"No";
+        } else {
+          passReq = @"Yes";
+        }
+      }
+    }
+    
+    [service resolveWithTimeout:0.5];
+    NSDictionary *toSet =
+    @{GSHostPlayerColumn: playerName,
+      GSMapNameColumn: mapName,
+      GSPlayersColumn: @"?",
+      GSPasswordColumn: passReq,
+      GSAllowJoinColumn: @"?",
+      GSPausedColumn: @"?",
+      GSHostnameColumn: service.hostName,
+      GSPortColumn: [NSString stringWithFormat:@"%ld", (long)service.port],
+      GSSourceColumn: @(GSServerSourceBonjour),
+      GSNetServiceKey: service};
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [joinTrackerArray addObject:toSet];
+      [self setJoinTrackerArray:joinTrackerArray];
+    });
+  });
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
+{
+  NSDictionary *toRemove;
+  for (NSDictionary *theDict in joinTrackerArray) {
+    if ([theDict[GSNetServiceKey] isEqual:service]) {
+      toRemove = theDict;
+    }
+  }
+  
+  [joinTrackerArray removeObject:toRemove];
+  [self setJoinTrackerArray:joinTrackerArray];
 }
 
 @end

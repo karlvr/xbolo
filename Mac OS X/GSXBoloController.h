@@ -176,7 +176,7 @@ NS_ASSUME_NONNULL_BEGIN
   BOOL joinPasswordBool;
   NSString *joinPasswordString;
   BOOL joinTrackerBool;
-  NSMutableArray *joinTrackerArray;
+  NSMutableArray<NSDictionary<NSString*,id>*> *joinTrackerArray;
 
   // tracker string
   NSString *trackerString;
@@ -332,7 +332,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int joinPortNumber;
 @property (nonatomic) BOOL joinPasswordEnabled;
 @property (nonatomic, copy) NSString *joinPassword;
-- (void)setJoinTrackerArray:(NSArray *)aArray;
+- (void)setJoinTrackerArray:(NSArray<NSDictionary<NSString*,id>*> *)aArray;
 - (void)setTrackerString:(NSString *)aString;
 - (void)setPrefPaneIdentifierString:(NSString *)aString;
 @property (nonatomic, copy) NSString *playerName;
