@@ -3849,7 +3849,7 @@ END
   NSMutableDictionary *mutUpdate = [toUpdate copy];
   NSInteger idx = [joinTrackerArray indexOfObject:toUpdate];
   
-  id val;
+  NSData *val;
   val = txtDict[XBoloBonjourPlayerName];
   if (val) {
     mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
@@ -3867,6 +3867,29 @@ END
       mutUpdate[GSPasswordColumn] = @"Yes";
     }
   }
+  val = txtDict[XBoloBonjourIsPaused];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSPausedColumn] = @"No";
+    } else {
+      mutUpdate[GSPausedColumn] = @"Yes";
+    }
+  }
+  val = txtDict[XBoloBonjourCanJoin];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSAllowJoinColumn] = @"No";
+    } else {
+      mutUpdate[GSAllowJoinColumn] = @"Yes";
+    }
+  }
+  val = txtDict[XBoloBonjourPlayerCount];
+  if (val) {
+    mutUpdate[GSPlayersColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+
   [joinTrackerArray replaceObjectAtIndex:idx withObject:[mutUpdate copy]];
   [self setJoinTrackerArray:joinTrackerArray];
 }
