@@ -216,12 +216,12 @@ static void getlisttrackerstatus(int status);
 @end
 
 @interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
-- (void)beginPublishing;
+- (void)startPublishing;
 - (void)updatePublishedInfo;
 - (void)stopPublishing;
 
-- (void)beginListening;
-- (void)endListening;
+- (void)startListening;
+- (void)stopListening;
 - (void)clearBonjourEntries;
 @end
 
@@ -983,6 +983,9 @@ END
 }
 
 - (IBAction)hostOK:(id)sender {
+  //Always stop listening for Bonjour methods.
+  [self stopListening];
+  
   NSData *mapData;
 
 TRY
@@ -1043,6 +1046,9 @@ TRY
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
       if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+    }
+    if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
+      [self startPublishing];
     }
   }
 
@@ -1124,6 +1130,11 @@ TRY
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
   if (listtracker(trackerString.UTF8String, &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
+  if (listener) {
+    // "Have you tried turning it off then on again?"
+    [self stopListening];
+    [self startListening];
+  }
 
 CLEANUP
   switch (ERROR) {
@@ -1148,6 +1159,9 @@ TRY
   [joinProgressIndicator startAnimation:self];
   [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
   if (startclient(joinAddressString.UTF8String, joinPortNumber, playerNameString.UTF8String, joinPasswordBool ? joinPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+
+  //Always stop listening for Bonjour methods.
+  [self stopListening];
 
 CLEANUP
   switch (ERROR) {
@@ -1941,6 +1955,19 @@ END
     }
   }
     else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
+    else if (action == @selector(hostToggleBonjourBroadcast:)) {
+      lockserver();
+      
+      if (server.setup) {
+        menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
+        unlockserver();
+        return YES;
+      } else {
+        menuItem.state = NSOffState;
+        unlockserver();
+        return NO;
+      }
+    }
 	else {
 		return YES;
 	}
@@ -3607,6 +3634,32 @@ END
   }
 }
 
+@synthesize broadcastBonjour = _broadcastBonjour;
+
+- (void)setBroadcastBonjour:(BOOL)broadcastBonjour
+{
+  _broadcastBonjour = broadcastBonjour;
+  if (broadcaster && !_broadcastBonjour) {
+    [self stopPublishing];
+  } else if (server.running && _broadcastBonjour) {
+    [self startPublishing];
+  }
+}
+
+- (IBAction)hostToggleBonjourBroadcast:(nullable id)sender
+{
+  self.broadcastBonjour = !_broadcastBonjour;
+}
+
+- (IBAction)joinToggleBonjourListen:(nullable NSButton*)sender
+{
+  if (listener) {
+    [self stopListening];
+  } else {
+    [self startListening];
+  }
+}
+
 @end
 
 // Bonjour TXT keys
@@ -3616,7 +3669,7 @@ END
 
 @implementation GSXBoloController (NetService)
 
-- (void)beginPublishing {
+- (void)startPublishing {
   NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
   broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
   broadcaster.delegate = self;
@@ -3639,13 +3692,13 @@ END
   broadcaster = nil;
 }
 
-- (void)beginListening {
+- (void)startListening {
   listener = [[NSNetServiceBrowser alloc] init];
   listener.delegate = self;
   [listener searchForServicesOfType:XBoloBonjourType inDomain:@""];
 }
 
-- (void)endListening {
+- (void)stopListening {
   [listener stop];
   listener = nil;
   [self clearBonjourEntries];
@@ -3707,10 +3760,51 @@ END
       GSNetServiceKey: service};
     
     dispatch_async(dispatch_get_main_queue(), ^{
-      [joinTrackerArray addObject:toSet];
-      [self setJoinTrackerArray:joinTrackerArray];
+      [self->joinTrackerArray addObject:toSet];
+      [self setJoinTrackerArray:self->joinTrackerArray];
+      service.delegate = self;
     });
   });
+}
+
+- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data
+{
+  if (sender == broadcaster) {
+    //We should have been the one to change this...
+    return;
+  }
+  NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: data];
+  NSDictionary *toUpdate;
+  for (NSDictionary *theDict in joinTrackerArray) {
+    if ([theDict[GSNetServiceKey] isEqual:sender]) {
+      toUpdate = theDict;
+      break;
+    }
+  }
+  NSAssert(toUpdate != nil, @"Uh, oops");
+  NSMutableDictionary *mutUpdate = [toUpdate copy];
+  NSInteger idx = [joinTrackerArray indexOfObject:toUpdate];
+  
+  id val;
+  val = txtDict[XBoloBonjourPlayerName];
+  if (val) {
+    mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+  val = txtDict[XBoloMapName];
+  if (val) {
+    mutUpdate[GSMapNameColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+  val = txtDict[XBoloReqiresPassword];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSPasswordColumn] = @"No";
+    } else {
+      mutUpdate[GSPasswordColumn] = @"Yes";
+    }
+  }
+  [joinTrackerArray replaceObjectAtIndex:idx withObject:[mutUpdate copy]];
+  [self setJoinTrackerArray:joinTrackerArray];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
@@ -3719,6 +3813,7 @@ END
   for (NSDictionary *theDict in joinTrackerArray) {
     if ([theDict[GSNetServiceKey] isEqual:service]) {
       toRemove = theDict;
+      break;
     }
   }
   

@@ -241,6 +241,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)hostTimeLimit:(nullable id)sender;
 - (IBAction)hostHiddenMinesSwitch:(nullable id)sender;
 - (IBAction)hostTrackerSwitch:(nullable id)sender;
+- (IBAction)hostToggleBonjourBroadcast:(nullable id)sender;
+@property (nonatomic) BOOL broadcastBonjour;
 
 // domination controls
 - (IBAction)hostDominationType:(nullable id)sender;
@@ -250,6 +252,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)joinPasswordSwitch:(nullable id)sender;
 - (IBAction)joinPassword:(nullable id)sender;
 - (IBAction)joinTrackerRefresh:(nullable id)sender;
+- (IBAction)joinToggleBonjourListen:(nullable NSButton*)sender;
 
 // shared actions for host and join
 - (IBAction)tracker:(nullable id)sender;
