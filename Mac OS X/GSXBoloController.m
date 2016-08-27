@@ -238,6 +238,7 @@ static void getlisttrackerstatus(int status);
 @synthesize joinPasswordEnabled = joinPasswordBool;
 @synthesize joinPassword = joinPasswordString;
 @synthesize autoSlowdown = autoSlowdownBool;
+@synthesize tracker = trackerString;
 
 // NIB methods
 
@@ -353,7 +354,7 @@ static void getlisttrackerstatus(int status);
   [self setJoinPassword:[defaults stringForKey:GSJoinPasswordString]];
 
   // init tracker string
-  [self setTrackerString:[defaults stringForKey:GSTrackerString]];
+  [self setTracker:[defaults stringForKey:GSTrackerString]];
 
   // init the pref panes
   [self setPrefPaneIdentifierString:[defaults stringForKey:GSPrefPaneIdentifierString]];
@@ -671,19 +672,11 @@ static void getlisttrackerstatus(int status);
   [[NSUserDefaults standardUserDefaults] setInteger:aNumber forKey:GSJoinPortNumber];
 }
 
-- (void)setJoinPasswordBool:(BOOL)aBool {
-  self.joinPasswordEnabled = aBool;
-}
-
 - (void)setJoinPasswordEnabled:(BOOL)aBool {
   joinPasswordBool = aBool;
   joinPasswordSwitch.state = aBool ? NSOnState : NSOffState;
   joinPasswordField.enabled = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSJoinPasswordBool];
-}
-
-- (void)setJoinPasswordString:(NSString *)aString {
-  self.joinPassword = aString;
 }
 
 - (void)setJoinPassword:(NSString *)aString {
@@ -698,7 +691,7 @@ static void getlisttrackerstatus(int status);
   [joinTrackerTableView reloadData];
 }
 
-- (void)setTrackerString:(NSString *)aString {
+- (void)setTracker:(NSString *)aString {
   trackerString = [aString copy];
   hostTrackerField.stringValue = aString;
   joinTrackerField.stringValue = aString;
@@ -711,10 +704,6 @@ static void getlisttrackerstatus(int status);
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPrefPaneIdentifierString];
 }
 
-- (void)setPlayerNameString:(NSString *)aString {
-  self.playerName = aString;
-}
-
 - (void)setPlayerName:(NSString *)aString {
   playerNameString = [aString copy];
   prefPlayerNameField.stringValue = aString;
@@ -724,10 +713,6 @@ static void getlisttrackerstatus(int status);
 - (void)setKeyConfigDict:(NSDictionary *)aDict {
   keyConfigDict = [aDict copy];
   [[NSUserDefaults standardUserDefaults] setObject:aDict forKey:GSKeyConfigDict];
-}
-
-- (void)setAutoSlowdownBool:(BOOL)aBool {
-  self.autoSlowdown = aBool;
 }
 
 - (void)setAutoSlowdown:(BOOL)aBool {
@@ -777,10 +762,6 @@ END
   messageTargetInt = anInt;
   [messageTargetMatrix selectCellWithTag:anInt];
   [[NSUserDefaults standardUserDefaults] setInteger:anInt forKey:GSMessageTarget];
-}
-
-- (void)setMuteBool:(BOOL)aBool {
-  self.mute = aBool;
 }
 
 - (void)setMute:(BOOL)aBool {
@@ -1124,7 +1105,7 @@ END
 }
 
 - (IBAction)tracker:(id)sender {
-  [self setTrackerString:[sender stringValue]];
+  self.tracker = [sender stringValue];
 }
 
 - (IBAction)joinTrackerRefresh:(id)sender {
@@ -1509,7 +1490,7 @@ END
 }
 
 - (IBAction)applyKeyConfig:(id)sender {
-  NSMutableDictionary *dict;
+  NSMutableDictionary<NSString*,NSString*> *dict;
   dict = [NSMutableDictionary dictionary];
   if
     (
@@ -4342,7 +4323,7 @@ void getlisttrackerstatus(int status) {
   }
 }
 
-int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {
+int setKey(NSMutableDictionary<NSString*,NSString*> *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {
   NSString *key;
   id object;
   key = field.stringValue;

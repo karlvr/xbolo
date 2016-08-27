@@ -336,10 +336,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL joinPasswordEnabled;
 @property (nonatomic, copy) NSString *joinPassword;
 - (void)setJoinTrackerArray:(NSArray<NSDictionary<NSString*,id>*> *)aArray;
-- (void)setTrackerString:(NSString *)aString;
+@property (nonatomic, copy) NSString *tracker;
 - (void)setPrefPaneIdentifierString:(NSString *)aString;
 @property (nonatomic, copy) NSString *playerName;
-- (void)setKeyConfigDict:(NSDictionary *)aDict;
+- (void)setKeyConfigDict:(NSDictionary<NSString*,NSString*> *)aDict;
 @property (nonatomic) BOOL autoSlowdown;
 - (void)setShowStatusBool:(BOOL)aBool;
 - (void)setShowAllegianceBool:(BOOL)aBool;
@@ -351,11 +351,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(nullable NSString*)pass;
 
 
-- (void)setMuteBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
-- (void)setPlayerNameString:(NSString *)aString DEPRECATED_ATTRIBUTE;
-- (void)setJoinPasswordBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
-- (void)setJoinPasswordString:(NSString *)aString DEPRECATED_ATTRIBUTE;
-- (void)setAutoSlowdownBool:(BOOL)aBool DEPRECATED_ATTRIBUTE;
+- (void)setMuteBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setPlayerNameString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setJoinPasswordBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setJoinPasswordString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setAutoSlowdownBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setTrackerString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
 
 @end
 
