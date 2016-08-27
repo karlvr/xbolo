@@ -4,6 +4,7 @@
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
+#import "XBoloBonjourKeys.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -106,9 +107,6 @@ static NSString * const GSMessageTarget                   = @"GSMessageTarget";
 
 // private settings
 static NSString * const GSDisableBonjour                  = @"GSDisableBonjour";
-
-// Bonjour type for XBolo.
-static NSString * const XBoloBonjourType = @"_xbolo._udp.";
 
 
 static GSXBoloController *controller = nil;
@@ -3680,14 +3678,6 @@ END
 
 @end
 
-// Bonjour TXT keys
-#define XBoloBonjourPlayerName  @"PlayerName"
-#define XBoloMapName            @"MapName"
-#define XBoloReqiresPassword    @"PasswordNeeded"
-#define XBoloIsPaused           @"Paused"
-#define XBoloCanJoin            @"CanJoin"
-#define XBoloPlayerCount        @"PlayerCount"
-
 @implementation GSXBoloController (NetService)
 
 - (void)startPublishing {
@@ -3703,11 +3693,11 @@ END
     lockserver();
     NSMutableDictionary<NSString *, NSData *> *ourTxtDict = [[NSMutableDictionary alloc] initWithCapacity:6];
     ourTxtDict[XBoloBonjourPlayerName] = [playerNameString dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloMapName] = [hostMapString.lastPathComponent.stringByDeletingPathExtension dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
-    ourTxtDict[XBoloIsPaused] = server.pause == 0 ? [@"0" dataUsingEncoding:NSASCIIStringEncoding] : [@"1" dataUsingEncoding:NSASCIIStringEncoding];
+    ourTxtDict[XBoloBonjourMapName] = [hostMapString.lastPathComponent.stringByDeletingPathExtension dataUsingEncoding:NSUTF8StringEncoding];
+    ourTxtDict[XBoloBonjourReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
+    ourTxtDict[XBoloBonjourIsPaused] = server.pause == 0 ? [@"0" dataUsingEncoding:NSASCIIStringEncoding] : [@"1" dataUsingEncoding:NSASCIIStringEncoding];
     //allowjoin
-    ourTxtDict[XBoloCanJoin] = server.allowjoin ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
+    ourTxtDict[XBoloBonjourCanJoin] = server.allowjoin ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
     int playerCount = 0;
     for (NSInteger i = 0; i < MAX_PLAYERS; i++) {
       if (server.players[i].used) {
@@ -3715,7 +3705,7 @@ END
       }
     }
     unlockserver();
-    ourTxtDict[XBoloPlayerCount] = [[NSString stringWithFormat:@"%i", playerCount] dataUsingEncoding:NSASCIIStringEncoding];
+    ourTxtDict[XBoloBonjourPlayerCount] = [[NSString stringWithFormat:@"%i", playerCount] dataUsingEncoding:NSASCIIStringEncoding];
     
     NSData *txtData = [NSNetService dataFromTXTRecordDictionary:ourTxtDict];
     
@@ -3775,11 +3765,11 @@ END
       if (val) {
         playerName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
       }
-      val = txtDict[XBoloMapName];
+      val = txtDict[XBoloBonjourMapName];
       if (val) {
         mapName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
       }
-      val = txtDict[XBoloReqiresPassword];
+      val = txtDict[XBoloBonjourReqiresPassword];
       if (val) {
         NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
         if ([passBool isEqualToString:@"0"]) {
@@ -3788,7 +3778,7 @@ END
           passReq = @"Yes";
         }
       }
-      val = txtDict[XBoloIsPaused];
+      val = txtDict[XBoloBonjourIsPaused];
       if (val) {
         NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
         if ([passBool isEqualToString:@"0"]) {
@@ -3797,7 +3787,7 @@ END
           paused = @"Yes";
         }
       }
-      val = txtDict[XBoloCanJoin];
+      val = txtDict[XBoloBonjourCanJoin];
       if (val) {
         NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
         if ([passBool isEqualToString:@"0"]) {
@@ -3806,7 +3796,7 @@ END
           canJoin = @"Yes";
         }
       }
-      val = txtDict[XBoloPlayerCount];
+      val = txtDict[XBoloBonjourPlayerCount];
       if (val) {
         playerCount = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
       }
@@ -3832,7 +3822,7 @@ END
     dispatch_async(dispatch_get_main_queue(), ^{
       NSMutableArray *newTrackArr = self->joinTrackerArray;
       if (!newTrackArr) {
-        newTrackArr = [[NSMutableArray alloc] initWithCapacity:2];
+        newTrackArr = [[NSMutableArray alloc] initWithCapacity: moreComing ? 2 : 1];
       }
       [newTrackArr addObject:toSet];
       [self setJoinTrackerArray:newTrackArr];
@@ -3864,11 +3854,11 @@ END
   if (val) {
     mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
   }
-  val = txtDict[XBoloMapName];
+  val = txtDict[XBoloBonjourMapName];
   if (val) {
     mutUpdate[GSMapNameColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
   }
-  val = txtDict[XBoloReqiresPassword];
+  val = txtDict[XBoloBonjourReqiresPassword];
   if (val) {
     NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
     if ([passBool isEqualToString:@"0"]) {

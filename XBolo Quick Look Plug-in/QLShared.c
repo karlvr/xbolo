@@ -9,7 +9,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include "QLSharedStructs.h"
 
-static int setterraincolor(CGContextRef context, int tile);
+static int setterraincolor(CGContextRef context, BoloTerrainTypes tile);
 static int readnibble(const void *buf, size_t i);
 static CGColorSpaceRef myGetGenericRGBSpace(void);
 
@@ -67,7 +67,7 @@ int drawrun(CGContextRef context, struct BMAP_Run run, const void *buf) {
   return 0;
 }
 
-int setterraincolor(CGContextRef context, int tile) {
+int setterraincolor(CGContextRef context, BoloTerrainTypes tile) {
   switch (tile) {
     case kWallTile:  /* wall */
       CGContextSetFillColorWithColor(context, myGetBrownColor());
@@ -129,7 +129,7 @@ CGColorSpaceRef myGetGenericRGBSpace(void) {
   static CGColorSpaceRef colorSpace = NULL;
   
   if (colorSpace == NULL) {
-    colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
   }
   
   return colorSpace;

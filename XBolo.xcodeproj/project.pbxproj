@@ -118,6 +118,8 @@
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
+		553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
+		553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
 		55712B8B1CF8ED7B00326A27 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712B8A1CF8ED7B00326A27 /* main.m */; };
 		55712B8D1CF8ED7B00326A27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712B8C1CF8ED7B00326A27 /* Assets.xcassets */; };
@@ -319,7 +321,7 @@
 		4064445B108251E1008F913C /* tiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiles.h; sourceTree = "<group>"; };
 		4064445C108251E1008F913C /* tiles.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tiles.c; sourceTree = "<group>"; };
 		406444621082520D008F913C /* images.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = images.h; sourceTree = "<group>"; };
-		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; };
+		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; usesTabs = 1; };
 		407C8B2A0FDC72CA006A71F7 /* tracker.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tracker.c; sourceTree = "<group>"; };
 		407C8B390FDC739B006A71F7 /* XBolo Tracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XBolo Tracker"; sourceTree = BUILT_PRODUCTS_DIR; };
 		407ECEF91087C371002B43CB /* buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buf.h; sourceTree = "<group>"; };
@@ -342,6 +344,8 @@
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
+		553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjourKeys.m; sourceTree = "<group>"; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XBolo Map Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55712B8A1CF8ED7B00326A27 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -660,6 +664,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		553F04791D71F253005D0983 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */,
+				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		55712B851CF8ED7B00326A27 /* Magma */ = {
 			isa = PBXGroup;
 			children = (
@@ -753,6 +766,7 @@
 			isa = PBXGroup;
 			children = (
 				29B97315FDCFA39411CA2CEA /* Main XBolo */,
+				553F04791D71F253005D0983 /* Classes */,
 				55712C301CF903D900326A27 /* Images.xcassets */,
 			);
 			path = Shared;
@@ -1173,6 +1187,7 @@
 				408189901082475A00E4D4CA /* bmap_server.c in Sources */,
 				55C4A5591CBD7312003A29B0 /* server.c in Sources */,
 				4081899A1082495800E4D4CA /* bmap_client.c in Sources */,
+				553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
 				55C4A5581CBD72FA003A29B0 /* vector.c in Sources */,
 				55C4A5571CBD72F2003A29B0 /* rect.c in Sources */,
 				40644448108250E1008F913C /* terrain.c in Sources */,
@@ -1226,6 +1241,7 @@
 			files = (
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
+				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
 				408189921082475A00E4D4CA /* bmap_server.c in Sources */,
 				40A593620FBE78FC00F3E650 /* bolo.c in Sources */,
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
