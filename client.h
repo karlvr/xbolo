@@ -37,7 +37,7 @@ struct Client {
     struct Domination domination;
   } game;
 
-  /* number of elapsed ticks */
+  /** number of elapsed ticks */
   int timelimitreached;
   int basecontrolreached;
 

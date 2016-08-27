@@ -55,8 +55,8 @@ struct BMAP_PillInfo {
 	uint8_t y;
 	uint8_t owner;   /**< should be 0xFF except in speciality maps */
 	uint8_t armour;  /**< range 0-15 (dead pillbox = 0, full strength = 15) */
-	uint8_t speed;   /**< typically 50. Time between shots, in 20ms units */
-                   /**< Lower values makes the pillbox start off 'angry' */
+	uint8_t speed;   /**< typically 50. Time between shots, in 20ms units. 
+                      * Lower values makes the pillbox start off 'angry' */
 } __attribute__((__packed__));
 
 struct BMAP_BaseInfo {
@@ -75,12 +75,12 @@ struct BMAP_StartInfo {
 } __attribute__((__packed__));
 
 struct BMAP_Run {
-	uint8_t datalen;  /**< length of the data for this run */
-                    /**< INCLUDING this 4 byte header */
+	uint8_t datalen;  /**< length of the data for this run
+                       * INCLUDING this 4 byte header */
 	uint8_t y;        /**< y co-ordinate of this run. */
 	uint8_t startx;   /**< first square of the run */
-	uint8_t endx;     /**< last square of run + 1 */
-                    /**< (ie first deep sea square after run) */
+	uint8_t endx;     /**< last square of run + 1.
+                       * (ie first deep sea square after run) */
 /*	uint8_t data[0xFF];*/  /* actual length of data is always much less than 0xFF */
 } __attribute__((__packed__));
 

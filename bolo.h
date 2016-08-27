@@ -489,8 +489,6 @@ int listtracker(
 
 void stoptracker();
 
-Vec2f dir2vec(float dir);
-
 /*
  * Calcvis() returns a value between 0.0 and 1.0 based on how visible it is.
  */

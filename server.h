@@ -97,7 +97,7 @@ struct Server {
     struct Buf sendbuf;
   } joiningplayer;
 
-  /* player info */
+  /** player info */
   struct {
     /* connection variables */
     int used;
