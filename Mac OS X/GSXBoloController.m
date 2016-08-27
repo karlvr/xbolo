@@ -104,6 +104,9 @@ static NSString * const GSPortColumn                       = @"GSPortColumn";
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
 
+// private settings
+static NSString * const GSDisableBonjour                  = @"GSDisableBonjour";
+
 // Bonjour type for XBolo.
 static NSString * const XBoloBonjourType = @"_xbolo._udp.";
 
@@ -545,6 +548,13 @@ static void getlisttrackerstatus(int status);
  
   // set up robots menu
   [self setupRobotsMenu];
+  
+  // Register for Bonjour Services
+  if (![defaults boolForKey:GSDisableBonjour]) {
+    [self startListening];
+  }
+  
+  _broadcastBonjour = ![defaults boolForKey:GSDisableBonjour];
 }
 
 // accessor methods
@@ -3655,8 +3665,10 @@ END
 {
   if (listener) {
     [self stopListening];
+    sender.state = NSOffState;
   } else {
     [self startListening];
+    sender.state = NSOnState;
   }
 }
 
@@ -3719,7 +3731,13 @@ END
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
 {
+  [service resolveWithTimeout:5];
+
   dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    //[service resolveWithTimeout:5];
+    //usleep(500);
+    sleep(1);
+
     NSString *playerName = @"unknown";
     NSString *mapName = @"unknown";
     NSString *passReq = @"?";
@@ -3746,7 +3764,11 @@ END
       }
     }
     
-    [service resolveWithTimeout:0.5];
+    if (!service.hostName) {
+      NSLog(@"Did not get host name from \"%@\"!", service);
+      return;
+    }
+    
     NSDictionary *toSet =
     @{GSHostPlayerColumn: playerName,
       GSMapNameColumn: mapName,
@@ -3760,8 +3782,12 @@ END
       GSNetServiceKey: service};
     
     dispatch_async(dispatch_get_main_queue(), ^{
-      [self->joinTrackerArray addObject:toSet];
-      [self setJoinTrackerArray:self->joinTrackerArray];
+      NSMutableArray *newTrackArr = self->joinTrackerArray;
+      if (!newTrackArr) {
+        newTrackArr = [[NSMutableArray alloc] initWithCapacity:2];
+      }
+      [newTrackArr addObject:toSet];
+      [self setJoinTrackerArray:newTrackArr];
       service.delegate = self;
     });
   });
