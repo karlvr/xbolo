@@ -18,7 +18,7 @@ static NSImage *sprites = nil;
 static CGFloat phase = 0.0f;
 static NSMutableArray *boloMapViews = nil;
 
-@interface GSXBoloMapView (Private)
+@interface GSXBoloMapView ()
 + (void)phaseIncrement:(id)obj;
 - (GSPoint)convertScreenToWorld:(NSPoint)point;
 - (void)fillTool;

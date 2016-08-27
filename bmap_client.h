@@ -12,7 +12,7 @@
 
 #include "bmap.h"
 
-/* loads map on client */
+/** loads map on client */
 int clientloadmap(const void *buf, size_t len);
 
 #endif /* __BMAP_CLIENT__ */

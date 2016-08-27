@@ -14,8 +14,8 @@
 #include <sys/socket.h>
 
 /*!
- * Readblock() reads nbytes of file descriptor d into buf.  Returns nbytes
- * on success and -1 on failure and sets errno.
+ * Readblock() reads \c nbytes of file descriptor \c d into buf.  Returns \c nbytes
+ * on success and \c -1 on failure and sets errno.
  */
 ssize_t readblock(int d, void *buf, size_t nbytes);
 

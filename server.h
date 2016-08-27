@@ -16,6 +16,7 @@
 #include "errchk.h"
 
 #include <stdint.h>
+#include <pthread.h>
 
 #define TRACKERUPDATESECONDS (60)
 
@@ -42,13 +43,13 @@ struct Server {
   int mainpipe[2];
   int threadpipe[2];
 
-  /* server mutex */
+  /** server mutex */
   pthread_mutex_t mutex;
 
-  /* chain detonation */
+  /** chain detonation */
   struct ListNode chains[CHAINTICKS + 1];
 
-  /* flood fill */
+  /** flood fill */
   struct ListNode floods[FLOODTICKS + 1];
 
   /* game info */
@@ -61,10 +62,10 @@ struct Server {
   int allowjoin;
   int pause;
 
-  /* used in domination games */
+  /** used in domination games */
   int basecontrol;
 
-  /* number of elapsed ticks */
+  /** number of elapsed ticks */
   uint32_t ticks;
 
   union {
@@ -115,7 +116,7 @@ struct Server {
     struct Buf sendbuf;
   } players[MAX_PLAYERS];
 
-  /* banned players list */
+  /** banned players list */
   struct ListNode bannedplayers;
 } ;
 
@@ -329,7 +330,7 @@ struct SRPause {
   uint8_t pause;
 } __attribute__((__packed__));
 
-/* structure for banned player list */
+/** structure for banned player list */
 struct BannedPlayer {
   char name[MAXNAME];
   struct in_addr sin_addr;

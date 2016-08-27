@@ -114,7 +114,7 @@
 #define MINBASESHELLS       (1)
 #define MINBASEMINES        (1)
 
-#define TREESBESTOF         (4200)  /* works best if is multiple of TREESPLANTRATE*TICKSPERSEC */
+#define TREESBESTOF         (4200)  /**< works best if is multiple of TREESPLANTRATE*TICKSPERSEC */
 #define TREESPLANTRATE      (10)
 
 /* key masks */
@@ -447,10 +447,10 @@ struct Domination {
 } ;
 
 struct JOIN_Preamble {
-  uint8_t ident[8];  /* "XBOLOGAM" */
-  uint8_t version;   /* currently 0 */
-  char name[MAXNAME];   /* NULL terminated name */
-  char pass[MAXPASS];   /* NULL terminated password */
+  uint8_t ident[8];  /**< "XBOLOGAM" */
+  uint8_t version;   /**< currently 0 */
+  char name[MAXNAME];   /**< NULL terminated name */
+  char pass[MAXPASS];   /**< NULL terminated password */
 } __attribute__((__packed__));
 
 /*
@@ -459,11 +459,10 @@ struct JOIN_Preamble {
  
 int allowjoinserver();
 
-/*
+/*!
  * Initbolo() needs to be called once to initialize bolo.  Returns 0 on
  * success or -1 on failure and sets errno.
  */
-
 int initbolo(
     void (*setplayerstatusfunc)(int player),
     void (*setpillstatusfunc)(int pill),
@@ -505,9 +504,9 @@ Vec2f dir2vec(float f);
 
 
 struct BOLO_Preamble {
-  uint8_t ident[8];  /* "XBOLOGAM" */
-  uint8_t version;   /* currently 0 */
-  uint8_t player;    /* your player id */
+  uint8_t ident[8];  /**< "XBOLOGAM" */
+  uint8_t version;   /**< currently 0 */
+  uint8_t player;    /**< your player id */
   uint8_t hiddenmines;
   uint8_t pause;
   uint8_t gametype;
@@ -527,7 +526,7 @@ struct BOLO_Preamble {
     uint8_t host[MAXHOST];
     uint16_t alliance;
   } __attribute__((__packed__)) players[MAX_PLAYERS];
-  uint32_t maplen;   /* the map length */
+  uint32_t maplen;   /**< the map length */
 } __attribute__((__packed__));
 
 

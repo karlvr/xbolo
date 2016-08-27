@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 
 struct Client {
-  /* hostname of the server */
+  /** hostname of the server */
   char *hostname;
 
   /* data that should not be accessed from main thread witout a lock */
@@ -90,17 +90,17 @@ struct Client {
     struct ListNode explosions;
   } players[MAX_PLAYERS];
 
-  /* player id */
+  /** player id */
   int player;
 
   /* respawn counter */
   int respawncounter;
   int spawned;
 
-  /* shell firing counter */
+  /** shell firing counter */
   int shellcounter;
 
-  /* range of shells fired */
+  /** range of shells fired */
   float range;
 
   /* refueling */
@@ -108,7 +108,7 @@ struct Client {
   int refuelingbase;
   int refuelingcounter;
 
-  /* river drain */
+  /** river drain */
   int draincounter;
 
   /* resources */
@@ -136,13 +136,13 @@ struct Client {
   int sinksound;
   int builderdeathsound;
 
-  /* list of explosions */
+  /** list of explosions */
   struct ListNode explosions;
 
-  /* changed tiles */
+  /** changed tiles */
   struct ListNode changedtiles;
 
-  /* server address and sockets */
+  /** server address and sockets */
   struct sockaddr_in srvaddr;
   int cntlsock;
   int dgramsock;
@@ -306,7 +306,7 @@ struct CLUpdateExplosion {
 } __attribute__((__packed__));
 
 struct CLUpdate {
-  /* header */
+  /** header */
   struct {
     uint8_t player;
     int32_t seq[MAX_PLAYERS];
@@ -335,39 +335,39 @@ struct CLUpdate {
   uint8_t buf[CLUPDATEMAXSHELLS*sizeof(struct CLUpdateShell) + CLUPDATEMAXEXPLOSIONS*sizeof(struct CLUpdateExplosion)];
 } __attribute__((__packed__));
 
-/* call once during program startup to setup callbacks */
+/** call once during program startup to setup callbacks */
 int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void));
 
-/* call to start running client */
+/** call to start running client */
 int startclient(const char *hostname, uint16_t tcpport, const char playername[], const char password[]);
 
-/* call to stop running client */
+/** call to stop running client */
 int stopclient();
 
 /* used to lock struct Client client for reading */
 int lockclient();
 int unlockclient();
 
-/* keyboard events */
+/** keyboard events */
 int keyevent(int mask, int set);
 
-/* builder commands */
+/** builder commands */
 void buildercommand(int type, GSPoint p);
 
 /* alliance requests */
 int requestalliance(uint16_t withplayers);
 int leavealliance(uint16_t withplayers);
 
-/* chat messages */
+/** chat messages */
 int sendmessage(const char *text, int to);
 
-/* called when the view has been updated */
+/** called when the view has been updated */
 void clearchangedtiles();
 
-/* set when client is running */
+/** set when client is running */
 extern int client_running;
 
-/* client data */
+/** client data */
 extern struct Client client;
 
 #endif  /* __CLIENT__ */
