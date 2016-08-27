@@ -4,3 +4,4 @@
 
 #include "bolo.h"
 #import "XBoloAppDelegate.h"
+#import "XBoloBonjourKeys.h"

@@ -11,8 +11,8 @@
 
 #include <stdint.h>
 #include <float.h>
-#include <tgmath.h>
 #include <math.h>
+#include <tgmath.h>
 
 const float kPif =  3.14159265358979;
 const float k2Pif = 6.28318530717959;
@@ -105,7 +105,7 @@ Vec2f tan2f(float theta) {
 }
 
 float _atan2f(Vec2f dir) {
-  return atan2f(dir.y, dir.x);
+  return atan2(dir.y, dir.x);
 }
 
 Vec2i32 make2i32(int32_t x, int32_t y) {
