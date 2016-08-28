@@ -10,7 +10,9 @@
 #define QLSharedStructs_h
 
 #include <unistd.h>
-#include <CoreGraphics/CoreGraphics.h>
+#include <CoreFoundation/CFBase.h>
+#include <CoreGraphics/CGColor.h>
+#include <CoreGraphics/CGContext.h>
 
 #define MAPFILEIDENT        ("BMAPBOLO")
 #define MAPFILEIDENTLEN     (8)

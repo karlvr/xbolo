@@ -7,6 +7,7 @@
 //
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreGraphics/CoreGraphics.h>
 #include "QLSharedStructs.h"
 
 static int setterraincolor(CGContextRef context, BoloTerrainTypes tile);

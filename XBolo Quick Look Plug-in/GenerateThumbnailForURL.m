@@ -4,6 +4,7 @@
 #include <unistd.h>
 #import <Cocoa/Cocoa.h>
 #include "QLSharedStructs.h"
+#include "main.h"
 
 OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thumbnail, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options, CGSize maxSize) {
 @autoreleasepool {
