@@ -508,7 +508,7 @@ int joinclient() {
   struct JOIN_Preamble joinpreamble;
   struct BOLO_Preamble bolopreamble;
   uint8_t msg;
-  int ret;
+  int ret=0;
   int lookup = -1;
   int gotlock = 0;
 
@@ -5132,7 +5132,7 @@ END
 
 int shellcollisiontest(struct Shell *shell, int player) {
   GSPoint p;
-  int pill, base, ret;
+  int pill, base, ret=0;
   struct Explosion *explosion = NULL;
 
   assert(shell != NULL);

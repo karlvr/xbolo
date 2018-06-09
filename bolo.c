@@ -50,7 +50,7 @@ static struct {
 static void *trackerthread(struct TrackerThreadInfo *trackerthreadinfo);
 
 int allowjoinserver() {
-  int ret;
+  int ret=0;
   int gotlock = 0;
 
 TRY
