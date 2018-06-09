@@ -29,7 +29,7 @@ struct TErrNode {
 static struct TErrNode *top = NULL;
 static pthread_mutex_t mutex;
 
-static struct TErrNode *getnode();
+static struct TErrNode *getnode(void);
 static void errchkinit(void) __attribute__ ((constructor));
 
 void errchkinit(void) {

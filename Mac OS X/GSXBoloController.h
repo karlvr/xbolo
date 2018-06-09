@@ -364,7 +364,7 @@ NS_ASSUME_NONNULL_BEGIN
 void setplayerstatus(int player);
 void setpillstatus(int pill);
 void setbasestatus(int base);
-void settankstatus();
+void settankstatus(void);
 void playsound(int sound);
 void printmessage(int type, const char *text);
 void joinprogress(int statuscode, float progress);

@@ -16,7 +16,7 @@
 #include <string.h>
 
 /* server functions */
-static ssize_t serverloadmapsize();
+static ssize_t serverloadmapsize(void);
 
 int serverloadmap(const void *buf, size_t nbytes) {
   int i, x, y;

@@ -18,6 +18,13 @@
 #include "timing.h"
 #include "resolver.h"
 
+#include <sys/select.h>
+// Ugh, icky hack to get select() working..
+#ifdef __has_feature
+#  if __has_feature(modules)
+#    include <sys/_select.h>
+#  endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,14 +109,14 @@ static int sendtoone(const void *data, size_t size, int player);
 
 static void growtrees(int nplayers);
 
-static int chain();
+static int chain(void);
 static int chainat(int x, int y);
 
 static int explosionat(int player, int x, int y);
 static int superboomat(int player, int x, int y);
 
 static int floodtest(int x, int y);
-static int flood();
+static int flood(void);
 static int floodat(int x, int y);
 
 static int findpill(int x, int y);
@@ -117,8 +124,8 @@ static int findbase(int x, int y);
 static void droppills(int player, float x, float y, uint16_t pills);
 
 static int removeplayer(int player);
-static int nplayers();
-static int cleanupserver();
+static int nplayers(void);
+static int cleanupserver(void);
 
 int initserver() {
   int err;

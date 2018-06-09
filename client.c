@@ -18,6 +18,13 @@
 #include "timing.h"
 #include "resolver.h"
 
+#include <sys/select.h>
+// Ugh, icky hack to get select() working..
+#ifdef __has_feature
+#  if __has_feature(modules)
+#    include <sys/_select.h>
+#  endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -55,43 +62,43 @@ int collisionowner;
 /* static routines */
 /*******************/
 
-static int cleanupclient();
+static int cleanupclient(void);
 
 /* client receive routines */
 
-static int recvsrpause();
-static int recvsrsendmesg();
-static int recvsrdamage();
-static int recvsrgrabtrees();
-static int recvsrbuild();
-static int recvsrgrow();
-static int recvsrflood();
-static int recvsrplacemine();
-static int recvsrdropmine();
-static int recvsrdropboat();
-static int recvsrplayerjoin();
-static int recvsrplayerrejoin();
-static int recvsrplayerexit();
-static int recvsrplayerdisc();
-static int recvsrplayerkick();
-static int recvsrplayerban();
-static int recvsrrepairpill();
-static int recvsrcoolpill();
-static int recvsrcapturepill();
-static int recvsrbuildpill();
-static int recvsrdroppill();
-static int recvsrreplenishbase();
-static int recvsrcapturebase();
-static int recvsrrefuel();
-static int recvsrgrabboat();
-static int recvsrmineack();
-static int recvsrbuilderack();
-static int recvsrsmallboom();
-static int recvsrsuperboom();
-static int recvsrhittank();
-static int recvsrsetalliance();
-static int recvsrtimelimit();
-static int recvsrbasecontrol();
+static int recvsrpause(void);
+static int recvsrsendmesg(void);
+static int recvsrdamage(void);
+static int recvsrgrabtrees(void);
+static int recvsrbuild(void);
+static int recvsrgrow(void);
+static int recvsrflood(void);
+static int recvsrplacemine(void);
+static int recvsrdropmine(void);
+static int recvsrdropboat(void);
+static int recvsrplayerjoin(void);
+static int recvsrplayerrejoin(void);
+static int recvsrplayerexit(void);
+static int recvsrplayerdisc(void);
+static int recvsrplayerkick(void);
+static int recvsrplayerban(void);
+static int recvsrrepairpill(void);
+static int recvsrcoolpill(void);
+static int recvsrcapturepill(void);
+static int recvsrbuildpill(void);
+static int recvsrdroppill(void);
+static int recvsrreplenishbase(void);
+static int recvsrcapturebase(void);
+static int recvsrrefuel(void);
+static int recvsrgrabboat(void);
+static int recvsrmineack(void);
+static int recvsrbuilderack(void);
+static int recvsrsmallboom(void);
+static int recvsrsuperboom(void);
+static int recvsrhittank(void);
+static int recvsrsetalliance(void);
+static int recvsrtimelimit(void);
+static int recvsrbasecontrol(void);
 
 /* client send routines */
 
@@ -112,7 +119,7 @@ static int sendclsmallboom(int x, int y);
 static int sendclsuperboom(int x, int y);
 static int sendclrefuel(int base, int armour, int shells, int mines);
 static int sendclhittank(int player, float dir);
-static int sendclupdate();
+static int sendclupdate(void);
 
 /* builder speed routines */
 
@@ -133,7 +140,7 @@ static int refresh_client(int x, int y);
 static int enter(GSPoint new, GSPoint old);
 
 /* starts the player */
-static int spawn();
+static int spawn(void);
 
 /* game logic routines */
 static int tankmovelogic(int player);
@@ -159,17 +166,17 @@ static int buildercollision(GSPoint square);
 /* kill builder routines */
 static int killsquarebuilder(GSPoint p);
 static int killpointbuilder(Vec2f p);
-static int killbuilder();
+static int killbuilder(void);
 
 /* terrain to tile mapping functions */
 static int tilefor(int x, int y);
 static int fogtilefor(int x, int y, int tile);
 
 /* tank killing routines */
-static int killtank();
-static int drown();
-static int smallboom();
-static int superboom();
+static int killtank(void);
+static int drown(void);
+static int smallboom(void);
+static int superboom(void);
 
 /* pill and base finding routines */
 static int findpill(int x, int y);
@@ -188,11 +195,11 @@ static int getbuildertaskforcommand(int command, GSPoint at);
 /* client pthread routines */
 static void *clientmainthread(void *);
 
-static int dgramclient();
+static int dgramclient(void);
 
-static int joinclient();
+static int joinclient(void);
 
-int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void)) {
+int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(void), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void)) {
   int err;
 
 TRY

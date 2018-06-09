@@ -457,7 +457,7 @@ struct JOIN_Preamble {
  * Runningbolo() returns true if there is a game in progress.
  */
  
-int allowjoinserver();
+int allowjoinserver(void);
 
 /*!
  * Initbolo() needs to be called once to initialize bolo.  Returns 0 on
@@ -467,7 +467,7 @@ int initbolo(
     void (*setplayerstatusfunc)(int player),
     void (*setpillstatusfunc)(int pill),
     void (*setbasestatusfunc)(int base),
-    void (*settankstatusfunc)(),
+    void (*settankstatusfunc)(void),
     void (*playsound)(int sound),
     void (*printmessagefunc)(int type, const char *text),
     void (*joinprogress)(int statuscode, float scale),
@@ -479,15 +479,15 @@ int initbolo(
  * Returns 0 on success -1 on failure and sets errno.
  */
 
-void pauseresumegame();
-void togglejoingame();
+void pauseresumegame(void);
+void togglejoingame(void);
 
 int listtracker(
     const char trackerhostname[], struct ListNode *node,
     void(*trackerprogress)(int statuscode)
   );
 
-void stoptracker();
+void stoptracker(void);
 
 /*
  * Calcvis() returns a value between 0.0 and 1.0 based on how visible it is.

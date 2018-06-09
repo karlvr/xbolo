@@ -346,38 +346,38 @@ extern struct Server server;
 /* server routines */
 /*******************/
 
-int initserver();
+int initserver(void);
 int setupserver(
     int initiallypaused, const void *buf, size_t nbytes, uint16_t port,
     const char password[], int timelimit, int hiddenmines, int pauseonplayerexit,
     int gametype, const void *gamedata
   );
-int startserverthread();
+int startserverthread(void);
 int startserverthreadwithtracker(
     const char trackerhostname[], uint16_t port, const char hostplayername[],
     const char mapname[], void (*callback)(int status)
   );
-int stopserver();
-int lockserver();
-int unlockserver();
+int stopserver(void);
+int lockserver(void);
+int unlockserver(void);
 
-int togglejoinserver();
+int togglejoinserver(void);
 int kickplayer(int player);
 int banplayer(int player);
 int unbanplayer(int player);
 
 int tiletoterrain(int tile);
 
-int pauseresumeserver();
-int getservertcpport();
-int getserverudpport();
+int pauseresumeserver(void);
+int getservertcpport(void);
+int getserverudpport(void);
 
 /* lock server first before calling these */
-int getallowjoinserver();
+int getallowjoinserver(void);
 void setallowjoinserver(int allowjoin);
 
-int getpauseserver();
-void pauseserver();
-void resumeserver();
+int getpauseserver(void);
+void pauseserver(void);
+void resumeserver(void);
 
 #endif /* __SERVER__ */

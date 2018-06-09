@@ -113,7 +113,7 @@ typedef CF_ENUM(int, BoloErrors) {
 #define END }
 
 void pushlineinfo(const char *file, const char *function, size_t line);
-void errchkcleanup();
-void printlineinfo();
+void errchkcleanup(void);
+void printlineinfo(void);
 
 #endif /* __ERRCHK__ */

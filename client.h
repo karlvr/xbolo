@@ -151,7 +151,7 @@ struct Client {
   void (*setplayerstatus)(int player);
   void (*setpillstatus)(int pill);
   void (*setbasestatus)(int base);
-  void (*settankstatus)();
+  void (*settankstatus)(void);
   void (*playsound)(int sound);
   void (*printmessage)(int type, const char *text);
   void (*joinprogress)(int statuscode, float scale);
@@ -336,17 +336,17 @@ struct CLUpdate {
 } __attribute__((__packed__));
 
 /** call once during program startup to setup callbacks */
-int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void));
+int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(void), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void));
 
 /** call to start running client */
 int startclient(const char *hostname, uint16_t tcpport, const char playername[], const char password[]);
 
 /** call to stop running client */
-int stopclient();
+int stopclient(void);
 
 /* used to lock struct Client client for reading */
-int lockclient();
-int unlockclient();
+int lockclient(void);
+int unlockclient(void);
 
 /** keyboard events */
 int keyevent(int mask, int set);
@@ -362,7 +362,7 @@ int leavealliance(uint16_t withplayers);
 int sendmessage(const char *text, int to);
 
 /** called when the view has been updated */
-void clearchangedtiles();
+void clearchangedtiles(void);
 
 /** set when client is running */
 extern int client_running;
