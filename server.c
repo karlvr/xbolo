@@ -677,8 +677,11 @@ TRY
       if ((int32_t)(seq - server.players[clupdate.hdr.player].seq) > 0) {
         server.players[clupdate.hdr.player].seq = seq;
         server.players[clupdate.hdr.player].lastupdate = server.ticks;
-        *(uint32_t *)&server.players[clupdate.hdr.player].tank.x = ntohl(clupdate.hdr.tankx);
-        *(uint32_t *)&server.players[clupdate.hdr.player].tank.y = ntohl(clupdate.hdr.tanky);
+        float tmpFloat;
+        *(uint32_t *)&tmpFloat = ntohl(clupdate.hdr.tankx);
+        server.players[clupdate.hdr.player].tank.x = tmpFloat;
+        *(uint32_t *)&tmpFloat = ntohl(clupdate.hdr.tanky);
+        server.players[clupdate.hdr.player].tank.y = tmpFloat;
 
         if (server.players[clupdate.hdr.player].dgramaddr.sin_port != addr.sin_port) {
           server.players[clupdate.hdr.player].dgramaddr.sin_port = addr.sin_port;
@@ -2147,8 +2150,11 @@ TRY
   cldroppills->pills = ntohs(cldroppills->pills);
   cldroppills->x = ntohl(cldroppills->x);
   cldroppills->y = ntohl(cldroppills->y);
-  x = *((float *)&cldroppills->x);
-  y = *((float *)&cldroppills->y);
+  float tmpFloat;
+  *(UInt32*)&tmpFloat = cldroppills->x;
+  x = tmpFloat;
+  *(UInt32*)&tmpFloat = cldroppills->y;
+  y = tmpFloat;
 
   for (i = 0; i < server.npills; i++) {
     if ((cldroppills->pills & (1 << i)) && (server.pills[i].owner != player || server.pills[i].armour != ONBOARD)) {
