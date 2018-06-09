@@ -77,19 +77,16 @@
         NSString *myPath = [NSBundle mainBundle].bundlePath;
         NSString *enclosingPath = myPath.stringByDeletingLastPathComponent;
         NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
-        NSEnumerator *enumerator = [[[NSFileManager defaultManager] directoryContentsAtPath:botsPath] objectEnumerator];
-        NSString *name;
-        
+        NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:botsPath] includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
+
         LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);
         
-        while((name = [enumerator nextObject]))
+        for (NSURL *fullURL in enumerator)
         {
-            LOG(@"availableRobots: checking file %@", name);
-            NSString *fullPath = [botsPath stringByAppendingPathComponent: name];
-            LOG(@"availableRobots: full path %@", fullPath);
-            if([fullPath hasSuffix: @".xbolorobot"])
+            LOG(@"availableRobots: checking file %@", fullURL);
+            if([fullURL.pathExtension compare: @"xbolorobot"] == NSOrderedSame)
             {
-                NSBundle *bundle = [NSBundle bundleWithPath: fullPath];
+                NSBundle *bundle = [NSBundle bundleWithURL:fullURL];
                 LOG(@"availableRobots: bundle:%@", bundle);
                 if([bundle load])
                 {
