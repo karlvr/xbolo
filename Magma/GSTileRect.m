@@ -21,14 +21,14 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
 
 + (NSArray *)readableTypesForPasteboard:(NSPasteboard *)pasteboard {
-  return [NSArray arrayWithObject:GSUTIString];
+  return @[GSUTIString];
 }
 
 + (NSPasteboardReadingOptions)readingOptionsForType:(NSString *)type pasteboard:(NSPasteboard *)pasteboard {
   return NSPasteboardReadingAsData;
 }
 
-- (id)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type {
+- (instancetype)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type {
   self = [super init];
 
   if (self) {
@@ -48,17 +48,17 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
       NSLog(@"Error reading plist: %@, format: %lu", errorDesc, (unsigned long)format);
     }
 
-    origin = [temp objectForKey:@"origin"];
-    rect.origin = GSMakePoint([[origin objectForKey:@"x"] intValue], [[origin objectForKey:@"y"] intValue]);
+    origin = temp[@"origin"];
+    rect.origin = GSMakePoint([origin[@"x"] intValue], [origin[@"y"] intValue]);
 
-    size = [temp objectForKey:@"size"];
-    rect.size = GSMakeSize([[size objectForKey:@"width"] intValue], [[size objectForKey:@"height"] intValue]);
+    size = temp[@"size"];
+    rect.size = GSMakeSize([size[@"width"] intValue], [size[@"height"] intValue]);
 
-    data = [temp objectForKey:@"tiles"];
+    data = temp[@"tiles"];
     NSAssert([data length] == (GSWidth(rect) * GSHeight(rect) * sizeof(GSTile)), @"Error reading plist: Data length does not match rect size.");
-    tiles = (GSTile *)malloc([data length]);
+    tiles = (GSTile *)malloc(data.length);
     NSAssert(tiles, @"Malloc() Failed");
-    [data getBytes:tiles length:[data length]];
+    [data getBytes:tiles length:data.length];
   }
 
   return self;
@@ -68,7 +68,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
 
 - (NSArray *)writableTypesForPasteboard:(NSPasteboard *)pasteboard {
-  return [NSArray arrayWithObject:GSUTIString];
+  return @[GSUTIString];
 }
 
 - (id)pasteboardPropertyListForType:(NSString *)type {
@@ -78,13 +78,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
     NSData *plistData;
 
     plistDict =
-      [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
-        [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:GSMinX(rect)], [NSNumber numberWithUnsignedInt:GSMinY(rect)], nil] forKeys:[NSArray arrayWithObjects:@"x", @"y", nil]],
-        [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:GSWidth(rect)], [NSNumber numberWithUnsignedInt:GSHeight(rect)], nil] forKeys:[NSArray arrayWithObjects:@"width", @"height", nil]],
-        [NSData dataWithBytes:tiles length:GSWidth(rect) * GSHeight(rect) * sizeof(GSTile)],
-        nil]
-      forKeys:[NSArray arrayWithObjects:
-        @"origin", @"size", @"tiles", nil]];
+      @{@"origin": @{@"x": [NSNumber numberWithUnsignedInt:GSMinX(rect)], @"y": [NSNumber numberWithUnsignedInt:GSMinY(rect)]}, @"size": @{@"width": @(GSWidth(rect)), @"height": @(GSHeight(rect))}, @"tiles": [NSData dataWithBytes:tiles length:GSWidth(rect) * GSHeight(rect) * sizeof(GSTile)]};
 
     plistData = [NSPropertyListSerialization dataWithPropertyList:plistDict format:NSPropertyListXMLFormat_v1_0 options:0 error:&error];
 
@@ -101,22 +95,22 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 // Factory Class Methods
 
 
-+ (id)tileRectWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTiles:aTiles inRect:aRect] autorelease];
++ (instancetype)tileRectWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect {
+  return [[self alloc] initWithTiles:aTiles inRect:aRect];
 }
 
-+ (id)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTile:tile inRect:aRect] autorelease];
++ (instancetype)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect {
+  return [[self alloc] initWithTile:tile inRect:aRect];
 }
 
-+ (id)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect {
-  return [[[self alloc] initWithTileRect:tileRect inRect:aRect] autorelease];
++ (instancetype)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect {
+  return [[self alloc] initWithTileRect:tileRect inRect:aRect];
 }
 
 // Init Methods
 
 
-- (id)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect {
+- (instancetype)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect {
   self = [super init];
 
   if (self) {
@@ -141,7 +135,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
   return self;
 }
 
-- (id)initWithTile:(GSTile)tile inRect:(GSRect)aRect {
+- (instancetype)initWithTile:(GSTile)tile inRect:(GSRect)aRect {
   self = [super init];
 
   if (self) {
@@ -164,7 +158,7 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
   return self;
 }
 
-- (id)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect {
+- (instancetype)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect {
   self = [super init];
 
   if (self) {
@@ -197,16 +191,11 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
   if (tiles) {
     free(tiles);
   }
-
-  [super dealloc];
 }
 
 // Accessor Methods
 
-
-- (GSRect)rect {
-  return rect;
-}
+@synthesize rect;
 
 - (void)setOrigin:(GSPoint)origin {
   if (!GSEqualPoints(rect.origin, origin)) {

@@ -9,6 +9,9 @@
 #import "XBoloAppDelegate.h"
 #import "XBoloViewController.h"
 
+NSString *const GSXBoloErrorDomain = @"GSXBoloErrorDomain";
+
+
 @implementation XBoloAppDelegate
 
 @synthesize window;

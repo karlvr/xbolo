@@ -13,7 +13,7 @@
 @synthesize type;
 @synthesize value;
 
-- (id)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
       type = GSHorizontalBar;
@@ -26,12 +26,12 @@
   switch (type) {
   case GSHorizontalBar:
     [[NSColor greenColor] set];
-    [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth([self frame])*value, NSHeight([self frame]))];
+    [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth(self.frame)*value, NSHeight(self.frame))];
     break;
 
   case GSVerticalBar:
     [[NSColor greenColor] set];
-    [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth([self frame]), NSHeight([self frame])*value)];
+    [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth(self.frame), NSHeight(self.frame)*value)];
     break;
 
   default:

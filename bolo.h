@@ -114,7 +114,7 @@
 #define MINBASESHELLS       (1)
 #define MINBASEMINES        (1)
 
-#define TREESBESTOF         (4200)  /* works best if is multiple of TREESPLANTRATE*TICKSPERSEC */
+#define TREESBESTOF         (4200)  /**< works best if is multiple of TREESPLANTRATE*TICKSPERSEC */
 #define TREESPLANTRATE      (10)
 
 /* key masks */
@@ -447,28 +447,27 @@ struct Domination {
 } ;
 
 struct JOIN_Preamble {
-  uint8_t ident[8];  /* "XBOLOGAM" */
-  uint8_t version;   /* currently 0 */
-  char name[MAXNAME];   /* NULL terminated name */
-  char pass[MAXPASS];   /* NULL terminated password */
+  uint8_t ident[8];  /**< "XBOLOGAM" */
+  uint8_t version;   /**< currently 0 */
+  char name[MAXNAME];   /**< NULL terminated name */
+  char pass[MAXPASS];   /**< NULL terminated password */
 } __attribute__((__packed__));
 
 /*
  * Runningbolo() returns true if there is a game in progress.
  */
  
-int allowjoinserver();
+int allowjoinserver(void);
 
-/*
+/*!
  * Initbolo() needs to be called once to initialize bolo.  Returns 0 on
  * success or -1 on failure and sets errno.
  */
-
 int initbolo(
     void (*setplayerstatusfunc)(int player),
     void (*setpillstatusfunc)(int pill),
     void (*setbasestatusfunc)(int base),
-    void (*settankstatusfunc)(),
+    void (*settankstatusfunc)(void),
     void (*playsound)(int sound),
     void (*printmessagefunc)(int type, const char *text),
     void (*joinprogress)(int statuscode, float scale),
@@ -480,17 +479,15 @@ int initbolo(
  * Returns 0 on success -1 on failure and sets errno.
  */
 
-void pauseresumegame();
-void togglejoingame();
+void pauseresumegame(void);
+void togglejoingame(void);
 
 int listtracker(
     const char trackerhostname[], struct ListNode *node,
     void(*trackerprogress)(int statuscode)
   );
 
-void stoptracker();
-
-Vec2f dir2vec(float dir);
+void stoptracker(void);
 
 /*
  * Calcvis() returns a value between 0.0 and 1.0 based on how visible it is.
@@ -505,9 +502,9 @@ Vec2f dir2vec(float f);
 
 
 struct BOLO_Preamble {
-  uint8_t ident[8];  /* "XBOLOGAM" */
-  uint8_t version;   /* currently 0 */
-  uint8_t player;    /* your player id */
+  uint8_t ident[8];  /**< "XBOLOGAM" */
+  uint8_t version;   /**< currently 0 */
+  uint8_t player;    /**< your player id */
   uint8_t hiddenmines;
   uint8_t pause;
   uint8_t gametype;
@@ -527,7 +524,7 @@ struct BOLO_Preamble {
     uint8_t host[MAXHOST];
     uint16_t alliance;
   } __attribute__((__packed__)) players[MAX_PLAYERS];
-  uint32_t maplen;   /* the map length */
+  uint32_t maplen;   /**< the map length */
 } __attribute__((__packed__));
 
 

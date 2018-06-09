@@ -18,6 +18,13 @@
 #include "timing.h"
 #include "resolver.h"
 
+#include <sys/select.h>
+// Ugh, icky hack to get select() working..
+#ifdef __has_feature
+#  if __has_feature(modules)
+#    include <sys/_select.h>
+#  endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,14 +109,14 @@ static int sendtoone(const void *data, size_t size, int player);
 
 static void growtrees(int nplayers);
 
-static int chain();
+static int chain(void);
 static int chainat(int x, int y);
 
 static int explosionat(int player, int x, int y);
 static int superboomat(int player, int x, int y);
 
 static int floodtest(int x, int y);
-static int flood();
+static int flood(void);
 static int floodat(int x, int y);
 
 static int findpill(int x, int y);
@@ -117,8 +124,8 @@ static int findbase(int x, int y);
 static void droppills(int player, float x, float y, uint16_t pills);
 
 static int removeplayer(int player);
-static int nplayers();
-static int cleanupserver();
+static int nplayers(void);
+static int cleanupserver(void);
 
 int initserver() {
   int err;
@@ -238,13 +245,13 @@ TRY
   int one = 1;
   if ((server.listensock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.listensock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK)) {};
   setsockopt(server.listensock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 
   /* initialize dgramsock */
   if ((server.dgramsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.dgramsock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK)) {};
 
   /* initialize name to INADDR_ANY port */
   addr.sin_family = AF_INET;
@@ -1299,7 +1306,7 @@ TRY
     /* initialize trackersock */
     if ((server.tracker.sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
     if ((flags = fcntl(server.tracker.sock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK));
+    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK)) {};
 
     if ((connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, INET_ADDRSTRLEN))) {
       if (errno != EINPROGRESS) LOGFAIL(errno)

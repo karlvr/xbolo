@@ -10,6 +10,8 @@
 #ifndef __TERRAIN__
 #define __TERRAIN__
 
+#include <stdbool.h>
+
 enum {
 	kSeaTerrain,
 	kBoatTerrain,
@@ -45,6 +47,6 @@ enum {
 	kMinedGrassTerrain,
 } ;
 
-int isWaterLikeTerrain(int terrain);
+bool isWaterLikeTerrain(int terrain);
 
 #endif /* __TERRAIN__ */

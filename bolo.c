@@ -50,7 +50,7 @@ static struct {
 static void *trackerthread(struct TrackerThreadInfo *trackerthreadinfo);
 
 int allowjoinserver() {
-  int ret;
+  int ret=0;
   int gotlock = 0;
 
 TRY
@@ -67,7 +67,7 @@ ERRHANDLER(ret, -1)
 END
 }
   
-int initbolo(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*clientloopupdate)(void)) {
+int initbolo(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(void), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*clientloopupdate)(void)) {
   int err;
 
 TRY

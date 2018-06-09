@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
+        <development version="7000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
@@ -697,8 +698,8 @@
         <customObject id="419" customClass="NSFontManager"/>
         <window title="Tools" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="" animationBehavior="default" id="530" userLabel="Tools Panel" customClass="GSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
-            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
-            <rect key="contentRect" x="1325" y="650" width="78" height="212"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" topStrut="YES"/>
+            <rect key="contentRect" x="26" y="551" width="78" height="212"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="78" height="212"/>
             <value key="maxSize" type="size" width="78" height="212"/>
@@ -706,7 +707,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="78" height="212"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <matrix focusRingType="none" verticalHuggingPriority="750" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="532">
+                    <matrix focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="532">
                         <rect key="frame" x="5" y="5" width="68" height="202"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="32" height="32"/>
@@ -717,53 +718,53 @@
                         </buttonCell>
                         <cells>
                             <column>
-                                <buttonCell type="square" title="Pencil" bezelStyle="shadowlessSquare" image="Pencil" imagePosition="only" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="533">
+                                <buttonCell type="square" title="Pencil" bezelStyle="shadowlessSquare" image="Pencil" imagePosition="only" refusesFirstResponder="YES" state="on" borderStyle="border" toolTip="Pencil" imageScaling="proportionallyDown" inset="2" id="533">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Filled Ellipse" bezelStyle="shadowlessSquare" image="Filled Ellipse" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" id="534">
+                                <buttonCell type="square" title="Filled Ellipse" bezelStyle="shadowlessSquare" image="Filled Ellipse" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Filled Ellipse" tag="1" imageScaling="proportionallyDown" inset="2" id="534">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Filled Rectangle" bezelStyle="shadowlessSquare" image="Filled Rectangle" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="2" imageScaling="proportionallyDown" inset="2" id="536">
+                                <buttonCell type="square" title="Filled Rectangle" bezelStyle="shadowlessSquare" image="Filled Rectangle" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Filled Rectangle" tag="2" imageScaling="proportionallyDown" inset="2" id="536">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Ellipse" bezelStyle="shadowlessSquare" image="Ellipse" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="3" imageScaling="proportionallyDown" inset="2" id="537">
+                                <buttonCell type="square" title="Ellipse" bezelStyle="shadowlessSquare" image="Ellipse" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Ellipse" tag="3" imageScaling="proportionallyDown" inset="2" id="537">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Rectangle" bezelStyle="shadowlessSquare" image="Rectangle" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="4" imageScaling="proportionallyDown" inset="2" id="538">
+                                <buttonCell type="square" title="Rectangle" bezelStyle="shadowlessSquare" image="Rectangle" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Rectangle" tag="4" imageScaling="proportionallyDown" inset="2" id="538">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Fill" bezelStyle="shadowlessSquare" image="Fill" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="5" imageScaling="proportionallyDown" inset="2" id="587">
+                                <buttonCell type="square" title="Fill" bezelStyle="shadowlessSquare" image="Fill" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Fill" tag="5" imageScaling="proportionallyDown" inset="2" id="587">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Selection" bezelStyle="shadowlessSquare" image="Selection" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="6" imageScaling="proportionallyDown" inset="2" id="539">
+                                <buttonCell type="square" title="Selection" bezelStyle="shadowlessSquare" image="Selection" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Selection" tag="6" imageScaling="proportionallyDown" inset="2" id="539">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Mine" bezelStyle="shadowlessSquare" image="Mine" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="7" imageScaling="proportionallyDown" inset="2" id="542">
+                                <buttonCell type="square" title="Mine" bezelStyle="shadowlessSquare" image="Mine" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mine" tag="7" imageScaling="proportionallyDown" inset="2" id="542">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Pill" bezelStyle="shadowlessSquare" image="Pill" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="8" imageScaling="proportionallyDown" inset="2" id="543">
+                                <buttonCell type="square" title="Pill" bezelStyle="shadowlessSquare" image="Pill" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Pillbox" tag="8" imageScaling="proportionallyDown" inset="2" id="543">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Base" bezelStyle="shadowlessSquare" image="Base" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="9" imageScaling="proportionallyDown" inset="2" id="540">
+                                <buttonCell type="square" title="Base" bezelStyle="shadowlessSquare" image="Base" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Base" tag="9" imageScaling="proportionallyDown" inset="2" id="540">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Start" bezelStyle="shadowlessSquare" image="Start" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="10" imageScaling="proportionallyDown" inset="2" id="541">
+                                <buttonCell type="square" title="Start" bezelStyle="shadowlessSquare" image="Start" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Start" tag="10" imageScaling="proportionallyDown" inset="2" id="541">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="square" title="Delete" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="11" imageScaling="proportionallyDown" inset="2" id="583">
+                                <buttonCell type="square" title="Delete" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Delete" tag="11" imageScaling="proportionallyDown" inset="2" id="583">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -788,18 +789,18 @@
             </connections>
         </window>
         <window title="Palette" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="" animationBehavior="default" id="547" userLabel="Palette Panel" customClass="GSPanel">
-            <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
-            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
-            <rect key="contentRect" x="897" y="836" width="426" height="26"/>
+            <windowStyleMask key="styleMask" titled="YES" utility="YES" texturedBackground="YES"/>
+            <windowPositionMask key="initialPositionMask" rightStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="800" y="116" width="426" height="28"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="426" height="26"/>
-            <value key="maxSize" type="size" width="426" height="26"/>
+            <value key="maxSize" type="size" width="426" height="28"/>
             <view key="contentView" id="548">
-                <rect key="frame" x="0.0" y="0.0" width="426" height="26"/>
+                <rect key="frame" x="0.0" y="0.0" width="426" height="28"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="549">
-                        <rect key="frame" x="1" y="1" width="424" height="24"/>
+                    <matrix verticalHuggingPriority="750" allowsExpansionToolTips="YES" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="549">
+                        <rect key="frame" x="1" y="3" width="424" height="24"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="24" height="24"/>
                         <size key="intercellSpacing" width="1" height="0.0"/>
@@ -809,103 +810,103 @@
                         </buttonCell>
                         <cells>
                             <column>
-                                <buttonCell type="square" title="Wall" bezelStyle="shadowlessSquare" image="Wall" imagePosition="only" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="550">
+                                <buttonCell type="square" title="Wall" bezelStyle="shadowlessSquare" image="Wall" imagePosition="only" refusesFirstResponder="YES" state="on" borderStyle="border" toolTip="Wall" imageScaling="proportionallyDown" inset="2" id="550">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="River" bezelStyle="shadowlessSquare" image="River" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" id="559">
+                                <buttonCell type="square" title="River" bezelStyle="shadowlessSquare" image="River" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="River" tag="1" imageScaling="proportionallyDown" inset="2" id="559">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Swamp" bezelStyle="shadowlessSquare" image="Swamp" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="2" imageScaling="proportionallyDown" inset="2" id="557">
+                                <buttonCell type="square" title="Swamp" bezelStyle="shadowlessSquare" image="Swamp" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Swamp" tag="2" imageScaling="proportionallyDown" inset="2" id="557">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Crater" bezelStyle="shadowlessSquare" image="Crater" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="3" imageScaling="proportionallyDown" inset="2" id="555">
+                                <buttonCell type="square" title="Crater" bezelStyle="shadowlessSquare" image="Crater" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Crater" tag="3" imageScaling="proportionallyDown" inset="2" id="555">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Road" bezelStyle="shadowlessSquare" image="Road" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="4" imageScaling="proportionallyDown" inset="2" id="561">
+                                <buttonCell type="square" title="Road" bezelStyle="shadowlessSquare" image="Road" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Road" tag="4" imageScaling="proportionallyDown" inset="2" id="561">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Forest" bezelStyle="shadowlessSquare" image="Forest" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="5" imageScaling="proportionallyDown" inset="2" id="560">
+                                <buttonCell type="square" title="Forest" bezelStyle="shadowlessSquare" image="Forest" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Forest" tag="5" imageScaling="proportionallyDown" inset="2" id="560">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Rubble" bezelStyle="shadowlessSquare" image="Rubble" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="6" imageScaling="proportionallyDown" inset="2" id="554">
+                                <buttonCell type="square" title="Rubble" bezelStyle="shadowlessSquare" image="Rubble" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Rubble" tag="6" imageScaling="proportionallyDown" inset="2" id="554">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Grass" bezelStyle="shadowlessSquare" image="Grass" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="7" imageScaling="proportionallyDown" inset="2" id="558">
+                                <buttonCell type="square" title="Grass" bezelStyle="shadowlessSquare" image="Grass" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Grass" tag="7" imageScaling="proportionallyDown" inset="2" id="558">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Damaged Wall" bezelStyle="shadowlessSquare" image="DamagedWall" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="8" imageScaling="proportionallyDown" inset="2" id="562">
+                                <buttonCell type="square" title="Damaged Wall" bezelStyle="shadowlessSquare" image="DamagedWall" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Damaged Wall" tag="8" imageScaling="proportionallyDown" inset="2" id="562">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Boat" bezelStyle="shadowlessSquare" image="Boat" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="9" imageScaling="proportionallyDown" inset="2" id="556">
+                                <buttonCell type="square" title="Boat" bezelStyle="shadowlessSquare" image="Boat" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Boat" tag="9" imageScaling="proportionallyDown" inset="2" id="556">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Swamp" bezelStyle="shadowlessSquare" image="MinedSwamp" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="10" imageScaling="proportionallyDown" inset="2" id="553">
+                                <buttonCell type="square" title="Mined Swamp" bezelStyle="shadowlessSquare" image="MinedSwamp" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Swamp" tag="10" imageScaling="proportionallyDown" inset="2" id="553">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Crater" bezelStyle="shadowlessSquare" image="MinedCrater" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="11" imageScaling="proportionallyDown" inset="2" id="563">
+                                <buttonCell type="square" title="Mined Crater" bezelStyle="shadowlessSquare" image="MinedCrater" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Crater" tag="11" imageScaling="proportionallyDown" inset="2" id="563">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Road" bezelStyle="shadowlessSquare" image="MinedRoad" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="12" imageScaling="proportionallyDown" inset="2" id="745">
+                                <buttonCell type="square" title="Mined Road" bezelStyle="shadowlessSquare" image="MinedRoad" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Road" tag="12" imageScaling="proportionallyDown" inset="2" id="745">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Forest" bezelStyle="shadowlessSquare" image="MinedForest" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="13" imageScaling="proportionallyDown" inset="2" id="743">
+                                <buttonCell type="square" title="Mined Forest" bezelStyle="shadowlessSquare" image="MinedForest" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Forest" tag="13" imageScaling="proportionallyDown" inset="2" id="743">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Rubble" bezelStyle="shadowlessSquare" image="MinedRubble" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="14" imageScaling="proportionallyDown" inset="2" id="747">
+                                <buttonCell type="square" title="Mined Rubble" bezelStyle="shadowlessSquare" image="MinedRubble" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Rubble" tag="14" imageScaling="proportionallyDown" inset="2" id="747">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Mined Grass" bezelStyle="shadowlessSquare" image="MinedGrass" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="15" imageScaling="proportionallyDown" inset="2" id="744">
+                                <buttonCell type="square" title="Mined Grass" bezelStyle="shadowlessSquare" image="MinedGrass" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Mined Grass" tag="15" imageScaling="proportionallyDown" inset="2" id="744">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </column>
                             <column>
-                                <buttonCell type="square" title="Deep Sea" bezelStyle="shadowlessSquare" image="DeepSea" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" tag="16" imageScaling="proportionallyDown" inset="2" id="746">
+                                <buttonCell type="square" title="Deep Sea" bezelStyle="shadowlessSquare" image="DeepSea" imagePosition="only" refusesFirstResponder="YES" borderStyle="border" toolTip="Deep Sea" tag="16" imageScaling="proportionallyDown" inset="2" id="746">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -918,7 +919,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="549" firstAttribute="top" secondItem="548" secondAttribute="top" constant="1" id="6tn-wx-77e"/>
-                    <constraint firstAttribute="bottom" secondItem="549" secondAttribute="bottom" constant="1" id="Ye0-hd-OFU"/>
+                    <constraint firstAttribute="bottom" secondItem="549" secondAttribute="bottom" constant="3" id="Ye0-hd-OFU"/>
                     <constraint firstItem="549" firstAttribute="leading" secondItem="548" secondAttribute="leading" constant="1" id="vwP-af-yQd"/>
                     <constraint firstAttribute="trailing" secondItem="549" secondAttribute="trailing" constant="1" id="xUV-3E-fN5"/>
                 </constraints>

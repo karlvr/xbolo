@@ -25,12 +25,26 @@
 			<array>
 				<string>com.gengasw.xbolo.map</string>
 			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xbolorobot</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>XBolo Robot</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Version 0.4.1</string>
+	<string>Version 0.4.2</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -40,11 +54,28 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.4.1</string>
+	<string>0.4.2</string>
 	<key>CFBundleSignature</key>
 	<string>XBLO</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>Bolo URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>xbolo</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>0.4.1</string>
+	<string>0.4.2</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.simulation-games</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -54,7 +85,6 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.image</string>
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -74,6 +104,8 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>map</string>
+					<string>bmap</string>
+					<string>bol</string>
 				</array>
 			</dict>
 		</dict>

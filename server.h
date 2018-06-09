@@ -16,6 +16,7 @@
 #include "errchk.h"
 
 #include <stdint.h>
+#include <pthread.h>
 
 #define TRACKERUPDATESECONDS (60)
 
@@ -42,13 +43,13 @@ struct Server {
   int mainpipe[2];
   int threadpipe[2];
 
-  /* server mutex */
+  /** server mutex */
   pthread_mutex_t mutex;
 
-  /* chain detonation */
+  /** chain detonation */
   struct ListNode chains[CHAINTICKS + 1];
 
-  /* flood fill */
+  /** flood fill */
   struct ListNode floods[FLOODTICKS + 1];
 
   /* game info */
@@ -61,10 +62,10 @@ struct Server {
   int allowjoin;
   int pause;
 
-  /* used in domination games */
+  /** used in domination games */
   int basecontrol;
 
-  /* number of elapsed ticks */
+  /** number of elapsed ticks */
   uint32_t ticks;
 
   union {
@@ -96,7 +97,7 @@ struct Server {
     struct Buf sendbuf;
   } joiningplayer;
 
-  /* player info */
+  /** player info */
   struct {
     /* connection variables */
     int used;
@@ -115,7 +116,7 @@ struct Server {
     struct Buf sendbuf;
   } players[MAX_PLAYERS];
 
-  /* banned players list */
+  /** banned players list */
   struct ListNode bannedplayers;
 } ;
 
@@ -329,7 +330,7 @@ struct SRPause {
   uint8_t pause;
 } __attribute__((__packed__));
 
-/* structure for banned player list */
+/** structure for banned player list */
 struct BannedPlayer {
   char name[MAXNAME];
   struct in_addr sin_addr;
@@ -345,38 +346,38 @@ extern struct Server server;
 /* server routines */
 /*******************/
 
-int initserver();
+int initserver(void);
 int setupserver(
     int initiallypaused, const void *buf, size_t nbytes, uint16_t port,
     const char password[], int timelimit, int hiddenmines, int pauseonplayerexit,
     int gametype, const void *gamedata
   );
-int startserverthread();
+int startserverthread(void);
 int startserverthreadwithtracker(
     const char trackerhostname[], uint16_t port, const char hostplayername[],
     const char mapname[], void (*callback)(int status)
   );
-int stopserver();
-int lockserver();
-int unlockserver();
+int stopserver(void);
+int lockserver(void);
+int unlockserver(void);
 
-int togglejoinserver();
+int togglejoinserver(void);
 int kickplayer(int player);
 int banplayer(int player);
 int unbanplayer(int player);
 
 int tiletoterrain(int tile);
 
-int pauseresumeserver();
-int getservertcpport();
-int getserverudpport();
+int pauseresumeserver(void);
+int getservertcpport(void);
+int getserverudpport(void);
 
 /* lock server first before calling these */
-int getallowjoinserver();
+int getallowjoinserver(void);
 void setallowjoinserver(int allowjoin);
 
-int getpauseserver();
-void pauseserver();
-void resumeserver();
+int getpauseserver(void);
+void pauseserver(void);
+void resumeserver(void);
 
 #endif /* __SERVER__ */

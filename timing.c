@@ -19,7 +19,7 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 static mach_timebase_info_data_t gMachTimebase;
-#else
+#elif _POSIX_TIMERS
 static struct timespec timebase;
 #endif
 
@@ -55,7 +55,7 @@ void sleepuntil(uint64_t nanoseconds, unsigned slop) {
   int64_t delta = nanoseconds - getcurrenttime();
 
   while(delta > slop) {
-    struct timespec ts = { delta / 1000000000, delta % 1000000000 };
+    struct timespec ts = { (long)(delta / 1000000000), delta % 1000000000 };
     nanosleep(&ts, NULL);
     delta = nanoseconds - getcurrenttime();
   }

@@ -4,6 +4,8 @@
 <dict>
 	<key>GSMuteBool</key>
 	<false/>
+	<key>GSDisableBonjour</key>
+	<false/>
 	<key>GSHostUPnPBool</key>
 	<false/>
 	<key>GSAutoSlowdownBool</key>

@@ -4,6 +4,7 @@
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
+#import "XBoloBonjourKeys.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -18,6 +19,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
+typedef NS_ENUM(NSInteger, GSServerSource) {
+  GSServerSourceTracker = 0,
+  GSServerSourceBonjour
+};
 
 static NSString * const GSHostMapString              = @"GSHostMapString";
 static NSString * const GSHostUPnPBool               = @"GSHostUPnPBool";
@@ -86,6 +92,7 @@ static NSString * const GSShowAllegianceBool               = @"GSShowAllegianceB
 static NSString * const GSShowMessagesBool                 = @"GSShowMessagesBool";
 
 // tracker table view columns
+static NSString * const GSSourceColumn                     = @"GSSourceColumn";
 static NSString * const GSHostPlayerColumn                 = @"GSHostPlayerColumn";
 static NSString * const GSMapNameColumn                    = @"GSMapNameColumn";
 static NSString * const GSPlayersColumn                    = @"GSPlayersColumn";
@@ -97,6 +104,10 @@ static NSString * const GSPortColumn                       = @"GSPortColumn";
 
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
+
+// private settings
+static NSString * const GSDisableBonjour                  = @"GSDisableBonjour";
+
 
 static GSXBoloController *controller = nil;
 
@@ -149,7 +160,7 @@ int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSSt
 static void registercallback(int status);
 static void getlisttrackerstatus(int status);
 
-@interface GSXBoloController (Private)
+@interface GSXBoloController ()
 
 // bolo callbacks
 - (void)setPlayerStatus:(NSString *)aString;
@@ -159,7 +170,7 @@ static void getlisttrackerstatus(int status);
 - (void)refresh:(NSTimer *)aTimer;
 - (void)printMessage:(NSAttributedString *)string;
 - (void)setJoinProgressStatusTextField:(NSString *)aString;
-- (void)setJoinProgressIndicator:(NSString *)aString;
+- (void)setJoinProgressIndicator:(NSNumber *)aString;
 
 // callbacks from client thread
 - (void)joinSuccess;
@@ -205,7 +216,29 @@ static void getlisttrackerstatus(int status);
 - (void)setupRobotsMenu;
 @end
 
-@implementation GSXBoloController
+@interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
+- (void)startPublishing;
+- (void)updatePublishedInfo;
+- (void)stopPublishing;
+
+- (void)startListening;
+- (void)stopListening;
+- (void)clearBonjourEntries;
+@end
+
+@implementation GSXBoloController {
+  NSNetService *broadcaster;
+  NSNetServiceBrowser *listener;
+}
+@synthesize joinAddressString;
+@synthesize joinPortNumber;
+@synthesize hostPortNumber;
+@synthesize mute = muteBool;
+@synthesize playerName = playerNameString;
+@synthesize joinPasswordEnabled = joinPasswordBool;
+@synthesize joinPassword = joinPasswordString;
+@synthesize autoSlowdown = autoSlowdownBool;
+@synthesize tracker = trackerString;
 
 // NIB methods
 
@@ -220,67 +253,67 @@ static void getlisttrackerstatus(int status);
   // init toolbar items
   toolbarPlayerInfoItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
   [toolbarPlayerInfoItem setLabel:NSLocalizedString(@"Player Info", nil)];
-  [toolbarPlayerInfoItem setImage:[NSImage imageNamed:NSImageNameUser]];
-  [toolbarPlayerInfoItem setTarget:self];
-  [toolbarPlayerInfoItem setAction:@selector(prefPane:)];
+  toolbarPlayerInfoItem.image = [NSImage imageNamed:NSImageNameUser];
+  toolbarPlayerInfoItem.target = self;
+  toolbarPlayerInfoItem.action = @selector(prefPane:);
 
   toolbarKeyConfigItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarKeyConfigItemIdentifier];
   [toolbarKeyConfigItem setLabel:NSLocalizedString(@"Key Config", nil)];
-  [toolbarKeyConfigItem setImage:[NSImage imageNamed:GSKeyConfigImage]];
-  [toolbarKeyConfigItem setTarget:self];
-  [toolbarKeyConfigItem setAction:@selector(prefPane:)];
+  toolbarKeyConfigItem.image = [NSImage imageNamed:GSKeyConfigImage];
+  toolbarKeyConfigItem.target = self;
+  toolbarKeyConfigItem.action = @selector(prefPane:);
   [toolbarKeyConfigItem setEnabled:YES];
 
   // init the preferences toolbar
   prefToolbar = [[NSToolbar alloc] initWithIdentifier:GSPreferencesToolbar];
-  [prefToolbar setDelegate:self];
-  [prefToolbar setSelectedItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
-  [preferencesWindow setToolbar:prefToolbar];
+  prefToolbar.delegate = self;
+  prefToolbar.selectedItemIdentifier = GSToolbarPlayerInfoItemIdentifier;
+  preferencesWindow.toolbar = prefToolbar;
 
   // init bolo toolbar items
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
   [builderToolItem setLabel:NSLocalizedString(@"Builder Tool", nil)];
-  [builderToolItem setView:builderToolView];
-  [builderToolItem setMinSize:[builderToolView frame].size];
+  builderToolItem.view = builderToolView;
+  builderToolItem.minSize = builderToolView.frame.size;
 
   tankCenterItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSTankCenterItemIdentifier];
   [tankCenterItem setLabel:NSLocalizedString(@"Tank Center", nil)];
-  [tankCenterItem setImage:[NSImage imageNamed:GSTankCenterImage]];
-  [tankCenterItem setTarget:self];
-  [tankCenterItem setAction:@selector(tankCenter:)];
+  tankCenterItem.image = [NSImage imageNamed:GSTankCenterImage];
+  tankCenterItem.target = self;
+  tankCenterItem.action = @selector(tankCenter:);
 
   pillCenterItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSPillCenterItemIdentifier];
   [pillCenterItem setLabel:NSLocalizedString(@"Pill Center", nil)];
-  [pillCenterItem setImage:[NSImage imageNamed:GSPillCenterImage]];
-  [pillCenterItem setTarget:self];
-  [pillCenterItem setAction:@selector(pillCenter:)];
+  pillCenterItem.image = [NSImage imageNamed:GSPillCenterImage];
+  pillCenterItem.target = self;
+  pillCenterItem.action = @selector(pillCenter:);
 
   zoomInItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSZoomInItemIdentifier];
   [zoomInItem setLabel:NSLocalizedString(@"Zoom In", nil)];
-  [zoomInItem setImage:[NSImage imageNamed:GSZoomInImage]];
-  [zoomInItem setTarget:self];
-  [zoomInItem setAction:@selector(zoomIn:)];
+  zoomInItem.image = [NSImage imageNamed:GSZoomInImage];
+  zoomInItem.target = self;
+  zoomInItem.action = @selector(zoomIn:);
 
   zoomOutItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSZoomOutItemIdentifier];
   [zoomOutItem setLabel:NSLocalizedString(@"Zoom Out", nil)];
-  [zoomOutItem setImage:[NSImage imageNamed:GSZoomOutImage]];
-  [zoomOutItem setTarget:self];
-  [zoomOutItem setAction:@selector(zoomOut:)];
+  zoomOutItem.image = [NSImage imageNamed:GSZoomOutImage];
+  zoomOutItem.target = self;
+  zoomOutItem.action = @selector(zoomOut:);
 
   // init the builder toolbar
   boloToolbar = [[NSToolbar alloc] initWithIdentifier:GSBoloToolbar];
-  [boloToolbar setDelegate:self];
+  boloToolbar.delegate = self;
   [boloToolbar setAllowsUserCustomization:YES];
-  [boloWindow setToolbar:boloToolbar];
+  boloWindow.toolbar = boloToolbar;
 
   // init status bars
-  [playerShellsStatusBar setType:GSVerticalBar];
-  [playerMinesStatusBar setType:GSVerticalBar];
-  [playerArmourStatusBar setType:GSVerticalBar];
-  [playerTreesStatusBar setType:GSVerticalBar];
-  [baseShellsStatusBar setType:GSHorizontalBar];
-  [baseMinesStatusBar setType:GSHorizontalBar];
-  [baseArmourStatusBar setType:GSHorizontalBar];
+  playerShellsStatusBar.type = GSVerticalBar;
+  playerMinesStatusBar.type = GSVerticalBar;
+  playerArmourStatusBar.type = GSVerticalBar;
+  playerTreesStatusBar.type = GSVerticalBar;
+  baseShellsStatusBar.type = GSHorizontalBar;
+  baseMinesStatusBar.type = GSHorizontalBar;
+  baseArmourStatusBar.type = GSHorizontalBar;
 
   // we don't need no stink'n windows menu
   [newGameWindow setExcludedFromWindowsMenu:YES];
@@ -317,16 +350,16 @@ static void getlisttrackerstatus(int status);
   // init the join pane
   [self setJoinAddressString:[defaults stringForKey:GSJoinAddressString]];
   [self setJoinPortNumber:(int)[defaults integerForKey:GSJoinPortNumber]];
-  [self setJoinPasswordBool:[defaults boolForKey:GSJoinPasswordBool]];
-  [self setJoinPasswordString:[defaults stringForKey:GSJoinPasswordString]];
+  [self setJoinPasswordEnabled:[defaults boolForKey:GSJoinPasswordBool]];
+  [self setJoinPassword:[defaults stringForKey:GSJoinPasswordString]];
 
   // init tracker string
-  [self setTrackerString:[defaults stringForKey:GSTrackerString]];
+  [self setTracker:[defaults stringForKey:GSTrackerString]];
 
   // init the pref panes
   [self setPrefPaneIdentifierString:[defaults stringForKey:GSPrefPaneIdentifierString]];
-  [self setPlayerNameString:[defaults stringForKey:GSPlayerNameString]];
-  [self setAutoSlowdownBool:[defaults boolForKey:GSAutoSlowdownBool]];
+  [self setPlayerName:[defaults stringForKey:GSPlayerNameString]];
+  [self setAutoSlowdown:[defaults boolForKey:GSAutoSlowdownBool]];
   [self revertKeyConfig:self];
 
   // init the show variables
@@ -350,25 +383,22 @@ static void getlisttrackerstatus(int status);
   [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
 
   // init sound
-  [self setMuteBool:[defaults boolForKey:GSMuteBool]];
+  [self setMute:[defaults boolForKey:GSMuteBool]];
 
   // allocate sounds
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bubbles" ofType:@"aiff"] byReference:NO];
   bubblessounds = [[NSMutableArray alloc] init];
   [bubblessounds addObject:sound];
-  [bubblessounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"build" ofType:@"aiff"] byReference:NO];
   buildsounds = [[NSMutableArray alloc] init];
   [buildsounds addObject:sound];
   [buildsounds addObject:[sound copy]];
-  [buildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"builderdeath" ofType:@"aiff"] byReference:NO];
   builderdeathsounds = [[NSMutableArray alloc] init];
   [builderdeathsounds addObject:sound];
   [builderdeathsounds addObject:[sound copy]];
-  [builderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"explosion" ofType:@"aiff"] byReference:NO];
   explosionsounds = [[NSMutableArray alloc] init];
@@ -378,19 +408,16 @@ static void getlisttrackerstatus(int status);
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
-  [explosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuild" ofType:@"aiff"] byReference:NO];
   farbuildsounds = [[NSMutableArray alloc] init];
   [farbuildsounds addObject:sound];
   [farbuildsounds addObject:[sound copy]];
-  [farbuildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuilderdeath" ofType:@"aiff"] byReference:NO];
   farbuilderdeathsounds = [[NSMutableArray alloc] init];
   [farbuilderdeathsounds addObject:sound];
   [farbuilderdeathsounds addObject:[sound copy]];
-  [farbuilderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fexplosion" ofType:@"aiff"] byReference:NO];
   farexplosionsounds = [[NSMutableArray alloc] init];
@@ -400,81 +427,68 @@ static void getlisttrackerstatus(int status);
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
-  [farexplosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittank" ofType:@"aiff"] byReference:NO];
   farhittanksounds = [[NSMutableArray alloc] init];
   [farhittanksounds addObject:sound];
   [farhittanksounds addObject:[sound copy]];
-  [farhittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhitterrain" ofType:@"aiff"] byReference:NO];
   farhitterrainsounds = [[NSMutableArray alloc] init];
   [farhitterrainsounds addObject:sound];
   [farhitterrainsounds addObject:[sound copy]];
-  [farhitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittree" ofType:@"aiff"] byReference:NO];
   farhittreesounds = [[NSMutableArray alloc] init];
   [farhittreesounds addObject:sound];
   [farhittreesounds addObject:[sound copy]];
-  [farhittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fshot" ofType:@"aiff"] byReference:NO];
   farshotsounds = [[NSMutableArray alloc] init];
   [farshotsounds addObject:sound];
   [farshotsounds addObject:[sound copy]];
-  [farshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsink" ofType:@"aiff"] byReference:NO];
   farsinksounds = [[NSMutableArray alloc] init];
   [farsinksounds addObject:sound];
   [farsinksounds addObject:[sound copy]];
-  [farsinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsuperboom" ofType:@"aiff"] byReference:NO];
   farsuperboomsounds = [[NSMutableArray alloc] init];
   [farsuperboomsounds addObject:sound];
   [farsuperboomsounds addObject:[sound copy]];
-  [farsuperboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ftree" ofType:@"aiff"] byReference:NO];
   fartreesounds = [[NSMutableArray alloc] init];
   [fartreesounds addObject:sound];
   [fartreesounds addObject:[sound copy]];
-  [fartreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittank" ofType:@"aiff"] byReference:NO];
   hittanksounds = [[NSMutableArray alloc] init];
   [hittanksounds addObject:sound];
   [hittanksounds addObject:[sound copy]];
-  [hittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hitterrain" ofType:@"aiff"] byReference:NO];
   hitterrainsounds = [[NSMutableArray alloc] init];
   [hitterrainsounds addObject:sound];
   [hitterrainsounds addObject:[sound copy]];
   [hitterrainsounds addObject:[sound copy]];
-  [hitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittree" ofType:@"aiff"] byReference:NO];
   hittreesounds = [[NSMutableArray alloc] init];
   [hittreesounds addObject:sound];
   [hittreesounds addObject:[sound copy]];
-  [hittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"mine" ofType:@"aiff"] byReference:NO];
   minesounds = [[NSMutableArray alloc] init];
   [minesounds addObject:sound];
   [minesounds addObject:[sound copy]];
-  [minesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"msgreceived" ofType:@"aiff"] byReference:NO];
   msgreceivedsounds = [[NSMutableArray alloc] init];
   [msgreceivedsounds addObject:sound];
   [msgreceivedsounds addObject:[sound copy]];
   [msgreceivedsounds addObject:[sound copy]];
-  [msgreceivedsounds makeObjectsPerformSelector:@selector(release)];
 	
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pillshot" ofType:@"aiff"] byReference:NO];
   pillshotsounds = [[NSMutableArray alloc] init];
@@ -484,17 +498,14 @@ static void getlisttrackerstatus(int status);
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
-  [pillshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"sink" ofType:@"aiff"] byReference:NO];
   sinksounds = [[NSMutableArray alloc] init];
   [sinksounds addObject:sound];
-  [sinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"superboom" ofType:@"aiff"] byReference:NO];
   superboomsounds = [[NSMutableArray alloc] init];
   [superboomsounds addObject:sound];
-  [superboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tankshot" ofType:@"aiff"] byReference:NO];
   tankshotsounds = [[NSMutableArray alloc] init];
@@ -503,19 +514,16 @@ static void getlisttrackerstatus(int status);
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
-  [tankshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tree" ofType:@"aiff"] byReference:NO];
   treesounds = [[NSMutableArray alloc] init];
   [treesounds addObject:sound];
   [treesounds addObject:[sound copy]];
   [treesounds addObject:[sound copy]];
-  [treesounds makeObjectsPerformSelector:@selector(release)];
 
   speechSynthesizers = [[NSMutableArray alloc] init];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
-  [speechSynthesizers makeObjectsPerformSelector:@selector(release)];
 
   zoomLevel = DEFAULT_ZOOM;
 
@@ -524,14 +532,14 @@ static void getlisttrackerstatus(int status);
   [joinProgressStatusTextField setBordered:NO];
   [joinProgressStatusTextField setEditable:NO];
   [joinProgressStatusTextField setDrawsBackground:NO];
-  [[joinProgressWindow contentView] addSubview:joinProgressStatusTextField];
+  [joinProgressWindow.contentView addSubview:joinProgressStatusTextField];
 
   joinProgressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(18, 18, 172, 20)];
-  [[joinProgressWindow contentView] addSubview:joinProgressIndicator];
+  [joinProgressWindow.contentView addSubview:joinProgressIndicator];
 
   // setup double clicking in tracker
-  [joinTrackerTableView setTarget:self];
-  [joinTrackerTableView setDoubleAction:@selector(joinOK:)];
+  joinTrackerTableView.target = self;
+  joinTrackerTableView.doubleAction = @selector(joinOK:);
 
   // TCMPortMapper
   portMapper = [TCMPortMapper sharedInstance];
@@ -539,49 +547,54 @@ static void getlisttrackerstatus(int status);
  
   // set up robots menu
   [self setupRobotsMenu];
+  
+  // Register for Bonjour Services
+  if (![defaults boolForKey:GSDisableBonjour]) {
+    [self startListening];
+  }
+  
+  _broadcastBonjour = ![defaults boolForKey:GSDisableBonjour];
 }
 
 // accessor methods
 
 - (void)setHostMapString:(NSString *)aString {
-  [hostMapString release];
   hostMapString = [aString copy];
-  [hostMapField setStringValue:[[NSFileManager defaultManager] displayNameAtPath:aString]];
+  hostMapField.stringValue = [[NSFileManager defaultManager] displayNameAtPath:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMapString];
 }
 
 - (void)setHostUPnPBool:(BOOL)aBool {
   hostUPnPBool = aBool;
-  [hostUPnPSwitch setState:aBool ? NSOnState : NSOffState];
-  [hostPortField setEnabled:!aBool];
+  hostUPnPSwitch.state = aBool ? NSOnState : NSOffState;
+  hostPortField.enabled = !aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostUPnPBool];
 }
 
 - (void)setHostPortNumber:(int)aNumber {
   hostPortNumber = aNumber;
-  [hostPortField setIntValue:aNumber];
+  hostPortField.intValue = aNumber;
   [[NSUserDefaults standardUserDefaults] setInteger:aNumber forKey:GSHostPortNumber];
 }
 
 - (void)setHostPasswordBool:(BOOL)aBool {
   hostPasswordBool = aBool;
-  [hostPasswordSwitch setState:aBool ? NSOnState : NSOffState];
-  [hostPasswordField setEnabled:aBool];
+  hostPasswordSwitch.state = aBool ? NSOnState : NSOffState;
+  hostPasswordField.enabled = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostPasswordBool];
 }
 
 - (void)setHostPasswordString:(NSString *)aString {
-  [hostPasswordString release];
   hostPasswordString = [aString copy];
-  [hostPasswordField setStringValue:aString];
+  hostPasswordField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostPasswordString];
 }
 
 - (void)setHostTimeLimitBool:(BOOL)aBool {
   hostTimeLimitBool = aBool;
-  [hostTimeLimitSwitch setState:aBool ? NSOnState : NSOffState];
-  [hostTimeLimitSlider setEnabled:aBool];
-  [hostTimeLimitField setEnabled:aBool];
+  hostTimeLimitSwitch.state = aBool ? NSOnState : NSOffState;
+  hostTimeLimitSlider.enabled = aBool;
+  hostTimeLimitField.enabled = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostTimeLimitBool];
 }
 
@@ -590,26 +603,25 @@ static void getlisttrackerstatus(int status);
   int hours, minutes, seconds;
 
   scanner = [NSScanner scannerWithString:aString];
-  [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+  scanner.charactersToBeSkipped = [NSCharacterSet characterSetWithCharactersInString:@":"];
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostTimeLimitString release];
   hostTimeLimitString = [aString copy];
-  [hostTimeLimitSlider setIntValue:hours*3600 + minutes*60 + seconds];
-  [hostTimeLimitField setStringValue:aString];
+  hostTimeLimitSlider.intValue = hours*3600 + minutes*60 + seconds;
+  hostTimeLimitField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostTimeLimitString];
 }
 
 - (void)setHostHiddenMinesBool:(BOOL)aBool {
   hostHiddenMinesBool = aBool;
-  [hostHiddenMinesSwitch setState:aBool ? NSOnState : NSOffState];
+  hostHiddenMinesSwitch.state = aBool ? NSOnState : NSOffState;
 
   if (aBool) {
-    [hostHiddenMinesTextField setStringValue:@"Mines May Be Hidden"];
+    hostHiddenMinesTextField.stringValue = @"Mines May Be Hidden";
   }
   else {
-    [hostHiddenMinesTextField setStringValue:@"Mines Will Always Be Visible"];
+    hostHiddenMinesTextField.stringValue = @"Mines Will Always Be Visible";
   }
 
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostHiddenMinesBool];
@@ -617,8 +629,8 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostTrackerBool:(BOOL)aBool {
   hostTrackerBool = aBool;
-  [hostTrackerSwitch setState:hostTrackerBool ? NSOnState : NSOffState];
-  [hostTrackerField setEnabled:hostTrackerBool];
+  hostTrackerSwitch.state = hostTrackerBool ? NSOnState : NSOffState;
+  hostTrackerField.enabled = hostTrackerBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostTrackerBool];
 }
 
@@ -636,82 +648,74 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setHostDominationBaseControlString:(NSString *)aString {
-  NSScanner *scanner;
   int hours, minutes, seconds;
-  scanner = [NSScanner scannerWithString:aString];
-  [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+  NSScanner *scanner = [NSScanner scannerWithString:aString];
+  scanner.charactersToBeSkipped = [NSCharacterSet characterSetWithCharactersInString:@":"];
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostDominationBaseControlString release];
   hostDominationBaseControlString = [aString copy];
-  [hostDominationBaseControlSlider setIntValue:hours*3600 + minutes*60 + seconds];
-  [hostDominationBaseControlField setStringValue:aString];
+  hostDominationBaseControlSlider.intValue = hours*3600 + minutes*60 + seconds;
+  hostDominationBaseControlField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostDominationBaseControlString];
 }
 
 - (void)setJoinAddressString:(NSString *)newJoinAddressString {
-  [joinAddressString release];
   joinAddressString = [newJoinAddressString copy];
-  [joinAddressField setStringValue:newJoinAddressString];
+  joinAddressField.stringValue = newJoinAddressString;
   [[NSUserDefaults standardUserDefaults] setObject:newJoinAddressString forKey:GSJoinAddressString];
 }
 
 - (void)setJoinPortNumber:(int)aNumber {
   joinPortNumber = aNumber;
-  [joinPortField setIntValue:aNumber];
+  joinPortField.intValue = aNumber;
   [[NSUserDefaults standardUserDefaults] setInteger:aNumber forKey:GSJoinPortNumber];
 }
 
-- (void)setJoinPasswordBool:(BOOL)aBool {
+- (void)setJoinPasswordEnabled:(BOOL)aBool {
   joinPasswordBool = aBool;
-  [joinPasswordSwitch setState:aBool ? NSOnState : NSOffState];
-  [joinPasswordField setEnabled:aBool];
+  joinPasswordSwitch.state = aBool ? NSOnState : NSOffState;
+  joinPasswordField.enabled = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSJoinPasswordBool];
 }
 
-- (void)setJoinPasswordString:(NSString *)aString {
-  [joinPasswordString release];
+- (void)setJoinPassword:(NSString *)aString {
   joinPasswordString = [aString copy];
-  [joinPasswordField setStringValue:aString];
+  joinPasswordField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSJoinPasswordString];
 }
 
 - (void)setJoinTrackerArray:(NSArray *)aArray {
-  [joinTrackerArray release];
   joinTrackerArray = [aArray mutableCopy];
-  [joinTrackerArray sortUsingDescriptors:[joinTrackerTableView sortDescriptors]];
+  [joinTrackerArray sortUsingDescriptors:joinTrackerTableView.sortDescriptors];
   [joinTrackerTableView reloadData];
 }
 
-- (void)setTrackerString:(NSString *)aString {
-  [trackerString release];
+- (void)setTracker:(NSString *)aString {
   trackerString = [aString copy];
-  [hostTrackerField setStringValue:aString];
-  [joinTrackerField setStringValue:aString];
+  hostTrackerField.stringValue = aString;
+  joinTrackerField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSTrackerString];
 }
 
 - (void)setPrefPaneIdentifierString:(NSString *)aString {
-  [prefToolbar setSelectedItemIdentifier:aString];
+  prefToolbar.selectedItemIdentifier = aString;
   [prefTab selectTabViewItemWithIdentifier:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPrefPaneIdentifierString];
 }
 
-- (void)setPlayerNameString:(NSString *)aString {
-  [playerNameString release];
+- (void)setPlayerName:(NSString *)aString {
   playerNameString = [aString copy];
-  [prefPlayerNameField setStringValue:aString];
+  prefPlayerNameField.stringValue = aString;
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPlayerNameString];
 }
 
 - (void)setKeyConfigDict:(NSDictionary *)aDict {
-  [keyConfigDict release];
   keyConfigDict = [aDict copy];
   [[NSUserDefaults standardUserDefaults] setObject:aDict forKey:GSKeyConfigDict];
 }
 
-- (void)setAutoSlowdownBool:(BOOL)aBool {
+- (void)setAutoSlowdown:(BOOL)aBool {
 TRY
   autoSlowdownBool = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSAutoSlowdownBool];
@@ -760,7 +764,7 @@ END
   [[NSUserDefaults standardUserDefaults] setInteger:anInt forKey:GSMessageTarget];
 }
 
-- (void)setMuteBool:(BOOL)aBool {
+- (void)setMute:(BOOL)aBool {
   muteBool = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSMuteBool];
 }
@@ -768,18 +772,13 @@ END
 // IBAction methods
 
 - (IBAction)closeGame:(id)sender {
-  NSEnumerator *enumerator;
-  TCMPortMapping *portMapping;
-
   [boloWindow orderOut:self];
   [statusPanel orderOut:self];
   [allegiancePanel orderOut:self];
   [messagesPanel orderOut:self];
 
   /* remove port mapping */
-  enumerator = [[portMapper portMappings] objectEnumerator];
-
-  while ((portMapping = [enumerator nextObject])) {
+  for (TCMPortMapping *portMapping in [portMapper portMappings]) {
     [portMapper removePortMapping:portMapping];
   }
 
@@ -789,6 +788,7 @@ END
 
   if (server.setup) {
     stopserver();
+    [self stopPublishing];
   }
 
   [self newGame:self];
@@ -797,20 +797,20 @@ END
 - (IBAction)hostChoose:(id)sender {
   NSOpenPanel *panel = [NSOpenPanel openPanel];
   panel.allowedFileTypes = @[NSFileTypeForHFSTypeCode('BMAP'), @"map", @"com.gengasw.xbolo.map"];
-  if ([hostMapString length] > 0) {
-    panel.directoryURL = [NSURL fileURLWithPath:[hostMapString stringByDeletingLastPathComponent]];
+  if (hostMapString.length > 0) {
+    panel.directoryURL = [NSURL fileURLWithPath:hostMapString.stringByDeletingLastPathComponent];
   }
   
   [panel beginSheetModalForWindow:newGameWindow completionHandler:^(NSInteger returnCode) {
     if (returnCode == NSOKButton) {
-      [self setHostMapString:[[[panel URLs] objectAtIndex:0] path]];
+      [self setHostMapString:panel.URLs[0].path];
     }
   }];
 }
 
 - (IBAction)hostUPnPSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = sender.state == NSOnState;
   [self setHostUPnPBool:aBool];
   if (!aBool) {
     [hostPortField selectText:self];
@@ -823,7 +823,7 @@ END
 
 - (IBAction)hostPasswordSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = sender.state == NSOnState;
   [self setHostPasswordBool:aBool];
   if (aBool) {
     [hostPasswordField selectText:self];
@@ -836,7 +836,7 @@ END
 
 - (IBAction)hostTimeLimitSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = sender.state == NSOnState;
   [self setHostTimeLimitBool:aBool];
   if (aBool) {
     [hostTimeLimitField selectText:self];
@@ -867,13 +867,13 @@ END
 
 - (IBAction)hostHiddenMinesSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = sender.state == NSOnState;
   [self setHostHiddenMinesBool:aBool];
 }
 
 - (IBAction)hostTrackerSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = sender.state == NSOnState;
   [self setHostTrackerBool:aBool];
   if (aBool) {
     [hostTrackerField selectText:self];
@@ -885,7 +885,7 @@ END
 }
 
 - (IBAction)hostDominationType:(id)sender {
-  [self setHostDominationTypeNumber:(int)[[hostDominationTypeMatrix selectedCell] tag]];
+  [self setHostDominationTypeNumber:(int)[hostDominationTypeMatrix.selectedCell tag]];
 }
 
 - (IBAction)hostDominationBaseControl:(id)sender {
@@ -912,23 +912,18 @@ END
 }
 
 - (void)portMapperDidFinishWork:(NSNotification *)aNotification {
-  TCMPortMapping *mapping;
-  NSEnumerator *enumerator;
-
 TRY
-  enumerator = [[portMapper portMappings] objectEnumerator];
-
-  while ((mapping = [enumerator nextObject])) {
+  for (TCMPortMapping *mapping in [portMapper portMappings]) {
     if ([mapping localPort] == getservertcpport()) {
       if ([mapping mappingStatus] == TCMPortMappingStatusMapped && [mapping transportProtocol] == TCMPortMappingTransportProtocolBoth) {
         if (hostTrackerBool) {
-          startserverthreadwithtracker([trackerString UTF8String], [mapping externalPort], [playerNameString UTF8String], [[hostMapString lastPathComponent] UTF8String], registercallback);
+          startserverthreadwithtracker(trackerString.UTF8String, [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
         }
         else {
           [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
 
           if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-            if (startserverthreadwithtracker([trackerString UTF8String], getservertcpport(), [playerNameString UTF8String], [[hostMapString lastPathComponent] UTF8String], registercallback)) LOGFAIL(errno)
+            if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
           }
           else {
             if (startserverthread()) LOGFAIL(errno)
@@ -978,10 +973,13 @@ END
 }
 
 - (IBAction)hostOK:(id)sender {
+  //Always stop listening for Bonjour methods.
+  [self stopListening];
+  
   NSData *mapData;
 
 TRY
-  if ([hostMapString length] == 0) {
+  if (hostMapString.length == 0) {
     NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
   }
   else if ((mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
@@ -995,7 +993,7 @@ TRY
     int paused;
 
     scanner = [NSScanner scannerWithString:hostTimeLimitString];
-    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+    scanner.charactersToBeSkipped = [NSCharacterSet characterSetWithCharactersInString:@":"];
     [scanner scanInt:&hours];
     [scanner scanInt:&minutes];
     [scanner scanInt:&seconds];
@@ -1003,7 +1001,7 @@ TRY
 
     domination.type = hostDominationTypeNumber;
     scanner = [NSScanner scannerWithString:hostDominationBaseControlString];
-    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+    scanner.charactersToBeSkipped = [NSCharacterSet characterSetWithCharactersInString:@":"];
     [scanner scanInt:&hours];
     [scanner scanInt:&minutes];
     [scanner scanInt:&seconds];
@@ -1016,13 +1014,13 @@ TRY
       paused = 1;
     }
 
-    [joinProgressStatusTextField setStringValue:@"Starting..."];
+    joinProgressStatusTextField.stringValue = @"Starting...";
     [joinProgressIndicator setIndeterminate:YES];
-    [joinProgressIndicator setDoubleValue:0.0];
+    joinProgressIndicator.doubleValue = 0.0;
     [joinProgressIndicator startAnimation:self];
     [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 
-    if (setupserver(paused, [mapData bytes], [mapData length], hostUPnPBool ? 0 : hostPortNumber, hostPasswordBool ? [hostPasswordString UTF8String] : NULL, hostTimeLimitBool ? timelimit : 0, hostHiddenMinesBool, 0, hostGameTypeNumber, &domination)) LOGFAIL(errno)
+    if (setupserver(paused, mapData.bytes, mapData.length, hostUPnPBool ? 0 : hostPortNumber, hostPasswordBool ? hostPasswordString.UTF8String : NULL, hostTimeLimitBool ? timelimit : 0, hostHiddenMinesBool, 0, hostGameTypeNumber, &domination)) LOGFAIL(errno)
 
     /* if using UPnP */
     if (hostUPnPBool) {
@@ -1030,14 +1028,17 @@ TRY
       [portMapper addPortMapping:[TCMPortMapping portMappingWithLocalPort:getservertcpport() desiredExternalPort:getservertcpport() transportProtocol:TCMPortMappingTransportProtocolBoth userInfo:nil]];
       [portMapper start];
 
-      [joinProgressStatusTextField setStringValue:@"UPnP Mapping Port..."];
+      joinProgressStatusTextField.stringValue = @"UPnP Mapping Port...";
     }
     else if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-      if (startserverthreadwithtracker([trackerString UTF8String], getservertcpport(), [playerNameString UTF8String], [[hostMapString lastPathComponent] UTF8String], registercallback)) LOGFAIL(errno)
+      if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
     }
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
-      if (startclient("localhost", getservertcpport(), [playerNameString UTF8String], hostPasswordBool ? [hostPasswordString UTF8String] : NULL)) LOGFAIL(errno)
+      if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+    }
+    if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
+      [self startPublishing];
     }
   }
 
@@ -1091,8 +1092,8 @@ END
 
 - (IBAction)joinPasswordSwitch:(NSButton*)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
-  [self setJoinPasswordBool:aBool];
+  aBool = sender.state == NSOnState;
+  [self setJoinPasswordEnabled:aBool];
 
   if (aBool) {
     [joinPasswordField selectText:self];
@@ -1100,25 +1101,30 @@ END
 }
 
 - (IBAction)joinPassword:(id)sender {
-  [self setJoinPasswordString:[sender stringValue]];
+  self.joinPassword = [sender stringValue];
 }
 
 - (IBAction)tracker:(id)sender {
-  [self setTrackerString:[sender stringValue]];
+  self.tracker = [sender stringValue];
 }
 
 - (IBAction)joinTrackerRefresh:(id)sender {
 TRY
   [joinTrackerTableView deselectAll:self];
-  [joinProgressStatusTextField setStringValue:@""];
+  joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
-  [joinProgressIndicator setDoubleValue:0.0];
+  joinProgressIndicator.doubleValue = 0.0;
   [joinProgressIndicator startAnimation:self];
   [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
   
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
-  if (listtracker([trackerString UTF8String], &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
+  if (listtracker(trackerString.UTF8String, &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
+  if (listener) {
+    // "Have you tried turning it off then on again?"
+    [self stopListening];
+    [self startListening];
+  }
 
 CLEANUP
   switch (ERROR) {
@@ -1137,12 +1143,15 @@ END
 
 - (IBAction)joinOK:(id)sender {
 TRY
-  [joinProgressStatusTextField setStringValue:@""];
+  joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
-  [joinProgressIndicator setDoubleValue:0.0];
+  joinProgressIndicator.doubleValue = 0.0;
   [joinProgressIndicator startAnimation:self];
   [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-  if (startclient([joinAddressString UTF8String], joinPortNumber, [playerNameString UTF8String], joinPasswordBool ? [joinPasswordString UTF8String] : NULL)) LOGFAIL(errno)
+  if (startclient(joinAddressString.UTF8String, joinPortNumber, playerNameString.UTF8String, joinPasswordBool ? joinPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+
+  //Always stop listening for Bonjour methods.
+  [self stopListening];
 
 CLEANUP
   switch (ERROR) {
@@ -1204,7 +1213,7 @@ END
 }
 
 - (IBAction)statusPanel:(id)sender {
-  if ([statusPanel isKeyWindow]) {
+  if (statusPanel.keyWindow) {
     [boloWindow makeKeyAndOrderFront:self];
   }
   else {
@@ -1213,7 +1222,7 @@ END
 }
 
 - (IBAction)allegiancePanel:(id)sender {
-  if ([allegiancePanel isKeyWindow]) {
+  if (allegiancePanel.keyWindow) {
     [boloWindow makeKeyAndOrderFront:self];
   }
   else {
@@ -1222,7 +1231,7 @@ END
 }
 
 - (IBAction)messagesPanel:(id)sender {
-  if ([messagesPanel isKeyWindow]) {
+  if (messagesPanel.keyWindow) {
     [boloWindow makeKeyAndOrderFront:self];
   }
   else {
@@ -1236,26 +1245,31 @@ END
 
 - (IBAction)toggleJoin:(id)sender {
   togglejoingame();
+  [self updatePublishedInfo];
 }
 
 - (IBAction)toggleMute:(id)sender {
-  [self setMuteBool:!muteBool];
+  [self setMute:!muteBool];
 }
 
 - (IBAction)gamePauseResumeMenu:(id)sender {
   pauseresumegame();
+  [self updatePublishedInfo];
 }
 
 - (IBAction)kickPlayer:(id)sender {
   kickplayer((int)[sender tag]);
+  [self updatePublishedInfo];
 }
 
 - (IBAction)banPlayer:(id)sender {
   banplayer((int)[sender tag]);
+  [self updatePublishedInfo];
 }
 
 - (IBAction)unbanPlayer:(id)sender {
   unbanplayer((int)[sender tag]);
+  [self updatePublishedInfo];
 }
 
 - (IBAction)scrollUp:(id)sender {
@@ -1264,14 +1278,14 @@ END
   NSPoint nspoint;
   CGPoint cgpoint;
 
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
   rect.origin.y += 64.0/kZoomLevels[zoomLevel];
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
     cgpoint.x = nspoint.x;
-    cgpoint.y = [screen frame].size.height - nspoint.y + 64.0;
+    cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
     CGWarpMouseCursorPosition(cgpoint);
   }
 }
@@ -1282,14 +1296,14 @@ END
   NSPoint nspoint;
   CGPoint cgpoint;
 
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
   rect.origin.y -= 64.0/kZoomLevels[zoomLevel];
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
     cgpoint.x = nspoint.x;
-    cgpoint.y = [screen frame].size.height - nspoint.y - 64.0;
+    cgpoint.y = screen.frame.size.height - nspoint.y - 64.0;
     CGWarpMouseCursorPosition(cgpoint);
   }
 }
@@ -1300,14 +1314,14 @@ END
   NSPoint nspoint;
   CGPoint cgpoint;
 
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
   rect.origin.x -= 64.0/kZoomLevels[zoomLevel];
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
     cgpoint.x = nspoint.x + 64.0;
-    cgpoint.y = [screen frame].size.height - nspoint.y;
+    cgpoint.y = screen.frame.size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);
   }
 }
@@ -1318,14 +1332,14 @@ END
   NSPoint nspoint;
   CGPoint cgpoint;
 
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
   rect.origin.x += 64.0/kZoomLevels[zoomLevel];
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow mouseLocationOutsideOfEventStream] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
     cgpoint.x = nspoint.x - 64.0;
-    cgpoint.y = [screen frame].size.height - nspoint.y;
+    cgpoint.y = screen.frame.size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);
   }
 }
@@ -1338,10 +1352,10 @@ END
 
 TRY
   players = 0;
-  set = [playerInfoTableView selectedRowIndexes];
+  set = playerInfoTableView.selectedRowIndexes;
 
   for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
-    players |= 1 << [[[playerInfoArray objectAtIndex:i] objectForKey:@"Index"] intValue];
+    players |= 1 << [playerInfoArray[i][@"Index"] intValue];
   }
 
   // lock client
@@ -1380,10 +1394,10 @@ END
 
 TRY
   players = 0;
-  set = [playerInfoTableView selectedRowIndexes];
+  set = playerInfoTableView.selectedRowIndexes;
 
   for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
-    players |= 1 << [[[playerInfoArray objectAtIndex:i] objectForKey:@"Index"] intValue];
+    players |= 1 << [playerInfoArray[i][@"Index"] intValue];
   }
 
   // lock client
@@ -1417,7 +1431,7 @@ END
 
 - (IBAction)sendMessage:(id)sender {
 TRY
-  if (sendmessage([[messageTextField stringValue] UTF8String], messageTargetInt)) LOGFAIL(errno)
+  if (sendmessage(messageTextField.stringValue.UTF8String, messageTargetInt)) LOGFAIL(errno)
   [messageTextField selectText:self];
 
 CLEANUP
@@ -1452,31 +1466,31 @@ END
 }
 
 - (IBAction)prefPlayerName:(id)sender {
-  [self setPlayerNameString:[sender stringValue]];
+  self.playerName = [sender stringValue];
 }
 
 - (IBAction)revertKeyConfig:(id)sender {
   NSDictionary *dict;
   dict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:GSKeyConfigDict];
-  [prefAccelerateField setStringValue:[[dict allKeysForObject:GSAccelerateString] objectAtIndex:0]];
-  [prefBrakeField setStringValue:[[dict allKeysForObject:GSBrakeString] objectAtIndex:0]];
-  [prefTurnLeftField setStringValue:[[dict allKeysForObject:GSTurnLeftString] objectAtIndex:0]];
-  [prefTurnRightField setStringValue:[[dict allKeysForObject:GSTurnRightString] objectAtIndex:0]];
-  [prefLayMineField setStringValue:[[dict allKeysForObject:GSLayMineString] objectAtIndex:0]];
-  [prefShootField setStringValue:[[dict allKeysForObject:GSShootString] objectAtIndex:0]];
-  [prefIncreaseAimField setStringValue:[[dict allKeysForObject:GSIncreaseAimString] objectAtIndex:0]];
-  [prefDecreaseAimField setStringValue:[[dict allKeysForObject:GSDecreaseAimString] objectAtIndex:0]];
-  [prefUpField setStringValue:[[dict allKeysForObject:GSUpString] objectAtIndex:0]];
-  [prefDownField setStringValue:[[dict allKeysForObject:GSDownString] objectAtIndex:0]];
-  [prefLeftField setStringValue:[[dict allKeysForObject:GSLeftString] objectAtIndex:0]];
-  [prefRightField setStringValue:[[dict allKeysForObject:GSRightString] objectAtIndex:0]];
-  [prefTankViewField setStringValue:[[dict allKeysForObject:GSTankViewString] objectAtIndex:0]];
-  [prefPillViewField setStringValue:[[dict allKeysForObject:GSPillViewString] objectAtIndex:0]];
-  [prefAutoSlowdownSwitch setState:[[NSUserDefaults standardUserDefaults] boolForKey:GSAutoSlowdownBool] ? NSOnState : NSOffState];
+  prefAccelerateField.stringValue = [dict allKeysForObject:GSAccelerateString][0];
+  prefBrakeField.stringValue = [dict allKeysForObject:GSBrakeString][0];
+  prefTurnLeftField.stringValue = [dict allKeysForObject:GSTurnLeftString][0];
+  prefTurnRightField.stringValue = [dict allKeysForObject:GSTurnRightString][0];
+  prefLayMineField.stringValue = [dict allKeysForObject:GSLayMineString][0];
+  prefShootField.stringValue = [dict allKeysForObject:GSShootString][0];
+  prefIncreaseAimField.stringValue = [dict allKeysForObject:GSIncreaseAimString][0];
+  prefDecreaseAimField.stringValue = [dict allKeysForObject:GSDecreaseAimString][0];
+  prefUpField.stringValue = [dict allKeysForObject:GSUpString][0];
+  prefDownField.stringValue = [dict allKeysForObject:GSDownString][0];
+  prefLeftField.stringValue = [dict allKeysForObject:GSLeftString][0];
+  prefRightField.stringValue = [dict allKeysForObject:GSRightString][0];
+  prefTankViewField.stringValue = [dict allKeysForObject:GSTankViewString][0];
+  prefPillViewField.stringValue = [dict allKeysForObject:GSPillViewString][0];
+  prefAutoSlowdownSwitch.state = [[NSUserDefaults standardUserDefaults] boolForKey:GSAutoSlowdownBool] ? NSOnState : NSOffState;
 }
 
 - (IBAction)applyKeyConfig:(id)sender {
-  NSMutableDictionary *dict;
+  NSMutableDictionary<NSString*,NSString*> *dict;
   dict = [NSMutableDictionary dictionary];
   if
     (
@@ -1499,7 +1513,7 @@ END
     )
   {
     [self setKeyConfigDict:dict];
-    [self setAutoSlowdownBool:[prefAutoSlowdownSwitch state] == NSOnState];
+    [self setAutoSlowdown:prefAutoSlowdownSwitch.state == NSOnState];
   }
 }
 
@@ -1512,7 +1526,7 @@ END
   if (zoomLevel < MAX_ZOOM) {
     zoomLevel++;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = [boloView visibleRect];
+    visRect = boloView.visibleRect;
     size.width = 4096.0*zoom;
     size.height = 4096.0*zoom;
     [boloView setFrameSize:size];
@@ -1529,7 +1543,7 @@ END
   if (zoomLevel > 0) {
     zoomLevel--;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = [boloView visibleRect];
+    visRect = boloView.visibleRect;
     size.width = 4096.0*zoom;
     size.height = 4096.0*zoom;
     [boloView setFrameSize:size];
@@ -1556,7 +1570,7 @@ END
   int gotlock = 0;
 
 TRY
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
 
   if (lockclient()) LOGFAIL(errno)
   gotlock = 1;
@@ -1595,7 +1609,7 @@ END
   int gotlock = 0;
 
 TRY
-  rect = [boloView visibleRect];
+  rect = boloView.visibleRect;
   square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
   square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
 
@@ -1676,7 +1690,7 @@ END
   NSString *object;
 
 TRY
-  object = [keyConfigDict objectForKey:[NSString stringWithFormat:@"%d", keyCode]];
+  object = keyConfigDict[[NSString stringWithFormat:@"%d", keyCode]];
   if (object != nil) {
     if ([object isEqualToString:GSAccelerateString]) {
       if (autoSlowdownBool) {
@@ -1807,7 +1821,7 @@ END
 
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   SEL action;
-  action = [menuItem action];
+  action = menuItem.action;
 	if (action == @selector(newGame:)) {
     return !client_running;
 	}
@@ -1824,7 +1838,7 @@ END
 		return client_running;
 	}
 	else if (action == @selector(hostGameType:)) {
-    switch ([menuItem tag]) {
+    switch (menuItem.tag) {
     case kDominationGameType:  // Domination
       return YES;
 
@@ -1845,14 +1859,14 @@ END
     }
 	}
 	else if (action == @selector(builderToolMenu:)) {
-		[menuItem setState:[menuItem tag] == builderToolInt ? NSOnState : NSOffState];
+		menuItem.state = menuItem.tag == builderToolInt ? NSOnState : NSOffState;
 		return YES;
 	}
 	else if (action == @selector(gamePauseResumeMenu:)) {
     lockserver();
 
     if (server.setup) {
-      [menuItem setState:server.pause ? NSOnState: NSOffState];
+      menuItem.state = server.pause ? NSOnState: NSOffState;
       unlockserver();
       return YES;
     }
@@ -1865,7 +1879,7 @@ END
     lockserver();
 
     if (server.setup) {
-      [menuItem setState:server.allowjoin ? NSOnState: NSOffState];
+      menuItem.state = server.allowjoin ? NSOnState: NSOffState;
       unlockserver();
       return YES;
     }
@@ -1875,7 +1889,7 @@ END
     }
   }
 	else if (action == @selector(toggleMute:)) {
-    [menuItem setState:muteBool];
+    menuItem.state = muteBool;
     return YES;
   }
 	else if (action == @selector(kickPlayer:)) {
@@ -1884,10 +1898,10 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = (int)[menuItem tag];
+      player = (int)menuItem.tag;
 
       if (server.players[player].cntlsock != -1) {
-        [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
+        menuItem.title = [NSString stringWithFormat:@"%@@%@", [NSString stringWithString:@(server.players[player].name)], [NSString stringWithString:@(inet_ntoa(server.players[player].addr.sin_addr))]];
         lockclient();
         ret = player != client.player;
         unlockclient();
@@ -1897,7 +1911,7 @@ END
       }
 
       unlockserver();
-      [menuItem setHidden:!ret];
+      menuItem.hidden = !ret;
       return ret;
     }
     else {
@@ -1913,10 +1927,10 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = (int)[menuItem tag];
+      player = (int)menuItem.tag;
 
       if (server.players[player].cntlsock != -1) {
-        [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
+        menuItem.title = [NSString stringWithFormat:@"%@@%@", [NSString stringWithString:@(server.players[player].name)], [NSString stringWithString:@(inet_ntoa(server.players[player].addr.sin_addr))]];
         lockclient();
         ret = player != client.player;
         unlockclient();
@@ -1926,7 +1940,7 @@ END
       }
 
       unlockserver();
-      [menuItem setHidden:!ret];
+      menuItem.hidden = !ret;
       return ret;
     }
     else {
@@ -1936,6 +1950,19 @@ END
     }
   }
     else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
+    else if (action == @selector(hostToggleBonjourBroadcast:)) {
+      lockserver();
+      
+      if (server.setup) {
+        menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
+        unlockserver();
+        return YES;
+      } else {
+        menuItem.state = NSOffState;
+        unlockserver();
+        return NO;
+      }
+    }
 	else {
 		return YES;
 	}
@@ -1966,8 +1993,8 @@ END
         if(tojoin)
         {
             NSArray *components = [tojoin componentsSeparatedByString: @":"];
-            [self setJoinAddressString: [components objectAtIndex: 0]];
-            [self setJoinPortNumber: [[components objectAtIndex: 1] intValue]];
+            [self setJoinAddressString: components[0]];
+            [self setJoinPortNumber: [components[1] intValue]];
             [self joinOK: nil];
         }
     }
@@ -1996,7 +2023,7 @@ END
 - (void)menuNeedsUpdate:(NSMenu *)menu {
   NSInteger i;
 
-  for (i = [menu numberOfItems] - 1; i >= 0; i--) {
+  for (i = menu.numberOfItems - 1; i >= 0; i--) {
     [menu removeItemAtIndex:i];
   }
 
@@ -2013,11 +2040,10 @@ END
 
     while (node) {
       bannedplayer = ptrlist(node);
-      menuItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:bannedplayer->name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(bannedplayer->sin_addr) encoding:NSASCIIStringEncoding]]] action:@selector(unbanPlayer:) keyEquivalent:@""];
-      [menuItem setTarget:self];
-      [menuItem setTag:i];
+      menuItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:@(bannedplayer->name)], [NSString stringWithString:@(inet_ntoa(bannedplayer->sin_addr))]] action:@selector(unbanPlayer:) keyEquivalent:@""];
+      menuItem.target = self;
+      menuItem.tag = i;
       [menu addItem:menuItem];
-      [menuItem release];
       i++;
       node = nextlist(node);
     }
@@ -2059,10 +2085,10 @@ END
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
   if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
+    return @[GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier];
   }
   else if (toolbar == boloToolbar) {
-    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, nil];
+    return @[GSBoloToolItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier];
   }
   else {
     return [NSArray array];
@@ -2071,10 +2097,10 @@ END
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
   if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
+    return @[GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier];
   }
   else if (toolbar == boloToolbar) {
-    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, NSToolbarSeparatorItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, nil];
+    return @[GSBoloToolItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, NSToolbarSeparatorItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier];
   }
   else {
     return [NSArray array];
@@ -2083,7 +2109,7 @@ END
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
   if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
+    return @[GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier];
   }
   else if (toolbar == boloToolbar) {
     return [NSArray array];
@@ -2095,25 +2121,25 @@ END
 
 // NSWindow delegate methods
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
-  if ([aNotification object] == statusPanel) {
+  if (aNotification.object == statusPanel) {
     [self setShowStatusBool:YES];
   }
-  else if ([aNotification object] == allegiancePanel) {
+  else if (aNotification.object == allegiancePanel) {
     [self setShowAllegianceBool:YES];
   }
-  else if ([aNotification object] == messagesPanel) {
+  else if (aNotification.object == messagesPanel) {
     [self setShowMessagesBool:YES];
   }
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification {
-  if ([aNotification object] == statusPanel) {
+  if (aNotification.object == statusPanel) {
     [self setShowStatusBool:NO];
   }
-  else if ([aNotification object] == allegiancePanel) {
+  else if (aNotification.object == allegiancePanel) {
     [self setShowAllegianceBool:NO];
   }
-  else if ([aNotification object] == messagesPanel) {
+  else if (aNotification.object == messagesPanel) {
     [self setShowMessagesBool:NO];
   }
 }
@@ -2131,7 +2157,7 @@ TRY
   if (lockclient()) LOGFAIL(errno)
   gotlock = 1;
 
-  player = [aString intValue];
+  player = aString.intValue;
 
   switch (player) {
   case 0x0:
@@ -2209,7 +2235,7 @@ TRY
     enumerator = [playerInfoArray objectEnumerator];
 
     while ((playerRecord = [enumerator nextObject])) {
-      if ([[playerRecord objectForKey:@"Index"] isEqualToString:indexString]) {
+      if ([playerRecord[@"Index"] isEqualToString:indexString]) {
         break;
       }
     }
@@ -2217,42 +2243,40 @@ TRY
     if (playerRecord == nil) {
       playerRecord = [[NSMutableDictionary alloc] init];
       [playerInfoArray addObject:playerRecord];
-      [playerRecord release];
     }
 
-    [playerRecord setObject:indexString forKey:@"Index"];
+    playerRecord[@"Index"] = indexString;
 
     if (client.players[client.player].seq - client.players[player].lastupdate >= 3*TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:client.players[player].name] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor whiteColor], NSForegroundColorAttributeName, [NSColor redColor], NSBackgroundColorAttributeName, nil]];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor], NSBackgroundColorAttributeName: [NSColor redColor]}];
     }
     else if (client.players[client.player].seq - client.players[player].lastupdate >= TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:client.players[player].name] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor yellowColor], NSBackgroundColorAttributeName, nil]];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor yellowColor]}];
     }
     else {
-      name = [[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:client.players[player].name] attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor greenColor], NSBackgroundColorAttributeName, nil]];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor greenColor]}];
     }
 
-    [playerRecord setObject:name forKey:@"Player"];
-    [name release];
+    playerRecord[@"Player"] = name;
 
     if (client.player == player) {
-      [imageView setImage:[NSImage imageNamed:@"PlayerStatFriendly"]];
+      imageView.image = [NSImage imageNamed:@"PlayerStatFriendly"];
     }
     else if (
       (client.players[client.player].alliance & (1 << player)) &&
       (client.players[player].alliance & (1 << client.player))
     ) {
-      [imageView setImage:[NSImage imageNamed:@"PlayerStatAlliedFriendly"]];
+      imageView.image = [NSImage imageNamed:@"PlayerStatAlliedFriendly"];
     }
     else {
-      [imageView setImage:[NSImage imageNamed:@"PlayerStatHostile"]];
+      imageView.image = [NSImage imageNamed:@"PlayerStatHostile"];
     }
   }
   else {
     enumerator = [playerInfoArray objectEnumerator];
 
     while ((playerRecord = [enumerator nextObject])) {
-      if ([[playerRecord objectForKey:@"Index"] isEqualToString:indexString]) {
+      if ([playerRecord[@"Index"] isEqualToString:indexString]) {
         [playerInfoArray removeObject:playerRecord];
         break;
       }
@@ -2291,7 +2315,7 @@ END
   int pill;
 
 TRY
-  pill = [aString intValue];
+  pill = aString.intValue;
 
   switch (pill) {
   case 0x0:
@@ -2368,12 +2392,12 @@ TRY
   if (pill < client.npills) {
     switch (client.pills[pill].armour) {
     case 0:
-      [imageView setImage:[NSImage imageNamed:@"PillStatDead"]];
+      imageView.image = [NSImage imageNamed:@"PillStatDead"];
       break;
 
     case ONBOARD:
       if (client.pills[pill].owner == client.player) {
-        [imageView setImage:[NSImage imageNamed:@"PillStatIntFriendly"]];
+        imageView.image = [NSImage imageNamed:@"PillStatIntFriendly"];
       }
       else if (
         client.pills[pill].owner != NEUTRAL &&
@@ -2382,20 +2406,20 @@ TRY
           (client.players[client.player].alliance & (1 << client.pills[pill].owner))
         )
       ) {
-        [imageView setImage:[NSImage imageNamed:@"PillStatIntAllied"]];
+        imageView.image = [NSImage imageNamed:@"PillStatIntAllied"];
       }
       else {
-        [imageView setImage:[NSImage imageNamed:@"PillStatIntHostile"]];
+        imageView.image = [NSImage imageNamed:@"PillStatIntHostile"];
       }
 
       break;
 
     default:
       if (client.pills[pill].owner == client.player) {
-        [imageView setImage:[NSImage imageNamed:@"PillStatFriendly"]];
+        imageView.image = [NSImage imageNamed:@"PillStatFriendly"];
       }
       else if (client.pills[pill].owner == NEUTRAL) {
-        [imageView setImage:[NSImage imageNamed:@"PillStatNeutral"]];
+        imageView.image = [NSImage imageNamed:@"PillStatNeutral"];
       }
       else if (
         client.pills[pill].owner != NEUTRAL &&
@@ -2404,10 +2428,10 @@ TRY
           (client.players[client.player].alliance & (1 << client.pills[pill].owner))
         )
       ) {
-        [imageView setImage:[NSImage imageNamed:@"PillStatFriendly"]];
+        imageView.image = [NSImage imageNamed:@"PillStatFriendly"];
       }
       else {
-        [imageView setImage:[NSImage imageNamed:@"PillStatHostile"]];
+        imageView.image = [NSImage imageNamed:@"PillStatHostile"];
       }
 
       break;
@@ -2447,7 +2471,7 @@ TRY
   if (lockclient()) LOGFAIL(errno)
   gotlock = 1;
 
-  base = [aString intValue];
+  base = aString.intValue;
 
   switch (base) {
   case 0x0:
@@ -2521,13 +2545,13 @@ TRY
 
   if (base < client.nbases) {
     if (client.bases[base].owner == NEUTRAL) {
-      [imageView setImage:[NSImage imageNamed:@"BaseStatNeutral"]];
+      imageView.image = [NSImage imageNamed:@"BaseStatNeutral"];
     }
     else if (client.bases[base].armour < MINBASEARMOUR) {
-      [imageView setImage:[NSImage imageNamed:@"BaseStatDead"]];
+      imageView.image = [NSImage imageNamed:@"BaseStatDead"];
     }
     else if (client.bases[base].owner == client.player) {
-      [imageView setImage:[NSImage imageNamed:@"BaseStatFriendly"]];
+      imageView.image = [NSImage imageNamed:@"BaseStatFriendly"];
     }
     else if (
       client.bases[base].owner != NEUTRAL &&
@@ -2536,10 +2560,10 @@ TRY
         (client.players[client.player].alliance & (1 << client.bases[base].owner))
       )
     ) {
-      [imageView setImage:[NSImage imageNamed:@"BaseStatFriendly"]];
+      imageView.image = [NSImage imageNamed:@"BaseStatFriendly"];
     }
     else {
-      [imageView setImage:[NSImage imageNamed:@"BaseStatHostile"]];
+      imageView.image = [NSImage imageNamed:@"BaseStatHostile"];
     }
   }
   else {
@@ -2569,19 +2593,19 @@ END
 }
 
 - (void)setTankStatusBars {
-  [playerKillsTextField setStringValue:[NSString stringWithFormat:@"%d", client.kills]];
-  [playerDeathsTextField setStringValue:[NSString stringWithFormat:@"%d", client.deaths]];
-  [playerShellsStatusBar setValue:((CGFloat)client.shells)/MAXSHELLS];
-  [playerMinesStatusBar setValue:((CGFloat)client.mines)/MAXMINES];
-  [playerArmourStatusBar setValue:((CGFloat)client.armour)/MAXARMOUR];
-  [playerTreesStatusBar setValue:((CGFloat)client.trees)/MAXTREES];
+  playerKillsTextField.stringValue = [NSString stringWithFormat:@"%d", client.kills];
+  playerDeathsTextField.stringValue = [NSString stringWithFormat:@"%d", client.deaths];
+  playerShellsStatusBar.value = ((CGFloat)client.shells)/MAXSHELLS;
+  playerMinesStatusBar.value = ((CGFloat)client.mines)/MAXMINES;
+  playerArmourStatusBar.value = ((CGFloat)client.armour)/MAXARMOUR;
+  playerTreesStatusBar.value = ((CGFloat)client.trees)/MAXTREES;
 }
 
 - (void)refresh:(NSTimer *)aTimer {
   int i;
   int base = -1;
   CGFloat dist = 8.0, dist2;
-  int gotlock = 0;
+  BOOL gotlock = 0;
   static int counter = 0;
 
 TRY
@@ -2631,18 +2655,18 @@ TRY
             diff = sub2f(client.players[client.player].builder, client.players[client.player].tank);
             newdir = vec2dir(diff);
           
-            [builderStatusView setState:GSBuilderStatusViewStateDirection];
-            [builderStatusView setDir:newdir];
+            builderStatusView.state = GSBuilderStatusViewStateDirection;
+            builderStatusView.dir = newdir;
           }
           
           break;
           
         case kBuilderParachute:
-          [builderStatusView setState:GSBuilderStatusViewStateDead];
+          builderStatusView.state = GSBuilderStatusViewStateDead;
           break;
           
         case kBuilderReady:
-          [builderStatusView setState:GSBuilderStatusViewStateReady];
+          builderStatusView.state = GSBuilderStatusViewStateReady;
           break;
           
         default:
@@ -2667,14 +2691,14 @@ TRY
         }
       
         if (base != -1) {
-          [baseArmourStatusBar setValue:(CGFloat)client.bases[base].armour/(CGFloat)MAX_BASE_ARMOUR];
-          [baseShellsStatusBar setValue:(CGFloat)client.bases[base].shells/(CGFloat)MAX_BASE_SHELLS];
-          [baseMinesStatusBar setValue:(CGFloat)client.bases[base].mines/(CGFloat)MAX_BASE_MINES];
+          baseArmourStatusBar.value = (CGFloat)client.bases[base].armour/(CGFloat)MAX_BASE_ARMOUR;
+          baseShellsStatusBar.value = (CGFloat)client.bases[base].shells/(CGFloat)MAX_BASE_SHELLS;
+          baseMinesStatusBar.value = (CGFloat)client.bases[base].mines/(CGFloat)MAX_BASE_MINES;
         }
         else {
-          [baseShellsStatusBar setValue:0.0];
-          [baseMinesStatusBar setValue:0.0];
-          [baseArmourStatusBar setValue:0.0];
+          baseShellsStatusBar.value = 0.0;
+          baseMinesStatusBar.value = 0.0;
+          baseArmourStatusBar.value = 0.0;
         }
       }
     }
@@ -2706,10 +2730,10 @@ END
   NSAttributedString *newline;
 
   newline = [[NSAttributedString alloc] initWithString:@"\n"];
-  [[messagesTextView textStorage] appendAttributedString:newline];
-  [[messagesTextView textStorage] appendAttributedString:aString];
+  [messagesTextView.textStorage appendAttributedString:newline];
+  [messagesTextView.textStorage appendAttributedString:aString];
   [messagesTextView didChangeText];
-  [messagesTextView scrollPoint:NSMakePoint(0.0f, NSHeight([messagesTextView frame]) - NSHeight([messagesTextView visibleRect]))];
+  [messagesTextView scrollPoint:NSMakePoint(0.0f, NSHeight(messagesTextView.frame) - NSHeight(messagesTextView.visibleRect))];
 
 //  int i;
 //  if (!muteBool) {
@@ -2725,7 +2749,6 @@ END
 //    }
 //  }
 	
-  [newline release];
 }
 
 
@@ -2736,10 +2759,10 @@ END
   NSInteger i;
   NSDictionary *row;
 
-  table = [aNotification object];
+  table = aNotification.object;
 
   if (table == playerInfoTableView) {
-    if ([table numberOfSelectedRows] == 0) {
+    if (table.numberOfSelectedRows == 0) {
       [requestAllianceButton setEnabled:FALSE];
       [leaveAllianceButton setEnabled:FALSE];
     }
@@ -2749,12 +2772,12 @@ END
     }
   }
   else if (table == joinTrackerTableView) {
-    i = [[table selectedRowIndexes] firstIndex];
+    i = table.selectedRowIndexes.firstIndex;
 
     if (i != NSNotFound) {
-      row = [joinTrackerArray objectAtIndex:i];
-      [self setJoinAddressString:[row objectForKey:GSHostnameColumn]];
-      [self setJoinPortNumber:[[row objectForKey:GSPortColumn] intValue]];
+      row = joinTrackerArray[i];
+      [self setJoinAddressString:row[GSHostnameColumn]];
+      [self setJoinPortNumber:[row[GSPortColumn] intValue]];
     }
   }
 }
@@ -2764,10 +2787,10 @@ END
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   if (aTableView == playerInfoTableView) {
-    return [playerInfoArray count];
+    return playerInfoArray.count;
   }
   else if (aTableView == joinTrackerTableView) {
-    return [joinTrackerArray count];
+    return joinTrackerArray.count;
   }
   else {
     return 0;
@@ -2777,21 +2800,29 @@ END
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
-    return [[playerInfoArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+    return playerInfoArray[rowIndex][aTableColumn.identifier];
   }
   else if (aTableView == joinTrackerTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [joinTrackerArray count]);
-    return [[joinTrackerArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+    if ([aTableColumn.identifier isEqualToString:GSSourceColumn]) {
+      NSNumber *servSource = joinTrackerArray[rowIndex][GSSourceColumn];
+      if (servSource.integerValue == GSServerSourceTracker) {
+        return [NSImage imageNamed:@"XBolo"];
+      } else /* GSServerSourceBonjour */{
+        return [NSImage imageNamed:NSImageNameBonjour];
+      }
+    }
+    return joinTrackerArray[rowIndex][aTableColumn.identifier];
   }
   else {
     return nil;
   }
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
-    [[playerInfoArray objectAtIndex:rowIndex] setObject:anObject forKey:[aTableColumn identifier]];
+    playerInfoArray[rowIndex][aTableColumn.identifier] = anObject;
   }
 }
 
@@ -2800,13 +2831,13 @@ END
     NSInteger index;
     NSDictionary *selection;
 
-    index = [[aTableView selectedRowIndexes] firstIndex];
+    index = aTableView.selectedRowIndexes.firstIndex;
 
     if (index != NSNotFound) {
-      selection = [joinTrackerArray objectAtIndex:index];
+      selection = joinTrackerArray[index];
     }
 
-    [joinTrackerArray sortUsingDescriptors:[aTableView sortDescriptors]];
+    [joinTrackerArray sortUsingDescriptors:aTableView.sortDescriptors];
     [aTableView reloadData];
 
     if (index != NSNotFound) {
@@ -2818,12 +2849,12 @@ END
 //
 
 - (void)setJoinProgressStatusTextField:(NSString *)aString {
-  [joinProgressStatusTextField setStringValue:aString];
+  joinProgressStatusTextField.stringValue = aString;
 }
 
-- (void)setJoinProgressIndicator:(NSString *)aString {
+- (void)setJoinProgressIndicator:(NSNumber *)aString {
   [joinProgressIndicator setIndeterminate:NO];
-  [joinProgressIndicator setDoubleValue:[aString doubleValue]];
+  joinProgressIndicator.doubleValue = aString.doubleValue;
 }
 
 - (void)joinSuccess {
@@ -2842,7 +2873,7 @@ END
     [allegiancePanel orderFront:self];
   }
 
-  [[messagesTextView textStorage] deleteCharactersInRange:NSMakeRange(0, [[messagesTextView textStorage] length])];
+  [messagesTextView.textStorage deleteCharactersInRange:NSMakeRange(0, messagesTextView.textStorage.length)];
 
   if (showMessagesBool) {
     [messagesPanel orderFront:self];
@@ -3202,7 +3233,7 @@ END
 
 - (void)registerSuccess {
 TRY
-  if (startclient("localhost", getservertcpport(), [playerNameString UTF8String], hostPasswordBool ? [hostPasswordString UTF8String] : NULL)) LOGFAIL(errno)
+  if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
 
 CLEANUP
   switch (ERROR) {
@@ -3479,22 +3510,22 @@ END
 
   // convert list to NSArray for displaying
   table = [NSMutableArray array];
-  keys = [NSArray arrayWithObjects:GSHostPlayerColumn, GSMapNameColumn, GSPlayersColumn, GSPasswordColumn, GSAllowJoinColumn, GSPausedColumn, GSHostnameColumn, GSPortColumn, nil];
+  keys = @[GSHostPlayerColumn, GSMapNameColumn, GSPlayersColumn, GSPasswordColumn, GSAllowJoinColumn, GSPausedColumn, GSHostnameColumn, GSPortColumn, GSSourceColumn];
+  NSNumber *sourceTracker = @(GSServerSourceTracker);
 
   for (node = nextlist(&trackerlist); node; node = nextlist(node)) {
     struct TrackerHostList *hostlist;
     hostlist = ptrlist(node);
 
-    objects = [NSArray arrayWithObjects:
-      [NSString stringWithCString:(char *)hostlist->game.playername encoding:NSASCIIStringEncoding],
-      [NSString stringWithCString:(char *)hostlist->game.mapname encoding:NSASCIIStringEncoding],
+    objects = @[@((char *)hostlist->game.playername),
+      @((char *)hostlist->game.mapname),
       [NSString stringWithFormat:@"%d", hostlist->game.nplayers],
       hostlist->game.passreq ? @"Yes" : @"No",
       hostlist->game.allowjoin ? @"Yes" : @"No",
       hostlist->game.pause ? @"Yes" : @"No",
-      [NSString stringWithUTF8String:inet_ntoa(hostlist->addr)],
+      @(inet_ntoa(hostlist->addr)),
       [NSString stringWithFormat:@"%d", hostlist->game.port],
-      nil];
+      sourceTracker];
     [table addObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
   }
 
@@ -3510,7 +3541,7 @@ END
 - (BOOL)_validateRobotMenuItem: (NSMenuItem *)item
 {
     [robotLock lock];
-    [item setState: [item representedObject] == robot ? NSOnState : NSOffState];
+    item.state = item.representedObject == robot ? NSOnState : NSOffState;
     [robotLock unlock];
     return YES;
 }
@@ -3529,8 +3560,7 @@ END
         else
         {
             [robot unload];
-            [robot release];
-            robot = [newRobot retain];
+            robot = newRobot;
         }
     }
     [robotLock unlock];
@@ -3538,37 +3568,31 @@ END
 
 - (void)setupRobotsMenu
 {
-    NSArray *robots = [GSRobot availableRobots];
+    NSArray<GSRobot*> *robots = [GSRobot availableRobots];
     
     NSMenuItem *autoMenu = nil;
     NSString *autoName = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSAutomaticallyLoadRobot"];
     
-    if([robots count])
+    if(robots.count)
     {
         NSMenu *menu = [[NSMenu alloc] initWithTitle: @"Robots"];
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: @"Manual Control" action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
         [menu addItem: item];
-        [item release];
         
         [menu addItem: [NSMenuItem separatorItem]];
         
-        NSEnumerator *enumerator = [robots objectEnumerator];
-        GSRobot *r;
-        while((r = [enumerator nextObject]))
+        for(GSRobot *r in robots)
         {
-            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: [r name] action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
-            [item setRepresentedObject: r];
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: r.name action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
+            item.representedObject = r;
             [menu addItem: item];
-            if(autoName && [[r name] hasPrefix: autoName])
+            if(autoName && [r.name hasPrefix: autoName])
                 autoMenu = item;
-            [item release];
         }
         
         NSMenuItem *robotItem = [[NSMenuItem alloc] initWithTitle: @"Robots" action: NULL keyEquivalent: @""];
-        [robotItem setSubmenu: menu];
-        [[NSApp mainMenu] addItem: robotItem];
-        [robotItem release];
-        [menu release];
+        robotItem.submenu = menu;
+        [NSApp.mainMenu addItem: robotItem];
     }
     
     if(autoMenu)
@@ -3577,11 +3601,11 @@ END
 
 - (void)clientLoopUpdate
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [robotLock lock];
-    [robot step];
-    [robotLock unlock];
-    [pool release];
+    @autoreleasepool {
+        [robotLock lock];
+        [robot step];
+        [robotLock unlock];
+    }
 }
 
 - (void)sendMessageToRobot: (NSString *)string
@@ -3593,465 +3617,724 @@ END
     [robotLock unlock];
 }    
 
+- (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(NSString *)pass
+{
+  self.joinPortNumber = port;
+  self.joinAddressString = [servStr copy];
+  if (pass) {
+    self.joinPasswordEnabled = YES;
+    self.joinPassword = pass;
+  } else {
+    self.joinPasswordEnabled = NO;
+  }
+}
+
+@synthesize broadcastBonjour = _broadcastBonjour;
+
+- (void)setBroadcastBonjour:(BOOL)broadcastBonjour
+{
+  _broadcastBonjour = broadcastBonjour;
+  if (broadcaster && !_broadcastBonjour) {
+    [self stopPublishing];
+  } else if (server.running && _broadcastBonjour) {
+    [self startPublishing];
+  }
+}
+
+- (IBAction)hostToggleBonjourBroadcast:(nullable id)sender
+{
+  self.broadcastBonjour = !_broadcastBonjour;
+}
+
+- (IBAction)joinToggleBonjourListen:(nullable NSButton*)sender
+{
+  if (listener) {
+    [self stopListening];
+    sender.state = NSOffState;
+  } else {
+    [self startListening];
+    sender.state = NSOnState;
+  }
+}
+
+@end
+
+@implementation GSXBoloController (NetService)
+
+- (void)startPublishing {
+  NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
+  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
+  broadcaster.delegate = self;
+  [self updatePublishedInfo];
+  [broadcaster publish];
+}
+
+- (void)updatePublishedInfo {
+  if (broadcaster) {
+    lockserver();
+    NSMutableDictionary<NSString *, NSData *> *ourTxtDict = [[NSMutableDictionary alloc] initWithCapacity:6];
+    ourTxtDict[XBoloBonjourPlayerName] = [playerNameString dataUsingEncoding:NSUTF8StringEncoding];
+    ourTxtDict[XBoloBonjourMapName] = [hostMapString.lastPathComponent.stringByDeletingPathExtension dataUsingEncoding:NSUTF8StringEncoding];
+    ourTxtDict[XBoloBonjourReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
+    ourTxtDict[XBoloBonjourIsPaused] = server.pause == 0 ? [@"0" dataUsingEncoding:NSASCIIStringEncoding] : [@"1" dataUsingEncoding:NSASCIIStringEncoding];
+    //allowjoin
+    ourTxtDict[XBoloBonjourCanJoin] = server.allowjoin ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
+    int playerCount = 0;
+    for (NSInteger i = 0; i < MAX_PLAYERS; i++) {
+      if (server.players[i].used) {
+        playerCount++;
+      }
+    }
+    unlockserver();
+    ourTxtDict[XBoloBonjourPlayerCount] = [[NSString stringWithFormat:@"%i", playerCount] dataUsingEncoding:NSASCIIStringEncoding];
+    
+    NSData *txtData = [NSNetService dataFromTXTRecordDictionary:ourTxtDict];
+    
+    [broadcaster setTXTRecordData:txtData];
+  }
+}
+
+- (void)stopPublishing {
+  [broadcaster stop];
+  broadcaster = nil;
+}
+
+- (void)startListening {
+  listener = [[NSNetServiceBrowser alloc] init];
+  listener.delegate = self;
+  [listener searchForServicesOfType:XBoloBonjourType inDomain:@""];
+}
+
+- (void)stopListening {
+  [listener stop];
+  listener = nil;
+  [self clearBonjourEntries];
+}
+
+- (void)clearBonjourEntries {
+  NSMutableIndexSet *mutSet = [NSMutableIndexSet indexSet];
+  for (NSInteger i = 0; i < joinTrackerArray.count; i++) {
+    if ([joinTrackerArray[i][GSSourceColumn] isEqual:@(GSServerSourceBonjour)]) {
+      [mutSet addIndex:i];
+    }
+  }
+  [joinTrackerArray removeObjectsAtIndexes:mutSet];
+  [self setJoinTrackerArray:joinTrackerArray];
+}
+
+#define GSNetServiceKey @"NetService"
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
+{
+  [service resolveWithTimeout:5];
+
+  dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    //usleep(500);
+    sleep(1);
+
+    NSString *playerName = @"unknown";
+    NSString *mapName = @"unknown";
+    NSString *passReq = @"?";
+    NSString *paused = @"?";
+    NSString *canJoin = @"?";
+    NSString *playerCount = @"?";
+    NSData *txtData = [service TXTRecordData];
+    if (txtData) {
+      NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: txtData];
+      id val;
+      val = txtDict[XBoloBonjourPlayerName];
+      if (val) {
+        playerName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+      }
+      val = txtDict[XBoloBonjourMapName];
+      if (val) {
+        mapName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+      }
+      val = txtDict[XBoloBonjourReqiresPassword];
+      if (val) {
+        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+        if ([passBool isEqualToString:@"0"]) {
+          passReq = @"No";
+        } else {
+          passReq = @"Yes";
+        }
+      }
+      val = txtDict[XBoloBonjourIsPaused];
+      if (val) {
+        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+        if ([passBool isEqualToString:@"0"]) {
+          paused = @"No";
+        } else {
+          paused = @"Yes";
+        }
+      }
+      val = txtDict[XBoloBonjourCanJoin];
+      if (val) {
+        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+        if ([passBool isEqualToString:@"0"]) {
+          canJoin = @"No";
+        } else {
+          canJoin = @"Yes";
+        }
+      }
+      val = txtDict[XBoloBonjourPlayerCount];
+      if (val) {
+        playerCount = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+      }
+    }
+    
+    if (!service.hostName) {
+      NSLog(@"Did not get host name from \"%@\"!", service);
+      return;
+    }
+    
+    NSDictionary *toSet =
+    @{GSHostPlayerColumn: playerName,
+      GSMapNameColumn: mapName,
+      GSPlayersColumn: playerCount,
+      GSPasswordColumn: passReq,
+      GSAllowJoinColumn: canJoin,
+      GSPausedColumn: paused,
+      GSHostnameColumn: service.hostName,
+      GSPortColumn: [NSString stringWithFormat:@"%ld", (long)service.port],
+      GSSourceColumn: @(GSServerSourceBonjour),
+      GSNetServiceKey: service};
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      NSMutableArray *newTrackArr = self->joinTrackerArray;
+      if (!newTrackArr) {
+        newTrackArr = [[NSMutableArray alloc] initWithCapacity: moreComing ? 2 : 1];
+      }
+      [newTrackArr addObject:toSet];
+      [self setJoinTrackerArray:newTrackArr];
+      service.delegate = self;
+    });
+  });
+}
+
+- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data
+{
+  if (sender == broadcaster) {
+    //We should have been the one to change this...
+    return;
+  }
+  NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: data];
+  NSDictionary *toUpdate;
+  for (NSDictionary *theDict in joinTrackerArray) {
+    if ([theDict[GSNetServiceKey] isEqual:sender]) {
+      toUpdate = theDict;
+      break;
+    }
+  }
+  NSAssert(toUpdate != nil, @"Uh, oops");
+  NSMutableDictionary *mutUpdate = [toUpdate copy];
+  NSInteger idx = [joinTrackerArray indexOfObject:toUpdate];
+  
+  NSData *val;
+  val = txtDict[XBoloBonjourPlayerName];
+  if (val) {
+    mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+  val = txtDict[XBoloBonjourMapName];
+  if (val) {
+    mutUpdate[GSMapNameColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+  val = txtDict[XBoloBonjourReqiresPassword];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSPasswordColumn] = @"No";
+    } else {
+      mutUpdate[GSPasswordColumn] = @"Yes";
+    }
+  }
+  val = txtDict[XBoloBonjourIsPaused];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSPausedColumn] = @"No";
+    } else {
+      mutUpdate[GSPausedColumn] = @"Yes";
+    }
+  }
+  val = txtDict[XBoloBonjourCanJoin];
+  if (val) {
+    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+    if ([passBool isEqualToString:@"0"]) {
+      mutUpdate[GSAllowJoinColumn] = @"No";
+    } else {
+      mutUpdate[GSAllowJoinColumn] = @"Yes";
+    }
+  }
+  val = txtDict[XBoloBonjourPlayerCount];
+  if (val) {
+    mutUpdate[GSPlayersColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
+  }
+
+  [joinTrackerArray replaceObjectAtIndex:idx withObject:[mutUpdate copy]];
+  [self setJoinTrackerArray:joinTrackerArray];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
+{
+  NSDictionary *toRemove;
+  for (NSDictionary *theDict in joinTrackerArray) {
+    if ([theDict[GSNetServiceKey] isEqual:service]) {
+      toRemove = theDict;
+      break;
+    }
+  }
+  
+  [joinTrackerArray removeObject:toRemove];
+  [self setJoinTrackerArray:joinTrackerArray];
+}
+
 @end
 
 void setplayerstatus(int player) {
-  NSAutoreleasePool *pool;
   assert(player >= 0 && player < MAX_PLAYERS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
+  }
 }
 
 void setpillstatus(int pill) {
-  NSAutoreleasePool *pool;
   assert(pill >= 0 && pill < MAX_PILLS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
+  }
 }
 
 void setbasestatus(int base) {
-  NSAutoreleasePool *pool;
   assert(base >= 0 && base < MAX_BASES);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
+  }
 }
 
 void settankstatus() {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
+  }
 }
 
 void playsound(int snd) {
   if (!muteBool) {
     int i;
-    NSAutoreleasePool *pool;
     NSArray *array;
 
-    pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
-    switch (snd) {
-    case kBubblesSound:
-      array = bubblessounds;
-      break;
+      switch (snd) {
+      case kBubblesSound:
+        array = bubblessounds;
+        break;
 
-    case kBuildSound:
-      array = buildsounds;
-      break;
+      case kBuildSound:
+        array = buildsounds;
+        break;
 
-    case kBuilderDeathSound:
-      array = builderdeathsounds;
-      break;
+      case kBuilderDeathSound:
+        array = builderdeathsounds;
+        break;
 
-    case kExplosionSound:
-      array = explosionsounds;
-      break;
+      case kExplosionSound:
+        array = explosionsounds;
+        break;
 
-    case kFarBuildSound:
-      array = farbuildsounds;
-      break;
+      case kFarBuildSound:
+        array = farbuildsounds;
+        break;
 
-    case kFarBuilderDeathSound:
-      array = farbuilderdeathsounds;
-      break;
+      case kFarBuilderDeathSound:
+        array = farbuilderdeathsounds;
+        break;
 
-    case kFarExplosionSound:
-      array = farexplosionsounds;
-      break;
+      case kFarExplosionSound:
+        array = farexplosionsounds;
+        break;
 
-    case kFarHitTankSound:
-      array = farhittanksounds;
-      break;
+      case kFarHitTankSound:
+        array = farhittanksounds;
+        break;
 
-    case kFarHitTerrainSound:
-      array = farhitterrainsounds;
-      break;
+      case kFarHitTerrainSound:
+        array = farhitterrainsounds;
+        break;
 
-    case kFarHitTreeSound:
-      array = farhittreesounds;
-      break;
+      case kFarHitTreeSound:
+        array = farhittreesounds;
+        break;
 
-    case kFarShotSound:
-      array = farshotsounds;
-      break;
+      case kFarShotSound:
+        array = farshotsounds;
+        break;
 
-    case kFarSinkSound:
-      array = farsinksounds;
-      break;
+      case kFarSinkSound:
+        array = farsinksounds;
+        break;
 
-    case kFarSuperBoomSound:
-      array = farsuperboomsounds;
-      break;
+      case kFarSuperBoomSound:
+        array = farsuperboomsounds;
+        break;
 
-    case kFarTreeSound:
-      array = fartreesounds;
-      break;
+      case kFarTreeSound:
+        array = fartreesounds;
+        break;
 
-    case kHitTankSound:
-      array = hittanksounds;
-      break;
+      case kHitTankSound:
+        array = hittanksounds;
+        break;
 
-    case kHitTerrainSound:
-      array = hitterrainsounds;
-      break;
+      case kHitTerrainSound:
+        array = hitterrainsounds;
+        break;
 
-    case kHitTreeSound:
-      array = hittreesounds;
-      break;
+      case kHitTreeSound:
+        array = hittreesounds;
+        break;
 
-    case kMineSound:
-      array = minesounds;
-      break;
+      case kMineSound:
+        array = minesounds;
+        break;
 			
 	case kMsgReceivedSound:
 	  array = msgreceivedsounds;
 	  break;
 
-    case kPillShotSound:
-      array = pillshotsounds;
-      break;
+      case kPillShotSound:
+        array = pillshotsounds;
+        break;
 
-    case kSinkSound:
-      array = sinksounds;
-      break;
+      case kSinkSound:
+        array = sinksounds;
+        break;
 
-    case kSuperBoomSound:
-      array = superboomsounds;
-      break;
+      case kSuperBoomSound:
+        array = superboomsounds;
+        break;
 
-    case kTankShotSound:
-      array = tankshotsounds;
-      break;
+      case kTankShotSound:
+        array = tankshotsounds;
+        break;
 
-    case kTreeSound:
-      array = treesounds;
-      break;
+      case kTreeSound:
+        array = treesounds;
+        break;
 
-    default:
-      array = nil;
-      break;
-    }
-
-    // start playing sound
-    for (i = 0; i < [array count]; i++) {
-      if (![[array objectAtIndex:i] isPlaying]) {
-        [[array objectAtIndex:i] play];
+      default:
+        array = nil;
         break;
       }
-    }
 
-    [pool release];
+      // start playing sound
+      for (i = 0; i < array.count; i++) {
+        if (![array[i] isPlaying]) {
+          [array[i] play];
+          break;
+        }
+      }
+
+    }
   }
 }
 
 void printmessage(int type, const char *text) {
-  NSAutoreleasePool *pool;
   NSDictionary *attr;
   NSAttributedString *attrstring;
 
   assert(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY || type == MSGGAME);
 
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
 
-  switch (type) {
-  case MSGEVERYONE:
-    attr = [[NSDictionary alloc] init];
-    break;
+    switch (type) {
+    case MSGEVERYONE:
+      attr = [[NSDictionary alloc] init];
+      break;
 
-  case MSGALLIES:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor purpleColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGALLIES:
+      attr = @{NSForegroundColorAttributeName: [NSColor purpleColor]};
+      break;
 
-  case MSGNEARBY:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGNEARBY:
+      attr = @{NSForegroundColorAttributeName: [NSColor redColor]};
+      break;
 
-  case MSGGAME:
-    attr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor blueColor], NSForegroundColorAttributeName, nil];
-    break;
+    case MSGGAME:
+      attr = @{NSForegroundColorAttributeName: [NSColor blueColor]};
+      break;
 
-  default:
-    assert(0);
-    break;
-  }
+    default:
+      assert(0);
+      break;
+    }
 
-  NSString *string = [NSString stringWithCString:text encoding:NSUTF8StringEncoding];
-  attrstring = [[NSAttributedString alloc] initWithString:string attributes:attr];
-  [controller performSelectorOnMainThread:@selector(printMessage:) withObject:attrstring waitUntilDone:NO];
+    NSString *string = @(text);
+    attrstring = [[NSAttributedString alloc] initWithString:string attributes:attr];
+    [controller performSelectorOnMainThread:@selector(printMessage:) withObject:attrstring waitUntilDone:NO];
 
-  if(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY) {
+    if(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY) {
 	playsound(kMsgReceivedSound);
 	[controller sendMessageToRobot: string];
+    }
+    
   }
-  
-  [attrstring release];
-  [attr release];
-  [pool release];
 }
 
 void joinprogress(int statuscode, float progress) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (statuscode) {
+    /* status udpates */
+    case kJoinRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Hostname..." waitUntilDone:NO];
+      break;
 
-  switch (statuscode) {
-  /* status udpates */
-  case kJoinRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Hostname..." waitUntilDone:NO];
-    break;
+    case kJoinCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting..." waitUntilDone:NO];
+      break;
 
-  case kJoinCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting..." waitUntilDone:NO];
-    break;
+    case kJoinSENDJOIN:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Client Data" waitUntilDone:NO];
+      break;
 
-  case kJoinSENDJOIN:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Client Data" waitUntilDone:NO];
-    break;
+    case kJoinRECVPREAMBLE:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receiving Server Data" waitUntilDone:NO];
+      break;
 
-  case kJoinRECVPREAMBLE:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receiving Server Data" waitUntilDone:NO];
-    break;
+    case kJoinRECVMAP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Map Data" waitUntilDone:NO];
+      [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:@(progress) waitUntilDone:NO];
+      break;
 
-  case kJoinRECVMAP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Map Data" waitUntilDone:NO];
-    [controller performSelectorOnMainThread:@selector(setJoinProgressIndicator:) withObject:[NSString stringWithFormat:@"%f", progress] waitUntilDone:NO];
-    break;
+    case kJoinSUCCESS:
+      [controller performSelectorOnMainThread:@selector(joinSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinSUCCESS:
-    [controller performSelectorOnMainThread:@selector(joinSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    /* errors */
+    case kJoinEHOSTNOTFOUND:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:@(hstrerror(HOST_NOT_FOUND)) waitUntilDone:NO];
+      break;
 
-  /* errors */
-  case kJoinEHOSTNOTFOUND:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:@(hstrerror(NO_RECOVERY)) waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:@(hstrerror(NO_DATA)) waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(joinDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kJoinETIMEOUT:
+      [controller performSelectorOnMainThread:@selector(joinTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinETIMEOUT:
-    [controller performSelectorOnMainThread:@selector(joinTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(joinConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(joinConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinENETUNREACH:
+      [controller performSelectorOnMainThread:@selector(joinNetUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinENETUNREACH:
-    [controller performSelectorOnMainThread:@selector(joinNetUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(joinHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(joinHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(joinBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(joinBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEDISALLOW:
+      [controller performSelectorOnMainThread:@selector(joinDisallow) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEDISALLOW:
-    [controller performSelectorOnMainThread:@selector(joinDisallow) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBADPASS:
+      [controller performSelectorOnMainThread:@selector(joinBadPassword) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBADPASS:
-    [controller performSelectorOnMainThread:@selector(joinBadPassword) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinESERVERFULL:
+      [controller performSelectorOnMainThread:@selector(joinServerFull) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinESERVERFULL:
-    [controller performSelectorOnMainThread:@selector(joinServerFull) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinETIMELIMIT:
+      [controller performSelectorOnMainThread:@selector(joinTimeLimit) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinETIMELIMIT:
-    [controller performSelectorOnMainThread:@selector(joinTimeLimit) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinEBANNEDPLAYER:
+      [controller performSelectorOnMainThread:@selector(joinBannedPlayer) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinEBANNEDPLAYER:
-    [controller performSelectorOnMainThread:@selector(joinBannedPlayer) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinESERVERERROR:
+      [controller performSelectorOnMainThread:@selector(joinServerError) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinESERVERERROR:
-    [controller performSelectorOnMainThread:@selector(joinServerError) withObject:nil waitUntilDone:NO];
-    break;
+    case kJoinECONNRESET:
+      [controller performSelectorOnMainThread:@selector(joinConnectionReset) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kJoinECONNRESET:
-    [controller performSelectorOnMainThread:@selector(joinConnectionReset) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
 void registercallback(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (status) {
+    case kRegisterRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
+      break;
 
-  switch (status) {
-  case kRegisterRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
-    break;
+    case kRegisterCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
+      break;
 
-  case kRegisterCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
-    break;
+    case kRegisterSENDINGDATA:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Data..." waitUntilDone:NO];
+      break;
 
-  case kRegisterSENDINGDATA:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Sending Data..." waitUntilDone:NO];
-    break;
+    case kRegisterTESTINGTCP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing TCP Port..." waitUntilDone:NO];
+      break;
 
-  case kRegisterTESTINGTCP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing TCP Port..." waitUntilDone:NO];
-    break;
+    case kRegisterTESTINGUDP:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing UDP Port..." waitUntilDone:NO];
+      break;
 
-  case kRegisterTESTINGUDP:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Testing UDP Port..." waitUntilDone:NO];
-    break;
+    case kRegisterSUCCESS:
+      [controller performSelectorOnMainThread:@selector(registerSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterSUCCESS:
-    [controller performSelectorOnMainThread:@selector(registerSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(NO_RECOVERY)) waitUntilDone:NO];
+      break;
+    
+    case kRegisterEHOSTNOTFOUND:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(HOST_NOT_FOUND)) waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
-  
-  case kRegisterEHOSTNOTFOUND:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(NO_DATA)) waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kRegisterETIMEOUT:
+      [controller performSelectorOnMainThread:@selector(registerTrackerTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterETIMEOUT:
-    [controller performSelectorOnMainThread:@selector(registerTrackerTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTDOWN:
+      [controller performSelectorOnMainThread:@selector(registerTrackerHostDown) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTDOWN:
-    [controller performSelectorOnMainThread:@selector(registerTrackerHostDown) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(registerTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(registerTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(registerTrackerBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(registerTrackerBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterETCPCLOSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerTCPPortBlocked) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterETCPCLOSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerTCPPortBlocked) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterEUDPCLOSED:
+      [controller performSelectorOnMainThread:@selector(registerTrackerUDPPortBlocked) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterEUDPCLOSED:
-    [controller performSelectorOnMainThread:@selector(registerTrackerUDPPortBlocked) withObject:nil waitUntilDone:NO];
-    break;
+    case kRegisterECONNRESET:
+      [controller performSelectorOnMainThread:@selector(registerTrackerConnectionReset) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kRegisterECONNRESET:
-    [controller performSelectorOnMainThread:@selector(registerTrackerConnectionReset) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
 void getlisttrackerstatus(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    switch (status) {
+    case kGetListTrackerRESOLVING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
+      break;
 
-  switch (status) {
-  case kGetListTrackerRESOLVING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Resolving Tracker..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerCONNECTING:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerCONNECTING:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Connecting to Tracker..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerGETTINGLIST:
+      [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Game List..." waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerGETTINGLIST:
-    [controller performSelectorOnMainThread:@selector(setJoinProgressStatusTextField:) withObject:@"Receving Game List..." waitUntilDone:NO];
-    break;
+    case kGetListTrackerSUCCESS:
+      [controller performSelectorOnMainThread:@selector(getListTrackerSuccess) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerSUCCESS:
-    [controller performSelectorOnMainThread:@selector(getListTrackerSuccess) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerECONNABORTED:  // error caused by user cancel
+      break;
 
-  case kGetListTrackerECONNABORTED:  // error caused by user cancel
-    break;
+    case kGetListTrackerEPIPE:
+      break;
 
-  case kGetListTrackerEPIPE:
-    break;
+    case kGetListTrackerEHOSTNOTFOUND:  // error from dns lookup
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(HOST_NOT_FOUND)) waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNOTFOUND:  // error from dns lookup
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(HOST_NOT_FOUND) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTNORECOVERY:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(NO_RECOVERY)) waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNORECOVERY:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_RECOVERY) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTNODATA:
+      [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:@(hstrerror(NO_DATA)) waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTNODATA:
-    [controller performSelectorOnMainThread:@selector(trackerDNSError:) withObject:[NSString stringWithCString:hstrerror(NO_DATA) encoding:NSUTF8StringEncoding] waitUntilDone:NO];
-    break;
+    case kGetListTrackerETIMEOUT:  // error caused by other factors
+      [controller performSelectorOnMainThread:@selector(getListTrackerTimeOut) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerETIMEOUT:  // error caused by other factors
-    [controller performSelectorOnMainThread:@selector(getListTrackerTimeOut) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerECONNREFUSED:
+      [controller performSelectorOnMainThread:@selector(getListTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerECONNREFUSED:
-    [controller performSelectorOnMainThread:@selector(getListTrackerConnectionRefused) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTDOWN:
+      [controller performSelectorOnMainThread:@selector(getListTrackerHostDown) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTDOWN:
-    [controller performSelectorOnMainThread:@selector(getListTrackerHostDown) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEHOSTUNREACH:
+      [controller performSelectorOnMainThread:@selector(getListTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEHOSTUNREACH:
-    [controller performSelectorOnMainThread:@selector(getListTrackerHostUnreachable) withObject:nil waitUntilDone:NO];
-    break;
+    case kGetListTrackerEBADVERSION:
+      [controller performSelectorOnMainThread:@selector(getListTrackerBadVersion) withObject:nil waitUntilDone:NO];
+      break;
 
-  case kGetListTrackerEBADVERSION:
-    [controller performSelectorOnMainThread:@selector(getListTrackerBadVersion) withObject:nil waitUntilDone:NO];
-    break;
+    default:
+      assert(0);
+      break;
+    }
 
-  default:
-    assert(0);
-    break;
   }
-
-  [pool release];
 }
 
-int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {
+int setKey(NSMutableDictionary<NSString*,NSString*> *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {
   NSString *key;
   id object;
-  key = [field stringValue];
-  object = [dict objectForKey:key];
+  key = field.stringValue;
+  object = dict[key];
 
   if (object != nil) {
     [[NSAlert alertWithMessageText:@"There is a key conflict." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There is a conflict with %@ and %@.  Change one of them.", object, newObject] beginSheetModalForWindow:win modalDelegate:nil didEndSelector:nil contextInfo:NULL];
     return -1;
   }
   else {
-    [dict setObject:newObject forKey:key];
+    dict[key] = newObject;
     return 0;
   }
 }

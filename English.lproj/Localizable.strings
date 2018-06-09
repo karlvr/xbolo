@@ -1,8 +1,37 @@
-﻿/* No comment provided by engineer. */
-"'%@' and '%@' use the same key.  Please choose a different key for one of them." = "'%@' and '%@' use the same key.  Please choose a different key for one of them.";
+/* No comment provided by engineer. */
+"'%@' and '%@' use the same key.  Please choose a different key for one of them." = "‘%@’ and ‘%@’ use the same key.  Please choose a different key for one of them.";
 
 /* No comment provided by engineer. */
 "Key Conflict" = "Key Conflict";
 
 /* No comment provided by engineer. */
 "OK" = "OK";
+
+
+"Starting..." = "Starting…";
+
+"UPnP Mapping Port..." = "UPnP Mapping Port…";
+
+"Resolving Tracker..." = "Resolving Tracker…";
+
+"Connecting to Tracker..." = "Connecting to Tracker…";
+
+"Sending Data..." = "Sending Data…";
+
+"Testing TCP Port..." = "Testing TCP Port…";
+
+"Testing UDP Port..." = "Testing UDP Port…";
+
+"Receving Game List..." = "Receving Game List…";
+
+// Join Progress
+
+"Resolving Hostname..." = "Resolving Hostname…";
+
+"Connecting..." = "Connecting…";
+
+"Sending Client Data" = "Sending Client Data";
+
+"Receiving Server Data" = "Receiving Server Data";
+
+"Receving Map Data" = "Receving Map Data";

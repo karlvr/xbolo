@@ -78,6 +78,8 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>map</string>
+					<string>bmap</string>
+					<string>bol</string>
 				</array>
 			</dict>
 		</dict>

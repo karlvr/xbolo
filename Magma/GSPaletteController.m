@@ -9,7 +9,7 @@
 #import "GSPaletteController.h"
 
 
-static GSPaletteController *controller = nil;
+static __weak GSPaletteController *controller = nil;
 
 @implementation GSPaletteController
 
@@ -17,7 +17,7 @@ static GSPaletteController *controller = nil;
   return [controller palette];
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
 
   if (self) {
@@ -27,16 +27,8 @@ static GSPaletteController *controller = nil;
   return self;
 }
 
-- (void)dealloc {
-  if (controller == self) {
-    controller = nil;
-  }
-
-  [super dealloc];
-}
-
 - (NSInteger)palette {
-  return [[paletteMatrix selectedCell] tag];
+  return [paletteMatrix.selectedCell tag];
 }
 
 - (NSString *)windowFrameAutosaveName {

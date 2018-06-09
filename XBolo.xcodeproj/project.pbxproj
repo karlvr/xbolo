@@ -43,10 +43,7 @@
 		404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */; };
 		404D43460FF85B9C00589EA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43450FF85B9C00589EA2 /* main.m */; };
 		404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D43470FF85BAF00589EA2 /* XBoloViewController.xib */; };
-		404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 404D43490FF85BBB00589EA2 /* XBolo-Info.plist */; };
 		404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D434C0FF85BCC00589EA2 /* MainWindow.xib */; };
-		4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
-		40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
 		405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
 		405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
 		405E19390FC7E4A6008CDDF0 /* sink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19370FC7E4A5008CDDF0 /* sink.aiff */; };
@@ -121,6 +118,8 @@
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
+		553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
+		553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
 		55712B8B1CF8ED7B00326A27 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712B8A1CF8ED7B00326A27 /* main.m */; };
 		55712B8D1CF8ED7B00326A27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712B8C1CF8ED7B00326A27 /* Assets.xcassets */; };
@@ -131,7 +130,7 @@
 		55712BA51CF8EEEA00326A27 /* GSTileRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA21CF8EEEA00326A27 /* GSTileRect.m */; };
 		55712BA61CF8EEEA00326A27 /* GSXBoloMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA41CF8EEEA00326A27 /* GSXBoloMap.m */; };
 		55712BAB1CF8EF0300326A27 /* GSPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BA81CF8EF0300326A27 /* GSPanel.m */; };
-		55712BAC1CF8EF0300326A27 /* GSXBoloMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAA1CF8EF0300326A27 /* GSXBoloMapView.m */; };
+		55712BAC1CF8EF0300326A27 /* GSXBoloMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAA1CF8EF0300326A27 /* GSXBoloMapView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55712BB11CF8EF1800326A27 /* GSPaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BAE1CF8EF1800326A27 /* GSPaletteController.m */; };
 		55712BB21CF8EF1800326A27 /* GSToolsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712BB01CF8EF1800326A27 /* GSToolsController.m */; };
 		55712C041CF8F00100326A27 /* mouseEyeDropper.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 55712BF61CF8F00100326A27 /* mouseEyeDropper.tiff */; };
@@ -153,8 +152,37 @@
 		55712C321CF903D900326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
 		55712C341CF9064600326A27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		55712C371CF9068700326A27 /* XBolo Quick Look Plug-in.qlgenerator in Embed QuickLook PlugIn */ = {isa = PBXBuildFile; fileRef = 40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55712C821CFA1AC300326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C301CF903D900326A27 /* Images.xcassets */; };
+		55712C841CFA1B0800326A27 /* OS X-only.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55712C831CFA1B0800326A27 /* OS X-only.xcassets */; };
+		55712C851CFA1B9800326A27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
+		55712C861CFA1D9300326A27 /* bubbles.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A060FC81032008CDDF0 /* bubbles.aiff */; };
+		55712C871CFA1D9300326A27 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
+		55712C881CFA1D9300326A27 /* builderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197603E5088801924B91 /* builderdeath.aiff */; };
+		55712C891CFA1D9300326A27 /* explosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197703E5088801924B91 /* explosion.aiff */; };
+		55712C8A1CFA1D9300326A27 /* fbuild.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B70FC91E2F0018390E /* fbuild.aiff */; };
+		55712C8B1CFA1D9300326A27 /* fbuilderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B80FC91E2F0018390E /* fbuilderdeath.aiff */; };
+		55712C8C1CFA1D9300326A27 /* fexplosion.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B90FC91E2F0018390E /* fexplosion.aiff */; };
+		55712C8D1CFA1D9300326A27 /* fhittank.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BA0FC91E2F0018390E /* fhittank.aiff */; };
+		55712C8E1CFA1D9300326A27 /* fhitterrain.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BB0FC91E2F0018390E /* fhitterrain.aiff */; };
+		55712C8F1CFA1D9300326A27 /* fhittree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BC0FC91E2F0018390E /* fhittree.aiff */; };
+		55712C901CFA1D9300326A27 /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
+		55712C911CFA1D9300326A27 /* fsink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BE0FC91E2F0018390E /* fsink.aiff */; };
+		55712C921CFA1D9300326A27 /* fsuperboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BF0FC91E2F0018390E /* fsuperboom.aiff */; };
+		55712C931CFA1D9300326A27 /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
+		55712C941CFA1D9300326A27 /* hittank.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A070FC81032008CDDF0 /* hittank.aiff */; };
+		55712C951CFA1D9300326A27 /* hitterrain.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A080FC81032008CDDF0 /* hitterrain.aiff */; };
+		55712C961CFA1D9300326A27 /* hittree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A090FC81032008CDDF0 /* hittree.aiff */; };
+		55712C971CFA1D9300326A27 /* mine.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19380FC7E4A6008CDDF0 /* mine.aiff */; };
+		55712C981CFA1D9300326A27 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
+		55712C991CFA1D9300326A27 /* sink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19370FC7E4A5008CDDF0 /* sink.aiff */; };
+		55712C9A1CFA1D9300326A27 /* superboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1BF10FC8E26A008CDDF0 /* superboom.aiff */; };
+		55712C9B1CFA1D9300326A27 /* tankshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197803E5088801924B91 /* tankshot.aiff */; };
+		55712C9C1CFA1D9300326A27 /* tree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F553197B03E5088801924B91 /* tree.aiff */; };
 		558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558243611CBD7A63006BDC14 /* MainMenu.xib */; };
 		558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558243641CBD7ABB006BDC14 /* Images.xcassets */; };
+		55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B79B1D2C3E50008A61F6 /* BoloURLHandler.swift */; };
+		55A4B79F1D2C3FBD008A61F6 /* XBolo.scriptSuite in Resources */ = {isa = PBXBuildFile; fileRef = 55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */; };
+		55A4B7A01D2C3FBD008A61F6 /* XBolo.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */; };
 		55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
 		55C4A54F1CBD71C6003A29B0 /* bmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27AAD0FA6A22600647706 /* bmap.c */; };
 		55C4A5501CBD71DE003A29B0 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = FDF3ECCB0736F4DA0070DF96 /* io.c */; };
@@ -165,8 +193,13 @@
 		55C4A5581CBD72FA003A29B0 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE46EC806BD2C37004F79C3 /* vector.c */; };
 		55C4A5591CBD7312003A29B0 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
 		55C4A55A1CBD732D003A29B0 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
+		55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */; };
+		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
+		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
+		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
+		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
-		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; };
+		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
 		C2BFADE21055937F009A1EE7 /* timing.h in Headers */ = {isa = PBXBuildFile; fileRef = C2BFADE01055937F009A1EE7 /* timing.h */; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
@@ -234,63 +267,61 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		35290DD21231E4FD009A579E /* msgreceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = msgreceived.aiff; path = Sounds/msgreceived.aiff; sourceTree = "<group>"; };
+		35290DD21231E4FD009A579E /* msgreceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = msgreceived.aiff; sourceTree = "<group>"; };
 		400A40CC0FDAD9AD00D38BF9 /* tracker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tracker.h; sourceTree = "<group>"; };
 		4014422410ACA4F6008487C8 /* resolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolver.h; sourceTree = "<group>"; };
 		4014422510ACA4F6008487C8 /* resolver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = resolver.c; sourceTree = "<group>"; };
-		402097B70FC91E2F0018390E /* fbuild.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fbuild.aiff; path = Sounds/fbuild.aiff; sourceTree = "<group>"; };
-		402097B80FC91E2F0018390E /* fbuilderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fbuilderdeath.aiff; path = Sounds/fbuilderdeath.aiff; sourceTree = "<group>"; };
-		402097B90FC91E2F0018390E /* fexplosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fexplosion.aiff; path = Sounds/fexplosion.aiff; sourceTree = "<group>"; };
-		402097BA0FC91E2F0018390E /* fhittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhittank.aiff; path = Sounds/fhittank.aiff; sourceTree = "<group>"; };
-		402097BB0FC91E2F0018390E /* fhitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhitterrain.aiff; path = Sounds/fhitterrain.aiff; sourceTree = "<group>"; };
-		402097BC0FC91E2F0018390E /* fhittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fhittree.aiff; path = Sounds/fhittree.aiff; sourceTree = "<group>"; };
-		402097BE0FC91E2F0018390E /* fsink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fsink.aiff; path = Sounds/fsink.aiff; sourceTree = "<group>"; };
-		402097BF0FC91E2F0018390E /* fsuperboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fsuperboom.aiff; path = Sounds/fsuperboom.aiff; sourceTree = "<group>"; };
-		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = ftree.aiff; path = Sounds/ftree.aiff; sourceTree = "<group>"; };
-		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fshot.aiff; path = Sounds/fshot.aiff; sourceTree = "<group>"; };
+		402097B70FC91E2F0018390E /* fbuild.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fbuild.aiff; sourceTree = "<group>"; };
+		402097B80FC91E2F0018390E /* fbuilderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fbuilderdeath.aiff; sourceTree = "<group>"; };
+		402097B90FC91E2F0018390E /* fexplosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fexplosion.aiff; sourceTree = "<group>"; };
+		402097BA0FC91E2F0018390E /* fhittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhittank.aiff; sourceTree = "<group>"; };
+		402097BB0FC91E2F0018390E /* fhitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhitterrain.aiff; sourceTree = "<group>"; };
+		402097BC0FC91E2F0018390E /* fhittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fhittree.aiff; sourceTree = "<group>"; };
+		402097BE0FC91E2F0018390E /* fsink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fsink.aiff; sourceTree = "<group>"; };
+		402097BF0FC91E2F0018390E /* fsuperboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fsuperboom.aiff; sourceTree = "<group>"; };
+		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ftree.aiff; sourceTree = "<group>"; };
+		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fshot.aiff; sourceTree = "<group>"; };
 		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
-		404D425D0FF84FEA00589EA2 /* iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		404D425D0FF84FEA00589EA2 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
-		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSBoloView.h; path = "Mac OS X/GSBoloView.h"; sourceTree = "<group>"; };
-		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSBoloView.m; path = "Mac OS X/GSBoloView.m"; sourceTree = "<group>"; };
-		404D42810FF8525200589EA2 /* GSBuilderStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSBuilderStatusView.h; path = "Mac OS X/GSBuilderStatusView.h"; sourceTree = "<group>"; };
-		404D42820FF8525200589EA2 /* GSBuilderStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSBuilderStatusView.m; path = "Mac OS X/GSBuilderStatusView.m"; sourceTree = "<group>"; };
-		404D42830FF8525200589EA2 /* GSKeyCodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSKeyCodeField.h; path = "Mac OS X/GSKeyCodeField.h"; sourceTree = "<group>"; };
-		404D42840FF8525200589EA2 /* GSKeyCodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSKeyCodeField.m; path = "Mac OS X/GSKeyCodeField.m"; sourceTree = "<group>"; };
-		404D42850FF8525200589EA2 /* GSStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSStatusBar.h; path = "Mac OS X/GSStatusBar.h"; sourceTree = "<group>"; };
-		404D42860FF8525200589EA2 /* GSStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusBar.m; path = "Mac OS X/GSStatusBar.m"; sourceTree = "<group>"; };
-		404D42870FF8525200589EA2 /* GSStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSStatusView.h; path = "Mac OS X/GSStatusView.h"; sourceTree = "<group>"; };
-		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusView.m; path = "Mac OS X/GSStatusView.m"; sourceTree = "<group>"; };
-		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSXBoloController.h; path = "Mac OS X/GSXBoloController.h"; sourceTree = "<group>"; };
-		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSXBoloController.m; path = "Mac OS X/GSXBoloController.m"; sourceTree = "<group>"; };
-		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Main.m; path = "Mac OS X/Main.m"; sourceTree = "<group>"; };
-		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloView.m; path = iPhone/Classes/XBoloView.m; sourceTree = "<group>"; };
-		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloView.h; path = iPhone/Classes/XBoloView.h; sourceTree = "<group>"; };
-		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloViewController.h; path = iPhone/Classes/XBoloViewController.h; sourceTree = "<group>"; };
-		404D43380FF85B6B00589EA2 /* XBoloViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloViewController.m; path = iPhone/Classes/XBoloViewController.m; sourceTree = "<group>"; };
-		404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloAppDelegate.h; path = iPhone/Classes/XBoloAppDelegate.h; sourceTree = "<group>"; };
-		404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloAppDelegate.m; path = iPhone/Classes/XBoloAppDelegate.m; sourceTree = "<group>"; };
-		404D43450FF85B9C00589EA2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iPhone/main.m; sourceTree = "<group>"; };
-		404D43470FF85BAF00589EA2 /* XBoloViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = XBoloViewController.xib; path = iPhone/XBoloViewController.xib; sourceTree = "<group>"; };
-		404D43490FF85BBB00589EA2 /* XBolo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "XBolo-Info.plist"; path = "iPhone/XBolo-Info.plist"; sourceTree = "<group>"; };
-		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBolo_Prefix.pch; path = iPhone/XBolo_Prefix.pch; sourceTree = "<group>"; };
-		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = iPhone/MainWindow.xib; sourceTree = "<group>"; };
-		4050678E109533640037C3D3 /* PillStatIntAllied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntAllied.png; path = Images/PillStatIntAllied.png; sourceTree = "<group>"; };
-		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = pillshot.aiff; path = Sounds/pillshot.aiff; sourceTree = "<group>"; };
-		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = build.aiff; path = Sounds/build.aiff; sourceTree = "<group>"; };
-		405E19370FC7E4A5008CDDF0 /* sink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = sink.aiff; path = Sounds/sink.aiff; sourceTree = "<group>"; };
-		405E19380FC7E4A6008CDDF0 /* mine.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = mine.aiff; path = Sounds/mine.aiff; sourceTree = "<group>"; };
-		405E1A060FC81032008CDDF0 /* bubbles.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = bubbles.aiff; path = Sounds/bubbles.aiff; sourceTree = "<group>"; };
-		405E1A070FC81032008CDDF0 /* hittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hittank.aiff; path = Sounds/hittank.aiff; sourceTree = "<group>"; };
-		405E1A080FC81032008CDDF0 /* hitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hitterrain.aiff; path = Sounds/hitterrain.aiff; sourceTree = "<group>"; };
-		405E1A090FC81032008CDDF0 /* hittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = hittree.aiff; path = Sounds/hittree.aiff; sourceTree = "<group>"; };
-		405E1BF10FC8E26A008CDDF0 /* superboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = superboom.aiff; path = Sounds/superboom.aiff; sourceTree = "<group>"; };
+		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloView.h; sourceTree = "<group>"; };
+		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBoloView.m; sourceTree = "<group>"; };
+		404D42810FF8525200589EA2 /* GSBuilderStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBuilderStatusView.h; sourceTree = "<group>"; };
+		404D42820FF8525200589EA2 /* GSBuilderStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBuilderStatusView.m; sourceTree = "<group>"; };
+		404D42830FF8525200589EA2 /* GSKeyCodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKeyCodeField.h; sourceTree = "<group>"; };
+		404D42840FF8525200589EA2 /* GSKeyCodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSKeyCodeField.m; sourceTree = "<group>"; };
+		404D42850FF8525200589EA2 /* GSStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStatusBar.h; sourceTree = "<group>"; };
+		404D42860FF8525200589EA2 /* GSStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStatusBar.m; sourceTree = "<group>"; };
+		404D42870FF8525200589EA2 /* GSStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStatusView.h; sourceTree = "<group>"; };
+		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStatusView.m; sourceTree = "<group>"; };
+		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSXBoloController.h; sourceTree = "<group>"; };
+		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = GSXBoloController.m; sourceTree = "<group>"; };
+		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Main.m; sourceTree = "<group>"; };
+		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloView.m; sourceTree = "<group>"; };
+		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloView.h; sourceTree = "<group>"; };
+		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloViewController.h; sourceTree = "<group>"; };
+		404D43380FF85B6B00589EA2 /* XBoloViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloViewController.m; sourceTree = "<group>"; };
+		404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBoloAppDelegate.h; sourceTree = "<group>"; };
+		404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloAppDelegate.m; sourceTree = "<group>"; };
+		404D43450FF85B9C00589EA2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		404D43470FF85BAF00589EA2 /* XBoloViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XBoloViewController.xib; sourceTree = "<group>"; };
+		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBolo_Prefix.pch; sourceTree = "<group>"; };
+		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = pillshot.aiff; sourceTree = "<group>"; };
+		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = build.aiff; sourceTree = "<group>"; };
+		405E19370FC7E4A5008CDDF0 /* sink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = sink.aiff; sourceTree = "<group>"; };
+		405E19380FC7E4A6008CDDF0 /* mine.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = mine.aiff; sourceTree = "<group>"; };
+		405E1A060FC81032008CDDF0 /* bubbles.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = bubbles.aiff; sourceTree = "<group>"; };
+		405E1A070FC81032008CDDF0 /* hittank.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hittank.aiff; sourceTree = "<group>"; };
+		405E1A080FC81032008CDDF0 /* hitterrain.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hitterrain.aiff; sourceTree = "<group>"; };
+		405E1A090FC81032008CDDF0 /* hittree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hittree.aiff; sourceTree = "<group>"; };
+		405E1BF10FC8E26A008CDDF0 /* superboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = superboom.aiff; sourceTree = "<group>"; };
 		40644446108250E1008F913C /* terrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = terrain.h; sourceTree = "<group>"; };
 		40644447108250E1008F913C /* terrain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = terrain.c; sourceTree = "<group>"; };
 		4064445B108251E1008F913C /* tiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiles.h; sourceTree = "<group>"; };
 		4064445C108251E1008F913C /* tiles.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tiles.c; sourceTree = "<group>"; };
 		406444621082520D008F913C /* images.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = images.h; sourceTree = "<group>"; };
-		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; };
+		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; usesTabs = 1; };
 		407C8B2A0FDC72CA006A71F7 /* tracker.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tracker.c; sourceTree = "<group>"; };
 		407C8B390FDC739B006A71F7 /* XBolo Tracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XBolo Tracker"; sourceTree = BUILT_PRODUCTS_DIR; };
 		407ECEF91087C371002B43CB /* buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buf.h; sourceTree = "<group>"; };
@@ -313,6 +344,8 @@
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
+		553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjourKeys.m; sourceTree = "<group>"; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XBolo Map Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55712B8A1CF8ED7B00326A27 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -342,17 +375,31 @@
 		55712C231CF8F0D000326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		55712C301CF903D900326A27 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		55712C351CF9065800326A27 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		55712C831CFA1B0800326A27 /* OS X-only.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "OS X-only.xcassets"; path = "Mac OS X/OS X-only.xcassets"; sourceTree = "<group>"; };
 		558243621CBD7A63006BDC14 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		558243641CBD7ABB006BDC14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		55A4B79A1D2C3E50008A61F6 /* Mac OS X-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mac OS X-Bridging-Header.h"; sourceTree = "<group>"; };
+		55A4B79B1D2C3E50008A61F6 /* BoloURLHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = BoloURLHandler.swift; sourceTree = "<group>"; usesTabs = 1; };
+		55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptSuite; path = XBolo.scriptSuite; sourceTree = "<group>"; };
+		55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptTerminology; path = XBolo.scriptTerminology; sourceTree = "<group>"; };
+		55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhone.xcassets; sourceTree = "<group>"; };
+		55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPhone-Bridging-Header.h"; sourceTree = "<group>"; };
+		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
+		55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XBuilderStatusView.swift; sourceTree = "<group>"; };
+		55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = vector_Swift.swift; sourceTree = "<group>"; };
+		55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Standard Autopilot.xbolorobot"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
+		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
-		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
+		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
 		C2BFADE01055937F009A1EE7 /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
 		C2BFADE11055937F009A1EE7 /* timing.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; path = timing.c; sourceTree = "<group>"; usesTabs = 0; };
-		F553197603E5088801924B91 /* builderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = builderdeath.aiff; path = Sounds/builderdeath.aiff; sourceTree = "<group>"; };
-		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = explosion.aiff; path = Sounds/explosion.aiff; sourceTree = "<group>"; };
-		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
-		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tree.aiff; path = Sounds/tree.aiff; sourceTree = "<group>"; };
+		F553197603E5088801924B91 /* builderdeath.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = builderdeath.aiff; sourceTree = "<group>"; };
+		F553197703E5088801924B91 /* explosion.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = explosion.aiff; sourceTree = "<group>"; };
+		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = tankshot.aiff; sourceTree = "<group>"; };
+		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = tree.aiff; sourceTree = "<group>"; };
 		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
 		FD969DCD07441F9C009568EF /* rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rect.h; sourceTree = "<group>"; };
@@ -360,7 +407,7 @@
 		FDA94E5E0736F27D00E4BF82 /* errchk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errchk.c; sourceTree = "<group>"; };
 		FDA94E5F0736F27D00E4BF82 /* errchk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errchk.h; sourceTree = "<group>"; };
 		FDA94E6A0736F2B600E4BF82 /* bolo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bolo.h; sourceTree = "<group>"; };
-		FDA94E6B0736F2B600E4BF82 /* bolo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bolo.c; sourceTree = "<group>"; wrapsLines = 0; };
+		FDA94E6B0736F2B600E4BF82 /* bolo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bolo.c; sourceTree = "<group>"; wrapsLines = 1; };
 		FDB3E70203E620A7000001CA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		FDCF83C4073DAA7C006B13CC /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
 		FDCF83C5073DAA7C006B13CC /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
@@ -412,6 +459,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55F4E50E1D2877BC00CC90E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -420,9 +474,10 @@
 			children = (
 				40A593760FBE78FD00F3E650 /* XBolo.app */,
 				407C8B390FDC739B006A71F7 /* XBolo Tracker */,
-				404D425D0FF84FEA00589EA2 /* iPhone.app */,
+				404D425D0FF84FEA00589EA2 /* XBolo.app */,
 				408187591080C81200E4D4CA /* Dedicated Host */,
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
+				55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -437,6 +492,7 @@
 				408187641080C83B00E4D4CA /* Dedicated Host */,
 				55712B851CF8ED7B00326A27 /* Magma */,
 				55712C2F1CF903A600326A27 /* Shared */,
+				55F4E5121D2877BC00CC90E0 /* Standard Autopilot */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -445,7 +501,7 @@
 			sourceTree = "<group>";
 			usesTabs = 0;
 		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+		29B97315FDCFA39411CA2CEA /* Main XBolo */ = {
 			isa = PBXGroup;
 			children = (
 				FDE46EC706BD2C37004F79C3 /* vector.h */,
@@ -483,7 +539,7 @@
 				4014422410ACA4F6008487C8 /* resolver.h */,
 				4014422510ACA4F6008487C8 /* resolver.c */,
 			);
-			name = "Other Sources";
+			name = "Main XBolo";
 			path = ..;
 			sourceTree = "<group>";
 		};
@@ -491,9 +547,11 @@
 			isa = PBXGroup;
 			children = (
 				558243641CBD7ABB006BDC14 /* Images.xcassets */,
-				F55317CA03E5054901924B91 /* Images */,
+				55712C831CFA1B0800326A27 /* OS X-only.xcassets */,
 				F55317CB03E5055801924B91 /* Sounds */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */,
+				55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */,
 				FD507B6E03EB7E6000360B11 /* Localizable.strings */,
 				FD968C270472BA17000001C9 /* DefaultPreferences.plist */,
 				FDB3E70103E620A7000001CA /* Credits.rtf */,
@@ -519,26 +577,25 @@
 		404D42660FF850B700589EA2 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */,
 				404D43450FF85B9C00589EA2 /* main.m */,
-				404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */,
-				404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */,
-				404D42680FF8510100589EA2 /* Model */,
-				404D42690FF8510800589EA2 /* View */,
-				404D426A0FF8510F00589EA2 /* Controller */,
+				55D1E20E1CFB77BE003C0B00 /* Classes */,
 				404D430D0FF8593700589EA2 /* Resources */,
+				55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */,
 			);
-			name = iPhone;
+			path = iPhone;
 			sourceTree = "<group>";
 		};
 		404D42670FF850D400589EA2 /* Mac OS X */ = {
 			isa = PBXGroup;
 			children = (
 				404D429D0FF852DA00589EA2 /* Main.m */,
+				55A4B79A1D2C3E50008A61F6 /* Mac OS X-Bridging-Header.h */,
 				F55317BA03E4DB8E01924B91 /* Model */,
 				F55317BB03E4DB9601924B91 /* View */,
 				F55317BC03E4DB9B01924B91 /* Controller */,
 			);
-			name = "Mac OS X";
+			path = "Mac OS X";
 			sourceTree = "<group>";
 		};
 		404D42680FF8510100589EA2 /* Model */ = {
@@ -553,6 +610,8 @@
 			children = (
 				404D43100FF85B5700589EA2 /* XBoloView.h */,
 				404D430F0FF85B5700589EA2 /* XBoloView.m */,
+				55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */,
+				55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -560,6 +619,8 @@
 		404D426A0FF8510F00589EA2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */,
+				404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */,
 				404D43370FF85B6B00589EA2 /* XBoloViewController.h */,
 				404D43380FF85B6B00589EA2 /* XBoloViewController.m */,
 			);
@@ -580,9 +641,9 @@
 			children = (
 				404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */,
 				404D434C0FF85BCC00589EA2 /* MainWindow.xib */,
-				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
-				404D43490FF85BBB00589EA2 /* XBolo-Info.plist */,
 				404D43470FF85BAF00589EA2 /* XBoloViewController.xib */,
+				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
+				55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -603,22 +664,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		553F04791D71F253005D0983 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */,
+				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		55712B851CF8ED7B00326A27 /* Magma */ = {
 			isa = PBXGroup;
 			children = (
+				55712B8A1CF8ED7B00326A27 /* main.m */,
 				55712B991CF8EE2B00326A27 /* Classes */,
 				55712B9F1CF8EEA700326A27 /* Resources */,
-				55712B891CF8ED7B00326A27 /* Other Sources */,
 			);
 			path = Magma;
-			sourceTree = "<group>";
-		};
-		55712B891CF8ED7B00326A27 /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				55712B8A1CF8ED7B00326A27 /* main.m */,
-			);
-			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 		55712B961CF8EDF700326A27 /* Controller */ = {
@@ -703,11 +765,34 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97315FDCFA39411CA2CEA /* Main XBolo */,
+				553F04791D71F253005D0983 /* Classes */,
 				55712C301CF903D900326A27 /* Images.xcassets */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
+		};
+		55D1E20E1CFB77BE003C0B00 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				404D42680FF8510100589EA2 /* Model */,
+				404D42690FF8510800589EA2 /* View */,
+				404D426A0FF8510F00589EA2 /* Controller */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		55F4E5121D2877BC00CC90E0 /* Standard Autopilot */ = {
+			isa = PBXGroup;
+			children = (
+				55F4E5131D2877BC00CC90E0 /* Info.plist */,
+				55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */,
+				55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */,
+			);
+			indentWidth = 4;
+			path = "Standard Autopilot";
+			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
 			isa = PBXGroup;
@@ -717,7 +802,7 @@
 				C2765E8E1056031E0007E05A /* GSRobotExternal.h */,
 			);
 			name = Model;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		F55317BB03E4DB9601924B91 /* View */ = {
 			isa = PBXGroup;
@@ -741,16 +826,9 @@
 			children = (
 				404D42990FF8528F00589EA2 /* GSXBoloController.h */,
 				404D429A0FF8528F00589EA2 /* GSXBoloController.m */,
+				55A4B79B1D2C3E50008A61F6 /* BoloURLHandler.swift */,
 			);
 			name = Controller;
-			sourceTree = "<group>";
-		};
-		F55317CA03E5054901924B91 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				4050678E109533640037C3D3 /* PillStatIntAllied.png */,
-			);
-			name = Images;
 			sourceTree = "<group>";
 		};
 		F55317CB03E5055801924B91 /* Sounds */ = {
@@ -781,7 +859,7 @@
 				F553197803E5088801924B91 /* tankshot.aiff */,
 				F553197B03E5088801924B91 /* tree.aiff */,
 			);
-			name = Sounds;
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -837,7 +915,7 @@
 			);
 			name = iPhone;
 			productName = iPhone;
-			productReference = 404D425D0FF84FEA00589EA2 /* iPhone.app */;
+			productReference = 404D425D0FF84FEA00589EA2 /* XBolo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		407C8B380FDC739B006A71F7 /* XBolo Tracker */ = {
@@ -912,16 +990,36 @@
 			productReference = 55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
+		55F4E5101D2877BC00CC90E0 /* Standard Autopilot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55F4E5141D2877BC00CC90E0 /* Build configuration list for PBXNativeTarget "Standard Autopilot" */;
+			buildPhases = (
+				55F4E50D1D2877BC00CC90E0 /* Sources */,
+				55F4E50E1D2877BC00CC90E0 /* Frameworks */,
+				55F4E50F1D2877BC00CC90E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Standard Autopilot";
+			productName = "Standard Autopilot";
+			productReference = 55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
 					55712B831CF8ED7B00326A27 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					55F4E5101D2877BC00CC90E0 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
 				};
@@ -952,6 +1050,7 @@
 				407C8B380FDC739B006A71F7 /* XBolo Tracker */,
 				408187581080C81200E4D4CA /* Dedicated Host */,
 				55712B831CF8ED7B00326A27 /* XBolo Map Editor */,
+				55F4E5101D2877BC00CC90E0 /* Standard Autopilot */,
 			);
 		};
 /* End PBXProject section */
@@ -971,11 +1070,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55712C911CFA1D9300326A27 /* fsink.aiff in Resources */,
 				404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */,
-				404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */,
+				55712C8A1CFA1D9300326A27 /* fbuild.aiff in Resources */,
+				55712C901CFA1D9300326A27 /* fshot.aiff in Resources */,
+				55712C8C1CFA1D9300326A27 /* fexplosion.aiff in Resources */,
+				55712C971CFA1D9300326A27 /* mine.aiff in Resources */,
+				55712C8F1CFA1D9300326A27 /* fhittree.aiff in Resources */,
+				55712C931CFA1D9300326A27 /* ftree.aiff in Resources */,
+				55712C871CFA1D9300326A27 /* build.aiff in Resources */,
+				55712C8E1CFA1D9300326A27 /* fhitterrain.aiff in Resources */,
+				55712C9A1CFA1D9300326A27 /* superboom.aiff in Resources */,
+				55712C8D1CFA1D9300326A27 /* fhittank.aiff in Resources */,
+				55712C921CFA1D9300326A27 /* fsuperboom.aiff in Resources */,
+				55712C951CFA1D9300326A27 /* hitterrain.aiff in Resources */,
+				55712C941CFA1D9300326A27 /* hittank.aiff in Resources */,
+				55712C961CFA1D9300326A27 /* hittree.aiff in Resources */,
+				55712C891CFA1D9300326A27 /* explosion.aiff in Resources */,
+				55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */,
+				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
-				40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */,
+				55712C991CFA1D9300326A27 /* sink.aiff in Resources */,
+				55712C821CFA1AC300326A27 /* Images.xcassets in Resources */,
+				55712C9C1CFA1D9300326A27 /* tree.aiff in Resources */,
 				35290DD41231E4FD009A579E /* msgreceived.aiff in Resources */,
+				55712C981CFA1D9300326A27 /* pillshot.aiff in Resources */,
+				55712C9B1CFA1D9300326A27 /* tankshot.aiff in Resources */,
+				55712C8B1CFA1D9300326A27 /* fbuilderdeath.aiff in Resources */,
+				55712C881CFA1D9300326A27 /* builderdeath.aiff in Resources */,
+				55712C861CFA1D9300326A27 /* bubbles.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,6 +1114,7 @@
 				40A593390FBE78FC00F3E650 /* tree.aiff in Resources */,
 				40A5933A0FBE78FC00F3E650 /* Credits.rtf in Resources */,
 				40A5933B0FBE78FC00F3E650 /* Localizable.strings in Resources */,
+				55712C841CFA1B0800326A27 /* OS X-only.xcassets in Resources */,
 				40A5934C0FBE78FC00F3E650 /* DefaultPreferences.plist in Resources */,
 				558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */,
 				405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */,
@@ -998,6 +1122,7 @@
 				405E19390FC7E4A6008CDDF0 /* sink.aiff in Resources */,
 				405E193A0FC7E4A6008CDDF0 /* mine.aiff in Resources */,
 				405E1A0A0FC81032008CDDF0 /* bubbles.aiff in Resources */,
+				55A4B79F1D2C3FBD008A61F6 /* XBolo.scriptSuite in Resources */,
 				405E1A0B0FC81032008CDDF0 /* hittank.aiff in Resources */,
 				405E1A0C0FC81032008CDDF0 /* hitterrain.aiff in Resources */,
 				405E1A0D0FC81032008CDDF0 /* hittree.aiff in Resources */,
@@ -1010,10 +1135,10 @@
 				402097C70FC91E2F0018390E /* fhittree.aiff in Resources */,
 				402097C90FC91E2F0018390E /* fsink.aiff in Resources */,
 				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
+				55A4B7A01D2C3FBD008A61F6 /* XBolo.scriptTerminology in Resources */,
 				402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */,
 				402097CC0FC91E2F0018390E /* ftree.aiff in Resources */,
 				402098370FC926C00018390E /* fshot.aiff in Resources */,
-				4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */,
 				35290DD31231E4FD009A579E /* msgreceived.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1037,6 +1162,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55F4E50F1D2877BC00CC90E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1048,12 +1180,14 @@
 				404D43110FF85B5700589EA2 /* XBoloView.m in Sources */,
 				404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */,
 				55C4A5561CBD72EF003A29B0 /* list.c in Sources */,
+				55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */,
 				55C4A5551CBD72E9003A29B0 /* bolo.c in Sources */,
 				404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */,
 				404D43460FF85B9C00589EA2 /* main.m in Sources */,
 				408189901082475A00E4D4CA /* bmap_server.c in Sources */,
 				55C4A5591CBD7312003A29B0 /* server.c in Sources */,
 				4081899A1082495800E4D4CA /* bmap_client.c in Sources */,
+				553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
 				55C4A5581CBD72FA003A29B0 /* vector.c in Sources */,
 				55C4A5571CBD72F2003A29B0 /* rect.c in Sources */,
 				40644448108250E1008F913C /* terrain.c in Sources */,
@@ -1064,6 +1198,8 @@
 				406444641082520D008F913C /* images.c in Sources */,
 				407ECEFE1087C371002B43CB /* buf.c in Sources */,
 				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
+				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
+				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1105,10 +1241,12 @@
 			files = (
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
+				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
 				408189921082475A00E4D4CA /* bmap_server.c in Sources */,
 				40A593620FBE78FC00F3E650 /* bolo.c in Sources */,
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
 				40A593610FBE78FC00F3E650 /* errchk.c in Sources */,
+				55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */,
 				404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */,
 				404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */,
 				404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */,
@@ -1151,6 +1289,14 @@
 				55712BAB1CF8EF0300326A27 /* GSPanel.m in Sources */,
 				55712BA51CF8EEEA00326A27 /* GSTileRect.m in Sources */,
 				55712C2E1CF9025D00326A27 /* terrain.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55F4E50D1D2877BC00CC90E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1248,11 +1394,38 @@
 		404367A50F77EFB700B24B31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
 					USE_SIMD_H,
 					"$(inherited)",
 				);
@@ -1263,7 +1436,7 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = NO;
@@ -1272,36 +1445,71 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_SIGN_COMPARE = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				GCC_WARN_UNUSED_LABEL = NO;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		404367A60F77EFB700B24B31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_SIMD_H,
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1309,6 +1517,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1320,18 +1531,21 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
+				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.${PRODUCT_NAME:identifier}";
-				PRODUCT_NAME = iPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
+				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPhone/iPhone-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -1339,6 +1553,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1349,18 +1566,21 @@
 					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
+				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
 					"-framework",
 					UIKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.${PRODUCT_NAME:identifier}";
-				PRODUCT_NAME = iPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
+				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPhone/iPhone-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 2;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1368,6 +1588,7 @@
 		407C8B3C0FDC73BA006A71F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -1383,7 +1604,9 @@
 		407C8B3D0FDC73BA006A71F7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1397,6 +1620,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1413,7 +1637,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1427,6 +1653,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = NO;
@@ -1437,13 +1664,12 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
 				GENERATE_PKGINFO_FILE = NO;
-				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1453,6 +1679,7 @@
 				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1462,16 +1689,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_LDFLAGS = "";
@@ -1479,6 +1707,7 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
 				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1491,8 +1720,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBoloMapEditor;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1535,8 +1763,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBoloMapEditor;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1549,6 +1776,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1567,6 +1795,74 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.XBolo-Map-Editor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		55F4E5151D2877BC00CC90E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Standard Autopilot/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Standard Autopilot/Standard Autopilot-Bridging-Header.h";
+				WRAPPER_EXTENSION = xbolorobot;
+			};
+			name = Debug;
+		};
+		55F4E5161D2877BC00CC90E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Standard Autopilot/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Standard Autopilot/Standard Autopilot-Bridging-Header.h";
+				WRAPPER_EXTENSION = xbolorobot;
 			};
 			name = Release;
 		};
@@ -1623,6 +1919,15 @@
 			buildConfigurations = (
 				55712B921CF8ED7B00326A27 /* Debug */,
 				55712B931CF8ED7B00326A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55F4E5141D2877BC00CC90E0 /* Build configuration list for PBXNativeTarget "Standard Autopilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55F4E5151D2877BC00CC90E0 /* Debug */,
+				55F4E5161D2877BC00CC90E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

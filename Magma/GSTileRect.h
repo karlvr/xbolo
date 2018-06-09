@@ -10,20 +10,23 @@
 #include "bmap.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GSTileRect : NSObject < NSPasteboardReading, NSPasteboardWriting > {
   GSRect rect;
   GSTile *tiles;
 }
 
-+ (id)tileRectWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect;
-+ (id)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect;
-+ (id)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect;
++ (instancetype)tileRectWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect;
++ (instancetype)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect;
++ (instancetype)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect;
 
-- (id)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect;
-- (id)initWithTile:(GSTile)tile inRect:(GSRect)aRect;
-- (id)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect;
+- (instancetype)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTile:(GSTile)tile inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type NS_DESIGNATED_INITIALIZER;
 
-- (GSRect)rect;
+@property (readonly) GSRect rect;
 - (void)setOrigin:(GSPoint)origin;
 - (void)offsetX:(int)dx y:(int)dy;
 
@@ -41,3 +44,5 @@
 - (void)copyToTiles:(GSTile *)aTiles;
 
 @end
+
+NS_ASSUME_NONNULL_END

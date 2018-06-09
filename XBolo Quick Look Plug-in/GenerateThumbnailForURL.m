@@ -4,6 +4,7 @@
 #include <unistd.h>
 #import <Cocoa/Cocoa.h>
 #include "QLSharedStructs.h"
+#include "main.h"
 
 OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thumbnail, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options, CGSize maxSize) {
 @autoreleasepool {
@@ -12,8 +13,8 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
   size_t nbytes;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
-  buf = [data bytes];
-  nbytes = [data length];
+  buf = data.bytes;
+  nbytes = data.length;
 
   CGContextRef context = QLThumbnailRequestCreateContext(thumbnail, CGSizeMake(256, 256), false, NULL);
 
@@ -92,10 +93,10 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     startInfos = (struct BMAP_StartInfo *)(baseInfos + preamble->nbases);
     runData = (void *)(startInfos + preamble->nstarts);
     runDataLen =
-      nbytes - (sizeof(struct BMAP_Preamble) +
+      (int)(nbytes - (sizeof(struct BMAP_Preamble) +
                 preamble->npills*sizeof(struct BMAP_PillInfo) +
                 preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-                preamble->nstarts*sizeof(struct BMAP_StartInfo));
+                preamble->nstarts*sizeof(struct BMAP_StartInfo)));
 
     offset = 0;
 

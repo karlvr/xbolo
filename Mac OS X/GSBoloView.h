@@ -9,7 +9,7 @@
   struct ListNode rectlist;
 
   IBOutlet GSXBoloController *boloController;
-  unsigned int modifiers;
+  NSEventModifierFlags modifiers;
 }
 + (void)refresh;
 + (void)removeView:(GSBoloView *)view;

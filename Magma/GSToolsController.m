@@ -9,7 +9,7 @@
 #import "GSToolsController.h"
 
 
-static GSToolsController *controller = nil;
+static __weak GSToolsController *controller = nil;
 
 @implementation GSToolsController
 
@@ -17,7 +17,7 @@ static GSToolsController *controller = nil;
   return [controller tool];
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
 
   if (self) {
@@ -27,16 +27,8 @@ static GSToolsController *controller = nil;
   return self;
 }
 
-- (void)dealloc {
-  if (controller == self) {
-    controller = nil;
-  }
-
-  [super dealloc];
-}
-
 - (NSInteger)tool {
-  return [[toolMatrix selectedCell] tag];
+  return [toolMatrix.selectedCell tag];
 }
 
 - (NSString *)windowFrameAutosaveName {

@@ -18,6 +18,13 @@
 #include "timing.h"
 #include "resolver.h"
 
+#include <sys/select.h>
+// Ugh, icky hack to get select() working..
+#ifdef __has_feature
+#  if __has_feature(modules)
+#    include <sys/_select.h>
+#  endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -55,43 +62,43 @@ int collisionowner;
 /* static routines */
 /*******************/
 
-static int cleanupclient();
+static int cleanupclient(void);
 
 /* client receive routines */
 
-static int recvsrpause();
-static int recvsrsendmesg();
-static int recvsrdamage();
-static int recvsrgrabtrees();
-static int recvsrbuild();
-static int recvsrgrow();
-static int recvsrflood();
-static int recvsrplacemine();
-static int recvsrdropmine();
-static int recvsrdropboat();
-static int recvsrplayerjoin();
-static int recvsrplayerrejoin();
-static int recvsrplayerexit();
-static int recvsrplayerdisc();
-static int recvsrplayerkick();
-static int recvsrplayerban();
-static int recvsrrepairpill();
-static int recvsrcoolpill();
-static int recvsrcapturepill();
-static int recvsrbuildpill();
-static int recvsrdroppill();
-static int recvsrreplenishbase();
-static int recvsrcapturebase();
-static int recvsrrefuel();
-static int recvsrgrabboat();
-static int recvsrmineack();
-static int recvsrbuilderack();
-static int recvsrsmallboom();
-static int recvsrsuperboom();
-static int recvsrhittank();
-static int recvsrsetalliance();
-static int recvsrtimelimit();
-static int recvsrbasecontrol();
+static int recvsrpause(void);
+static int recvsrsendmesg(void);
+static int recvsrdamage(void);
+static int recvsrgrabtrees(void);
+static int recvsrbuild(void);
+static int recvsrgrow(void);
+static int recvsrflood(void);
+static int recvsrplacemine(void);
+static int recvsrdropmine(void);
+static int recvsrdropboat(void);
+static int recvsrplayerjoin(void);
+static int recvsrplayerrejoin(void);
+static int recvsrplayerexit(void);
+static int recvsrplayerdisc(void);
+static int recvsrplayerkick(void);
+static int recvsrplayerban(void);
+static int recvsrrepairpill(void);
+static int recvsrcoolpill(void);
+static int recvsrcapturepill(void);
+static int recvsrbuildpill(void);
+static int recvsrdroppill(void);
+static int recvsrreplenishbase(void);
+static int recvsrcapturebase(void);
+static int recvsrrefuel(void);
+static int recvsrgrabboat(void);
+static int recvsrmineack(void);
+static int recvsrbuilderack(void);
+static int recvsrsmallboom(void);
+static int recvsrsuperboom(void);
+static int recvsrhittank(void);
+static int recvsrsetalliance(void);
+static int recvsrtimelimit(void);
+static int recvsrbasecontrol(void);
 
 /* client send routines */
 
@@ -112,7 +119,7 @@ static int sendclsmallboom(int x, int y);
 static int sendclsuperboom(int x, int y);
 static int sendclrefuel(int base, int armour, int shells, int mines);
 static int sendclhittank(int player, float dir);
-static int sendclupdate();
+static int sendclupdate(void);
 
 /* builder speed routines */
 
@@ -127,13 +134,13 @@ static int decreasevis(GSRect r);
 static int increasevis(GSRect r);
 
 /* refreshes a changed square */
-static int refresh(int x, int y);
+static int refresh_client(int x, int y);
 
 /* terrain physics */
 static int enter(GSPoint new, GSPoint old);
 
 /* starts the player */
-static int spawn();
+static int spawn(void);
 
 /* game logic routines */
 static int tankmovelogic(int player);
@@ -159,17 +166,17 @@ static int buildercollision(GSPoint square);
 /* kill builder routines */
 static int killsquarebuilder(GSPoint p);
 static int killpointbuilder(Vec2f p);
-static int killbuilder();
+static int killbuilder(void);
 
 /* terrain to tile mapping functions */
 static int tilefor(int x, int y);
 static int fogtilefor(int x, int y, int tile);
 
 /* tank killing routines */
-static int killtank();
-static int drown();
-static int smallboom();
-static int superboom();
+static int killtank(void);
+static int drown(void);
+static int smallboom(void);
+static int superboom(void);
 
 /* pill and base finding routines */
 static int findpill(int x, int y);
@@ -188,11 +195,11 @@ static int getbuildertaskforcommand(int command, GSPoint at);
 /* client pthread routines */
 static void *clientmainthread(void *);
 
-static int dgramclient();
+static int dgramclient(void);
 
-static int joinclient();
+static int joinclient(void);
 
-int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void)) {
+int initclient(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(void), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*loopupdate)(void)) {
   int err;
 
 TRY
@@ -501,7 +508,7 @@ int joinclient() {
   struct JOIN_Preamble joinpreamble;
   struct BOLO_Preamble bolopreamble;
   uint8_t msg;
-  int ret;
+  int ret=0;
   int lookup = -1;
   int gotlock = 0;
 
@@ -1545,7 +1552,7 @@ TRY
       /* fog of war */
       if (client.pills[pill].armour == 0) {
         if (testalliance(client.pills[pill].owner, client.player)) {
-          if (refresh(srdamage->x, srdamage->y)) LOGFAIL(errno)
+          if (refresh_client(srdamage->x, srdamage->y)) LOGFAIL(errno)
           if (decreasevis(GSMakeRect(client.pills[pill].x - 7, client.pills[pill].y - 7, 15, 15))) LOGFAIL(errno)
         }
 
@@ -1616,7 +1623,7 @@ TRY
   }
 
   /* refresh seen tiles */
-  if (refresh(srdamage->x, srdamage->y)) LOGFAIL(errno)
+  if (refresh_client(srdamage->x, srdamage->y)) LOGFAIL(errno)
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRDamage)) == -1) LOGFAIL(errno)
 
@@ -1639,7 +1646,7 @@ TRY
     client.terrain[srgrabtrees->y][srgrabtrees->x] = kGrassTerrain0;
   }
 
-  if (refresh(srgrabtrees->x, srgrabtrees->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srgrabtrees->x, srgrabtrees->y) == -1) LOGFAIL(errno)
 
   if (client.playsound) {
     if (client.fog[srgrabtrees->y][srgrabtrees->x] > 0) {
@@ -1665,7 +1672,7 @@ TRY
   srbuild = (struct SRBuild *)client.recvbuf.ptr;
 
   client.terrain[srbuild->y][srbuild->x] = srbuild->terrain;
-  if (refresh(srbuild->x, srbuild->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srbuild->x, srbuild->y) == -1) LOGFAIL(errno)
 
   if (client.playsound) {
     if (client.fog[srbuild->y][srbuild->x] > 0) {
@@ -1706,7 +1713,7 @@ TRY
     case kSwampTerrain3:
     case kRoadTerrain:
       client.terrain[srgrow->y][srgrow->x] = kForestTerrain;
-      if (refresh(srgrow->x, srgrow->y)) LOGFAIL(errno)
+      if (refresh_client(srgrow->x, srgrow->y)) LOGFAIL(errno)
       break;
 
     case kMinedGrassTerrain:
@@ -1715,7 +1722,7 @@ TRY
     case kMinedSwampTerrain:
     case kMinedRoadTerrain:
       client.terrain[srgrow->y][srgrow->x] = kMinedForestTerrain;
-      if (refresh(srgrow->x, srgrow->y)) LOGFAIL(errno)
+      if (refresh_client(srgrow->x, srgrow->y)) LOGFAIL(errno)
       break;
 
     default:
@@ -1737,7 +1744,7 @@ TRY
   srflood = (struct SRFlood *)client.recvbuf.ptr;
 
   client.terrain[srflood->y][srflood->x] = kRiverTerrain;
-  if (refresh(srflood->x, srflood->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srflood->x, srflood->y) == -1) LOGFAIL(errno)
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRFlood)) == -1) LOGFAIL(errno)
 
@@ -1813,7 +1820,7 @@ TRY
   }
 
   if (!client.hiddenmines || testalliance(client.player, srplacemine->player)) {
-    if (refresh(srplacemine->x, srplacemine->y) == -1) LOGFAIL(errno)
+    if (refresh_client(srplacemine->x, srplacemine->y) == -1) LOGFAIL(errno)
   }
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRPlaceMine)) == -1) LOGFAIL(errno)
@@ -1889,7 +1896,7 @@ TRY
     client.playsound(kMineSound);
   }
 
-  if (refresh(srdropmine->x, srdropmine->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srdropmine->x, srdropmine->y) == -1) LOGFAIL(errno)
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRDropMine)) == -1) LOGFAIL(errno)
 
@@ -1945,7 +1952,7 @@ TRY
     break;
   }
 
-  if (refresh(srdropboat->x, srdropboat->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srdropboat->x, srdropboat->y) == -1) LOGFAIL(errno)
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRDropBoat)) == -1) LOGFAIL(errno)
 
@@ -2208,7 +2215,7 @@ TRY
   client.pills[srrepairpill->pill].armour = srrepairpill->armour;
 
   /* refresh seen tiles */
-  if (refresh(client.pills[srrepairpill->pill].x, client.pills[srrepairpill->pill].y) == -1) LOGFAIL(errno)
+  if (refresh_client(client.pills[srrepairpill->pill].x, client.pills[srrepairpill->pill].y) == -1) LOGFAIL(errno)
 
   if (client.playsound) {
     if (client.fog[client.pills[srrepairpill->pill].y][client.pills[srrepairpill->pill].x] > 0) {
@@ -2336,7 +2343,7 @@ TRY
   }
 
   /* refresh tiles */
-  if (refresh(client.pills[srcapturepill->pill].x, client.pills[srcapturepill->pill].y) == -1) LOGFAIL(errno)
+  if (refresh_client(client.pills[srcapturepill->pill].x, client.pills[srcapturepill->pill].y) == -1) LOGFAIL(errno)
 
   if (client.setpillstatus) {
     client.setpillstatus(srcapturepill->pill);
@@ -2366,7 +2373,7 @@ TRY
   client.pills[srbuildpill->pill].speed = MAXTICKSPERSHOT;
 
   /* refresh seen tiles */
-  if (refresh(srbuildpill->x, srbuildpill->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srbuildpill->x, srbuildpill->y) == -1) LOGFAIL(errno)
 
   /* play sound */
   if (client.playsound) {
@@ -2408,7 +2415,7 @@ TRY
   client.pills[srdroppill->pill].speed = MAXTICKSPERSHOT;
 
   /* refresh seen tiles */
-  if (refresh(srdroppill->x, srdroppill->y) == -1) LOGFAIL(errno)
+  if (refresh_client(srdroppill->x, srdroppill->y) == -1) LOGFAIL(errno)
 
   /* update pill status */
   if (client.setpillstatus) {
@@ -2487,7 +2494,7 @@ TRY
 
   client.bases[srcapturebase->base].owner = srcapturebase->owner;
 
-  if (refresh(client.bases[srcapturebase->base].x, client.bases[srcapturebase->base].y) == -1) LOGFAIL(errno)
+  if (refresh_client(client.bases[srcapturebase->base].x, client.bases[srcapturebase->base].y) == -1) LOGFAIL(errno)
 
   if (client.setbasestatus) {
     client.setbasestatus(srcapturebase->base);
@@ -2537,7 +2544,7 @@ TRY
 
   if (client.terrain[srgrabboat->y][srgrabboat->x] == kBoatTerrain) {
     client.terrain[srgrabboat->y][srgrabboat->x] = kRiverTerrain;
-    if (refresh(srgrabboat->x, srgrabboat->y)) LOGFAIL(errno)
+    if (refresh_client(srgrabboat->x, srgrabboat->y)) LOGFAIL(errno)
   }
 
   if (readbuf(&client.recvbuf, NULL, sizeof(struct SRGrabBoat)) == -1) LOGFAIL(errno)
@@ -2641,7 +2648,7 @@ TRY
   /* turn terrain to crater */
   if (client.terrain[srsmallboom->y][srsmallboom->x] != kSeaTerrain && client.terrain[srsmallboom->y][srsmallboom->x] != kMinedSeaTerrain) {
     client.terrain[srsmallboom->y][srsmallboom->x] = kCraterTerrain;
-    if (refresh(srsmallboom->x, srsmallboom->y)) LOGFAIL(errno)
+    if (refresh_client(srsmallboom->x, srsmallboom->y)) LOGFAIL(errno)
   }
 
   point.x = srsmallboom->x + 0.5;
@@ -2718,19 +2725,19 @@ TRY
   /* turn terrain to crater */
   if (client.terrain[srsuperboom->y][srsuperboom->x] != kSeaTerrain && client.terrain[srsuperboom->y][srsuperboom->x] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y][srsuperboom->x] = kCraterTerrain;
-    if (refresh(srsuperboom->x, srsuperboom->y)) LOGFAIL(errno)
+    if (refresh_client(srsuperboom->x, srsuperboom->y)) LOGFAIL(errno)
   }
   if (client.terrain[srsuperboom->y][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y][srsuperboom->x + 1] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y][srsuperboom->x + 1] = kCraterTerrain;
-    if (refresh(srsuperboom->x + 1, srsuperboom->y)) LOGFAIL(errno)
+    if (refresh_client(srsuperboom->x + 1, srsuperboom->y)) LOGFAIL(errno)
   }
   if (client.terrain[srsuperboom->y + 1][srsuperboom->x] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y + 1][srsuperboom->x] = kCraterTerrain;
-    if (refresh(srsuperboom->x, srsuperboom->y + 1)) LOGFAIL(errno)
+    if (refresh_client(srsuperboom->x, srsuperboom->y + 1)) LOGFAIL(errno)
   }
   if (client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] = kCraterTerrain;
-    if (refresh(srsuperboom->x + 1, srsuperboom->y + 1)) LOGFAIL(errno)
+    if (refresh_client(srsuperboom->x + 1, srsuperboom->y + 1)) LOGFAIL(errno)
   }
 
   /* create explosions */
@@ -2937,7 +2944,7 @@ TRY
 
         for (i = 0; i < client.nbases; i++) {
           if (client.bases[i].owner == srsetalliance->player) {
-            refresh(client.bases[i].x, client.bases[i].y);
+            refresh_client(client.bases[i].x, client.bases[i].y);
 
             if (client.setbasestatus) {
               client.setbasestatus(i);
@@ -2947,7 +2954,7 @@ TRY
 
         for (i = 0; i < client.npills; i++) {
           if (client.pills[i].owner == srsetalliance->player) {
-            refresh(client.pills[i].x, client.pills[i].y);
+            refresh_client(client.pills[i].x, client.pills[i].y);
 
             /* fog of war */
             if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
@@ -2981,7 +2988,7 @@ TRY
               client.setbasestatus(i);
             }
 
-            refresh(client.bases[i].x, client.bases[i].y);
+            refresh_client(client.bases[i].x, client.bases[i].y);
           }
         }
 
@@ -2989,7 +2996,7 @@ TRY
           if (client.pills[i].owner == srsetalliance->player) {
             /* fog of war */
             if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
-              if (refresh(client.pills[i].x, client.pills[i].y)) LOGFAIL(errno)
+              if (refresh_client(client.pills[i].x, client.pills[i].y)) LOGFAIL(errno)
               if (decreasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
@@ -4464,27 +4471,27 @@ TRY
   if (mag2f(sub2f(make2f(x + 0.5, y + 0.5), client.players[client.player].tank)) <= 2.0) {
     switch (client.terrain[y][x]) {
     case kMinedSwampTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedCraterTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedRoadTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedForestTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedRubbleTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedGrassTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refresh_client(x, y)) LOGFAIL(errno)
       break;
 
     default:
@@ -5125,7 +5132,7 @@ END
 
 int shellcollisiontest(struct Shell *shell, int player) {
   GSPoint p;
-  int pill, base, ret;
+  int pill, base, ret=0;
   struct Explosion *explosion = NULL;
 
   assert(shell != NULL);
@@ -6269,7 +6276,7 @@ int fogtilefor(int x, int y, int tile) {
   }
 }
 
-int refresh(int x, int y) {
+int refresh_client(int x, int y) {
   int i, j;
   GSRect rect;
   int image;
@@ -6344,7 +6351,7 @@ TRY
 
         for (j = 0; j < client.nbases; j++) {
           if (client.bases[j].owner == i) {
-            refresh(client.bases[j].x, client.bases[j].y);
+            refresh_client(client.bases[j].x, client.bases[j].y);
 
             if (client.setbasestatus) {
               client.setbasestatus(j);
@@ -6359,7 +6366,7 @@ TRY
               if (increasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
-            refresh(client.pills[j].x, client.pills[j].y);
+            refresh_client(client.pills[j].x, client.pills[j].y);
 
             if (client.setpillstatus) {
               client.setpillstatus(j);
@@ -6419,7 +6426,7 @@ TRY
 
         for (j = 0; j < client.nbases; j++) {
           if (client.bases[j].owner == i) {
-            refresh(client.bases[j].x, client.bases[j].y);
+            refresh_client(client.bases[j].x, client.bases[j].y);
             if (client.setbasestatus) {
               client.setbasestatus(j);
             }
@@ -6430,7 +6437,7 @@ TRY
           if (client.pills[j].owner == i) {
             /* fog of war */
             if (client.pills[j].armour != ONBOARD) {
-              if (refresh(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
+              if (refresh_client(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
 
               if (client.pills[j].armour > 0) {
                 if (decreasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)

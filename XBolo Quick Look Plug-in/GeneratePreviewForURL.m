@@ -5,6 +5,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #import <Cocoa/Cocoa.h>
 #include "QLSharedStructs.h"
+#include "main.h"
 
 OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options) {
 @autoreleasepool {
@@ -13,8 +14,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
   size_t nbytes;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
-  buf = [data bytes];
-  nbytes = [data length];
+  buf = data.bytes;
+  nbytes = data.length;
 
   CGContextRef context = QLPreviewRequestCreateContext(preview, CGSizeMake(256, 256), false, NULL);
 
@@ -93,10 +94,10 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     startInfos = (struct BMAP_StartInfo *)(baseInfos + preamble->nbases);
     runData = (void *)(startInfos + preamble->nstarts);
     runDataLen =
-      nbytes - (sizeof(struct BMAP_Preamble) +
+      (int)(nbytes - (sizeof(struct BMAP_Preamble) +
                 preamble->npills*sizeof(struct BMAP_PillInfo) +
                 preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-                preamble->nstarts*sizeof(struct BMAP_StartInfo));
+                preamble->nstarts*sizeof(struct BMAP_StartInfo)));
 
     offset = 0;
 

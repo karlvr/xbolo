@@ -35,6 +35,38 @@
 #define NEW_DATA 1
 #define THREAD_EXITED 2
 
++ (NSArray<NSURL*>*) searchURLs
+{
+    static NSArray<NSURL*> *savedURLs = nil;
+    if (savedURLs == nil) {
+        @autoreleasepool {
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSMutableArray<NSURL*> *tmpURLs = [[NSMutableArray alloc] initWithCapacity:5];
+            NSURL *tmpURL = [NSBundle mainBundle].builtInPlugInsURL;
+            if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                [tmpURLs addObject:tmpURL];
+            }
+            tmpURL = [[NSBundle mainBundle].bundleURL URLByDeletingLastPathComponent];
+            tmpURL = [tmpURL URLByAppendingPathComponent:@"Robots" isDirectory:YES];
+            if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                [tmpURLs addObject:tmpURL];
+            }
+            NSArray *libURLs = [fm URLsForDirectory:NSApplicationSupportDirectory inDomains:NSAllDomainsMask & ~NSSystemDomainMask];
+            for (NSURL *url in libURLs) {
+                tmpURL = [url URLByAppendingPathComponent:@"XBolo"];
+                tmpURL = [tmpURL URLByAppendingPathComponent:@"Robots" isDirectory:YES];
+                if (tmpURL && [tmpURL checkResourceIsReachableAndReturnError:NULL]) {
+                    [tmpURLs addObject:tmpURL];
+                }
+            }
+            
+            savedURLs = [tmpURLs copy];
+            [tmpURLs release];
+        }
+    }
+    return [[savedURLs retain] autorelease];
+}
+
 + (NSArray *)availableRobots
 {
     static NSMutableArray *robots = nil;
@@ -42,22 +74,19 @@
     {
         robots = [NSMutableArray array];
         
-        NSString *myPath = [[NSBundle mainBundle] bundlePath];
-        NSString *enclosingPath = [myPath stringByDeletingLastPathComponent];
+        NSString *myPath = [NSBundle mainBundle].bundlePath;
+        NSString *enclosingPath = myPath.stringByDeletingLastPathComponent;
         NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
-        NSEnumerator *enumerator = [[[NSFileManager defaultManager] directoryContentsAtPath:botsPath] objectEnumerator];
-        NSString *name;
-        
+        NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:botsPath] includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
+
         LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);
         
-        while((name = [enumerator nextObject]))
+        for (NSURL *fullURL in enumerator)
         {
-            LOG(@"availableRobots: checking file %@", name);
-            NSString *fullPath = [botsPath stringByAppendingPathComponent: name];
-            LOG(@"availableRobots: full path %@", fullPath);
-            if([fullPath hasSuffix: @".xbolorobot"])
+            LOG(@"availableRobots: checking file %@", fullURL);
+            if([fullURL.pathExtension compare: @"xbolorobot"] == NSOrderedSame)
             {
-                NSBundle *bundle = [NSBundle bundleWithPath: fullPath];
+                NSBundle *bundle = [NSBundle bundleWithURL:fullURL];
                 LOG(@"availableRobots: bundle:%@", bundle);
                 if([bundle load])
                 {
@@ -70,10 +99,9 @@
     return robots;
 }
 
-- (id)initWithBundle: (NSBundle *)bundle
+- (instancetype)initWithBundle: (NSBundle *)bundle
 {
-    if((self = [self init]))
-    {
+    if((self = [self init])) {
         _bundle = [bundle retain];
         _condLock = [[NSConditionLock alloc] initWithCondition: NO_NEW_DATA];
         _messages = [[NSMutableArray alloc] init];
@@ -85,24 +113,36 @@
 {
     [self unload];
     [_bundle release];
+    [_messages release];
+    [_condLock release];
     
     [super dealloc];
 }
 
 - (NSString *)name
 {
-    return [[_bundle bundlePath] lastPathComponent];
+    return _bundle.bundlePath.lastPathComponent;
+}
+
+- (BOOL)loadWithError:(NSError**)error
+{
+    NSError *err = [self load];
+    if (err) {
+        if (error) {
+            *error = err;
+        }
+        return NO;
+    }
+    return YES;
 }
 
 - (NSError *)load
 {
-    Class class = [_bundle principalClass];
+    Class class = _bundle.principalClass;
     if([class minimumRobotInterfaceVersionRequired] > GS_ROBOT_CURRENT_INTERFACE_VERSION)
     {
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"The robot could not be loaded because it requires a newer version of XBolo.", NSLocalizedDescriptionKey,
-                                  @"Check to see if a newer version of XBolo is available, and try again.", NSLocalizedRecoverySuggestionErrorKey,
-                                  nil];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The robot could not be loaded because it requires a newer version of XBolo.",
+                                  NSLocalizedRecoverySuggestionErrorKey: @"Check to see if a newer version of XBolo is available, and try again."};
         return [NSError errorWithDomain: NSPOSIXErrorDomain code: EINVAL userInfo: userInfo];
     }
     
@@ -239,7 +279,7 @@
                        gameState.builderscount * sizeof(*gameState.builders));
     
     NSMutableData *data = [NSMutableData dataWithLength: totalLength];
-    void *ptr = [data mutableBytes];
+    void *ptr = data.mutableBytes;
     memcpy(ptr, &gameState, sizeof(gameState));
     struct GSRobotGameState *gsp = ptr;
     ptr += sizeof(gameState);
@@ -266,7 +306,7 @@
     ptr += size;
     
     [_condLock lock];
-    if([_condLock condition] == THREAD_EXITED)
+    if(_condLock.condition == THREAD_EXITED)
     {
         [_condLock unlock];
     }
@@ -286,9 +326,7 @@
 - (void)_watcherThread
 {
     while(1)
-    {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
+    @autoreleasepool {
         [_condLock lockWhenCondition: NEW_DATA];
         if(_halt)
         {
@@ -299,12 +337,12 @@
         NSMutableData *gsdata = [_gamestateData retain];
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
-        ((struct GSRobotGameState *)[gsdata mutableBytes])->messages = messages;
+        ((struct GSRobotGameState *)gsdata.mutableBytes)->messages = (CFArrayRef)messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
         
-        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)[gsdata bytes] freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
+        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)gsdata.mutableBytes freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
         
         [gsdata release];
         [messages release];
@@ -328,15 +366,14 @@
             buildercommand(commandState.buildercommand, p);
         }
         
-        if([commandState.playersToAllyWith count])
+        if(((NSArray*)commandState.playersToAllyWith).count)
         {
             lockclient();
             uint16_t players = 0;
-            int i, j;
-            for(j = 0; j < [commandState.playersToAllyWith count]; j++)
+            int i;
+            for(NSString *name in ((NSArray*)commandState.playersToAllyWith))
             {
-                NSString *name = [commandState.playersToAllyWith objectAtIndex: j];
-                const char *cname = [name UTF8String];
+                const char *cname = name.UTF8String;
                 for(i = 0; i < MAX_PLAYERS; i++)
                 {
                     if(client.players[i].connected)
@@ -348,8 +385,6 @@
                 requestalliance(players);
             unlockclient();
         }
-        
-        [pool release];
     }
 }
 

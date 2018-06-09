@@ -17,7 +17,7 @@
 @synthesize state;
 @synthesize dir;
 
-- (id)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
 
   if (self) {
@@ -65,7 +65,7 @@
       NSAffineTransform *t;
       NSRect bounds;
 
-      bounds = [self bounds];
+      bounds = self.bounds;
       [[NSColor whiteColor] set];
       p = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-2.0, -2.0, 4.0, 4.0)];
       [p moveToPoint:NSMakePoint(bounds.size.width*0.25, bounds.size.height*0.125)];
@@ -85,7 +85,7 @@
  
   case GSBuilderStatusViewStateDead:
     [[NSColor colorWithPatternImage:[NSImage imageNamed:@"StipplePattern"]] set];
-    [[NSBezierPath bezierPathWithOvalInRect:[self bounds]] fill];
+    [[NSBezierPath bezierPathWithOvalInRect:self.bounds] fill];
     break;
 
   case GSBuilderStatusViewStateReady:

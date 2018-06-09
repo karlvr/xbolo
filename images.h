@@ -314,7 +314,7 @@
 
 typedef uint16_t GSImage;
 
-/* returns the image tile for x, y */
-GSTile mapImage(GSTile tiles[][256], int x, int y);
+/** returns the image tile for x, y */
+GSImage mapImage(GSTile tiles[][256], int x, int y);
 
 #endif  /* __IMAGES__ */
