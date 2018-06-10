@@ -36,15 +36,15 @@ class XStatusBar: UIView {
   
   // Only override drawRect: if you perform custom drawing.
   // An empty implementation adversely affects performance during animation.
-  override func drawRect(rect: CGRect) {
+  override func draw(_ rect: CGRect) {
     switch barType {
     case .Horizontal:
-      UIColor.greenColor().set()
+      UIColor.green.set()
       let path = UIBezierPath(rect: CGRect(x: 0.0, y: 0.0, width: self.frame.width * value, height: self.frame.height))
       path.fill()
       
     case .Vertical:
-      UIColor.greenColor().set()
+      UIColor.green.set()
       let path = UIBezierPath(rect: CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height * value))
       path.fill()
     }

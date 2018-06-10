@@ -30,27 +30,27 @@ class XBuilderStatusView : UIView {
     }
   }
   
-  override func drawRect(dirtyRect: CGRect) {
+  override func draw(_ dirtyRect: CGRect) {
     switch state {
     case .Direction:
       let bounds = self.bounds;
-      UIColor.whiteColor().set()
-      let p = UIBezierPath(ovalInRect: CGRect(x: -2, y: -2, width: 4, height: 4))
-      p.moveToPoint(CGPoint(x: bounds.size.width*0.25, y: bounds.size.height*0.125))
-      p.addLineToPoint(CGPoint(x: bounds.size.width*0.5, y: 0.0))
-      p.addLineToPoint(CGPoint(x: bounds.size.width*0.25, y: -bounds.size.height*0.125))
-      p.moveToPoint(.zero)
-      p.addLineToPoint(CGPoint(x: bounds.size.width*0.5, y: 0.0))
+      UIColor.white.set()
+      let p = UIBezierPath(ovalIn: CGRect(x: -2, y: -2, width: 4, height: 4))
+      p.move(to: CGPoint(x: bounds.size.width*0.25, y: bounds.size.height*0.125))
+      p.addLine(to: CGPoint(x: bounds.size.width*0.5, y: 0.0))
+      p.addLine(to: CGPoint(x: bounds.size.width*0.25, y: -bounds.size.height*0.125))
+      p.move(to: .zero)
+      p.addLine(to: CGPoint(x: bounds.size.width*0.5, y: 0.0))
       
-      var t = CGAffineTransformMakeTranslation(bounds.size.width*0.5, bounds.size.height*0.5)
-      t = CGAffineTransformRotate(t, direction)
-      p.applyTransform(t)
+      var t = CGAffineTransform(translationX: bounds.size.width*0.5, y: bounds.size.height*0.5)
+      t = t.rotated(by: direction)
+      p.apply(t)
       p.stroke()
       p.fill()
       
     case .Dead:
       UIColor(patternImage: UIImage(named: "StipplePattern")!).set()
-      UIBezierPath(ovalInRect: bounds).fill()
+      UIBezierPath(ovalIn: bounds).fill()
       break;
       
     case .Ready:
