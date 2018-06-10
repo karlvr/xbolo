@@ -8,6 +8,13 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include <pthread.h>
+#include <sys/select.h>
+// Ugh, icky hack to get select() working...
+#ifdef __has_feature
+#  if __has_feature(modules)
+#    include <sys/_select.h>
+#  endif
+#endif
 #include "tracker.h"
 #include "list.h"
 #include "errchk.h"

@@ -46,7 +46,7 @@ static void parsecommandline(int argc, const char *argv[]);
 static void usage(const char *arg);
 static ssize_t readfile(const char *path, void **buf);
 static void registercallback(int status);
-static int commandloop();
+static int commandloop(void);
 
 /* command line options */
 const char *mappath = DEFAULT_MAPPATH;

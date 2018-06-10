@@ -19,7 +19,7 @@
 #include "resolver.h"
 
 #include <sys/select.h>
-// Ugh, icky hack to get select() working..
+// Ugh, icky hack to get select() working...
 #ifdef __has_feature
 #  if __has_feature(modules)
 #    include <sys/_select.h>
