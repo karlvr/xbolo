@@ -182,8 +182,6 @@ Vec2i16 make2i16(int16_t x, int16_t y) {
   return r;
 }
 
-#if !(defined(USE_SIMD_H) && USE_SIMD_H)
-
 /*
  * r = -v
  */
@@ -242,7 +240,6 @@ Vec2i16 div2i16(Vec2i16 v, int16_t s) {
   r.y = v.y/s;
   return r;
 }
-#endif
 
 /*
  * r = v1*v2

@@ -29,12 +29,12 @@ struct Vec2i32 {
   int32_t x;
   int32_t y;
 } ;
+#endif
 
 struct Vec2i16 {
   int16_t x;
   int16_t y;
 } ;
-#endif
 
 struct Vec2i8 {
   int8_t x;
@@ -49,12 +49,11 @@ struct Vec2u8 {
 #if defined(USE_SIMD_H) && USE_SIMD_H
 typedef vector_float2 Vec2f;
 typedef vector_int2 Vec2i32;
-typedef vector_short2 Vec2i16;
 #else
 typedef struct Vec2f Vec2f;
 typedef struct Vec2i32 Vec2i32;
-typedef struct Vec2i16 Vec2i16;
 #endif
+typedef struct Vec2i16 Vec2i16;
 typedef struct Vec2i8 Vec2i8;
 
 float u16tof(uint16_t s);
@@ -112,19 +111,11 @@ Vec2i32 scale2i32(uint8_t dir, int32_t scale);
 Vec2i16 c2i32to2i16(Vec2i32 v);
 
 Vec2i16 make2i16(int16_t x, int16_t y);
-#if defined(USE_SIMD_H) && USE_SIMD_H
-#define neg2i16(v) -(v)
-#define add2i16(v1, v2) (v1 + v2)
-#define sub2i16(v1, v2) (v1 - v2)
-#define mul2i16(v1, s) (v1 * s)
-#define div2i16(v1, s) (v1 / s)
-#else
 Vec2i16 neg2i16(Vec2i16 v);
 Vec2i16 add2i16(Vec2i16 v1, Vec2i16 v2);
 Vec2i16 sub2i16(Vec2i16 v1, Vec2i16 v2);
 Vec2i16 mul2i16(Vec2i16 v, int16_t s);
 Vec2i16 div2i16(Vec2i16 v, int16_t s);
-#endif
 int16_t dot2i16(Vec2i16 v1, Vec2i16 v2);
 int16_t mag2i16(Vec2i16 v);
 Vec2i16 prj2i16(Vec2i16 v1, Vec2i16 v2);
