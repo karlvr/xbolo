@@ -23,12 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _halt;
 }
 
-+ (NSArray<GSRobot*> *)availableRobots;
-+ (NSArray<NSURL*> *)searchURLs;
-#if __has_feature(objc_class_property)
 @property (class, copy, readonly) NSArray<GSRobot*> *availableRobots;
 @property (class, copy, readonly) NSArray<NSURL*> *searchURLs;
-#endif
 
 @property (readonly) NSString *name;
 - (NSString *)name;

@@ -165,10 +165,7 @@ struct GSRobotCommandState
 NS_SWIFT_NAME(GSRobotProtocol)
 @protocol GSRobot <NSObject>
 
-+ (int)minimumRobotInterfaceVersionRequired;
-#if __has_feature(objc_class_property)
 @property (class, readonly) int minimumRobotInterfaceVersionRequired;
-#endif
 - (instancetype)init; // designated initializer
 - (struct GSRobotCommandState)stepXBoloRobotWithGameState: (const struct GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
 
