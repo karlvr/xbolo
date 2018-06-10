@@ -29,7 +29,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 - (void)refreshTiles;
 - (void)drawSprites;
 - (void)drawSprite:(int)tile at:(Vec2f)point fraction:(CGFloat)fraction;
-- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary *)attr;
+- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
 - (void)dirtyTiles:(NSRect)rect;
 @end
 
@@ -461,7 +461,7 @@ END
   }
 }
 
-- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary *)attr {
+- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr {
   NSString *string;
   NSRect rect;
 

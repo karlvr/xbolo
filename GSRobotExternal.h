@@ -77,10 +77,15 @@ enum {
     kUnknownTile,
 } ;
 
+#if defined(USE_SIMD_H) && USE_SIMD_H
+#include <simd/simd.h>
+typedef vector_float2 Vec2f;
+#else
 typedef struct Vec2f {
     float x;
     float y;
 } Vec2f;
+#endif
 #endif
 
 struct Tank
@@ -95,7 +100,7 @@ struct Tank
 #endif
 struct Shell
 {
-    float direction; // radians
+    float direction; //!< radians
     Vec2f position;
 };
 
@@ -108,11 +113,11 @@ struct Builder
 struct GSRobotGameState
 {
     int worldwidth, worldheight;
-    int *visibletiles; // worldwidth * worldheight elements, row major
+    int *visibletiles; //!< worldwidth * worldheight elements, row major
     
     Vec2f tankposition;
     Vec2f gunsightposition;
-    int tankdirection; // 0-15
+    int tankdirection; //!< 0-15
     int tankarmor;
     int tankshells;
     int tankmines;
@@ -120,8 +125,8 @@ struct GSRobotGameState
     int tankhasboat;
     int tankpillcount;
     
-    int builderstate; // 0 = dead, 1 = in tank, 2 = out of tank
-    float builderdirection; // radians, only valid if builderstate is out of tank
+    int builderstate; //!< 0 = dead, 1 = in tank, 2 = out of tank
+    float builderdirection; //!< radians, only valid if builderstate is out of tank
     
     int tankscount;
     struct Tank *tanks;
@@ -132,7 +137,7 @@ struct GSRobotGameState
     int builderscount;
     struct Builder *builders;
     
-    CFArrayRef messages; // array of NSString, may be nil if no messages
+    CFArrayRef messages; //!< array of NSString, may be nil if no messages
 };
 #if INTERNAL_GSROBOT_INCLUDE
 #undef Shell
@@ -152,7 +157,7 @@ struct GSRobotCommandState
     int buildercommand;
     int builderx, buildery;
     
-    CFArrayRef playersToAllyWith; // NSStrings containing player names
+    CFArrayRef playersToAllyWith; //!< NSStrings containing player names
 };
 
 #define GS_ROBOT_CURRENT_INTERFACE_VERSION 1

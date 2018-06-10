@@ -76,13 +76,11 @@ Vec2f mul2f(Vec2f v, float s) {
 Vec2f div2f(Vec2f v, float s) {
   return make2f(v.x/s, v.y/s);
 }
-#endif
 
 float dot2f(Vec2f v1, Vec2f v2) {
   return v1.x*v2.x + v1.y*v2.y;
 }
 
-#if !(defined(USE_SIMD_H) && USE_SIMD_H)
 float mag2f(Vec2f v) {
   return sqrt(dot2f(v, v));
 }
@@ -184,6 +182,8 @@ Vec2i16 make2i16(int16_t x, int16_t y) {
   return r;
 }
 
+#if !(defined(USE_SIMD_H) && USE_SIMD_H)
+
 /*
  * r = -v
  */
@@ -242,6 +242,7 @@ Vec2i16 div2i16(Vec2i16 v, int16_t s) {
   r.y = v.y/s;
   return r;
 }
+#endif
 
 /*
  * r = v1*v2
