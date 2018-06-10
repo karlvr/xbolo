@@ -2884,7 +2884,8 @@ TRY
   srhittank->dir = ntohl(srhittank->dir);
 
   client.players[client.player].boat = 0;
-  client.players[client.player].kickdir = *((float *)&srhittank->dir);
+  float tmpFloat = srhittank->dir;
+  client.players[client.player].kickdir = *((float *)&tmpFloat);
   client.players[client.player].kickspeed = KICKFORCE;
 
   client.armour -= 5;
@@ -3530,16 +3531,20 @@ TRY
   }
 
   clupdate.hdr.tankstatus = client.players[client.player].dead ? kTankDead : (client.players[client.player].boat ? kTankOnBoat : kTankNormal);
-  clupdate.hdr.tankx = htonl(*((uint32_t *)&client.players[client.player].tank.x));
-  clupdate.hdr.tanky = htonl(*((uint32_t *)&client.players[client.player].tank.y));
+  float tmpVec = client.players[client.player].tank.x;
+  clupdate.hdr.tankx = htonl(*((uint32_t *)&tmpVec));
+  tmpVec = client.players[client.player].tank.y;
+  clupdate.hdr.tanky = htonl(*((uint32_t *)&tmpVec));
   clupdate.hdr.tankspeed = htonl(*((uint32_t *)&client.players[client.player].speed));
   clupdate.hdr.tankturnspeed = htonl(*((uint32_t *)&client.players[client.player].turnspeed));
   clupdate.hdr.tankkickdir = htonl(*((uint32_t *)&client.players[client.player].kickdir));
   clupdate.hdr.tankkickspeed = htonl(*((uint32_t *)&client.players[client.player].kickspeed));
   clupdate.hdr.tankdir = (uint8_t)(client.players[client.player].dir*(FWIDTH/k2Pif));
   clupdate.hdr.builderstatus = client.players[client.player].builderstatus;
-  clupdate.hdr.builderx = htonl(*((uint32_t *)&client.players[client.player].builder.x));
-  clupdate.hdr.buildery = htonl(*((uint32_t *)&client.players[client.player].builder.y));
+  tmpVec = client.players[client.player].builder.x;
+  clupdate.hdr.builderx = htonl(*((uint32_t *)&tmpVec));
+  tmpVec = client.players[client.player].builder.y;
+  clupdate.hdr.buildery = htonl(*((uint32_t *)&tmpVec));
   clupdate.hdr.buildertargetx = client.players[client.player].buildertarget.x;
   clupdate.hdr.buildertargety = client.players[client.player].buildertarget.y;
   clupdate.hdr.builderwait = client.players[client.player].builderwait;
