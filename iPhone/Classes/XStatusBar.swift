@@ -17,7 +17,7 @@ class XStatusBar: UIView {
   }
   
   @IBInspectable
-  var barType: StatusBarType = StatusBarType.Horizontal {
+  @objc var barType: StatusBarType = StatusBarType.Horizontal {
     didSet {
       if oldValue != barType {
         setNeedsDisplay()
@@ -26,7 +26,7 @@ class XStatusBar: UIView {
   }
   
   @IBInspectable
-  var value: CGFloat = 0 {
+  @objc var value: CGFloat = 0 {
     didSet {
       if oldValue != value {
         setNeedsDisplay()

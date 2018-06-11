@@ -15,14 +15,14 @@ class XBuilderStatusView : UIView {
     case Dead
   }
   
-  var state: State = State.Ready {
+  @objc var state: State = State.Ready {
     didSet {
       if state != oldValue {
         setNeedsDisplay()
       }
     }
   }
-  var direction: CGFloat = 0 {
+  @objc var direction: CGFloat = 0 {
     didSet {
       if direction != oldValue && state == .Direction {
         setNeedsDisplay()
@@ -49,7 +49,7 @@ class XBuilderStatusView : UIView {
       p.fill()
       
     case .Dead:
-      UIColor(patternImage: UIImage(named: "StipplePattern")!).set()
+      UIColor(patternImage: #imageLiteral(resourceName: "StipplePattern")).set()
       UIBezierPath(ovalIn: bounds).fill()
       break;
       

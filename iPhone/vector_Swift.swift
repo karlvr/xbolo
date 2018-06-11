@@ -7,8 +7,17 @@
 //
 
 import Foundation
+import simd
 
-func atan2f(dir: Vec2f) -> Float {
+func atan2f(_ dir: Vec2f) -> Float {
+  return _atan2f(dir)
+}
+
+func atan(_ dir: Vec2f) -> Float {
+  return _atan2f(dir)
+}
+
+func atan2(_ dir: Vec2f) -> Float {
   return _atan2f(dir)
 }
 
