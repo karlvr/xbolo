@@ -114,32 +114,32 @@ static GSXBoloController *controller = nil;
 // sound
 static BOOL muteBool;
 
-static NSMutableArray *bubblessounds;
-static NSMutableArray *builderdeathsounds;
-static NSMutableArray *buildsounds;
-static NSMutableArray *sinksounds;
-static NSMutableArray *superboomsounds;
-static NSMutableArray *explosionsounds;
-static NSMutableArray *farbuildsounds;
-static NSMutableArray *farbuilderdeathsounds;
-static NSMutableArray *farexplosionsounds;
-static NSMutableArray *farhittanksounds;
-static NSMutableArray *farhitterrainsounds;
-static NSMutableArray *farhittreesounds;
-static NSMutableArray *farshotsounds;
-static NSMutableArray *farsinksounds;
-static NSMutableArray *farsuperboomsounds;
-static NSMutableArray *fartreesounds;
-static NSMutableArray *minesounds;
-static NSMutableArray *msgreceivedsounds;
-static NSMutableArray *pillshotsounds;
-static NSMutableArray *hittanksounds;
-static NSMutableArray *tankshotsounds;
-static NSMutableArray *hitterrainsounds;
-static NSMutableArray *hittreesounds;
-static NSMutableArray *treesounds;
+static NSMutableArray<NSSound*> *bubblessounds;
+static NSMutableArray<NSSound*> *builderdeathsounds;
+static NSMutableArray<NSSound*> *buildsounds;
+static NSMutableArray<NSSound*> *sinksounds;
+static NSMutableArray<NSSound*> *superboomsounds;
+static NSMutableArray<NSSound*> *explosionsounds;
+static NSMutableArray<NSSound*> *farbuildsounds;
+static NSMutableArray<NSSound*> *farbuilderdeathsounds;
+static NSMutableArray<NSSound*> *farexplosionsounds;
+static NSMutableArray<NSSound*> *farhittanksounds;
+static NSMutableArray<NSSound*> *farhitterrainsounds;
+static NSMutableArray<NSSound*> *farhittreesounds;
+static NSMutableArray<NSSound*> *farshotsounds;
+static NSMutableArray<NSSound*> *farsinksounds;
+static NSMutableArray<NSSound*> *farsuperboomsounds;
+static NSMutableArray<NSSound*> *fartreesounds;
+static NSMutableArray<NSSound*> *minesounds;
+static NSMutableArray<NSSound*> *msgreceivedsounds;
+static NSMutableArray<NSSound*> *pillshotsounds;
+static NSMutableArray<NSSound*> *hittanksounds;
+static NSMutableArray<NSSound*> *tankshotsounds;
+static NSMutableArray<NSSound*> *hitterrainsounds;
+static NSMutableArray<NSSound*> *hittreesounds;
+static NSMutableArray<NSSound*> *treesounds;
 
-static NSMutableArray *speechSynthesizers;
+static NSMutableArray<NSSpeechSynthesizer*> *speechSynthesizers;
 
 static struct ListNode trackerlist;
 
