@@ -15,7 +15,7 @@
 
 @implementation GSBuilderStatusView
 @synthesize state;
-@synthesize dir;
+@synthesize direction=dir;
 
 - (instancetype)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
@@ -47,7 +47,7 @@
   }
 }
 
-- (void)setDir:(CGFloat)aDir {
+- (void)setDirection:(CGFloat)aDir {
   if (dir != aDir) {
     dir = aDir;
 

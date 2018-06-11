@@ -2656,7 +2656,7 @@ TRY
             newdir = vec2dir(diff);
           
             builderStatusView.state = GSBuilderStatusViewStateDirection;
-            builderStatusView.dir = newdir;
+            builderStatusView.direction = newdir;
           }
           
           break;
