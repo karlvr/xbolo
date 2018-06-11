@@ -49,13 +49,6 @@ int16_t ftoi16(float s) {
   return (int16_t)(s*((float)INT16RADIX));
 }
 
-Vec2f make2f(float x, float y) {
-  Vec2f r;
-  r.x = x;
-  r.y = y;
-  return r;
-}
-
 #if !(defined(USE_SIMD_H) && USE_SIMD_H)
 Vec2f neg2f(Vec2f v) {
   return make2f(-v.x, -v.y);
@@ -89,26 +82,6 @@ Vec2f unit2f(Vec2f v) {
   return div2f(v, mag2f(v));
 }
 #endif
-
-Vec2f prj2f(Vec2f v1, Vec2f v2) {
-  return mul2f(v1, dot2f(v1, v2)/dot2f(v1, v1));
-}
-
-float cmp2f(Vec2f v1, Vec2f v2) {
-  return dot2f(v1, v2)/mag2f(v1);
-}
-
-bool isequal2f(Vec2f v1, Vec2f v2) {
-  return v1.x == v2.x && v1.y == v2.y;
-}
-
-Vec2f tan2f(float theta) {
-  return make2f(cos(theta), sin(theta));
-}
-
-float _atan2f(Vec2f dir) {
-  return atan2(dir.y, dir.x);
-}
 
 Vec2i32 make2i32(int32_t x, int32_t y) {
   Vec2i32 r;
@@ -307,3 +280,37 @@ Vec2i8 make2i8(int8_t x, int8_t y) {
 bool isequal2i8(Vec2i8 v1, Vec2i8 v2) {
   return v1.x == v2.x && v1.y == v2.y;
 }
+
+#undef tan2f
+Vec2f tan2f(float theta) {
+  return make2f(cos(theta), sin(theta));
+}
+
+#undef _atan2f
+float _atan2f(Vec2f dir) {
+  return atan2(dir.y, dir.x);
+}
+
+#undef prj2f
+Vec2f prj2f(Vec2f v1, Vec2f v2) {
+  return mul2f(v1, dot2f(v1, v2)/dot2f(v1, v1));
+}
+
+#undef cmp2f
+float cmp2f(Vec2f v1, Vec2f v2) {
+  return dot2f(v1, v2)/mag2f(v1);
+}
+
+#undef isequal2f
+bool isequal2f(Vec2f v1, Vec2f v2) {
+  return v1.x == v2.x && v1.y == v2.y;
+}
+
+#undef make2f
+Vec2f make2f(float x, float y) {
+  Vec2f r;
+  r.x = x;
+  r.y = y;
+  return r;
+}
+

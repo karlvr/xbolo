@@ -131,4 +131,38 @@ bool isequal2i8(Vec2i8 v1, Vec2i8 v2);
 extern const float kPif;
 extern const float k2Pif;
 
+#define make2f __make2f
+#define _atan2f ___atan2f
+#define tan2f __tan2f
+#define prj2f __prj2f
+#define cmp2f __cmp2f
+#define isequal2f __isequal2f
+
+static inline Vec2f __make2f(float x, float y) {
+  Vec2f r;
+  r.x = x;
+  r.y = y;
+  return r;
+}
+
+static inline Vec2f __prj2f(Vec2f v1, Vec2f v2) {
+  return mul2f(v1, dot2f(v1, v2)/dot2f(v1, v1));
+}
+
+static inline float __cmp2f(Vec2f v1, Vec2f v2) {
+  return dot2f(v1, v2)/mag2f(v1);
+}
+
+static inline bool __isequal2f(Vec2f v1, Vec2f v2) {
+  return v1.x == v2.x && v1.y == v2.y;
+}
+
+static inline Vec2f __tan2f(float theta) {
+  return make2f(cos(theta), sin(theta));
+}
+
+static inline float ___atan2f(Vec2f dir) {
+  return atan2(dir.y, dir.x);
+}
+
 #endif  /* __VECTOR__ */
