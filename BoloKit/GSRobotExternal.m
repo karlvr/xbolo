@@ -14,5 +14,12 @@
 @end
 
 @implementation GSRobotCommandState
+- (instancetype)init
+{
+  if (self = [super init]) {
+    _playersToAllyWith = @[];
+  }
+  return self;
+}
 
 @end

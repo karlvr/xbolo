@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 #if !INTERNAL_GSROBOT_INCLUDE
 enum {
@@ -79,7 +80,9 @@ enum {
 #endif
 
 #if defined(USE_SIMD_H) && USE_SIMD_H
+NS_ASSUME_NONNULL_END
 #include <simd/simd.h>
+NS_ASSUME_NONNULL_BEGIN
 typedef vector_float2 Vec2f;
 #else
 typedef struct Vec2f {
@@ -126,7 +129,7 @@ struct Builder
 
 //! 0 = dead, 1 = in tank, 2 = out of tank
 @property int builderstate;
-//! radians, only valid if builderstate is out of tank
+//! radians, only valid if \c builderstate is out of tank
 @property float builderdirection;
 
 @property int tankscount;
@@ -139,7 +142,7 @@ struct Builder
 @property struct Builder *builders;
 
 //! array of NSString, may be nil if no messages
-@property (copy) NSArray<NSString*> *messages;
+@property (copy, nullable) NSArray<NSString*> *messages;
 @property (strong) NSMutableData *gamestateData;
 
 @end
@@ -149,6 +152,8 @@ struct Builder
 #endif
 
 @interface GSRobotCommandState: NSObject
+- (instancetype)init;
+
 @property BOOL accelerate;
 @property BOOL decelerate;
 @property BOOL left;
@@ -176,3 +181,5 @@ NS_SWIFT_NAME(GSRobotProtocol)
 - (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
 
 @end
+
+NS_ASSUME_NONNULL_END
