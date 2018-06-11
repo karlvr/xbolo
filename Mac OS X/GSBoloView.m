@@ -54,6 +54,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 
   /* draw */
   for (GSBoloView *view in boloViews) {
+    // TODO: migrate away from lockFocusIfCanDraw!
     if ([view lockFocusIfCanDraw]) {
       [view eraseSprites];
       [view refreshTiles];
