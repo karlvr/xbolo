@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BoloKit
 
 public class StandardAutopilot: NSObject, GSRobotProtocol {
 	public override required init() {
@@ -17,12 +18,12 @@ public class StandardAutopilot: NSObject, GSRobotProtocol {
 		return GS_ROBOT_CURRENT_INTERFACE_VERSION
 	}
 	
-	public func stepXBoloRobot(with gameState: UnsafePointer<GSRobotGameState>!, freeFunction freeF: (@convention(c) (UnsafeMutableRawPointer?) -> Void)!, freeContext freeCtx: UnsafeMutableRawPointer!) -> GSRobotCommandState {
-		var state = GSRobotCommandState()
-		//let messages = gameState.memory.messages?.takeUnretainedValue() as? NSArray as? [String]
-		let tanks = UnsafeBufferPointer(start: gameState.pointee.tanks, count: Int(gameState.pointee.tankscount))
-		//let shells = UnsafeBufferPointer(start: gameState.memory.shells, count: Int(gameState.memory.shellscount))
-		//let builders = UnsafeBufferPointer(start: gameState.memory.builders, count: Int(gameState.memory.builderscount))
+	public func stepXBoloRobot(with gameState: GSRobotGameState!, freeFunction freeF: (@convention(c) (UnsafeMutableRawPointer?) -> Void)!, freeContext freeCtx: UnsafeMutableRawPointer!) -> GSRobotCommandState {
+		let state = GSRobotCommandState()
+		//let messages = gameState.messages
+		let tanks = UnsafeBufferPointer(start: gameState.tanks, count: Int(gameState.tankscount))
+		//let shells = UnsafeBufferPointer(start: gameState.shells, count: Int(gameState.shellscount))
+		//let builders = UnsafeBufferPointer(start: gameState.builders, count: Int(gameState.builderscount))
 		var targetTank: Tank?
 		for tank in tanks {
 			if targetTank == nil {

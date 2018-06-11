@@ -11,7 +11,7 @@
 #import "client.h"
 
 #define INTERNAL_GSROBOT_INCLUDE 1 // what a horrible hack
-#import "GSRobotExternal.h"
+#import <BoloKit/GSRobotExternal.h>
 #undef INTERNAL_GSROBOT_INCLUDE
 
 
@@ -168,7 +168,7 @@
 {
     NSParameterAssert(_robot);
     
-    struct GSRobotGameState gameState;
+    GSRobotGameState *gameState = [[GSRobotGameState new] autorelease];
     gameState.worldwidth = WIDTH;
     gameState.worldheight = WIDTH;
     
@@ -176,8 +176,7 @@
     float gunAngle = client.players[client.player].dir;
     float gunDeltaX = cos(gunAngle) * client.range;
     float gunDeltaY = -sin(gunAngle) * client.range;
-    gameState.gunsightposition.x = gameState.tankposition.x + gunDeltaX;
-    gameState.gunsightposition.y = gameState.tankposition.y + gunDeltaY;
+    gameState.gunsightposition = simd_make_float2(gameState.tankposition.x + gunDeltaX, gameState.tankposition.y + gunDeltaY);
     
     gameState.tankdirection = gunAngle * 8 / M_PI - 0.5;
     if(gameState.tankdirection < 0) gameState.tankdirection += 16;
@@ -272,38 +271,35 @@
     
     gameState.builderscount = writei;
     
-    int totalLength = (sizeof(gameState) +
-                       WIDTH * WIDTH * sizeof(*gameState.visibletiles) +
+    int totalLength = (WIDTH * WIDTH * sizeof(*gameState.visibletiles) +
                        gameState.tankscount * sizeof(*gameState.tanks) +
                        gameState.shellscount * sizeof(*gameState.shells) +
                        gameState.builderscount * sizeof(*gameState.builders));
     
     NSMutableData *data = [NSMutableData dataWithLength: totalLength];
     void *ptr = data.mutableBytes;
-    memcpy(ptr, &gameState, sizeof(gameState));
-    struct GSRobotGameState *gsp = ptr;
-    ptr += sizeof(gameState);
     
     memcpy(ptr, client.seentiles, WIDTH * WIDTH * sizeof(*gameState.visibletiles));
-    gsp->visibletiles = ptr;
+    gameState.visibletiles = ptr;
     ptr += WIDTH * WIDTH * sizeof(*gameState.visibletiles);
     
     int size;
     
     size = gameState.tankscount * sizeof(*gameState.tanks);
     memcpy(ptr, tanks, size);
-    gsp->tanks = ptr;
+    gameState.tanks = ptr;
     ptr += size;
     
     size = gameState.shellscount * sizeof(*gameState.shells);
     memcpy(ptr, shells, size);
-    gsp->shells = ptr;
+    gameState.shells = ptr;
     ptr += size;
     
     size = gameState.builderscount * sizeof(*gameState.builders);
     memcpy(ptr, builders, size);
-    gsp->builders = ptr;
+    gameState.builders = ptr;
     ptr += size;
+    gameState.gamestateData = data;
     
     [_condLock lock];
     if(_condLock.condition == THREAD_EXITED)
@@ -312,8 +308,8 @@
     }
     else
     {
-        [_gamestateData release];
-        _gamestateData = [data retain];
+        [_gamestate release];
+        _gamestate = [gameState retain];
         [_condLock unlockWithCondition: NEW_DATA];
     }
 }
@@ -334,15 +330,15 @@
             return;
         }
         
-        NSMutableData *gsdata = [_gamestateData retain];
+        GSRobotGameState *gsdata = [_gamestate retain];
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
-        ((struct GSRobotGameState *)gsdata.mutableBytes)->messages = (CFArrayRef)messages;
+        gsdata.messages = messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
         
-        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)gsdata.mutableBytes freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
+        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
         
         [gsdata release];
         [messages release];
@@ -366,12 +362,12 @@
             buildercommand(commandState.buildercommand, p);
         }
         
-        if(((NSArray*)commandState.playersToAllyWith).count)
+        if((commandState.playersToAllyWith).count)
         {
             lockclient();
             uint16_t players = 0;
             int i;
-            for(NSString *name in ((NSArray*)commandState.playersToAllyWith))
+            for(NSString *name in commandState.playersToAllyWith)
             {
                 const char *cname = name.UTF8String;
                 for(i = 0; i < MAX_PLAYERS; i++)

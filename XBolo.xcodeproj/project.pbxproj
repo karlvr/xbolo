@@ -24,7 +24,7 @@
 		402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BF0FC91E2F0018390E /* fsuperboom.aiff */; };
 		402097CC0FC91E2F0018390E /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
 		402098370FC926C00018390E /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
-		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		404D42890FF8525200589EA2 /* GSBoloView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D427F0FF8525200589EA2 /* GSBoloView.h */; };
 		404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloView.m */; };
 		404D428B0FF8525200589EA2 /* GSBuilderStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42810FF8525200589EA2 /* GSBuilderStatusView.h */; };
@@ -183,6 +183,11 @@
 		55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B79B1D2C3E50008A61F6 /* BoloURLHandler.swift */; };
 		55A4B79F1D2C3FBD008A61F6 /* XBolo.scriptSuite in Resources */ = {isa = PBXBuildFile; fileRef = 55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */; };
 		55A4B7A01D2C3FBD008A61F6 /* XBolo.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */; };
+		55C405E720CEE0060033C0E2 /* BoloKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 55C405E520CEE0060033C0E2 /* BoloKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		55C405EA20CEE0060033C0E2 /* BoloKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C405E320CEE0060033C0E2 /* BoloKit.framework */; };
+		55C405EB20CEE0060033C0E2 /* BoloKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 55C405E320CEE0060033C0E2 /* BoloKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55C405F020CEE04E0033C0E2 /* GSRobotExternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C405EF20CEE04E0033C0E2 /* GSRobotExternal.m */; };
+		55C405F120CEE0660033C0E2 /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
 		55C4A54F1CBD71C6003A29B0 /* bmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27AAD0FA6A22600647706 /* bmap.c */; };
 		55C4A5501CBD71DE003A29B0 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = FDF3ECCB0736F4DA0070DF96 /* io.c */; };
@@ -200,7 +205,6 @@
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
 		C2BFADE21055937F009A1EE7 /* timing.h in Headers */ = {isa = PBXBuildFile; fileRef = C2BFADE01055937F009A1EE7 /* timing.h */; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -227,6 +231,20 @@
 			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
 			remoteInfo = "XBolo Quick Look Plug-in";
 		};
+		55C405E820CEE0060033C0E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55C405E220CEE0060033C0E2;
+			remoteInfo = BoloKit;
+		};
+		55C405F220CEE9270033C0E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55C405E220CEE0060033C0E2;
+			remoteInfo = BoloKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -237,6 +255,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */,
+				55C405EB20CEE0060033C0E2 /* BoloKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,6 +401,10 @@
 		55A4B79B1D2C3E50008A61F6 /* BoloURLHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = BoloURLHandler.swift; sourceTree = "<group>"; usesTabs = 1; };
 		55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptSuite; path = XBolo.scriptSuite; sourceTree = "<group>"; };
 		55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptTerminology; path = XBolo.scriptTerminology; sourceTree = "<group>"; };
+		55C405E320CEE0060033C0E2 /* BoloKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BoloKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		55C405E520CEE0060033C0E2 /* BoloKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoloKit.h; sourceTree = "<group>"; };
+		55C405E620CEE0060033C0E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55C405EF20CEE04E0033C0E2 /* GSRobotExternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSRobotExternal.m; sourceTree = "<group>"; };
 		55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhone.xcassets; sourceTree = "<group>"; };
 		55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPhone-Bridging-Header.h"; sourceTree = "<group>"; };
 		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
@@ -391,7 +414,7 @@
 		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
 		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
-		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
+		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
 		C2BFADE01055937F009A1EE7 /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
@@ -445,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4064472B10829C15008F913C /* TCMPortMapper.framework in Frameworks */,
+				55C405EA20CEE0060033C0E2 /* BoloKit.framework in Frameworks */,
 				40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */,
 				40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */,
 				40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */,
@@ -456,6 +480,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				55712C341CF9064600326A27 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55C405DF20CEE0060033C0E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +509,7 @@
 				408187591080C81200E4D4CA /* Dedicated Host */,
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
 				55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */,
+				55C405E320CEE0060033C0E2 /* BoloKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -493,6 +525,7 @@
 				55712B851CF8ED7B00326A27 /* Magma */,
 				55712C2F1CF903A600326A27 /* Shared */,
 				55F4E5121D2877BC00CC90E0 /* Standard Autopilot */,
+				55C405E420CEE0060033C0E2 /* BoloKit */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -772,6 +805,17 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		55C405E420CEE0060033C0E2 /* BoloKit */ = {
+			isa = PBXGroup;
+			children = (
+				55C405E520CEE0060033C0E2 /* BoloKit.h */,
+				55C405E620CEE0060033C0E2 /* Info.plist */,
+				C2765E8E1056031E0007E05A /* GSRobotExternal.h */,
+				55C405EF20CEE04E0033C0E2 /* GSRobotExternal.m */,
+			);
+			path = BoloKit;
+			sourceTree = "<group>";
+		};
 		55D1E20E1CFB77BE003C0B00 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -799,7 +843,6 @@
 			children = (
 				C2765E89105602D70007E05A /* GSRobot.h */,
 				C2765E8A105602D70007E05A /* GSRobot.m */,
-				C2765E8E1056031E0007E05A /* GSRobotExternal.h */,
 			);
 			name = Model;
 			sourceTree = SOURCE_ROOT;
@@ -879,7 +922,6 @@
 				404D428B0FF8525200589EA2 /* GSBuilderStatusView.h in Headers */,
 				404D428D0FF8525200589EA2 /* GSKeyCodeField.h in Headers */,
 				C2765E8B105602D70007E05A /* GSRobot.h in Headers */,
-				C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */,
 				404D428F0FF8525200589EA2 /* GSStatusBar.h in Headers */,
 				404D42910FF8525200589EA2 /* GSStatusView.h in Headers */,
 				404D429B0FF8528F00589EA2 /* GSXBoloController.h in Headers */,
@@ -895,6 +937,15 @@
 				40A593230FBE78FC00F3E650 /* vector.h in Headers */,
 				407ECEFB1087C371002B43CB /* buf.h in Headers */,
 				4014422610ACA4F6008487C8 /* resolver.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55C405E020CEE0060033C0E2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55C405F120CEE0660033C0E2 /* GSRobotExternal.h in Headers */,
+				55C405E720CEE0060033C0E2 /* BoloKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,6 +1016,7 @@
 			);
 			dependencies = (
 				40E828751055A15E00B39BB9 /* PBXTargetDependency */,
+				55C405E920CEE0060033C0E2 /* PBXTargetDependency */,
 			);
 			name = "Mac OS X";
 			productName = XBolo;
@@ -990,6 +1042,24 @@
 			productReference = 55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
+		55C405E220CEE0060033C0E2 /* BoloKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55C405EC20CEE0060033C0E2 /* Build configuration list for PBXNativeTarget "BoloKit" */;
+			buildPhases = (
+				55C405DE20CEE0060033C0E2 /* Sources */,
+				55C405DF20CEE0060033C0E2 /* Frameworks */,
+				55C405E020CEE0060033C0E2 /* Headers */,
+				55C405E120CEE0060033C0E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BoloKit;
+			productName = BoloKit;
+			productReference = 55C405E320CEE0060033C0E2 /* BoloKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		55F4E5101D2877BC00CC90E0 /* Standard Autopilot */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55F4E5141D2877BC00CC90E0 /* Build configuration list for PBXNativeTarget "Standard Autopilot" */;
@@ -1001,6 +1071,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				55C405F320CEE9270033C0E2 /* PBXTargetDependency */,
 			);
 			name = "Standard Autopilot";
 			productName = "Standard Autopilot";
@@ -1018,6 +1089,10 @@
 				TargetAttributes = {
 					55712B831CF8ED7B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
+					};
+					55C405E220CEE0060033C0E2 = {
+						CreatedOnToolsVersion = 9.4;
+						ProvisioningStyle = Automatic;
 					};
 					55F4E5101D2877BC00CC90E0 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1051,6 +1126,7 @@
 				408187581080C81200E4D4CA /* Dedicated Host */,
 				55712B831CF8ED7B00326A27 /* XBolo Map Editor */,
 				55F4E5101D2877BC00CC90E0 /* Standard Autopilot */,
+				55C405E220CEE0060033C0E2 /* BoloKit */,
 			);
 		};
 /* End PBXProject section */
@@ -1159,6 +1235,13 @@
 				55712C1F1CF8F0C300326A27 /* GSXBoloMap.xib in Resources */,
 				55712C1C1CF8F05600326A27 /* Credits.rtf in Resources */,
 				55712C041CF8F00100326A27 /* mouseEyeDropper.tiff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55C405E120CEE0060033C0E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,6 +1375,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		55C405DE20CEE0060033C0E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55C405F020CEE04E0033C0E2 /* GSRobotExternal.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55F4E50D1D2877BC00CC90E0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1312,6 +1403,16 @@
 			isa = PBXTargetDependency;
 			name = "XBolo Quick Look Plug-in";
 			targetProxy = 55712C381CF9068700326A27 /* PBXContainerItemProxy */;
+		};
+		55C405E920CEE0060033C0E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55C405E220CEE0060033C0E2 /* BoloKit */;
+			targetProxy = 55C405E820CEE0060033C0E2 /* PBXContainerItemProxy */;
+		};
+		55C405F320CEE9270033C0E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55C405E220CEE0060033C0E2 /* BoloKit */;
+			targetProxy = 55C405F220CEE9270033C0E2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1426,6 +1527,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					USE_SIMD_H,
@@ -1658,6 +1760,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = NO;
@@ -1668,6 +1771,10 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					INTERNAL_GSROBOT_INCLUDE,
+					"$(inherited)",
+				);
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
@@ -1693,6 +1800,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBolo;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1701,6 +1809,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					INTERNAL_GSROBOT_INCLUDE,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "XBolo-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
@@ -1799,6 +1911,74 @@
 			};
 			name = Release;
 		};
+		55C405ED20CEE0060033C0E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = BoloKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.MaddTheSane.BoloKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		55C405EE20CEE0060033C0E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = BoloKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.MaddTheSane.BoloKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		55F4E5151D2877BC00CC90E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1808,7 +1988,6 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Standard Autopilot/Info.plist";
@@ -1899,6 +2078,15 @@
 			buildConfigurations = (
 				55712B921CF8ED7B00326A27 /* Debug */,
 				55712B931CF8ED7B00326A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55C405EC20CEE0060033C0E2 /* Build configuration list for PBXNativeTarget "BoloKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55C405ED20CEE0060033C0E2 /* Debug */,
+				55C405EE20CEE0060033C0E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

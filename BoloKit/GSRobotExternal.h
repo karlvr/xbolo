@@ -76,6 +76,7 @@ enum {
     kHostilePill15Tile,
     kUnknownTile,
 } ;
+#endif
 
 #if defined(USE_SIMD_H) && USE_SIMD_H
 #include <simd/simd.h>
@@ -85,7 +86,6 @@ typedef struct Vec2f {
     float x;
     float y;
 } Vec2f;
-#endif
 #endif
 
 struct Tank
@@ -110,63 +110,69 @@ struct Builder
     Vec2f position;
 };
 
-struct GSRobotGameState
-{
-    int worldwidth, worldheight;
-    int *visibletiles; //!< worldwidth * worldheight elements, row major
-    
-    Vec2f tankposition;
-    Vec2f gunsightposition;
-    int tankdirection; //!< 0-15
-    int tankarmor;
-    int tankshells;
-    int tankmines;
-    int tanktrees;
-    int tankhasboat;
-    int tankpillcount;
-    
-    int builderstate; //!< 0 = dead, 1 = in tank, 2 = out of tank
-    float builderdirection; //!< radians, only valid if builderstate is out of tank
-    
-    int tankscount;
-    struct Tank *tanks;
-    
-    int shellscount;
-    struct Shell *shells;
-    
-    int builderscount;
-    struct Builder *builders;
-    
-    CFArrayRef messages; //!< array of NSString, may be nil if no messages
-};
+@interface GSRobotGameState: NSObject
+@property int worldwidth, worldheight;
+@property int *visibletiles; //!< worldwidth * worldheight elements, row major
+
+@property Vec2f tankposition;
+@property Vec2f gunsightposition;
+@property int tankdirection; //!< 0-15
+@property int tankarmor;
+@property int tankshells;
+@property int tankmines;
+@property int tanktrees;
+@property int tankhasboat;
+@property int tankpillcount;
+
+//! 0 = dead, 1 = in tank, 2 = out of tank
+@property int builderstate;
+//! radians, only valid if builderstate is out of tank
+@property float builderdirection;
+
+@property int tankscount;
+@property struct Tank *tanks;
+
+@property int shellscount;
+@property struct Shell *shells;
+
+@property int builderscount;
+@property struct Builder *builders;
+
+//! array of NSString, may be nil if no messages
+@property (copy) NSArray<NSString*> *messages;
+@property (strong) NSMutableData *gamestateData;
+
+@end
+
 #if INTERNAL_GSROBOT_INCLUDE
 #undef Shell
 #endif
 
-struct GSRobotCommandState
-{
-    BOOL accelerate;
-    BOOL decelerate;
-    BOOL left;
-    BOOL right;
-    BOOL gunup;
-    BOOL gundown;
-    BOOL mine;
-    BOOL fire;
-    
-    int buildercommand;
-    int builderx, buildery;
-    
-    CFArrayRef playersToAllyWith; //!< NSStrings containing player names
-};
+@interface GSRobotCommandState: NSObject
+@property BOOL accelerate;
+@property BOOL decelerate;
+@property BOOL left;
+@property BOOL right;
+@property BOOL gunup;
+@property BOOL gundown;
+@property BOOL mine;
+@property BOOL fire;
 
-#define GS_ROBOT_CURRENT_INTERFACE_VERSION 1
+@property int buildercommand;
+@property int builderx, buildery;
+
+//! NSStrings containing player names
+@property (copy) NSArray<NSString*> *playersToAllyWith;
+
+@end
+
+#define GS_ROBOT_CURRENT_INTERFACE_VERSION 2
 
 NS_SWIFT_NAME(GSRobotProtocol)
 @protocol GSRobot <NSObject>
 
 @property (class, readonly) int minimumRobotInterfaceVersionRequired;
 - (instancetype)init; // designated initializer
-- (struct GSRobotCommandState)stepXBoloRobotWithGameState: (const struct GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
+- (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
 
 @end

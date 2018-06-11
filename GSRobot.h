@@ -9,6 +9,7 @@
 
 
 @protocol GSRobot;
+@class GSRobotGameState;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
     id <GSRobot> _robot;
     
     NSConditionLock *_condLock;
-    NSMutableData *_gamestateData;
-    NSMutableArray *_messages;
+    GSRobotGameState *_gamestate;
+    NSMutableArray<NSString*> *_messages;
     BOOL _halt;
 }
 
