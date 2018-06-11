@@ -581,7 +581,6 @@
 			children = (
 				558243641CBD7ABB006BDC14 /* Images.xcassets */,
 				55712C831CFA1B0800326A27 /* OS X-only.xcassets */,
-				F55317CB03E5055801924B91 /* Sounds */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				55A4B79D1D2C3FBD008A61F6 /* XBolo.scriptSuite */,
 				55A4B79E1D2C3FBD008A61F6 /* XBolo.scriptTerminology */,
@@ -798,6 +797,7 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F55317CB03E5055801924B91 /* Sounds */,
 				29B97315FDCFA39411CA2CEA /* Main XBolo */,
 				553F04791D71F253005D0983 /* Classes */,
 				55712C301CF903D900326A27 /* Images.xcassets */,
