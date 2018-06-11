@@ -130,6 +130,10 @@ END
 }
 
 - (void)drawTileAtPoint:(GSPoint)point {
+  if (NSGraphicsContext.currentContext == nil) {
+    //*Headtilts* I don't know how...
+    return;
+  }
   int image;
   NSRect dstRect, srcRect;
 
@@ -228,6 +232,10 @@ END
 //  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
 
   for (node = nextlist(&rectlist); node != NULL; node = nextlist(node)) {
+    if (NSGraphicsContext.currentContext == nil) {
+      //*Headtilts* I don't know how...
+      break;
+    }
     rect = (GSRect *)ptrlist(node);
 
     min_x = GSMinX(*rect);
@@ -250,6 +258,10 @@ END
 
 - (void)refreshTiles {
   struct ListNode *node;
+  if (NSGraphicsContext.currentContext == nil) {
+    //*Headtilts* I don't know how...
+    return;
+  }
 
 //  [NSGraphicsContext saveGraphicsState];
 //  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
@@ -456,7 +468,10 @@ END
   if (fraction > 0.00001) {
     srcRect = NSMakeRect((tile%16)*16, (tile/16)*16, 16.0, 16.0);
     dstRect = NSMakeRect(floor(point.x*16.0 - 8.0), floor((FWIDTH - point.y)*16.0 - 8.0), 16.0, 16.0);
-    [sprites drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:fraction];
+    if (NSGraphicsContext.currentContext != nil) {
+      //*Headtilts* I don't know how...
+      [sprites drawInRect:dstRect fromRect:srcRect operation:NSCompositingOperationSourceOver fraction:fraction];
+    }
     [self dirtyTiles:dstRect];
   }
 }
