@@ -2884,7 +2884,7 @@ TRY
   srhittank->dir = ntohl(srhittank->dir);
 
   client.players[client.player].boat = 0;
-  float tmpFloat = srhittank->dir;
+  uint32_t tmpFloat = srhittank->dir;
   client.players[client.player].kickdir = *((float *)&tmpFloat);
   client.players[client.player].kickspeed = KICKFORCE;
 
