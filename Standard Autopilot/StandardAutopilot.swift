@@ -31,7 +31,7 @@ public class StandardAutopilot: NSObject, GSRobotProtocol {
 		for tank in tanks {
 			if targetTank == nil {
 				targetTank = tank
-				continue
+				break
 			}
 		}
 		state.accelerate = true
