@@ -149,16 +149,16 @@ NS_ASSUME_NONNULL_BEGIN
 
   // host pane data
   NSString *hostMapString;
-  BOOL hostUPnPBool;
-  int hostPortNumber;
+  unsigned short hostPortNumber;
   BOOL hostPasswordBool;
+  BOOL hostUPnPBool;
   NSString *hostPasswordString;
   BOOL hostTimeLimitBool;
   NSString *hostTimeLimitString;
   BOOL hostHiddenMinesBool;
   BOOL hostTrackerBool;
 
-  // only supported type is domination
+  //! only supported type is domination
   int hostGameTypeNumber;
 
   // host domination data
@@ -172,13 +172,13 @@ NS_ASSUME_NONNULL_BEGIN
 
   // join pane data
   NSString *joinAddressString;
-  int joinPortNumber;
+  unsigned short joinPortNumber;
   BOOL joinPasswordBool;
-  NSString *joinPasswordString;
   BOOL joinTrackerBool;
+  NSString *joinPasswordString;
   NSMutableArray<NSDictionary<NSString*,id>*> *joinTrackerArray;
 
-  // tracker string
+  //! tracker string
   NSString *trackerString;
 
   // pref objects
@@ -194,13 +194,13 @@ NS_ASSUME_NONNULL_BEGIN
   IBOutlet NSButton *requestAllianceButton;
   IBOutlet NSButton *leaveAllianceButton;
 
-  // bolo tool matrix
+  //! bolo tool matrix
   IBOutlet NSMatrix *builderToolMatrix;
 
-  // bolo tool data
+  //! bolo tool data
   int builderToolInt;
 
-  // allegiance panel objects
+  //! allegiance panel objects
   NSMutableArray *playerInfoArray;
 
   // messages panel outlets
@@ -208,7 +208,7 @@ NS_ASSUME_NONNULL_BEGIN
   IBOutlet NSTextField *messageTextField;
   IBOutlet NSMatrix *messageTargetMatrix;
 
-  // message panel data
+  //! message panel data
   int messageTargetInt;
 
   // toolbar
@@ -219,10 +219,10 @@ NS_ASSUME_NONNULL_BEGIN
   NSToolbarItem *zoomInItem;
   NSToolbarItem *zoomOutItem;
 
-  // zoom
+  //! zoom
   int zoomLevel;
 
-  /* UPnP port mapper */
+  /*! UPnP port mapper */
   TCMPortMapper *portMapper;
 
   // bot
@@ -319,33 +319,33 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mouseEvent:(GSPoint)point;
 
 // accessor methods
-- (void)setHostMapString:(NSString *)aString;
-- (void)setHostUPnPBool:(BOOL)aBool;
-@property (nonatomic) int hostPortNumber;
-- (void)setHostPasswordBool:(BOOL)aBool;
-- (void)setHostPasswordString:(NSString *)aString;
-- (void)setHostTimeLimitBool:(BOOL)aBool;
-- (void)setHostTimeLimitString:(NSString *)aString;
-- (void)setHostHiddenMinesBool:(BOOL)aBool;
-- (void)setHostTrackerBool:(BOOL)aBool; 
-- (void)setHostGameTypeNumber:(int)aInt;
-- (void)setHostDominationTypeNumber:(int)newHostDominationTypeNumber;
-- (void)setHostDominationBaseControlString:(NSString *)string;
-@property (nonatomic, copy) NSString* joinAddressString;
-@property (nonatomic) int joinPortNumber;
+@property (nonatomic, copy) NSString * hostMap;
+@property (nonatomic) BOOL hostUPnP;
+@property (nonatomic) unsigned short hostPort;
+@property (nonatomic) BOOL hasHostPassword;
+@property (nonatomic, copy) NSString *hostPassword;
+@property (nonatomic) BOOL hasHostTimeLimit;
+@property (nonatomic, copy) NSString *hostTimeLimit;
+@property (nonatomic) BOOL hostHiddenMines;
+@property (nonatomic) BOOL hostTracker;
+@property (nonatomic) int hostGameType;
+@property (nonatomic) int hostDominationType;
+@property (nonatomic, copy) NSString *hostDominationBaseControl;
+@property (nonatomic, copy) NSString *joinAddress;
+@property (nonatomic) unsigned short joinPort;
 @property (nonatomic) BOOL joinPasswordEnabled;
 @property (nonatomic, copy) NSString *joinPassword;
 - (void)setJoinTrackerArray:(NSArray<NSDictionary<NSString*,id>*> *)aArray;
 @property (nonatomic, copy) NSString *tracker;
-- (void)setPrefPaneIdentifierString:(NSString *)aString;
+@property (nonatomic, copy) NSToolbarItemIdentifier prefPaneIdentifier;
 @property (nonatomic, copy) NSString *playerName;
 - (void)setKeyConfigDict:(NSDictionary<NSString*,NSString*> *)aDict;
 @property (nonatomic) BOOL autoSlowdown;
-- (void)setShowStatusBool:(BOOL)aBool;
-- (void)setShowAllegianceBool:(BOOL)aBool;
-- (void)setShowMessagesBool:(BOOL)aBool;
-- (void)setBuilderToolInteger:(int)anInt;
-- (void)setMessageTargetInteger:(int)anInt;
+@property (nonatomic) BOOL showStatus;
+@property (nonatomic) BOOL showAllegiance;
+@property (nonatomic) BOOL showMessages;
+@property (nonatomic) int builderTool;
+@property (nonatomic) int messageTarget;
 @property (getter=isMuted, nonatomic) BOOL mute;
 
 - (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(nullable NSString*)pass;
@@ -357,6 +357,23 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setJoinPasswordString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
 - (void)setAutoSlowdownBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
 - (void)setTrackerString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setHostMapString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setHostUPnPBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setHostPasswordBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setHostPasswordString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setHostTimeLimitBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setHostTimeLimitString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setHostHiddenMinesBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setHostTrackerBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setHostGameTypeNumber:(int)aInt UNAVAILABLE_ATTRIBUTE;
+- (void)setHostDominationTypeNumber:(int)newHostDominationTypeNumber UNAVAILABLE_ATTRIBUTE;
+- (void)setHostDominationBaseControlString:(NSString *)string UNAVAILABLE_ATTRIBUTE;
+- (void)setPrefPaneIdentifierString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
+- (void)setShowStatusBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setShowAllegianceBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setShowMessagesBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
+- (void)setBuilderToolInteger:(int)anInt UNAVAILABLE_ATTRIBUTE;
+- (void)setMessageTargetInteger:(int)anInt UNAVAILABLE_ATTRIBUTE;
 
 @end
 
