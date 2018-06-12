@@ -705,6 +705,7 @@ static NSMutableArray *boloMapViews = nil;
 
         default:
           NSAssert(nil, @"");
+          return;
           break;
         }
 

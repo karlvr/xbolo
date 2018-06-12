@@ -219,8 +219,10 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
   xc = GSWidth(rect) - 1;
   yc = GSHeight(rect) - 1;
-  aa *= (aa = xc * 0.5f);
-  bb *= (bb = yc * 0.5f);
+  aa = xc * 0.5f;
+  aa *= aa;
+  bb = yc * 0.5f;
+  bb *= bb;
 
   y = GSHeight(rect) / 2;
   xstart = xc;
@@ -268,8 +270,10 @@ static void floodFillTilesWithSize(GSTile *tiles, GSSize size, GSTile from, GSTi
 
   xc = GSWidth(rect) - 1;
   yc = GSHeight(rect) - 1;
-  aa *= (aa = xc * 0.5f);
-  bb *= (bb = yc * 0.5f);
+  aa = xc * 0.5f;
+  aa *= aa;
+  bb = yc * 0.5f;
+  bb *= bb;
 
   y = GSHeight(rect) / 2;
   xstart = xc;

@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)tileRectWithTile:(GSTile)tile inRect:(GSRect)aRect;
 + (instancetype)tileRectWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect;
 
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithTiles:(const GSTile *)aTiles inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithTile:(GSTile)tile inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithTileRect:(GSTileRect *)tileRect inRect:(GSRect)aRect NS_DESIGNATED_INITIALIZER;
