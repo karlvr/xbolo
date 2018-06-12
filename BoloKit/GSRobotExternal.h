@@ -5,7 +5,7 @@
 //  Created by Michael Ash on 9/7/09.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

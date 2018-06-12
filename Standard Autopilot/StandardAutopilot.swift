@@ -18,7 +18,10 @@ public class StandardAutopilot: NSObject, GSRobotProtocol {
 		return GS_ROBOT_CURRENT_INTERFACE_VERSION
 	}
 	
-	public func stepXBoloRobot(with gameState: GSRobotGameState!, freeFunction freeF: (@convention(c) (UnsafeMutableRawPointer?) -> Void)!, freeContext freeCtx: UnsafeMutableRawPointer!) -> GSRobotCommandState {
+	public func stepXBoloRobot(with gameState: GSRobotGameState, freeFunction freeF: @escaping (@convention(c) (UnsafeMutableRawPointer) -> Void), freeContext freeCtx: UnsafeMutableRawPointer) -> GSRobotCommandState {
+		defer {
+			freeF(freeCtx)
+		}
 		let state = GSRobotCommandState()
 		//let messages = gameState.messages
 		let tanks = UnsafeBufferPointer(start: gameState.tanks, count: Int(gameState.tankscount))
