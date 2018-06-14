@@ -307,13 +307,13 @@ static void getlisttrackerstatus(int status);
   boloWindow.toolbar = boloToolbar;
 
   // init status bars
-  playerShellsStatusBar.type = GSVerticalBar;
-  playerMinesStatusBar.type = GSVerticalBar;
-  playerArmourStatusBar.type = GSVerticalBar;
-  playerTreesStatusBar.type = GSVerticalBar;
-  baseShellsStatusBar.type = GSHorizontalBar;
-  baseMinesStatusBar.type = GSHorizontalBar;
-  baseArmourStatusBar.type = GSHorizontalBar;
+  playerShellsStatusBar.type = GSStatusBarVertical;
+  playerMinesStatusBar.type = GSStatusBarVertical;
+  playerArmourStatusBar.type = GSStatusBarVertical;
+  playerTreesStatusBar.type = GSStatusBarVertical;
+  baseShellsStatusBar.type = GSStatusBarHorizontal;
+  baseMinesStatusBar.type = GSStatusBarHorizontal;
+  baseArmourStatusBar.type = GSStatusBarHorizontal;
 
   // we don't need no stink'n windows menu
   [newGameWindow setExcludedFromWindowsMenu:YES];
@@ -955,8 +955,7 @@ TRY
         }
       }
       else {
-        NSEnumerator *enumerator;
-        TCMPortMapping *portMapping;
+        NSSet<TCMPortMapping*> *mappings;
 
         [joinProgressWindow orderOut:self];
         [joinProgressIndicator stopAnimation:self];
@@ -964,9 +963,9 @@ TRY
 
         [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
 
-        enumerator = [[portMapper portMappings] objectEnumerator];
+        mappings = [[portMapper portMappings] copy];
 
-        while ((portMapping = [enumerator nextObject])) {
+        for (TCMPortMapping *portMapping in mappings) {
           [portMapper removePortMapping:portMapping];
         }
 

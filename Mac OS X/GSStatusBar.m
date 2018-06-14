@@ -16,7 +16,7 @@
 - (instancetype)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-      type = GSHorizontalBar;
+      type = GSStatusBarHorizontal;
       value = 0.0f;
     }
     return self;
@@ -24,12 +24,12 @@
 
 - (void)drawRect:(NSRect)rect {
   switch (type) {
-  case GSHorizontalBar:
+    case GSStatusBarHorizontal:
     [[NSColor greenColor] set];
     [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth(self.frame)*value, NSHeight(self.frame))];
     break;
 
-  case GSVerticalBar:
+    case GSStatusBarVertical:
     [[NSColor greenColor] set];
     [NSBezierPath fillRect:NSMakeRect(0.0f, 0.0f, NSWidth(self.frame), NSHeight(self.frame)*value)];
     break;
@@ -41,8 +41,8 @@
 
 - (void)setType:(GSStatusBarType)aType {
   switch (aType) {
-  case GSHorizontalBar:
-  case GSVerticalBar:
+  case GSStatusBarHorizontal:
+  case GSStatusBarVertical:
     if (type != aType) {
       type = aType;
       [self setNeedsDisplay:YES];
