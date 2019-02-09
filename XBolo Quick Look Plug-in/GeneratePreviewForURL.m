@@ -42,7 +42,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     CGContextScaleCTM(context, 1, -1);
 
     if (nbytes < sizeof(struct BMAP_Preamble)) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
@@ -50,31 +50,31 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     preamble = buf;
 
     if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->version != CURRENTMAPVERSION) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->npills > MAX_PILLS) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->nbases > MAX_BASES) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->nstarts > MAXSTARTS) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
@@ -84,7 +84,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
         preamble->npills*sizeof(struct BMAP_PillInfo) +
         preamble->nbases*sizeof(struct BMAP_BaseInfo) +
         preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-      QLPreviewRequestFlushContext(preview, context);
+      //QLPreviewRequestFlushContext(preview, context);
       CFRelease(context);
       return noErr;
     }
@@ -190,7 +190,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
       }
 
       if (drawrun(context, run, runData + offset + sizeof(struct BMAP_Run)) == -1) {
-        QLPreviewRequestFlushContext(preview, context);
+        //QLPreviewRequestFlushContext(preview, context);
         CFRelease(context);
         return noErr;
       }

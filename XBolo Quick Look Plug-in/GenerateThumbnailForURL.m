@@ -41,7 +41,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     CGContextScaleCTM(context, 1, -1);
 
     if (nbytes < sizeof(struct BMAP_Preamble)) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
@@ -49,31 +49,31 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     preamble = buf;
 
     if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->version != CURRENTMAPVERSION) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->npills > MAX_PILLS) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->nbases > MAX_BASES) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
 
     if (preamble->nstarts > MAXSTARTS) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
@@ -83,7 +83,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
         preamble->npills*sizeof(struct BMAP_PillInfo) +
         preamble->nbases*sizeof(struct BMAP_BaseInfo) +
         preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-      QLThumbnailRequestFlushContext(thumbnail, context);
+      //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
       return noErr;
     }
@@ -189,7 +189,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
       }
 
       if (drawrun(context, run, runData + offset + sizeof(struct BMAP_Run)) == -1) {
-        QLThumbnailRequestFlushContext(thumbnail, context);
+        //QLThumbnailRequestFlushContext(thumbnail, context);
         CFRelease(context);
         return noErr;
       }
