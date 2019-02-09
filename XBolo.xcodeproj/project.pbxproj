@@ -1029,6 +1029,9 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
+					40A5931E0FBE78FC00F3E650 = {
+						LastSwiftMigration = 1010;
+					};
 					55712B831CF8ED7B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -1512,7 +1515,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1566,7 +1569,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
