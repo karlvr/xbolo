@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
 #if defined(USE_SIMD_H) && USE_SIMD_H
 #include <simd/simd.h>
 #endif
@@ -158,11 +159,11 @@ static inline bool __isequal2f(Vec2f v1, Vec2f v2) {
 }
 
 static inline Vec2f __tan2f(float theta) {
-  return make2f(cos(theta), sin(theta));
+  return make2f(cosf(theta), sinf(theta));
 }
 
 static inline float ___atan2f(Vec2f dir) {
-  return atan2(dir.y, dir.x);
+  return atan2f(dir.y, dir.x);
 }
 
 #endif  /* __VECTOR__ */
