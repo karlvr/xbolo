@@ -12,11 +12,10 @@
 
 @interface GSDisplayLink() {
   CVDisplayLinkRef _displayLink;
-  
   dispatch_source_t _source;
 }
 
-- (void)tick;
+- (void)displayLinkTick;
 
 @end
 
@@ -29,7 +28,7 @@ CVReturn myCVDisplayLinkOutputCallback(
                                         void * CV_NULLABLE displayLinkContext)
 {
   GSDisplayLink *link = (__bridge GSDisplayLink *)displayLinkContext;
-  [link tick];
+  [link displayLinkTick];
   return kCVReturnSuccess;
 }
 
@@ -42,8 +41,8 @@ CVReturn myCVDisplayLinkOutputCallback(
     }
     _source = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, queue);
 
-    CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-    if (!_displayLink) {
+    const CVReturn createSuccess = CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
+    if (createSuccess != kCVReturnSuccess || !_displayLink) {
       return nil;
     }
 
@@ -57,6 +56,11 @@ CVReturn myCVDisplayLinkOutputCallback(
     if (setCurrentCGDisplaySuccess != kCVReturnSuccess) {
       return nil;
     }
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_source_set_event_handler(_source, ^{
+      [weakSelf tick];
+    });
   }
   return self;
 }
@@ -70,16 +74,25 @@ CVReturn myCVDisplayLinkOutputCallback(
 
 - (void)start {
   CVDisplayLinkStart(_displayLink);
+  dispatch_resume(_source);
 }
 
 - (void)cancel {
+  if (!self.running) {
+    return;
+  }
   CVDisplayLinkStop(_displayLink);
+  dispatch_cancel(_source);
 }
 
 - (void)tick {
   if (_callback) {
     _callback();
   }
+}
+
+- (void)displayLinkTick {
+  dispatch_source_merge_data(_source, 1);
 }
 
 @end
