@@ -5,6 +5,7 @@
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
 #import "XBoloBonjourKeys.h"
+#import "GSDisplayLink.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -160,7 +161,9 @@ int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSSt
 static void registercallback(int status);
 static void getlisttrackerstatus(int status);
 
-@interface GSXBoloController ()
+@interface GSXBoloController () {
+  GSDisplayLink *_displayLink;
+}
 
 // bolo callbacks
 - (void)setPlayerStatus:(NSString *)aString;
@@ -380,7 +383,13 @@ static void getlisttrackerstatus(int status);
   [self setKeyConfigDict:[defaults dictionaryForKey:GSKeyConfigDict]];
 
   // schedule a timer
-  [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+  _displayLink = [[GSDisplayLink alloc] initWithQueue:nil];
+//  [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+  __weak typeof(self) weakSelf = self;
+  _displayLink.callback = ^{
+    [weakSelf refresh:nil];
+  };
+  [_displayLink start];
 
   // init sound
   [self setMute:[defaults boolForKey:GSMute]];
