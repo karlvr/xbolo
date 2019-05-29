@@ -1030,7 +1030,7 @@
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
 					40A5931E0FBE78FC00F3E650 = {
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 					};
 					55712B831CF8ED7B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1738,6 +1738,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1769,6 +1770,7 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
 			};
