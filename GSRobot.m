@@ -176,7 +176,7 @@
     float gunAngle = client.players[client.player].dir;
     float gunDeltaX = cos(gunAngle) * client.range;
     float gunDeltaY = -sin(gunAngle) * client.range;
-    gameState.gunsightposition = simd_make_float2(gameState.tankposition.x + gunDeltaX, gameState.tankposition.y + gunDeltaY);
+    gameState.gunsightposition = __make2f(gameState.tankposition.x + gunDeltaX, gameState.tankposition.y + gunDeltaY);
     
     gameState.tankdirection = gunAngle * 8 / M_PI - 0.5;
     if(gameState.tankdirection < 0) gameState.tankdirection += 16;
