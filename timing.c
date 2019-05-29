@@ -14,7 +14,7 @@
 #include <ConditionalMacros.h>
 #endif
 
-#if defined(__MACH__) && !TARGET_OS_IPHONE
+#if defined(__MACH__)
 #include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
@@ -26,7 +26,7 @@ static struct timespec timebase;
 void initializegetcurrenttime(void) __attribute__ ((constructor)); // get it to be called automatically at startup
 
 void initializegetcurrenttime(void) {
-#if defined(__MACH__) && !TARGET_OS_IPHONE
+#if defined(__MACH__)
   mach_timebase_info(&gMachTimebase);
 #elif _POSIX_TIMERS
   clock_gettime(CLOCK_MONOTONIC, &timebase);
