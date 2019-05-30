@@ -559,7 +559,7 @@ static void getlisttrackerstatus(int status);
 // accessor methods
 
 @synthesize hostMap=hostMapString;
-- (void)setHostMapString:(NSString *)aString {
+- (void)setHostMap:(NSString *)aString {
   hostMapString = [aString copy];
   hostMapField.stringValue = [[NSFileManager defaultManager] displayNameAtPath:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMap];
