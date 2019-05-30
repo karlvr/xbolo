@@ -22,7 +22,10 @@ static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
 static int dirtytiles(struct ListNode *list, GSRect rect);
 
-@interface GSBoloView ()
+@interface GSBoloView () {
+  NSBitmapImageRep *_bestTiles;
+}
+
 - (void)drawTileAtPoint:(GSPoint)point;
 - (void)drawTilesInRect:(NSRect)rect;
 - (void)eraseSprites;
@@ -47,31 +50,19 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 }
 
 + (void)refresh {
-  /* disable flush window on a bolo view windows */
-  for (GSBoloView *view in boloViews) {
-    [view.window disableFlushWindow];
-  }
-
   /* draw */
   for (GSBoloView *view in boloViews) {
-    // TODO: migrate away from lockFocusIfCanDraw!
-    if ([view lockFocusIfCanDraw]) {
-      [view eraseSprites];
-      [view refreshTiles];
-      [view drawSprites];
-      [view unlockFocus];
-      view.needsDisplay = YES;
-      [view.window flushWindow];
-    }
-  }
-
-  /* enable flush window and flush if needed */
-  for (GSBoloView *view in boloViews) {
-    [view.window enableFlushWindow];
-    [view.window flushWindowIfNeeded];
+//    [view eraseSprites];
+//    [view refreshTiles];
+//    [view drawSprites];
+    [view refresh];
   }
 
   clearchangedtiles();
+}
+
+- (void)refresh {
+  [self setNeedsDisplayInRect:self.visibleRect];
 }
 
 + (void)removeView:(GSBoloView *)view {
@@ -99,7 +90,36 @@ CLEANUP
 END
 }
 
+- (void)makeTilesImage {
+  NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
+  CGContextRef bctx = ctx.CGContext;
+
+  NSLog(@"Bitmap context info %i", CGBitmapContextGetBitmapInfo(bctx));
+
+  CGFloat scale = self.window.screen.backingScaleFactor;
+  CGSize tileImageSize = CGSizeMake(tiles.size.width * scale, tiles.size.height * scale);
+  //  NSRect r = [self backingAlignedRect:NSMakeRect(0, 0, 256, 256) options: NSAlignMinXInward];
+  CGContextRef tileContext = CGBitmapContextCreate(NULL, tileImageSize.width, tileImageSize.height, CGBitmapContextGetBitsPerComponent(bctx), CGBitmapContextGetBytesPerRow(bctx), CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
+  //  CGContextDrawImage(tileContext, CGRectMake(0, 0, CGBitmapContextGetWidth(bctx), CGBitmapContextGetHeight(bctx)), tiles);
+  [NSGraphicsContext saveGraphicsState];
+  NSGraphicsContext *tileGContext = [NSGraphicsContext graphicsContextWithCGContext:tileContext flipped:NO];
+  [NSGraphicsContext setCurrentContext:tileGContext];
+  [tiles drawInRect:NSMakeRect(0, 0, CGBitmapContextGetWidth(tileContext), CGBitmapContextGetHeight(tileContext))];
+  [ctx flushGraphics];
+  [NSGraphicsContext restoreGraphicsState];
+  CGImageRef tileImage = CGBitmapContextCreateImage(tileContext);
+//  _tilesCGImage = tileImage;
+
+  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:tileImage];
+  NSLog(@"got rep %@", rep);
+  _bestTiles = rep;
+}
+
 - (void)drawRect:(NSRect)rect {
+  if (_bestTiles == nil) {
+    [self makeTilesImage];
+  }
+
   BOOL gotlock = 0;
 
 TRY
@@ -169,6 +189,8 @@ END
 }
 
 - (void)drawTilesInRect:(NSRect)rect {
+  CGFloat scale = self.window.backingScaleFactor;
+
   int min_i, max_i, min_j, max_j;
   int min_x, max_x, min_y, max_y;
   int y, x;
@@ -193,7 +215,7 @@ END
 
       image = client.images[y][x];
       dstRect = NSMakeRect(16.0*x, 16.0*(255 - y), 16.0, 16.0);
-      srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
+      srcRect = NSMakeRect((image%16)*16 * scale, (image/16)*16 * scale, 16.0 * scale, 16.0 * scale);
 
       /* draw tile */
       if (image == UNKNOWNIMAGE) {
@@ -203,7 +225,7 @@ END
       }
       else {
         /* draw image */
-        [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+        [_bestTiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0 respectFlipped: NO hints: nil];
 
         /* draw mine */
         if (isMinedTile(client.seentiles, x, y)) {
