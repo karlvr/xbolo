@@ -57,7 +57,7 @@ struct Client {
 
   GSTile terrain[WIDTH][WIDTH];
   GSTile seentiles[WIDTH][WIDTH];
-  int images[WIDTH][WIDTH];
+  GSImage images[WIDTH][WIDTH];
   int fog[WIDTH][WIDTH];
 
   struct {

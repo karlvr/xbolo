@@ -135,7 +135,7 @@ END
     //*Headtilts* I don't know how...
     return;
   }
-  int image;
+  GSImage image;
   NSRect dstRect, srcRect;
 
   image = client.images[point.y][point.x];
@@ -143,7 +143,7 @@ END
   srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
 
   /* draw tile */
-  if (image == -1) {
+  if (image == UNKNOWNIMAGE) {
     /* draw black */
     [[NSColor blackColor] set];
     [NSBezierPath fillRect:dstRect];
@@ -189,14 +189,14 @@ END
   /* draw the tiles in the rect */
   for (y = min_y; y <= max_y; y++) {
     for (x = min_x; x <= max_x; x++) {
-      int image;
+      GSImage image;
 
       image = client.images[y][x];
       dstRect = NSMakeRect(16.0*x, 16.0*(255 - y), 16.0, 16.0);
       srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
 
       /* draw tile */
-      if (image == -1) {
+      if (image == UNKNOWNIMAGE) {
         /* draw black */
         [[NSColor blackColor] set];
         [NSBezierPath fillRect:dstRect];
@@ -269,7 +269,7 @@ END
 
   for (node = nextlist(&client.changedtiles); node != NULL; node = nextlist(node)) {
     GSPoint *p;
-    int image;
+    GSImage image;
     NSRect dstRect;
     NSRect srcRect;
 
@@ -279,7 +279,7 @@ END
     srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
 
     /* draw tile */
-    if (client.images[p->y][p->x] == -1) {
+    if (client.images[p->y][p->x] == UNKNOWNIMAGE) {
       /* draw black */
       [[NSColor blackColor] set];
       [NSBezierPath fillRect:dstRect];

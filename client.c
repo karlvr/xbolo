@@ -3913,7 +3913,7 @@ TRY
   for (y = GSMinY(r); y <= GSMaxY(r); y++) {
     for (x = GSMinX(r); x <= GSMaxX(r); x++) {
       GSPoint *p;
-      int image;
+      GSImage image;
 
       image = mapImage(client.seentiles, x, y);
 
@@ -6284,7 +6284,7 @@ int fogtilefor(int x, int y, int tile) {
 int refresh_client(int x, int y) {
   int i, j;
   GSRect rect;
-  int image;
+  GSImage image;
   GSPoint *p;
   int seentile;
 

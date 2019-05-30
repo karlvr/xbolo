@@ -311,8 +311,9 @@
 #define BUILD2IMAGE (0x82)
 #define CROSSHIMAGE (0x90)
 #define SELETRIMAGE (0x91)
+#define UNKNOWNIMAGE (0xff)
 
-typedef uint16_t GSImage;
+typedef uint8_t GSImage;
 
 /** returns the image tile for x, y */
 GSImage mapImage(GSTile tiles[][256], int x, int y);
