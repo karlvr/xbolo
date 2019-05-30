@@ -183,8 +183,8 @@ END
   min_x = min_i;
   max_x = max_i;
 
-  min_y = 255 - max_j;
-  max_y = 255 - min_j;
+  min_y = WIDTH - max_j;
+  max_y = WIDTH - min_j;
 
   /* draw the tiles in the rect */
   for (y = min_y; y <= max_y; y++) {
