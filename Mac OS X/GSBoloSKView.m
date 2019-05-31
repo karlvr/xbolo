@@ -27,7 +27,10 @@ static SKTextureAtlas *_spritesAtlas;
   NSMutableArray<SKSpriteNode *> *_explosions;
   NSMutableArray<SKSpriteNode *> *_parachutingBuilders;
   SKSpriteNode *_pointer;
+  SKSpriteNode *_selector;
   SKSpriteNode *_crosshair;
+  NSMutableArray<SKLabelNode *> *_otherPlayerLabels;
+  SKLabelNode *_gameStateLabel;
 }
 
 - (void)mapDidUpdate;
@@ -42,10 +45,10 @@ NSString *spriteName(GSImage image) {
   return [NSString stringWithFormat:@"sprite%03i", tileNo];
 }
 
-void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
-  NSUInteger count = sprites.count;
+void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
+  NSUInteger count = nodes.count;
   for (NSUInteger i = fromIndex; i < count; i++) {
-    sprites[i].hidden = YES;
+    nodes[i].hidden = YES;
   }
 }
 
@@ -58,6 +61,7 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
     _otherPlayers = [NSMutableArray array];
     _explosions = [NSMutableArray array];
     _parachutingBuilders = [NSMutableArray array];
+    _otherPlayerLabels = [NSMutableArray array];
   }
   return self;
 }
@@ -102,7 +106,7 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
   NSArray<SKTileGroup *> *tileGroups = _tileSet.tileGroups;
 
   SKTileMapNode *map = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH) fillWithTileGroup:tileGroups[MINE00IMAGE + 1]];
-  map.position = CGPointMake(2048, 2048);
+  map.position = CGPointMake(2048, 2048 - 16); // HACK not sure why I need this -16, but I do for sprites to be positioned correctly
 
   for (int y = 0; y <= WIDTH; y++) {
     for (int x = 0; x <= WIDTH; x++) {
@@ -123,7 +127,6 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
   SKSpriteNode *sprite;
   if (*nextSprite < sprites.count) {
     sprite = sprites[*nextSprite];
-    sprite.texture = [_spritesAtlas textureNamed:spriteName(image)];
     *nextSprite += 1;
   } else {
     sprite = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(image)]];
@@ -134,10 +137,30 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
   return sprite;
 }
 
+- (SKLabelNode *)nextLabel:(NSMutableArray<SKLabelNode *> *)labels
+                 nextLabel:(NSUInteger *)nextLabel
+                  fontName:(NSString *)fontName
+                  fontSize:(CGFloat)fontSize
+                 fontColor:(NSColor *)fontColor {
+  SKLabelNode *label;
+  if (*nextLabel < labels.count) {
+    label = labels[*nextLabel];
+    *nextLabel += 1;
+  } else {
+    label = [[SKLabelNode alloc] initWithFontNamed:fontName];
+    label.fontSize = fontSize;
+    label.fontColor = fontColor;
+    [labels addObject:label];
+    [self addChild:label];
+    *nextLabel += 1;
+  }
+  return label;
+}
+
 - (void)drawSprite:(SKSpriteNode *)sprite image:(GSImage)image at:(Vec2f)point fraction:(CGFloat)vis {
   if (vis > 0.00001) {
     sprite.texture = [_spritesAtlas textureNamed:spriteName(image)];
-    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y + 1)*16.0)); // TODO this +1 is a hack?
+    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
     sprite.position = p;
     sprite.hidden = NO;
   } else {
@@ -145,13 +168,30 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
   }
 }
 
+- (void)drawSprite:(SKSpriteNode *)sprite at:(Vec2f)point fraction:(CGFloat)vis {
+  if (vis > 0.00001) {
+    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
+    sprite.position = p;
+    sprite.hidden = NO;
+  } else {
+    sprite.hidden = YES;
+  }
+}
+
+- (void)drawLabel:(SKLabelNode *)label text:(NSString *)text at:(Vec2f)point {
+  label.text = text;
+  CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
+  label.position = p;
+  label.hidden = NO;
+}
+
 - (void)update {
   [self refreshTiles];
 
   int i;
   struct ListNode *node;
-  char *string = NULL;
   NSUInteger nextSprite;
+  NSUInteger nextLabel;
 
   /* draw builders */
   nextSprite = 0;
@@ -172,10 +212,11 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
       }
     }
   }
-  hideUnusedSprites(_builders, nextSprite);
+  hideUnusedNodes(_builders, nextSprite);
 
   /* draw other players */
   nextSprite = 0;
+  nextLabel = 0;
   for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected && i != client.player && !client.players[i].dead) {
       float vis;
@@ -195,12 +236,14 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
       }
 
       if (vis > 0.90) {
-        // TODO
-//        [self drawLabel:client.players[i].name at:client.players[i].tank withAttributes:@{NSForegroundColorAttributeName: [NSColor whiteColor]}];
+        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor]];
+        NSString *text = [NSString stringWithCString:client.players[i].name encoding:NSUTF8StringEncoding];
+        [self drawLabel:label text:text at:client.players[i].tank];
       }
     }
   }
-  hideUnusedSprites(_otherPlayers, nextSprite);
+  hideUnusedNodes(_otherPlayers, nextSprite);
+  hideUnusedNodes(_otherPlayerLabels, nextLabel);
 
   /* draw player */
   if (!client.players[client.player].dead) {
@@ -232,7 +275,7 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
       }
     }
   }
-  hideUnusedSprites(_shells, nextSprite);
+  hideUnusedNodes(_shells, nextSprite);
 
   /* draw explosions */
   node = nextlist(&client.explosions);
@@ -269,7 +312,7 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
       }
     }
   }
-  hideUnusedSprites(_explosions, nextSprite);
+  hideUnusedNodes(_explosions, nextSprite);
 
   /* draw parachuting builders */
   nextSprite = 0;
@@ -277,20 +320,25 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
     if (client.players[i].connected) {
       if (client.players[i].builderstatus == kBuilderParachute) {
         SKSpriteNode *sprite = [self nextSprite:_parachutingBuilders nextSprite:&nextSprite image:BUILD2IMAGE];
-        [self drawSprite:sprite image:BUILD2IMAGE at:client.players[i].builder fraction:fogvis(client.players[i].builder)];
+        [self drawSprite:sprite at:client.players[i].builder fraction:fogvis(client.players[i].builder)];
       }
     }
   }
-  hideUnusedSprites(_parachutingBuilders, nextSprite);
+  hideUnusedNodes(_parachutingBuilders, nextSprite);
 
   /* draw selector */
-//  {
-//    NSPoint aPoint;
-//    aPoint = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
-//    if ([self mouse:aPoint inRect:self.visibleRect]) {
-//      [self drawSprite:SELETRIMAGE at:make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
-//    }
-//  }
+  {
+    NSPoint aPoint;
+    aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
+    if ([self.view mouse:aPoint inRect:self.view.visibleRect]) {
+      if (!_selector) {
+        _selector = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(SELETRIMAGE)]];
+        [self addChild: _selector];
+      }
+
+      [self drawSprite:_selector at:make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
+    }
+  }
 
   /* draw crosshair */
   if (!client.players[client.player].dead) {
@@ -299,22 +347,30 @@ void hideUnusedSprites(NSArray<SKSpriteNode *> *sprites, NSUInteger fromIndex) {
       [self addChild:_crosshair];
     }
     [self drawSprite:_crosshair image:CROSSHIMAGE at:add2f(client.players[client.player].tank, mul2f(dir2vec(client.players[client.player].dir), client.range)) fraction:1.0];
+  } else {
+    _crosshair.hidden = YES;
   }
 
-//  if (client.pause) {
-//    NSRect rect;
-//    rect = self.visibleRect;
-//
-//    if (client.pause == -1) {
-//      [self drawLabel:"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
-//    }
-//    else {
-//      if (asprintf(&string, "Resume in %d", client.pause) == -1) LOGFAIL(errno)
-//        [self drawLabel:string at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
-//      free(string);
-//      string = NULL;
-//    }
-//  }
+  if (client.pause) {
+    Vec2f point = client.players[client.player].tank;
+
+    if (!_gameStateLabel) {
+      _gameStateLabel = [[SKLabelNode alloc] initWithFontNamed:@"Helvetica"];
+      _gameStateLabel.fontColor = [NSColor whiteColor];
+      _gameStateLabel.fontSize = 90;
+      [self addChild: _gameStateLabel];
+    }
+
+    if (client.pause == -1) {
+      [self drawLabel:_gameStateLabel text:@"Paused" at:point];
+    }
+    else {
+      NSString *text = [NSString stringWithFormat:@"Resume in %i", client.pause];
+      [self drawLabel:_gameStateLabel text:text at:point];
+    }
+  } else {
+    _gameStateLabel.hidden = YES;
+  }
 }
 
 - (void)refreshTiles {
