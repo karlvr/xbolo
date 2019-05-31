@@ -30,6 +30,7 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 
 @interface GSBoloView () {
   NSBitmapImageRep *_bestTiles;
+  CGFloat _tilesScale;
 }
 
 - (void)drawTileAtPoint:(GSPoint)point;
@@ -121,8 +122,9 @@ END
   NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:image];
   CGImageRelease(image);
   CGContextRelease(bitmapContext);
-  
+
   _bestTiles = rep;
+  _tilesScale = scale;
 }
 
 - (void)drawRect:(NSRect)rect {
@@ -199,8 +201,6 @@ END
 }
 
 - (void)drawTilesInRect:(NSRect)rect {
-  CGFloat scale = self.window.backingScaleFactor;
-
   int min_i, max_i, min_j, max_j;
   int min_x, max_x, min_y, max_y;
   int y, x;
@@ -225,7 +225,7 @@ END
 
       image = client.images[y][x];
       dstRect = NSMakeRect(16.0*x, 16.0*(255 - y), 16.0, 16.0);
-      srcRect = NSMakeRect((image%16)*16 * scale, (image/16)*16 * scale, 16.0 * scale, 16.0 * scale);
+      srcRect = NSMakeRect((image%16)*16 * _tilesScale, (image/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
 
       /* draw tile */
       if (image == UNKNOWNIMAGE) {
@@ -235,14 +235,14 @@ END
       }
       else {
         /* draw image */
-        [_bestTiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0 respectFlipped: NO hints: nil];
+        [_bestTiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0 respectFlipped:NO hints: nil];
 
         /* draw mine */
         if (isMinedTile(client.seentiles, x, y)) {
           NSRect mineImageRect;
 
-          mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-          [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+          mineImageRect = NSMakeRect((MINE00IMAGE%16)*16 * _tilesScale, (MINE00IMAGE/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
+          [_bestTiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
         }
 
         /* draw fog */
