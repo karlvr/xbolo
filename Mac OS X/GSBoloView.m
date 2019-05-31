@@ -172,7 +172,7 @@ END
 
   image = client.images[point.y][point.x];
   dstRect = NSMakeRect(16.0*point.x, 16.0*(255 - point.y), 16.0, 16.0);
-  srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
+  srcRect = NSMakeRect((image%16)*16 * _tilesScale, (image/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
 
   /* draw tile */
   if (image == UNKNOWNIMAGE) {
@@ -182,14 +182,14 @@ END
   }
   else {
     /* draw image */
-    [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+    [_bestTiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0 respectFlipped:NO hints:nil];
 
     /* draw mine */
     if (isMinedTile(client.seentiles, point.x, point.y)) {
       NSRect mineImageRect;
 
-      mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-      [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+      mineImageRect = NSMakeRect((MINE00IMAGE%16)*16 * _tilesScale, (MINE00IMAGE/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
+      [_bestTiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
     }
 
     /* draw fog */
@@ -308,7 +308,7 @@ END
     p = (GSPoint *)ptrlist(node);
     image = client.images[p->y][p->x];
     dstRect = NSMakeRect(16.0*p->x, 16.0*(255 - p->y), 16.0, 16.0);
-    srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
+    srcRect = NSMakeRect((image%16)*16 * _tilesScale, (image/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
 
     /* draw tile */
     if (client.images[p->y][p->x] == UNKNOWNIMAGE) {
@@ -318,14 +318,14 @@ END
     }
     else {
       /* draw image */
-      [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+      [_bestTiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0 respectFlipped:NO hints:nil];
 
       /* draw mine */
       if (isMinedTile(client.seentiles, p->x, p->y)) {
         NSRect mineImageRect;
 
-        mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-        [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+        mineImageRect = NSMakeRect((MINE00IMAGE%16)*16 * _tilesScale, (MINE00IMAGE/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
+        [_bestTiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
       }
 
       /* draw fog */
