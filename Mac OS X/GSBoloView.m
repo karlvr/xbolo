@@ -100,22 +100,28 @@ END
   NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
   CGContextRef bctx = ctx.CGContext;
 
-  CGFloat scale = self.window.screen.backingScaleFactor;
-  CGSize tileImageSize = CGSizeMake(tiles.size.width * scale, tiles.size.height * scale);
+  const CGFloat scale = self.window.screen.backingScaleFactor;
+  const CGSize imageSize = CGSizeMake(tiles.size.width * scale, tiles.size.height * scale);
 
   const size_t bytesPerSample = CGBitmapContextGetBytesPerRow(bctx) / CGBitmapContextGetWidth(bctx);
-  const size_t bytesPerRow = RoundBytesPerRow(bytesPerSample * tileImageSize.width);
+  const size_t bytesPerRow = RoundBytesPerRow(bytesPerSample * imageSize.width);
 
-  CGContextRef tileContext = CGBitmapContextCreate(NULL, tileImageSize.width, tileImageSize.height, CGBitmapContextGetBitsPerComponent(bctx), bytesPerRow, CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
+  CGContextRef bitmapContext = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, CGBitmapContextGetBitsPerComponent(bctx), bytesPerRow, CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
+
   [NSGraphicsContext saveGraphicsState];
-  NSGraphicsContext *tileGContext = [NSGraphicsContext graphicsContextWithCGContext:tileContext flipped:NO];
-  [NSGraphicsContext setCurrentContext:tileGContext];
-  [tiles drawInRect:NSMakeRect(0, 0, CGBitmapContextGetWidth(tileContext), CGBitmapContextGetHeight(tileContext))];
-  [ctx flushGraphics];
-  [NSGraphicsContext restoreGraphicsState];
-  CGImageRef tileImage = CGBitmapContextCreateImage(tileContext);
+  NSGraphicsContext *graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:bitmapContext flipped:NO];
+  [NSGraphicsContext setCurrentContext:graphicsContext];
 
-  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:tileImage];
+  [tiles drawInRect:NSMakeRect(0, 0, CGBitmapContextGetWidth(bitmapContext), CGBitmapContextGetHeight(bitmapContext))];
+
+  [graphicsContext flushGraphics];
+  [NSGraphicsContext restoreGraphicsState];
+
+  CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
+  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:image];
+  CGImageRelease(image);
+  CGContextRelease(bitmapContext);
+  
   _bestTiles = rep;
 }
 
