@@ -39,6 +39,7 @@ static NSCursor *cursor = nil;
   SKSpriteNode *_crosshair;
   NSMutableArray<SKLabelNode *> *_otherPlayerLabels;
   SKLabelNode *_gameStateLabel;
+  SKCameraNode *_camera;
 }
 
 - (void)update;
@@ -115,6 +116,16 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     _fogMap = fogMap;
   }
   return self;
+}
+
+- (void)didMoveToView:(SKView *)view {
+  if (_camera) {
+    [_camera removeFromParent];
+    _gameStateLabel = nil;
+  }
+  _camera = [[SKCameraNode alloc] init];
+  [self addChild:_camera];
+  self.camera = _camera;
 }
 
 - (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image {
@@ -248,6 +259,8 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     }
     GSImage image = (client.players[client.player].boat ? PTKB00IMAGE : PTNK00IMAGE) + (((int)(client.players[client.player].dir/(kPif/8.0) + 0.5))%16);
     [self drawSprite:_player image:image at:client.players[client.player].tank fraction:1.0];
+
+    _camera.position = _player.position;
   } else {
     _player.hidden = YES;
   }
@@ -325,6 +338,8 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     NSPoint aPoint;
     aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
     if ([self.view mouse:aPoint inRect:self.view.visibleRect]) {
+      aPoint = [self convertPointFromView:aPoint];
+
       if (!_selector) {
         _selector = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(SELETRIMAGE)]];
         [self addChild: _selector];
@@ -346,22 +361,21 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   }
 
   if (client.pause) {
-    Vec2f point = client.players[client.player].tank;
-
     if (!_gameStateLabel) {
       _gameStateLabel = [[SKLabelNode alloc] initWithFontNamed:@"Helvetica"];
       _gameStateLabel.fontColor = [NSColor whiteColor];
       _gameStateLabel.fontSize = 90;
-      [self addChild: _gameStateLabel];
+      _gameStateLabel.position = self.position;
+      [_camera addChild: _gameStateLabel];
     }
 
     if (client.pause == -1) {
-      [self drawLabel:_gameStateLabel text:@"Paused" at:point];
-    }
-    else {
+      _gameStateLabel.text = @"Paused";
+    } else {
       NSString *text = [NSString stringWithFormat:@"Resume in %i", client.pause];
-      [self drawLabel:_gameStateLabel text:text at:point];
+      _gameStateLabel.text = text;
     }
+    _gameStateLabel.hidden = NO;
   } else {
     _gameStateLabel.hidden = YES;
   }
@@ -417,7 +431,10 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
 
 @interface GSBoloSKView() {
   TestScene *_scene;
+  id<NSObject> _boundsChangeObserver;
 }
+
+- (void)boundsDidChange;
 
 @end
 
@@ -439,10 +456,25 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     self.showsNodeCount = YES;
     self.preferredFramesPerSecond = 16;
 
+    self.postsBoundsChangedNotifications = YES;
+    __weak typeof(self) weakSelf = self;
+    _boundsChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSViewFrameDidChangeNotification object:self queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+      [weakSelf boundsDidChange];
+    }];
+
     _scene = [[TestScene alloc] initWithSize:frameRect.size];
     [self presentScene:_scene];
   }
   return self;
+}
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:_boundsChangeObserver];
+  _boundsChangeObserver = nil;
+}
+
+- (void)boundsDidChange {
+  [_scene setSize:self.bounds.size];
 }
 
 - (void)refresh {
@@ -500,7 +532,8 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     NSPoint point;
 
     point = [self convertPoint:theEvent.locationInWindow fromView:nil];
-    [boloController mouseEvent:GSMakePoint(point.x/16.0, 255 - (int)(point.y/16.0))];
+    point = [_scene convertPointFromView:point];
+    [boloController mouseEvent:GSMakePoint(point.x/16.0, WIDTH - (int)(point.y/16.0) - 1)];
   }
 }
 
