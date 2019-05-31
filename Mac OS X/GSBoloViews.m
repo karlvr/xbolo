@@ -8,6 +8,8 @@
 
 #import "GSBoloViews.h"
 
+#import "client.h"
+
 static NSMutableArray<id<GSBoloViewProtocol>> *boloViews = nil;
 
 @implementation GSBoloViews
