@@ -20,6 +20,8 @@ static SKTextureAtlas *_spritesAtlas;
 @interface TestScene: SKScene {
   SKTileSet *_tileSet;
   SKTileMapNode *_map;
+  SKTileMapNode *_mineMap;
+  SKTileMapNode *_fogMap;
   SKSpriteNode *_player;
   NSMutableArray<SKSpriteNode *> *_shells;
   NSMutableArray<SKSpriteNode *> *_builders;
@@ -69,7 +71,6 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
 - (void)didMoveToView:(SKView *)view {
   self.backgroundColor = [NSColor redColor];
 
-
   NSMutableArray<SKTileGroup *> *tileGroups = [NSMutableArray array];
   for (GSImage image = 0; image <= MINE00IMAGE; image++) {
     NSString *tileName = [self tileName:image];
@@ -81,6 +82,14 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   /* Unknown image tile */
   {
     NSString *tileName = [self tileName:UNKNOWNIMAGE];
+    SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
+    SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
+    [tileGroups addObject:group];
+  }
+
+  /* Fog image tile */
+  {
+    NSString *tileName = [self tileName:UNKNOWNIMAGE - 1];
     SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
     SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
     [tileGroups addObject:group];
@@ -100,7 +109,9 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
 - (void)mapDidUpdate {
   if (_map) {
     [_map removeFromParent];
+    [_mineMap removeFromParent];
     _map = nil;
+    _mineMap = nil;
   }
 
   NSArray<SKTileGroup *> *tileGroups = _tileSet.tileGroups;
@@ -108,8 +119,20 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   SKTileMapNode *map = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH) fillWithTileGroup:tileGroups[MINE00IMAGE + 1]];
   map.position = CGPointMake(2048, 2048);
 
+  SKTileMapNode *mineMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
+  mineMap.position = map.position;
+
+  SKTileMapNode *fogMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
+  fogMap.position = map.position;
+
   [self addChild:map];
   _map = map;
+
+  [self addChild:mineMap];
+  _mineMap = mineMap;
+
+  [self addChild:fogMap];
+  _fogMap = fogMap;
 }
 
 - (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image {
@@ -380,25 +403,25 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
       [_map setTileGroup:tileGroups[MINE00IMAGE + 1] forColumn:p->x row:WIDTH - p->y - 1];
     }
 
-      /* draw mine */
-//      if (isMinedTile(client.seentiles, p->x, p->y)) {
-//        NSRect mineImageRect;
-//
-//        mineImageRect = NSMakeRect((MINE00IMAGE%16)*16 * _tilesScale, (MINE00IMAGE/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
-//        [_bestTiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
-//      }
-//
-//      /* draw fog */
-//      if (client.fog[p->y][p->x] == 0) {
-//        [[[NSColor blackColor] colorWithAlphaComponent:0.5] set];
-//        [NSBezierPath fillRect:dstRect];
-//      }
+    /* draw mine */
+    if (isMinedTile(client.seentiles, p->x, p->y)) {
+      [_mineMap setTileGroup:tileGroups[MINE00IMAGE] forColumn:p->x row:WIDTH - p->y - 1];
+    } else {
+      [_mineMap setTileGroup:nil forColumn:p->x row:WIDTH - p->y - 1];
+    }
+
+    /* draw fog */
+    if (client.fog[p->y][p->x] == 0) {
+      [_fogMap setTileGroup:tileGroups[MINE00IMAGE + 2] forColumn:p->x row:WIDTH - p->y - 1];
+    } else {
+      [_fogMap setTileGroup:nil forColumn:p->x row:WIDTH - p->y - 1];
+    }
   }
 }
 
 - (NSString *)tileName:(GSImage)image {
   /*
-   Tiles were previously indexed bottom-left, left to right, moving up, starting at 0 in the bottom-lefgt corner. 16 per row.
+   Tiles were previously indexed bottom-left, left to right, moving up, starting at 0 in the bottom-left corner. 16 per row.
    Our tile imsges are numbered 00-255 starting in the top-left.
 
    */
