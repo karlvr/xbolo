@@ -180,6 +180,7 @@
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
+		B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAD9229FEE9000741E7A /* GSBoloSKView.m */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -389,6 +390,8 @@
 		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
 		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
+		B804BAD8229FEE9000741E7A /* GSBoloSKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloSKView.h; sourceTree = "<group>"; };
+		B804BAD9229FEE9000741E7A /* GSBoloSKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloSKView.m; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -827,6 +830,8 @@
 			children = (
 				404D427F0FF8525200589EA2 /* GSBoloView.h */,
 				404D42800FF8525200589EA2 /* GSBoloView.m */,
+				B804BAD8229FEE9000741E7A /* GSBoloSKView.h */,
+				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
 				404D42820FF8525200589EA2 /* GSBuilderStatusView.m */,
 				404D42830FF8525200589EA2 /* GSKeyCodeField.h */,
@@ -1267,6 +1272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */,
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
 				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,

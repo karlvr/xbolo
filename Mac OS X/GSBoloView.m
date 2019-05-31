@@ -16,6 +16,10 @@
 #include <math.h>
 #include <tgmath.h>
 
+#import "GSBoloSKView.h"
+
+@import SpriteKit;
+
 static NSMutableArray<GSBoloView*> *boloViews = nil;
 static NSImage *tiles = nil;
 static NSImage *sprites = nil;
@@ -29,6 +33,8 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 }
 
 @interface GSBoloView () {
+  GSBoloSKView *_sk;
+  BOOL _handledMapDidUpdate;
   NSBitmapImageRep *_bestTiles;
   CGFloat _tilesScale;
 }
@@ -69,7 +75,12 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 }
 
 - (void)refresh {
-  [self setNeedsDisplayInRect:self.visibleRect];
+  if (!_handledMapDidUpdate) {
+    [_sk mapDidUpdate];
+    _handledMapDidUpdate = YES;
+  }
+  [_sk refresh];
+//  [self setNeedsDisplayInRect:self.visibleRect];
 }
 
 + (void)removeView:(GSBoloView *)view {
@@ -81,6 +92,10 @@ TRY
 	if (self = [super initWithFrame:frameRect]) {
     if (initlist(&rectlist) == -1) LOGFAIL(errno)
     [boloViews addObject:self];
+
+      GSBoloSKView *sk = [[GSBoloSKView alloc] initWithFrame:frameRect];
+      [self addSubview:sk];
+      _sk = sk;
 	}
 
 CLEANUP
