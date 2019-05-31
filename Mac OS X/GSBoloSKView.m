@@ -110,8 +110,10 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   if (_map) {
     [_map removeFromParent];
     [_mineMap removeFromParent];
+    [_fogMap removeFromParent];
     _map = nil;
     _mineMap = nil;
+    _fogMap = nil;
   }
 
   NSArray<SKTileGroup *> *tileGroups = _tileSet.tileGroups;
