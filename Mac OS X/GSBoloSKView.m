@@ -106,18 +106,7 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   NSArray<SKTileGroup *> *tileGroups = _tileSet.tileGroups;
 
   SKTileMapNode *map = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH) fillWithTileGroup:tileGroups[MINE00IMAGE + 1]];
-  map.position = CGPointMake(2048, 2048 - 16); // HACK not sure why I need this -16, but I do for sprites to be positioned correctly
-
-  for (int y = 0; y <= WIDTH; y++) {
-    for (int x = 0; x <= WIDTH; x++) {
-      GSImage image = client.images[y][x];
-      if (image != UNKNOWNIMAGE) {
-        [map setTileGroup:tileGroups[image] forColumn:x row:WIDTH - y];
-      } else {
-        [map setTileGroup:tileGroups[MINE00IMAGE + 1] forColumn:x row:WIDTH - y];
-      }
-    }
-  }
+  map.position = CGPointMake(2048, 2048);
 
   [self addChild:map];
   _map = map;
@@ -386,9 +375,9 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     image = client.images[p->y][p->x];
 
     if (image != UNKNOWNIMAGE) {
-      [_map setTileGroup:tileGroups[image] forColumn:p->x row:WIDTH - p->y];
+      [_map setTileGroup:tileGroups[image] forColumn:p->x row:WIDTH - p->y - 1];
     } else {
-      [_map setTileGroup:tileGroups[MINE00IMAGE + 1] forColumn:p->x row:WIDTH - p->y];
+      [_map setTileGroup:tileGroups[MINE00IMAGE + 1] forColumn:p->x row:WIDTH - p->y - 1];
     }
 
       /* draw mine */
