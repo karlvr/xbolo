@@ -31,10 +31,12 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 @interface GSBoloView () {
   NSBitmapImageRep *_bestTiles;
   CGFloat _tilesScale;
+  NSBitmapImageRep *_backingImage;
+  CGContextRef _backingBitmapContext;
 }
 
 - (void)drawTileAtPoint:(GSPoint)point;
-- (void)drawTilesInRect:(NSRect)rect;
+- (void)drawTilesInRect:(NSRect)rect scale:(CGFloat)scale;
 - (void)eraseSprites;
 - (void)refreshTiles;
 - (void)drawSprites;
@@ -97,6 +99,34 @@ CLEANUP
 END
 }
 
+- (void)makeBackingImage {
+  NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
+  CGContextRef bctx = ctx.CGContext;
+
+  const CGFloat scale = self.window.screen.backingScaleFactor;
+  const CGSize imageSize = CGSizeMake(self.bounds.size.width * scale, self.bounds.size.height * scale);
+
+  const size_t bytesPerSample = CGBitmapContextGetBytesPerRow(bctx) / CGBitmapContextGetWidth(bctx);
+  const size_t bytesPerRow = RoundBytesPerRow(bytesPerSample * imageSize.width);
+
+  CGContextRef bitmapContext = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, CGBitmapContextGetBitsPerComponent(bctx), bytesPerRow, CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
+
+  [NSGraphicsContext saveGraphicsState];
+  NSGraphicsContext *graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:bitmapContext flipped:NO];
+  [NSGraphicsContext setCurrentContext:graphicsContext];
+
+  [self drawTilesInRect:NSMakeRect(0, 0, imageSize.width, imageSize.height) scale:scale];
+
+  [graphicsContext flushGraphics];
+  [NSGraphicsContext restoreGraphicsState];
+
+  CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
+  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:image];
+  CGImageRelease(image);
+  _backingImage = rep;
+  _backingBitmapContext = bitmapContext;
+}
+
 - (void)makeTilesImage {
   NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
   CGContextRef bctx = ctx.CGContext;
@@ -131,6 +161,9 @@ END
   if (_bestTiles == nil) {
     [self makeTilesImage];
   }
+  if (_backingImage == nil) {
+    [self makeBackingImage];
+  }
 
   BOOL gotlock = 0;
 
@@ -138,7 +171,17 @@ TRY
   if (lockclient()) LOGFAIL(errno)
   gotlock = 1;
 
-  [self drawTilesInRect:rect];
+  if (_backingImage) {
+    CGFloat scale = self.window.backingScaleFactor;
+    NSRect sourceRect = rect;
+    sourceRect.origin.x *= scale;
+    sourceRect.origin.y *= scale;
+    sourceRect.size.width *= scale;
+    sourceRect.size.height *= scale;
+    [_backingImage drawInRect:rect fromRect:sourceRect operation:NSCompositeCopy fraction:1.0 respectFlipped:NO hints:nil];
+  } else {
+    [self drawTilesInRect:rect scale:1];
+  }
   [self drawSprites];
 
   if (unlockclient()) LOGFAIL(errno)
@@ -200,7 +243,7 @@ END
   }
 }
 
-- (void)drawTilesInRect:(NSRect)rect {
+- (void)drawTilesInRect:(NSRect)rect scale:(CGFloat)scale {
   int min_i, max_i, min_j, max_j;
   int min_x, max_x, min_y, max_y;
   int y, x;
@@ -224,7 +267,7 @@ END
       GSImage image;
 
       image = client.images[y][x];
-      dstRect = NSMakeRect(16.0*x, 16.0*(255 - y), 16.0, 16.0);
+      dstRect = NSMakeRect(16.0*x * scale, 16.0*(255 - y) * scale, 16.0 * scale, 16.0 * scale);
       srcRect = NSMakeRect((image%16)*16 * _tilesScale, (image/16)*16 * _tilesScale, 16.0 * _tilesScale, 16.0 * _tilesScale);
 
       /* draw tile */
