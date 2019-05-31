@@ -40,7 +40,10 @@ static NSCursor *cursor = nil;
   NSMutableArray<SKLabelNode *> *_otherPlayerLabels;
   SKLabelNode *_gameStateLabel;
   SKCameraNode *_camera;
+  BOOL _scrolling;
 }
+
+@property (nonatomic) BOOL autoScroll;
 
 - (void)update;
 
@@ -60,10 +63,24 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   }
 }
 
+CGFloat CGPointDist(CGPoint a, CGPoint b) {
+  return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
+
+CGPoint CGPointSubtract(CGPoint a, CGPoint b) {
+  return CGPointMake(a.x - b.x, a.y - b.y);
+}
+
+CGPoint CGPointAdd(CGPoint a, CGPoint b) {
+  return CGPointMake(a.x + b.x, a.y + b.y);
+}
+
 @implementation TestScene
 
 - (instancetype)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
+    _autoScroll = YES;
+
     _shells = [NSMutableArray array];
     _builders = [NSMutableArray array];
     _otherPlayers = [NSMutableArray array];
@@ -192,7 +209,53 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
 
 - (void)update {
   [self refreshTiles];
+  [self refreshSprites];
+  [self updateCamera];
+}
 
+- (void)updateCamera {
+  if (_scrolling) {
+    return;
+  }
+
+  if (_autoScroll) {
+    CGFloat cameraDistance = CGPointDist(_camera.position, _player.position);
+    if (cameraDistance > 16 * 8) {
+      [self moveCamera:_player.position];
+    }
+  }
+}
+
+- (void)moveCamera:(CGPoint)position {
+  const CGPoint delta = CGPointSubtract(position, _camera.position);
+
+  _scrolling = YES;
+
+  const NSPoint aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
+  const BOOL moveCursor = [self.view mouse:aPoint inRect:self.view.visibleRect];
+
+
+  SKAction *action = [SKAction moveTo:position duration:0.2];
+  if (moveCursor) {
+    CGEventRef event = CGEventCreate(NULL);
+    CGPoint mouseLocation = CGEventGetLocation(event);
+    CFRelease(event);
+    
+    action.timingFunction = ^float(float value) {
+      CGPoint newMouseLocation = mouseLocation;
+      newMouseLocation.x -= (delta.x * value);
+      newMouseLocation.y += (delta.y * value);
+      CGWarpMouseCursorPosition(newMouseLocation);
+
+      return value;
+    };
+  }
+  [_camera runAction:action completion:^{
+    self->_scrolling = NO;
+  }];
+}
+
+- (void)refreshSprites {
   int i;
   struct ListNode *node;
   NSUInteger nextSprite;
@@ -259,8 +322,6 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     }
     GSImage image = (client.players[client.player].boat ? PTKB00IMAGE : PTNK00IMAGE) + (((int)(client.players[client.player].dir/(kPif/8.0) + 0.5))%16);
     [self drawSprite:_player image:image at:client.players[client.player].tank fraction:1.0];
-
-    _camera.position = _player.position;
   } else {
     _player.hidden = YES;
   }
