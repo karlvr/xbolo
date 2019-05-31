@@ -1,5 +1,6 @@
-#import "GSBoloView.h"
+#import "GSBoloDrawRectView.h"
 #import "GSXBoloController.h"
+#import "GSBoloViews.h"
 
 #include "tiles.h"
 #include "images.h"
@@ -16,11 +17,8 @@
 #include <math.h>
 #include <tgmath.h>
 
-#import "GSBoloSKView.h"
-
 @import SpriteKit;
 
-static NSMutableArray<GSBoloView*> *boloViews = nil;
 static NSImage *tiles = nil;
 static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
@@ -32,9 +30,7 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
   return bytesPerRow;
 }
 
-@interface GSBoloView () {
-  GSBoloSKView *_sk;
-  BOOL _handledMapDidUpdate;
+@interface GSBoloDrawRectView () {
   NSBitmapImageRep *_bestTiles;
   CGFloat _tilesScale;
 }
@@ -49,54 +45,30 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 - (void)dirtyTiles:(NSRect)rect;
 @end
 
-@implementation GSBoloView
+@implementation GSBoloDrawRectView
 
 + (void)initialize {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    boloViews = [[NSMutableArray alloc] init];
-
     assert((tiles = [NSImage imageNamed:@"Tiles"]) != nil);
     assert((sprites = [NSImage imageNamed:@"Sprites"]) != nil);
     assert((cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Cursor"] hotSpot:NSMakePoint(8.0, 8.0)]) != nil);
   });
 }
 
-+ (void)refresh {
-  /* draw */
-  for (GSBoloView *view in boloViews) {
+- (void)refresh {
 //    [view eraseSprites];
 //    [view refreshTiles];
 //    [view drawSprites];
-    [view refresh];
-  }
-
-  clearchangedtiles();
-}
-
-- (void)refresh {
-  if (!_handledMapDidUpdate) {
-    [_sk mapDidUpdate];
-    _handledMapDidUpdate = YES;
-  }
-  [_sk refresh];
-//  [self setNeedsDisplayInRect:self.visibleRect];
-}
-
-+ (void)removeView:(GSBoloView *)view {
-  [boloViews removeObject:view];
+  [self setNeedsDisplayInRect:self.visibleRect];
 }
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
 TRY
-	if (self = [super initWithFrame:frameRect]) {
+  if (self = [super initWithFrame:frameRect]) {
     if (initlist(&rectlist) == -1) LOGFAIL(errno)
-    [boloViews addObject:self];
-
-      GSBoloSKView *sk = [[GSBoloSKView alloc] initWithFrame:frameRect];
-      [self addSubview:sk];
-      _sk = sk;
-	}
+    [GSBoloViews addView:self];
+  }
 
 CLEANUP
   switch (ERROR) {

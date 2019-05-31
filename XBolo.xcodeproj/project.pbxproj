@@ -23,7 +23,7 @@
 		402097CC0FC91E2F0018390E /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
 		402098370FC926C00018390E /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
 		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloView.m */; };
+		404D428A0FF8525200589EA2 /* GSBoloDrawRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */; };
 		404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42820FF8525200589EA2 /* GSBuilderStatusView.m */; };
 		404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42840FF8525200589EA2 /* GSKeyCodeField.m */; };
 		404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42860FF8525200589EA2 /* GSStatusBar.m */; };
@@ -181,6 +181,7 @@
 		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
 		B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAD9229FEE9000741E7A /* GSBoloSKView.m */; };
+		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -279,8 +280,8 @@
 		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
 		404D425D0FF84FEA00589EA2 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
-		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloView.h; sourceTree = "<group>"; };
-		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBoloView.m; sourceTree = "<group>"; };
+		404D427F0FF8525200589EA2 /* GSBoloDrawRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloDrawRectView.h; sourceTree = "<group>"; };
+		404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBoloDrawRectView.m; sourceTree = "<group>"; };
 		404D42810FF8525200589EA2 /* GSBuilderStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBuilderStatusView.h; sourceTree = "<group>"; };
 		404D42820FF8525200589EA2 /* GSBuilderStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBuilderStatusView.m; sourceTree = "<group>"; };
 		404D42830FF8525200589EA2 /* GSKeyCodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKeyCodeField.h; sourceTree = "<group>"; };
@@ -392,6 +393,9 @@
 		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
 		B804BAD8229FEE9000741E7A /* GSBoloSKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloSKView.h; sourceTree = "<group>"; };
 		B804BAD9229FEE9000741E7A /* GSBoloSKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloSKView.m; sourceTree = "<group>"; };
+		B804BAE222A1D07000741E7A /* GSBoloViews.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViews.h; sourceTree = "<group>"; };
+		B804BAE322A1D07000741E7A /* GSBoloViews.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloViews.m; sourceTree = "<group>"; };
+		B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViewProtocol.h; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -828,8 +832,8 @@
 		F55317BB03E4DB9601924B91 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				404D427F0FF8525200589EA2 /* GSBoloView.h */,
-				404D42800FF8525200589EA2 /* GSBoloView.m */,
+				404D427F0FF8525200589EA2 /* GSBoloDrawRectView.h */,
+				404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */,
 				B804BAD8229FEE9000741E7A /* GSBoloSKView.h */,
 				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
@@ -840,6 +844,9 @@
 				404D42860FF8525200589EA2 /* GSStatusBar.m */,
 				404D42870FF8525200589EA2 /* GSStatusView.h */,
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
+				B804BAE222A1D07000741E7A /* GSBoloViews.h */,
+				B804BAE322A1D07000741E7A /* GSBoloViews.m */,
+				B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1273,6 +1280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */,
+				B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */,
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
 				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
@@ -1281,7 +1289,7 @@
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
 				40A593610FBE78FC00F3E650 /* errchk.c in Sources */,
 				55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */,
-				404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */,
+				404D428A0FF8525200589EA2 /* GSBoloDrawRectView.m in Sources */,
 				404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */,
 				404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */,
 				C2765E8C105602D70007E05A /* GSRobot.m in Sources */,

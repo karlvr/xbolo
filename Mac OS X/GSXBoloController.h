@@ -11,6 +11,7 @@
 #include "client.h"
 
 @class GSKeyCodeField, GSBoloView, GSRobot, GSStatusBar, GSBuilderStatusView;
+@protocol GSBoloViewProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -79,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
   IBOutlet GSKeyCodeField *prefPillViewField;
 
   // Main View Outlets
-  IBOutlet GSBoloView *boloView;
+  IBOutlet NSView<GSBoloViewProtocol> *boloView;
   IBOutlet NSView *builderToolView;
 
   /* Status Window Outlets */

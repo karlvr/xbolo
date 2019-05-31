@@ -8,12 +8,18 @@
 
 #import "GSBoloSKView.h"
 
+#import "GSXBoloController.h"
+#import "GSBoloViews.h"
+
 #import "bolo.h"
 #import "images.h"
 #import "client.h"
 
+#include <Carbon/Carbon.h>
+
 static SKTextureAtlas *_tilesAtlas;
 static SKTextureAtlas *_spritesAtlas;
+static NSCursor *cursor = nil;
 
 @import SpriteKit;
 
@@ -35,7 +41,6 @@ static SKTextureAtlas *_spritesAtlas;
   SKLabelNode *_gameStateLabel;
 }
 
-- (void)mapDidUpdate;
 - (void)update;
 
 @end
@@ -64,77 +69,52 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
     _explosions = [NSMutableArray array];
     _parachutingBuilders = [NSMutableArray array];
     _otherPlayerLabels = [NSMutableArray array];
+
+    self.backgroundColor = [NSColor redColor];
+
+    NSMutableArray<SKTileGroup *> *tileGroups = [NSMutableArray array];
+    for (GSImage image = 0; image <= MINE00IMAGE; image++) {
+      NSString *tileName = [self tileName:image];
+      SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
+      SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
+      [tileGroups addObject:group];
+    }
+
+    /* Unknown image tile */
+    {
+      NSString *tileName = [self tileName:UNKNOWNIMAGE];
+      SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
+      SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
+      [tileGroups addObject:group];
+    }
+
+    /* Fog image tile */
+    {
+      NSString *tileName = [self tileName:UNKNOWNIMAGE - 1];
+      SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
+      SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
+      [tileGroups addObject:group];
+    }
+
+    _tileSet = [[SKTileSet alloc] initWithTileGroups:tileGroups];
+
+    SKTileMapNode *map = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH) fillWithTileGroup:tileGroups[MINE00IMAGE + 1]];
+    map.position = CGPointMake(2048, 2048);
+
+    SKTileMapNode *mineMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
+    mineMap.position = map.position;
+
+    SKTileMapNode *fogMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
+    fogMap.position = map.position;
+
+    [self addChild:map];
+    [self addChild:mineMap];
+    [self addChild:fogMap];
+    _map = map;
+    _mineMap = mineMap;
+    _fogMap = fogMap;
   }
   return self;
-}
-
-- (void)didMoveToView:(SKView *)view {
-  self.backgroundColor = [NSColor redColor];
-
-  NSMutableArray<SKTileGroup *> *tileGroups = [NSMutableArray array];
-  for (GSImage image = 0; image <= MINE00IMAGE; image++) {
-    NSString *tileName = [self tileName:image];
-    SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
-    SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
-    [tileGroups addObject:group];
-  }
-
-  /* Unknown image tile */
-  {
-    NSString *tileName = [self tileName:UNKNOWNIMAGE];
-    SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
-    SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
-    [tileGroups addObject:group];
-  }
-
-  /* Fog image tile */
-  {
-    NSString *tileName = [self tileName:UNKNOWNIMAGE - 1];
-    SKTileDefinition *tileDef = [[SKTileDefinition alloc] initWithTexture:[_tilesAtlas textureNamed:tileName]];
-    SKTileGroup *group = [[SKTileGroup alloc] initWithTileDefinition:tileDef];
-    [tileGroups addObject:group];
-  }
-
-  _tileSet = [[SKTileSet alloc] initWithTileGroups:tileGroups];
-}
-
-- (BOOL)becomeFirstResponder {
-  return NO;
-}
-
-- (BOOL)acceptsFirstResponder {
-  return NO;
-}
-
-- (void)mapDidUpdate {
-  if (_map) {
-    [_map removeFromParent];
-    [_mineMap removeFromParent];
-    [_fogMap removeFromParent];
-    _map = nil;
-    _mineMap = nil;
-    _fogMap = nil;
-  }
-
-  NSArray<SKTileGroup *> *tileGroups = _tileSet.tileGroups;
-
-  SKTileMapNode *map = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH) fillWithTileGroup:tileGroups[MINE00IMAGE + 1]];
-  map.position = CGPointMake(2048, 2048);
-
-  SKTileMapNode *mineMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
-  mineMap.position = map.position;
-
-  SKTileMapNode *fogMap = [[SKTileMapNode alloc] initWithTileSet:_tileSet columns:WIDTH rows:WIDTH tileSize:CGSizeMake(IMAGEWIDTH, IMAGEWIDTH)];
-  fogMap.position = map.position;
-
-  [self addChild:map];
-  _map = map;
-
-  [self addChild:mineMap];
-  _mineMap = mineMap;
-
-  [self addChild:fogMap];
-  _fogMap = fogMap;
 }
 
 - (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image {
@@ -448,11 +428,13 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   dispatch_once(&onceToken, ^{
     _tilesAtlas = [SKTextureAtlas atlasNamed:@"TilesAtlas"];
     _spritesAtlas = [SKTextureAtlas atlasNamed:@"SpritesAtlas"];
+    assert((cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Cursor"] hotSpot:NSMakePoint(8.0, 8.0)]) != nil);
   });
 }
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
   if (self = [super initWithFrame:frameRect]) {
+    [GSBoloViews addView:self];
     self.showsFPS = YES;
     self.showsNodeCount = YES;
     self.preferredFramesPerSecond = 16;
@@ -463,12 +445,72 @@ void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   return self;
 }
 
-- (void)mapDidUpdate {
-  [_scene mapDidUpdate];
-}
-
 - (void)refresh {
   [_scene update];
+}
+
+- (BOOL)becomeFirstResponder {
+  BOOL okToChange;
+  if ((okToChange = [super becomeFirstResponder])) {
+    UInt32 carbonModifiers;
+    carbonModifiers = GetCurrentKeyModifiers();
+    modifiers =
+    (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
+    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSShiftKeyMask : 0) |
+    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSControlKeyMask : 0) |
+    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSAlternateKeyMask : 0) |
+    (carbonModifiers & cmdKey ? NSCommandKeyMask : 0);
+    //    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
+    //    (carbonModifiers &  ? NSHelpKeyMask : 0) |
+    //    (carbonModifiers &  ? NSFunctionKeyMask : 0);
+  }
+  return okToChange;
+}
+
+- (BOOL)acceptsFirstResponder {
+  return YES;
+}
+
+- (void)keyDown:(NSEvent *)theEvent {
+  if (!theEvent.ARepeat) {
+    [boloController keyEvent:YES forKey:theEvent.keyCode];
+  }
+}
+
+- (void)keyUp:(NSEvent *)theEvent {
+  if (!theEvent.ARepeat) {
+    [boloController keyEvent:NO forKey:theEvent.keyCode];
+  }
+}
+
+- (void)flagsChanged:(NSEvent *)theEvent {
+  NSEventModifierFlags oldModifiers;
+  oldModifiers = modifiers;
+  modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  if (modifiers & (oldModifiers ^ modifiers)) {
+    [boloController keyEvent:YES forKey:theEvent.keyCode];
+  }
+  else {
+    [boloController keyEvent:NO forKey:theEvent.keyCode];
+  }
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
+  if (theEvent.type == NSLeftMouseUp) {
+    NSPoint point;
+
+    point = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    [boloController mouseEvent:GSMakePoint(point.x/16.0, 255 - (int)(point.y/16.0))];
+  }
+}
+
+- (BOOL)isOpaque {
+  return YES;
+}
+
+- (void)resetCursorRects {
+  [self addCursorRect:self.visibleRect cursor:cursor];
+  [cursor setOnMouseEntered:YES];
 }
 
 @end

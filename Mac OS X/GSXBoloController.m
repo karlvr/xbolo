@@ -1,10 +1,11 @@
 #import "GSXBoloController.h"
-#import "GSBoloView.h"
+#import "GSBoloViews.h"
 #import "GSRobot.h"
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
 #import "XBoloBonjourKeys.h"
+#import "GSBoloViews.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -2661,7 +2662,7 @@ TRY
       }
       if(centerTank)
         [self tankCenter:nil];
-      [GSBoloView refresh];
+      [GSBoloViews refresh];
 
       if (counter%2) {
         switch (client.players[client.player].builderstatus) {

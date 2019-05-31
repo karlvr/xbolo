@@ -8,12 +8,16 @@
 
 #import <SpriteKit/SpriteKit.h>
 
+#import "GSBoloViewProtocol.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GSBoloSKView : SKView
+@class GSXBoloController;
 
-- (void)mapDidUpdate;
-- (void)refresh;
+@interface GSBoloSKView : SKView<GSBoloViewProtocol> {
+  IBOutlet GSXBoloController *boloController;
+  NSEventModifierFlags modifiers;
+}
 
 @end
 
