@@ -22,6 +22,12 @@ static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
 static int dirtytiles(struct ListNode *list, GSRect rect);
 
+/** Round the bytesPerRow to the best performance value */
+size_t RoundBytesPerRow(size_t bytesPerRow) {
+  bytesPerRow += 16 - bytesPerRow % 16;
+  return bytesPerRow;
+}
+
 @interface GSBoloView () {
   NSBitmapImageRep *_bestTiles;
 }
@@ -94,13 +100,13 @@ END
   NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
   CGContextRef bctx = ctx.CGContext;
 
-  NSLog(@"Bitmap context info %i", CGBitmapContextGetBitmapInfo(bctx));
-
   CGFloat scale = self.window.screen.backingScaleFactor;
   CGSize tileImageSize = CGSizeMake(tiles.size.width * scale, tiles.size.height * scale);
-  //  NSRect r = [self backingAlignedRect:NSMakeRect(0, 0, 256, 256) options: NSAlignMinXInward];
-  CGContextRef tileContext = CGBitmapContextCreate(NULL, tileImageSize.width, tileImageSize.height, CGBitmapContextGetBitsPerComponent(bctx), CGBitmapContextGetBytesPerRow(bctx), CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
-  //  CGContextDrawImage(tileContext, CGRectMake(0, 0, CGBitmapContextGetWidth(bctx), CGBitmapContextGetHeight(bctx)), tiles);
+
+  const size_t bytesPerSample = CGBitmapContextGetBytesPerRow(bctx) / CGBitmapContextGetWidth(bctx);
+  const size_t bytesPerRow = RoundBytesPerRow(bytesPerSample * tileImageSize.width);
+
+  CGContextRef tileContext = CGBitmapContextCreate(NULL, tileImageSize.width, tileImageSize.height, CGBitmapContextGetBitsPerComponent(bctx), bytesPerRow, CGBitmapContextGetColorSpace(bctx), CGBitmapContextGetBitmapInfo(bctx));
   [NSGraphicsContext saveGraphicsState];
   NSGraphicsContext *tileGContext = [NSGraphicsContext graphicsContextWithCGContext:tileContext flipped:NO];
   [NSGraphicsContext setCurrentContext:tileGContext];
@@ -108,10 +114,8 @@ END
   [ctx flushGraphics];
   [NSGraphicsContext restoreGraphicsState];
   CGImageRef tileImage = CGBitmapContextCreateImage(tileContext);
-//  _tilesCGImage = tileImage;
 
   NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:tileImage];
-  NSLog(@"got rep %@", rep);
   _bestTiles = rep;
 }
 
