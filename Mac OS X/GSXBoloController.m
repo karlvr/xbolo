@@ -2496,7 +2496,7 @@ TRY
           [boloView scrollRectToVisible:rect];  /* potential to call drawRect: which locks client */
         }
         if (unlockclient()) LOGFAIL(errno)
-        gotlock = 1;
+        gotlock = 0;
 
         client.spawned = 0;
       }
