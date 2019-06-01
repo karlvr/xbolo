@@ -187,6 +187,7 @@
 		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
+		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -407,6 +408,8 @@
 		B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMTKView.m; sourceTree = "<group>"; };
 		B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMetalRenderer.h; sourceTree = "<group>"; };
 		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
+		B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloWrapperView.h; sourceTree = "<group>"; };
+		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -853,6 +856,8 @@
 				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
 				B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */,
 				B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */,
+				B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */,
+				B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
 				404D42820FF8525200589EA2 /* GSBuilderStatusView.m */,
 				404D42830FF8525200589EA2 /* GSKeyCodeField.h */,
@@ -1329,6 +1334,7 @@
 				C2BFADE31055937F009A1EE7 /* timing.c in Sources */,
 				40A593600FBE78FC00F3E650 /* vector.c in Sources */,
 				407ECEFC1087C371002B43CB /* buf.c in Sources */,
+				B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */,
 				4014422710ACA4F6008487C8 /* resolver.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -47,6 +47,8 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 
 @implementation GSBoloDrawRectView
 
+@synthesize boloController;
+
 + (void)initialize {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{

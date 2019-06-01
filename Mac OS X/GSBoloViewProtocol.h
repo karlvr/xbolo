@@ -8,7 +8,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class GSXBoloController;
+
 @protocol GSBoloViewProtocol <NSObject>
+
+@property (strong, nonatomic) GSXBoloController *boloController;
 
 - (void)refresh;
 - (void)scroll:(CGPoint)delta;

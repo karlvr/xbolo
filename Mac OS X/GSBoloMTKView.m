@@ -30,6 +30,8 @@ static NSCursor *cursor = nil;
 
 @implementation GSBoloMTKView
 
+@synthesize boloController;
+
 + (void)initialize {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
