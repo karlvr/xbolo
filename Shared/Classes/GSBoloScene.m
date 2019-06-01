@@ -555,15 +555,11 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 - (void)nextPillCenter {
   GSPoint square;
   int i, j;
-  int gotlock = 0;
   BOOL found = NO;
 
-  TRY
+TRY
   square.x = _camera.position.x/16.0;
   square.y = FWIDTH - (_camera.position.y/16.0);
-
-  if (lockclient()) LOGFAIL(errno)
-    gotlock = 1;
 
   /* Find the currently centered pillbox */
   for (i = 0; i < client.npills; i++) {
@@ -579,8 +575,6 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
             ) {
           square.x = client.pills[j].x;
           square.y = client.pills[j].y;
-          if (unlockclient()) LOGFAIL(errno)
-            gotlock = 0;
           found = YES;
           SUCCESS
         }
@@ -588,8 +582,6 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 
       square.x = client.pills[i].x;
       square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-        gotlock = 0;
       found = YES;
       SUCCESS
     }
@@ -603,17 +595,12 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
         ) {
       square.x = client.pills[i].x;
       square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-        gotlock = 0;
       found = YES;
       SUCCESS
     }
   }
 
-  if (unlockclient()) LOGFAIL(errno)
-    gotlock = 0;
-
-  CLEANUP
+CLEANUP
   switch (ERROR) {
     case 0:
       if (found) {
@@ -623,17 +610,13 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
       break;
 
     default:
-      if (gotlock) {
-        unlockclient();
-      }
-
       PCRIT(ERROR)
       printlineinfo();
       CLEARERRLOG
       exit(EXIT_FAILURE);
       break;
   }
-  END
+END
 }
 
 @end

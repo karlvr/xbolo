@@ -90,15 +90,11 @@ END
   GSPoint square;
   NSRect rect;
   int i, j;
-  int gotlock = 0;
 
 TRY
   rect = self.visibleRect;
   square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
   square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
-
-  if (lockclient()) LOGFAIL(errno)
-    gotlock = 1;
 
   for (i = 0; i < client.npills; i++) {
     if (
@@ -113,8 +109,6 @@ TRY
             ) {
           square.x = client.pills[j].x;
           square.y = client.pills[j].y;
-          if (unlockclient()) LOGFAIL(errno)
-            gotlock = 0;
           rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
           rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
           SUCCESS
@@ -123,8 +117,6 @@ TRY
 
       square.x = client.pills[i].x;
       square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-        gotlock = 0;
       rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
       rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
       SUCCESS
@@ -138,16 +130,11 @@ TRY
         ) {
       square.x = client.pills[i].x;
       square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-        gotlock = 0;
       rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
       rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
       SUCCESS
     }
   }
-
-  if (unlockclient()) LOGFAIL(errno)
-    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
@@ -156,10 +143,6 @@ CLEANUP
       break;
 
     default:
-      if (gotlock) {
-        unlockclient();
-      }
-
       PCRIT(ERROR)
       printlineinfo();
       CLEARERRLOG
@@ -189,19 +172,12 @@ END
 
 - (void)tankCenter {
   NSRect rect;
-  int gotlock = 0;
 
 TRY
   rect = self.visibleRect;
 
-  if (lockclient()) LOGFAIL(errno)
-    gotlock = 1;
-
   rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
   rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
-
-  if (unlockclient()) LOGFAIL(errno)
-    gotlock = 0;
 
   [self scrollRectToVisible:rect];
 
@@ -211,10 +187,6 @@ CLEANUP
       break;
 
     default:
-      if (gotlock) {
-        unlockclient();
-      }
-
       PCRIT(ERROR)
       printlineinfo();
       CLEARERRLOG

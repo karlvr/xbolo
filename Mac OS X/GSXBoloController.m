@@ -1532,11 +1532,63 @@ END
 }
 
 - (IBAction)tankCenter:(id)sender {
+  BOOL gotlock = 0;
+
+TRY
+  if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
   [boloView tankCenter];
+
+  if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
+
+CLEANUP
+  switch (ERROR) {
+    case 0:
+      return;
+
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
+
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+  }
+END
 }
 
 - (IBAction)pillCenter:(id)sender {
+  BOOL gotlock = 0;
+
+TRY
+  if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
   [boloView nextPillCenter];
+
+  if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
+
+CLEANUP
+  switch (ERROR) {
+    case 0:
+      return;
+
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
+
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+  }
+END
 }
 
 // key event methods
