@@ -6,6 +6,8 @@
 //  Copyright © 2019 Robert Chrzanowski. All rights reserved.
 //
 
+#import "bolo.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class GSXBoloController;
@@ -16,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)refresh;
 - (void)scroll:(CGPoint)delta;
+- (void)scrollToVisible:(Vec2f)point;
+- (void)zoomTo:(CGFloat)zoom;
 - (void)tankCenter;
 - (void)nextPillCenter;
 

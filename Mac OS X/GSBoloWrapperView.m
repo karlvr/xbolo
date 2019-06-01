@@ -77,6 +77,14 @@
   [_wrapped scroll:delta];
 }
 
+- (void)scrollToVisible:(Vec2f)point {
+  [_wrapped scrollToVisible:point];
+}
+
+- (void)zoomTo:(CGFloat)zoom {
+  [_wrapped zoomTo:zoom];
+}
+
 - (void)tankCenter {
   [_wrapped tankCenter];
 }

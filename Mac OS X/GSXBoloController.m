@@ -1486,36 +1486,18 @@ END
 // map interface actions
 
 - (IBAction)zoomIn:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel < MAX_ZOOM) {
     zoomLevel++;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x + 0.25*visRect.size.width, visRect.origin.y + 0.25*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
 - (IBAction)zoomOut:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel > 0) {
     zoomLevel--;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x - 0.5*visRect.size.width, visRect.origin.y - 0.5*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
@@ -2542,10 +2524,7 @@ TRY
           rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
           rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
 
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-
-          [boloView scrollRectToVisible:rect];  /* potential to call drawRect: which locks client */
+          [boloView scrollToVisible:client.players[client.player].tank];
         }
         if (unlockclient()) LOGFAIL(errno)
         gotlock = 0;

@@ -35,6 +35,7 @@ static SKTextureAtlas *_spritesAtlas;
   BOOL _autoScroll;
   BOOL _scrolling;
   CGPoint _scroll;
+  CGFloat _zoom;
 
   NSView *_nonSKView;
 }
@@ -69,6 +70,14 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   return CGPointMake(a.x + b.x, a.y + b.y);
 }
 
+CGPoint CGPointMul(CGPoint p, CGFloat m) {
+  return CGPointMake(p.x * m, p.y * m);
+}
+
+CGSize CGSizeMul(CGSize s, CGFloat m) {
+  return CGSizeMake(s.width * m, s.height * m);
+}
+
 @implementation GSBoloScene
 
 + (void)initialize {
@@ -82,6 +91,8 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 - (instancetype)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
     _autoScroll = YES;
+    _zoom = 1.0;
+    _baseZoom = 1.0;
 
     _shells = [NSMutableArray array];
     _builders = [NSMutableArray array];
@@ -285,6 +296,25 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   }
 }
 
+- (void)scrollToVisible:(Vec2f)point {
+  CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0));
+  [self moveCamera:p animated:NO];
+}
+
+- (void)zoomTo:(CGFloat)zoom {
+  _zoom = zoom;
+
+  _camera.xScale = _baseZoom / zoom;
+  _camera.yScale = _baseZoom / zoom;
+}
+
+- (void)setBaseZoom:(CGFloat)baseZoom {
+  _baseZoom = baseZoom;
+
+  _camera.xScale = baseZoom / _zoom;
+  _camera.yScale = baseZoom / _zoom;
+}
+
 - (void)activateAutoScroll {
   _scroll = CGPointZero;
   _autoScroll = YES;
@@ -485,16 +515,12 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   if (self.view) {
     return [super convertPointFromView:point];
   } else if (_nonSKView) {
-    CGRect viewBounds = _nonSKView.bounds;
-    CGSize sceneSize = self.size;
-    CGPoint cameraPos = _camera.position;
-    CGFloat xScale = _camera.xScale;
-    CGFloat yScale = _camera.yScale;
-    sceneSize.width *= xScale;
-    sceneSize.height *= yScale;
+    const CGSize viewSize = _nonSKView.bounds.size;
+    const CGSize sceneSize = CGSizeMul(self.size, _camera.xScale);
+    const CGPoint cameraPos = _camera.position;
 
-    return CGPointMake(point.x * sceneSize.width / viewBounds.size.width + cameraPos.x - viewBounds.size.width / 2.0,
-                       point.y * sceneSize.height / viewBounds.size.height + cameraPos.y - viewBounds.size.height / 2.0);
+    return CGPointMake(point.x * sceneSize.width / viewSize.width + cameraPos.x - viewSize.width / 2.0 / _zoom,
+                       point.y * sceneSize.height / viewSize.height + cameraPos.y - viewSize.height / 2.0 / _zoom);
   } else {
     NSLog(@"GSBoloScene: No view");
     return point;

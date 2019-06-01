@@ -33,6 +33,7 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 @interface GSBoloDrawRectView () {
   NSBitmapImageRep *_bestTiles;
   CGFloat _tilesScale;
+  CGFloat _zoom;
 }
 
 - (void)drawTileAtPoint:(GSPoint)point;
@@ -63,6 +64,8 @@ TRY
   if (self = [super initWithFrame:frameRect]) {
     if (initlist(&rectlist) == -1) LOGFAIL(errno)
       [GSBoloViews addView:self];
+
+    _zoom = 1.0;
   }
 
 CLEANUP
@@ -168,6 +171,28 @@ END
     cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
     CGWarpMouseCursorPosition(cgpoint);
   }
+}
+
+- (void)scrollToVisible:(Vec2f)point {
+  NSRect rect;
+  rect.size.width = rect.size.height = 16 * 16 * _zoom;
+  rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
+  rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
+
+  [self scrollRectToVisible:rect];
+}
+
+- (void)zoomTo:(CGFloat)zoom {
+  _zoom = zoom;
+  
+  NSRect visRect = self.visibleRect;
+  NSSize size;
+  size.width = 4096.0*zoom;
+  size.height = 4096.0*zoom;
+  [self setFrameSize:size];
+  [self setBoundsSize:NSMakeSize(4096.0, 4096.0)];
+  [self scrollPoint:NSMakePoint(visRect.origin.x + 0.25*visRect.size.width, visRect.origin.y + 0.25*visRect.size.height)];
+  [self setNeedsDisplay:YES];
 }
 
 - (void)tankCenter {

@@ -8,13 +8,18 @@
 
 @import SpriteKit;
 
+#import "bolo.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GSBoloScene: SKScene
 
+@property (nonatomic) CGFloat baseZoom;
+
 - (void)update;
 - (void)scroll:(CGPoint)delta;
-- (void)activateAutoScroll;
+- (void)scrollToVisible:(Vec2f)point;
+- (void)zoomTo:(CGFloat)zoom;
 - (void)tankCenter;
 - (void)nextPillCenter;
 

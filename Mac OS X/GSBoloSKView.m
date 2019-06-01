@@ -78,8 +78,12 @@ static NSCursor *cursor = nil;
   [_scene scroll:delta];
 }
 
-- (void)activateAutoScroll {
-  [_scene activateAutoScroll];
+- (void)scrollToVisible:(Vec2f)point {
+  [_scene scrollToVisible:point];
+}
+
+- (void)zoomTo:(CGFloat)zoom {
+  [_scene zoomTo:zoom];
 }
 
 - (void)tankCenter {

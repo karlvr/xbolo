@@ -24,8 +24,7 @@
     CGFloat scale = view.window.backingScaleFactor;
 
     _scene = [[GSBoloScene alloc] initWithSize:view.drawableSize];
-    _scene.camera.xScale = 1.0 / scale;
-    _scene.camera.yScale = 1.0 / scale;
+    _scene.baseZoom = 1.0 / scale;
     _renderer = [SKRenderer rendererWithDevice:view.device];
     _renderer.scene = _scene;
     _renderer.ignoresSiblingOrder = YES;
