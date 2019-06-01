@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tankCenter;
 - (void)nextPillCenter;
 
+- (void)didMoveToNonSKView:(NSView *)view;
+
 @end
 
 NS_ASSUME_NONNULL_END

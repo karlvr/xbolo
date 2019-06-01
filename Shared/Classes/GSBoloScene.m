@@ -35,7 +35,11 @@ static SKTextureAtlas *_spritesAtlas;
   BOOL _autoScroll;
   BOOL _scrolling;
   CGPoint _scroll;
+
+  NSView *_nonSKView;
 }
+
+@property (nonatomic, readonly) NSView *anyView;
 
 @end
 
@@ -129,18 +133,24 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
     _map = map;
     _mineMap = mineMap;
     _fogMap = fogMap;
+
+    _camera = [[SKCameraNode alloc] init];
+    [self addChild:_camera];
+    self.camera = _camera;
   }
   return self;
 }
 
-- (void)didMoveToView:(SKView *)view {
-  if (_camera) {
-    [_camera removeFromParent];
-    _gameStateLabel = nil;
+- (void)didMoveToNonSKView:(NSView *)view {
+  _nonSKView = view;
+}
+
+- (NSView *)anyView {
+  if (_nonSKView) {
+    return _nonSKView;
+  } else {
+    return self.view;
   }
-  _camera = [[SKCameraNode alloc] init];
-  [self addChild:_camera];
-  self.camera = _camera;
 }
 
 - (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image {
@@ -212,7 +222,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 }
 
 - (void)updateCamera {
-  if (_scrolling) {
+  if (_scrolling || !_camera) {
     return;
   }
 
@@ -229,8 +239,8 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 - (void)moveCamera:(CGPoint)position animated:(BOOL)animated {
   const CGPoint delta = CGPointSubtract(position, _camera.position);
 
-  const NSPoint aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
-  const BOOL moveCursor = [self.view mouse:aPoint inRect:self.view.visibleRect];
+  const NSPoint aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
+  const BOOL moveCursor = [self.anyView mouse:aPoint inRect:self.anyView.visibleRect];
 
   if (animated) {
     _scrolling = YES;
@@ -426,8 +436,8 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   /* draw selector */
   {
     NSPoint aPoint;
-    aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
-    if ([self.view mouse:aPoint inRect:self.view.visibleRect]) {
+    aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
+    if ([self.anyView mouse:aPoint inRect:self.anyView.visibleRect]) {
       aPoint = [self convertPointFromView:aPoint];
 
       if (!_selector) {
@@ -468,6 +478,26 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
     _gameStateLabel.hidden = NO;
   } else {
     _gameStateLabel.hidden = YES;
+  }
+}
+
+- (CGPoint)convertPointFromView:(CGPoint)point {
+  if (self.view) {
+    return [super convertPointFromView:point];
+  } else if (_nonSKView) {
+    CGRect viewBounds = _nonSKView.bounds;
+    CGSize sceneSize = self.size;
+    CGPoint cameraPos = _camera.position;
+    CGFloat xScale = _camera.xScale;
+    CGFloat yScale = _camera.yScale;
+    sceneSize.width *= xScale;
+    sceneSize.height *= yScale;
+
+    return CGPointMake(point.x * sceneSize.width / viewBounds.size.width + cameraPos.x - viewBounds.size.width / 2.0,
+                       point.y * sceneSize.height / viewBounds.size.height + cameraPos.y - viewBounds.size.height / 2.0);
+  } else {
+    NSLog(@"GSBoloScene: No view");
+    return point;
   }
 }
 

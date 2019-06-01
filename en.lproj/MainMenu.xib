@@ -605,7 +605,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="800" height="550"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="fgp-yA-YKI" userLabel="BoloSKView" customClass="GSBoloSKView">
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="fgp-yA-YKI" userLabel="BoloSKView" customClass="GSBoloMTKView">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="550"/>
                         <connections>
                             <outlet property="boloController" destination="514" id="3dV-gF-u7p"/>

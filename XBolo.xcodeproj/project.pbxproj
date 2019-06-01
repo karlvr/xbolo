@@ -184,6 +184,9 @@
 		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		B804BAE922A20A0E00741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
 		B804BAEB22A20AC900741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
+		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
+		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
+		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -400,6 +403,10 @@
 		B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViewProtocol.h; sourceTree = "<group>"; };
 		B804BAE722A20A0E00741E7A /* GSBoloScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloScene.h; sourceTree = "<group>"; };
 		B804BAE822A20A0E00741E7A /* GSBoloScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloScene.m; sourceTree = "<group>"; };
+		B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMTKView.h; sourceTree = "<group>"; };
+		B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMTKView.m; sourceTree = "<group>"; };
+		B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMetalRenderer.h; sourceTree = "<group>"; };
+		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -689,6 +696,8 @@
 				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
 				B804BAE722A20A0E00741E7A /* GSBoloScene.h */,
 				B804BAE822A20A0E00741E7A /* GSBoloScene.m */,
+				B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */,
+				B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -842,6 +851,8 @@
 				404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */,
 				B804BAD8229FEE9000741E7A /* GSBoloSKView.h */,
 				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
+				B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */,
+				B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
 				404D42820FF8525200589EA2 /* GSBuilderStatusView.m */,
 				404D42830FF8525200589EA2 /* GSKeyCodeField.h */,
@@ -1248,6 +1259,7 @@
 				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
 				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
+				B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1286,6 +1298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
 				B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */,
 				B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */,
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
@@ -1298,6 +1311,7 @@
 				55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */,
 				404D428A0FF8525200589EA2 /* GSBoloDrawRectView.m in Sources */,
 				404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */,
+				B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */,
 				404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */,
 				C2765E8C105602D70007E05A /* GSRobot.m in Sources */,
 				404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */,
