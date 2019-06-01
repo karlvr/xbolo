@@ -1295,75 +1295,19 @@ END
 }
 
 - (IBAction)scrollUp:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, -16)];
 }
 
 - (IBAction)scrollDown:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y - 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, 16)];
 }
 
 - (IBAction)scrollLeft:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x + 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(-16, 0)];
 }
 
 - (IBAction)scrollRight:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x - 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(16, 0)];
 }
 
 - (IBAction)requestAlliance:(id)sender {
@@ -1589,128 +1533,10 @@ END
 
 - (IBAction)tankCenter:(id)sender {
   [boloView tankCenter];
-  return;
-  
-  NSRect rect;
-  int gotlock = 0;
-
-TRY
-  rect = boloView.visibleRect;
-
-  if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
-
-  rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
-  rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
-
-  if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
-
-  [boloView scrollRectToVisible:rect];
-
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    break;
-
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
-
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
-  }
-END
 }
 
 - (IBAction)pillCenter:(id)sender {
   [boloView nextPillCenter];
-  return;
-
-  GSPoint square;
-  NSRect rect;
-  int i, j;
-  int gotlock = 0;
-
-TRY
-  rect = boloView.visibleRect;
-  square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
-  square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
-
-  if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
-
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0 &&
-        square.x == client.pills[i].x && square.y == client.pills[i].y
-        ) {
-      for (j = (i + 1)%client.npills; j != i; j = (j + 1)%client.npills) {
-        if (
-            client.pills[j].owner == client.player &&
-            client.pills[j].armour != ONBOARD && client.pills[j].armour != 0
-            ) {
-          square.x = client.pills[j].x;
-          square.y = client.pills[j].y;
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-          rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-          rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-          SUCCESS
-        }
-      }
-      
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
-  
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0
-        ) {
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
-
-  if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
-
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    [boloView scrollRectToVisible:rect];
-    break;
-
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
-
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
-  }
-END
 }
 
 // key event methods

@@ -58,6 +58,27 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
   });
 }
 
+- (instancetype)initWithFrame:(NSRect)frameRect {
+TRY
+  if (self = [super initWithFrame:frameRect]) {
+    if (initlist(&rectlist) == -1) LOGFAIL(errno)
+      [GSBoloViews addView:self];
+  }
+
+CLEANUP
+  switch (ERROR) {
+    case 0:
+      RETURN(self)
+
+    default:
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+  }
+END
+}
+
 - (void)refresh {
 //    [view eraseSprites];
 //    [view refreshTiles];
@@ -65,23 +86,140 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
   [self setNeedsDisplayInRect:self.visibleRect];
 }
 
-- (instancetype)initWithFrame:(NSRect)frameRect {
+- (void)nextPillCenter {
+  GSPoint square;
+  NSRect rect;
+  int i, j;
+  int gotlock = 0;
+
 TRY
-  if (self = [super initWithFrame:frameRect]) {
-    if (initlist(&rectlist) == -1) LOGFAIL(errno)
-    [GSBoloViews addView:self];
+  rect = self.visibleRect;
+  square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
+  square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
+
+  if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
+  for (i = 0; i < client.npills; i++) {
+    if (
+        client.pills[i].owner == client.player &&
+        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0 &&
+        square.x == client.pills[i].x && square.y == client.pills[i].y
+        ) {
+      for (j = (i + 1)%client.npills; j != i; j = (j + 1)%client.npills) {
+        if (
+            client.pills[j].owner == client.player &&
+            client.pills[j].armour != ONBOARD && client.pills[j].armour != 0
+            ) {
+          square.x = client.pills[j].x;
+          square.y = client.pills[j].y;
+          if (unlockclient()) LOGFAIL(errno)
+            gotlock = 0;
+          rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
+          rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
+          SUCCESS
+        }
+      }
+
+      square.x = client.pills[i].x;
+      square.y = client.pills[i].y;
+      if (unlockclient()) LOGFAIL(errno)
+        gotlock = 0;
+      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
+      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
+      SUCCESS
+    }
   }
+
+  for (i = 0; i < client.npills; i++) {
+    if (
+        client.pills[i].owner == client.player &&
+        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0
+        ) {
+      square.x = client.pills[i].x;
+      square.y = client.pills[i].y;
+      if (unlockclient()) LOGFAIL(errno)
+        gotlock = 0;
+      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
+      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
+      SUCCESS
+    }
+  }
+
+  if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
-  case 0:
-    RETURN(self)
+    case 0:
+      [self scrollRectToVisible:rect];
+      break;
 
-  default:
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
+
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+      break;
+  }
+END
+}
+
+- (void)scroll:(CGPoint)delta {
+  NSScreen *screen;
+  NSRect rect;
+  NSPoint nspoint;
+  CGPoint cgpoint;
+
+  rect = self.visibleRect;
+  rect.origin = NSMakePoint(rect.origin.x + delta.x, rect.origin.y + delta.y);
+  [self scrollRectToVisible:rect];
+
+  nspoint = [NSEvent mouseLocation];
+  if ([self mouse:[self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:self.window.contentView] inRect:self.visibleRect] && (screen = self.window.screen)) {
+    cgpoint.x = nspoint.x;
+    cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
+    CGWarpMouseCursorPosition(cgpoint);
+  }
+}
+
+- (void)tankCenter {
+  NSRect rect;
+  int gotlock = 0;
+
+TRY
+  rect = self.visibleRect;
+
+  if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
+  rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
+  rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
+
+  if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
+
+  [self scrollRectToVisible:rect];
+
+CLEANUP
+  switch (ERROR) {
+    case 0:
+      break;
+
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
+
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+      break;
   }
 END
 }
