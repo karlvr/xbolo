@@ -286,6 +286,10 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   _autoScroll = YES;
 }
 
+- (void)deactivateAutoScroll {
+  _autoScroll = NO;
+}
+
 - (void)refreshSprites {
   int i;
   struct ListNode *node;
@@ -528,6 +532,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   GSPoint square;
   int i, j;
   int gotlock = 0;
+  BOOL found = NO;
 
   TRY
   square.x = _camera.position.x/16.0;
@@ -552,6 +557,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
           square.y = client.pills[j].y;
           if (unlockclient()) LOGFAIL(errno)
             gotlock = 0;
+          found = YES;
           SUCCESS
         }
       }
@@ -560,6 +566,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
       square.y = client.pills[i].y;
       if (unlockclient()) LOGFAIL(errno)
         gotlock = 0;
+      found = YES;
       SUCCESS
     }
   }
@@ -574,6 +581,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
       square.y = client.pills[i].y;
       if (unlockclient()) LOGFAIL(errno)
         gotlock = 0;
+      found = YES;
       SUCCESS
     }
   }
@@ -584,7 +592,10 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   CLEANUP
   switch (ERROR) {
     case 0:
-      [self moveCamera:CGPointMake(square.x * 16, (WIDTH - square.y) * 16) animated:NO];
+      if (found) {
+        [self deactivateAutoScroll];
+        [self moveCamera:CGPointMake(square.x * 16, (WIDTH - square.y) * 16) animated:NO];
+      }
       break;
 
     default:
