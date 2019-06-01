@@ -313,6 +313,9 @@
 #define SELETRIMAGE (0x91)
 #define UNKNOWNIMAGE (0xff)
 
+#define IMAGEWIDTH 16
+#define FIMAGEWIDTH 16.0
+
 typedef uint8_t GSImage;
 
 /** returns the image tile for x, y */

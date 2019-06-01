@@ -23,7 +23,7 @@
 		402097CC0FC91E2F0018390E /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
 		402098370FC926C00018390E /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
 		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloView.m */; };
+		404D428A0FF8525200589EA2 /* GSBoloDrawRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */; };
 		404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42820FF8525200589EA2 /* GSBuilderStatusView.m */; };
 		404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42840FF8525200589EA2 /* GSKeyCodeField.m */; };
 		404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42860FF8525200589EA2 /* GSStatusBar.m */; };
@@ -180,6 +180,16 @@
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
+		B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAD9229FEE9000741E7A /* GSBoloSKView.m */; };
+		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
+		B804BAE922A20A0E00741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
+		B804BAEB22A20AC900741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
+		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
+		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
+		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
+		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
+		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
+		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -278,8 +288,8 @@
 		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
 		404D425D0FF84FEA00589EA2 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
-		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloView.h; sourceTree = "<group>"; };
-		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBoloView.m; sourceTree = "<group>"; };
+		404D427F0FF8525200589EA2 /* GSBoloDrawRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloDrawRectView.h; sourceTree = "<group>"; };
+		404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBoloDrawRectView.m; sourceTree = "<group>"; };
 		404D42810FF8525200589EA2 /* GSBuilderStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBuilderStatusView.h; sourceTree = "<group>"; };
 		404D42820FF8525200589EA2 /* GSBuilderStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSBuilderStatusView.m; sourceTree = "<group>"; };
 		404D42830FF8525200589EA2 /* GSKeyCodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKeyCodeField.h; sourceTree = "<group>"; };
@@ -389,6 +399,20 @@
 		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
 		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
+		B804BAD8229FEE9000741E7A /* GSBoloSKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloSKView.h; sourceTree = "<group>"; };
+		B804BAD9229FEE9000741E7A /* GSBoloSKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloSKView.m; sourceTree = "<group>"; };
+		B804BAE222A1D07000741E7A /* GSBoloViews.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViews.h; sourceTree = "<group>"; };
+		B804BAE322A1D07000741E7A /* GSBoloViews.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloViews.m; sourceTree = "<group>"; };
+		B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViewProtocol.h; sourceTree = "<group>"; };
+		B804BAE722A20A0E00741E7A /* GSBoloScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloScene.h; sourceTree = "<group>"; };
+		B804BAE822A20A0E00741E7A /* GSBoloScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloScene.m; sourceTree = "<group>"; };
+		B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMTKView.h; sourceTree = "<group>"; };
+		B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMTKView.m; sourceTree = "<group>"; };
+		B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMetalRenderer.h; sourceTree = "<group>"; };
+		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
+		B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloWrapperView.h; sourceTree = "<group>"; };
+		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
+		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -676,6 +700,10 @@
 			children = (
 				553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */,
 				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
+				B804BAE722A20A0E00741E7A /* GSBoloScene.h */,
+				B804BAE822A20A0E00741E7A /* GSBoloScene.m */,
+				B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */,
+				B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -772,6 +800,7 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				B8BD70AC22A31AC800F07A00 /* Resources */,
 				F55317CB03E5055801924B91 /* Sounds */,
 				29B97315FDCFA39411CA2CEA /* Main XBolo */,
 				553F04791D71F253005D0983 /* Classes */,
@@ -813,6 +842,14 @@
 			sourceTree = "<group>";
 			usesTabs = 1;
 		};
+		B8BD70AC22A31AC800F07A00 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B8BD70AD22A31ADD00F07A00 /* Everard Island.map */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -825,8 +862,14 @@
 		F55317BB03E4DB9601924B91 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				404D427F0FF8525200589EA2 /* GSBoloView.h */,
-				404D42800FF8525200589EA2 /* GSBoloView.m */,
+				404D427F0FF8525200589EA2 /* GSBoloDrawRectView.h */,
+				404D42800FF8525200589EA2 /* GSBoloDrawRectView.m */,
+				B804BAD8229FEE9000741E7A /* GSBoloSKView.h */,
+				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
+				B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */,
+				B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */,
+				B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */,
+				B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
 				404D42820FF8525200589EA2 /* GSBuilderStatusView.m */,
 				404D42830FF8525200589EA2 /* GSKeyCodeField.h */,
@@ -835,6 +878,9 @@
 				404D42860FF8525200589EA2 /* GSStatusBar.m */,
 				404D42870FF8525200589EA2 /* GSStatusView.h */,
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
+				B804BAE222A1D07000741E7A /* GSBoloViews.h */,
+				B804BAE322A1D07000741E7A /* GSBoloViews.m */,
+				B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1109,6 +1155,7 @@
 				55712C961CFA1D9300326A27 /* hittree.aiff in Resources */,
 				55712C891CFA1D9300326A27 /* explosion.aiff in Resources */,
 				55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */,
+				B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
 				55712C991CFA1D9300326A27 /* sink.aiff in Resources */,
@@ -1155,6 +1202,7 @@
 				402097C60FC91E2F0018390E /* fhitterrain.aiff in Resources */,
 				402097C70FC91E2F0018390E /* fhittree.aiff in Resources */,
 				402097C90FC91E2F0018390E /* fsink.aiff in Resources */,
+				B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
 				5562F91820D064140007248E /* XBolo.scriptTerminology in Resources */,
 				402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */,
@@ -1212,6 +1260,7 @@
 				55C4A5551CBD72E9003A29B0 /* bolo.c in Sources */,
 				404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */,
 				404D43460FF85B9C00589EA2 /* main.m in Sources */,
+				B804BAEB22A20AC900741E7A /* GSBoloScene.m in Sources */,
 				408189901082475A00E4D4CA /* bmap_server.c in Sources */,
 				55C4A5591CBD7312003A29B0 /* server.c in Sources */,
 				4081899A1082495800E4D4CA /* bmap_client.c in Sources */,
@@ -1229,6 +1278,7 @@
 				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
 				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
+				B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1267,6 +1317,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
+				B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */,
+				B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */,
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
 				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
@@ -1275,8 +1328,9 @@
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
 				40A593610FBE78FC00F3E650 /* errchk.c in Sources */,
 				55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */,
-				404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */,
+				404D428A0FF8525200589EA2 /* GSBoloDrawRectView.m in Sources */,
 				404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */,
+				B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */,
 				404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */,
 				C2765E8C105602D70007E05A /* GSRobot.m in Sources */,
 				404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */,
@@ -1289,10 +1343,12 @@
 				40A593660FBE78FC00F3E650 /* rect.c in Sources */,
 				40A5936A0FBE78FC00F3E650 /* server.c in Sources */,
 				4064444A108250E1008F913C /* terrain.c in Sources */,
+				B804BAE922A20A0E00741E7A /* GSBoloScene.m in Sources */,
 				4064445F108251E1008F913C /* tiles.c in Sources */,
 				C2BFADE31055937F009A1EE7 /* timing.c in Sources */,
 				40A593600FBE78FC00F3E650 /* vector.c in Sources */,
 				407ECEFC1087C371002B43CB /* buf.c in Sources */,
+				B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */,
 				4014422710ACA4F6008487C8 /* resolver.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

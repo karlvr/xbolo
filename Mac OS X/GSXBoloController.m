@@ -1,10 +1,11 @@
 #import "GSXBoloController.h"
-#import "GSBoloView.h"
+#import "GSBoloViews.h"
 #import "GSRobot.h"
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
 #import "XBoloBonjourKeys.h"
+#import "GSBoloViews.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -997,13 +998,13 @@ END
   //Always stop listening for Bonjour methods.
   [self stopListening];
   
-  NSData *mapData;
+  NSData *mapData = nil;
 
 TRY
-  if (hostMapString.length == 0) {
+  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
     NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
   }
-  else if ((mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
+  else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
     NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
     [self setHostMap:[NSString string]];
   }
@@ -1294,75 +1295,19 @@ END
 }
 
 - (IBAction)scrollUp:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, -16)];
 }
 
 - (IBAction)scrollDown:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y - 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, 16)];
 }
 
 - (IBAction)scrollLeft:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x + 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(-16, 0)];
 }
 
 - (IBAction)scrollRight:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x - 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(16, 0)];
 }
 
 - (IBAction)requestAlliance:(id)sender {
@@ -1541,36 +1486,18 @@ END
 // map interface actions
 
 - (IBAction)zoomIn:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel < MAX_ZOOM) {
     zoomLevel++;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x + 0.25*visRect.size.width, visRect.origin.y + 0.25*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
 - (IBAction)zoomOut:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel > 0) {
     zoomLevel--;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x - 0.5*visRect.size.width, visRect.origin.y - 0.5*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
@@ -1587,121 +1514,61 @@ END
 }
 
 - (IBAction)tankCenter:(id)sender {
-  NSRect rect;
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
-  rect = boloView.visibleRect;
-
   if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
+    gotlock = 1;
 
-  rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
-  rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
+  [boloView tankCenter];
 
   if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
-
-  [boloView scrollRectToVisible:rect];
+    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
-  case 0:
-    break;
+    case 0:
+      return;
 
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
 
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
   }
 END
 }
 
 - (IBAction)pillCenter:(id)sender {
-  GSPoint square;
-  NSRect rect;
-  int i, j;
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
-  rect = boloView.visibleRect;
-  square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
-  square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
-
   if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
+    gotlock = 1;
 
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0 &&
-        square.x == client.pills[i].x && square.y == client.pills[i].y
-        ) {
-      for (j = (i + 1)%client.npills; j != i; j = (j + 1)%client.npills) {
-        if (
-            client.pills[j].owner == client.player &&
-            client.pills[j].armour != ONBOARD && client.pills[j].armour != 0
-            ) {
-          square.x = client.pills[j].x;
-          square.y = client.pills[j].y;
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-          rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-          rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-          SUCCESS
-        }
-      }
-      
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
-  
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0
-        ) {
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
+  [boloView nextPillCenter];
 
   if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
+    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
-  case 0:
-    [boloView scrollRectToVisible:rect];
-    break;
+    case 0:
+      return;
 
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
 
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
   }
 END
 }
@@ -1747,22 +1614,30 @@ TRY
     }
     else if ([object isEqualToString:GSUp]) {
       if (event) {
-        [self scrollUp:self];
+        [boloView scroll:CGPointMake(0, -16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSDown]) {
       if (event) {
-        [self scrollDown:self];
+        [boloView scroll:CGPointMake(0, 16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSLeft]) {
       if (event) {
-        [self scrollLeft:self];
+        [boloView scroll:CGPointMake(-16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSRight]) {
       if (event) {
-        [self scrollRight:self];
+        [boloView scroll:CGPointMake(16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSTankView]) {
@@ -2649,19 +2524,16 @@ TRY
           rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
           rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
 
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-
-          [boloView scrollRectToVisible:rect];  /* potential to call drawRect: which locks client */
+          [boloView scrollToVisible:client.players[client.player].tank];
         }
         if (unlockclient()) LOGFAIL(errno)
-        gotlock = 1;
+        gotlock = 0;
 
         client.spawned = 0;
       }
       if(centerTank)
         [self tankCenter:nil];
-      [GSBoloView refresh];
+      [GSBoloViews refresh];
 
       if (counter%2) {
         switch (client.players[client.player].builderstatus) {
