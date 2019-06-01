@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class GSBoloScene;
 
+API_AVAILABLE(ios(11), macosx(10.13))
 @interface GSBoloMetalRenderer : NSObject <MTKViewDelegate>
 
 - (instancetype)initWithMTLView:(MTKView *)view;
