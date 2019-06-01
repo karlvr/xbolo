@@ -3,7 +3,7 @@
 //  Mac OS X
 //
 //  Created by Karl von Randow on 1/06/19.
-//  Copyright © 2019 Robert Chrzanowski. All rights reserved.
+//  Copyright © 2019 Karl von Randow. All rights reserved.
 //
 
 #import "GSBoloViews.h"
