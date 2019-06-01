@@ -245,7 +245,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     }
   } else if (!CGPointEqualToPoint(_scroll, CGPointZero)) {
     [self moveCamera:[self constrainCamera:_scroll] animated:NO];
-  } else {
+  } else if (!_pillboxViewMode) {
     CGPoint constrainedCamera = [self constrainCamera:_scroll];
     if (!CGPointEqualToPoint(_camera.position, constrainedCamera)) {
       /* Tank has driven out of constrained range */
