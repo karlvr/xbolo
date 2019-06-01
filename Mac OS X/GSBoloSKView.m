@@ -745,7 +745,7 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 }
 
 - (void)resetCursorRects {
-  [self addCursorRect:self.visibleRect cursor:cursor];
+  [self addCursorRect:self.bounds cursor:cursor];
   [cursor setOnMouseEntered:YES];
 }
 
