@@ -640,6 +640,8 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
     self.showsFPS = YES;
     self.showsNodeCount = YES;
     self.preferredFramesPerSecond = 16;
+    self.ignoresSiblingOrder = YES;
+    self.shouldCullNonVisibleNodes = YES;
 
     self.postsBoundsChangedNotifications = YES;
     __weak typeof(self) weakSelf = self;
