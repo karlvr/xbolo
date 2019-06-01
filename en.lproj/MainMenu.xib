@@ -587,8 +587,8 @@
                 <outlet property="prefShootField" destination="nYU-2V-epe" id="iHt-vU-Ln8"/>
                 <outlet property="prefTab" destination="1236" id="1241"/>
                 <outlet property="prefTankViewField" destination="OzK-PL-3oL" id="Ext-PL-ivb"/>
-                <outlet property="prefTurnLeftField" destination="XZg-B9-Jwe" id="ToF-h9-xSf"/>
-                <outlet property="prefTurnRightField" destination="aZ2-TM-Ryz" id="2qi-tD-LD1"/>
+                <outlet property="prefTurnLeftField" destination="Z2z-EA-Vex" id="yvM-dj-Qyw"/>
+                <outlet property="prefTurnRightField" destination="Zqx-v1-21m" id="NLT-hi-G4H"/>
                 <outlet property="prefUpField" destination="Qa7-8w-vhL" id="aJV-GX-hOX"/>
                 <outlet property="preferencesWindow" destination="707" id="728"/>
                 <outlet property="requestAllianceButton" destination="1628" id="1645"/>
