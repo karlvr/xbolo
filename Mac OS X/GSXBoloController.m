@@ -998,13 +998,13 @@ END
   //Always stop listening for Bonjour methods.
   [self stopListening];
   
-  NSData *mapData;
+  NSData *mapData = nil;
 
 TRY
-  if (hostMapString.length == 0) {
+  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
     NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
   }
-  else if ((mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
+  else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
     NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
     [self setHostMap:[NSString string]];
   }

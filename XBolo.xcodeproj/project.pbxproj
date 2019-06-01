@@ -188,6 +188,8 @@
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
+		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
+		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -410,6 +412,7 @@
 		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
 		B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloWrapperView.h; sourceTree = "<group>"; };
 		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
+		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -797,6 +800,7 @@
 		55712C2F1CF903A600326A27 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				B8BD70AC22A31AC800F07A00 /* Resources */,
 				F55317CB03E5055801924B91 /* Sounds */,
 				29B97315FDCFA39411CA2CEA /* Main XBolo */,
 				553F04791D71F253005D0983 /* Classes */,
@@ -837,6 +841,14 @@
 			path = "Standard Autopilot";
 			sourceTree = "<group>";
 			usesTabs = 1;
+		};
+		B8BD70AC22A31AC800F07A00 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B8BD70AD22A31ADD00F07A00 /* Everard Island.map */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
 		};
 		F55317BA03E4DB8E01924B91 /* Model */ = {
 			isa = PBXGroup;
@@ -1143,6 +1155,7 @@
 				55712C961CFA1D9300326A27 /* hittree.aiff in Resources */,
 				55712C891CFA1D9300326A27 /* explosion.aiff in Resources */,
 				55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */,
+				B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
 				55712C991CFA1D9300326A27 /* sink.aiff in Resources */,
@@ -1189,6 +1202,7 @@
 				402097C60FC91E2F0018390E /* fhitterrain.aiff in Resources */,
 				402097C70FC91E2F0018390E /* fhittree.aiff in Resources */,
 				402097C90FC91E2F0018390E /* fsink.aiff in Resources */,
+				B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
 				5562F91820D064140007248E /* XBolo.scriptTerminology in Resources */,
 				402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */,
