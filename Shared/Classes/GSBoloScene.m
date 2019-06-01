@@ -202,7 +202,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 - (void)drawSprite:(SKSpriteNode *)sprite image:(GSImage)image at:(Vec2f)point fraction:(CGFloat)vis {
   if (vis > 0.00001) {
     sprite.texture = [_spritesAtlas textureNamed:spriteName(image)];
-    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
+    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0));
     sprite.position = p;
     sprite.hidden = NO;
   } else {
@@ -212,7 +212,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 
 - (void)drawSprite:(SKSpriteNode *)sprite at:(Vec2f)point fraction:(CGFloat)vis {
   if (vis > 0.00001) {
-    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
+    CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0));
     sprite.position = p;
     sprite.hidden = NO;
   } else {
@@ -220,9 +220,9 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   }
 }
 
-- (void)drawLabel:(SKLabelNode *)label text:(NSString *)text at:(Vec2f)point {
+- (void)drawLabel:(SKLabelNode *)label text:(NSString *)text at:(Vec2f)point offset:(CGPoint)offset {
   label.text = text;
-  CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0)); // TODO this +1 is a hack?
+  CGPoint p = CGPointMake(floor(point.x*16.0) + offset.x, floor((FWIDTH - point.y)*16.0) + offset.y);
   label.position = p;
   label.hidden = NO;
 }
@@ -414,7 +414,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       if (vis > 0.90) {
         SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor]];
         NSString *text = [NSString stringWithCString:client.players[i].name encoding:NSUTF8StringEncoding];
-        [self drawLabel:label text:text at:client.players[i].tank];
+        [self drawLabel:label text:text at:client.players[i].tank offset:CGPointMake(0, 12)];
       }
     }
   }
@@ -430,6 +430,10 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     }
     GSImage image = (client.players[client.player].boat ? PTKB00IMAGE : PTNK00IMAGE) + (((int)(client.players[client.player].dir/(kPif/8.0) + 0.5))%16);
     [self drawSprite:_player image:image at:client.players[client.player].tank fraction:1.0];
+
+//    SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor]];
+//    NSString *text = [NSString stringWithCString:client.players[client.player].name encoding:NSUTF8StringEncoding];
+//    [self drawLabel:label text:text at:client.players[client.player].tank offset:CGPointMake(0, 12)];
   } else {
     _player.hidden = YES;
   }
