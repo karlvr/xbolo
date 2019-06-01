@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol GSBoloViewProtocol <NSObject>
 
 - (void)refresh;
+- (void)scroll:(CGPoint)delta;
+- (void)tankCenter;
+- (void)nextPillCenter;
 
 @end
 

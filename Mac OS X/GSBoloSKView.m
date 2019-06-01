@@ -40,12 +40,16 @@ static NSCursor *cursor = nil;
   NSMutableArray<SKLabelNode *> *_otherPlayerLabels;
   SKLabelNode *_gameStateLabel;
   SKCameraNode *_camera;
+  BOOL _autoScroll;
   BOOL _scrolling;
+  CGPoint _scroll;
 }
 
-@property (nonatomic) BOOL autoScroll;
-
 - (void)update;
+- (void)scroll:(CGPoint)delta;
+- (void)activateAutoScroll;
+- (void)tankCenter;
+- (void)nextPillCenter;
 
 @end
 
@@ -221,38 +225,65 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   if (_autoScroll) {
     CGFloat cameraDistance = CGPointDist(_camera.position, _player.position);
     if (cameraDistance > 16 * 8) {
-      [self moveCamera:_player.position];
+      [self moveCamera:_player.position animated:YES];
     }
+  } else if (!CGPointEqualToPoint(_scroll, CGPointZero)) {
+    [self moveCamera:CGPointAdd(_camera.position, _scroll) animated:NO];
   }
 }
 
-- (void)moveCamera:(CGPoint)position {
+- (void)moveCamera:(CGPoint)position animated:(BOOL)animated {
   const CGPoint delta = CGPointSubtract(position, _camera.position);
-
-  _scrolling = YES;
 
   const NSPoint aPoint = [self.view convertPoint:self.view.window.mouseLocationOutsideOfEventStream fromView:nil];
   const BOOL moveCursor = [self.view mouse:aPoint inRect:self.view.visibleRect];
 
+  if (animated) {
+    _scrolling = YES;
 
-  SKAction *action = [SKAction moveTo:position duration:0.2];
-  if (moveCursor) {
-    CGEventRef event = CGEventCreate(NULL);
-    CGPoint mouseLocation = CGEventGetLocation(event);
-    CFRelease(event);
-    
-    action.timingFunction = ^float(float value) {
+    SKAction *action = [SKAction moveTo:position duration:0.2];
+    if (moveCursor) {
+      CGEventRef event = CGEventCreate(NULL);
+      CGPoint mouseLocation = CGEventGetLocation(event);
+      CFRelease(event);
+
+      action.timingFunction = ^float(float value) {
+        CGPoint newMouseLocation = mouseLocation;
+        newMouseLocation.x -= (delta.x * value);
+        newMouseLocation.y += (delta.y * value);
+        CGWarpMouseCursorPosition(newMouseLocation);
+
+        return value;
+      };
+    }
+    [_camera runAction:action completion:^{
+      self->_scrolling = NO;
+    }];
+  } else {
+    _camera.position = position;
+    if (moveCursor) {
+      CGEventRef event = CGEventCreate(NULL);
+      CGPoint mouseLocation = CGEventGetLocation(event);
+      CFRelease(event);
+
       CGPoint newMouseLocation = mouseLocation;
-      newMouseLocation.x -= (delta.x * value);
-      newMouseLocation.y += (delta.y * value);
+      newMouseLocation.x -= delta.x;
+      newMouseLocation.y += delta.y;
       CGWarpMouseCursorPosition(newMouseLocation);
-
-      return value;
-    };
+    }
   }
-  [_camera runAction:action completion:^{
-    self->_scrolling = NO;
-  }];
+}
+
+- (void)scroll:(CGPoint)delta {
+  _scroll = delta;
+  if (!CGPointEqualToPoint(_scroll, CGPointZero)) {
+    _autoScroll = NO;
+  }
+}
+
+- (void)activateAutoScroll {
+  _scroll = CGPointZero;
+  _autoScroll = YES;
 }
 
 - (void)refreshSprites {
@@ -488,6 +519,88 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
   return [NSString stringWithFormat:@"tile%02i", tileNo];
 }
 
+- (void)tankCenter {
+  [self moveCamera:_player.position animated:NO];
+  [self activateAutoScroll];
+}
+
+- (void)nextPillCenter {
+  GSPoint square;
+  int i, j;
+  int gotlock = 0;
+
+  TRY
+  square.x = _camera.position.x/16.0;
+  square.y = FWIDTH - (_camera.position.y/16.0);
+
+  if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
+  /* Find the currently centered pillbox */
+  for (i = 0; i < client.npills; i++) {
+    if (
+        client.pills[i].owner == client.player &&
+        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0 &&
+        square.x == client.pills[i].x && square.y == client.pills[i].y
+        ) {
+      for (j = (i + 1)%client.npills; j != i; j = (j + 1)%client.npills) {
+        if (
+            client.pills[j].owner == client.player &&
+            client.pills[j].armour != ONBOARD && client.pills[j].armour != 0
+            ) {
+          square.x = client.pills[j].x;
+          square.y = client.pills[j].y;
+          if (unlockclient()) LOGFAIL(errno)
+            gotlock = 0;
+          SUCCESS
+        }
+      }
+
+      square.x = client.pills[i].x;
+      square.y = client.pills[i].y;
+      if (unlockclient()) LOGFAIL(errno)
+        gotlock = 0;
+      SUCCESS
+    }
+  }
+
+  /* Center on the first pillbox */
+  for (i = 0; i < client.npills; i++) {
+    if (
+        client.pills[i].owner == client.player &&
+        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0
+        ) {
+      square.x = client.pills[i].x;
+      square.y = client.pills[i].y;
+      if (unlockclient()) LOGFAIL(errno)
+        gotlock = 0;
+      SUCCESS
+    }
+  }
+
+  if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
+
+  CLEANUP
+  switch (ERROR) {
+    case 0:
+      [self moveCamera:CGPointMake(square.x * 16, (WIDTH - square.y) * 16) animated:NO];
+      break;
+
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
+
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
+      break;
+  }
+  END
+}
+
 @end
 
 @interface GSBoloSKView() {
@@ -541,6 +654,24 @@ CGPoint CGPointAdd(CGPoint a, CGPoint b) {
 - (void)refresh {
   [_scene update];
 }
+
+- (void)scroll:(CGPoint)delta {
+  [_scene scroll:delta];
+}
+
+- (void)activateAutoScroll {
+  [_scene activateAutoScroll];
+}
+
+- (void)tankCenter {
+  [_scene tankCenter];
+}
+
+- (void)nextPillCenter {
+  [_scene nextPillCenter];
+}
+
+#pragma mark -
 
 - (BOOL)becomeFirstResponder {
   BOOL okToChange;

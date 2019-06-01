@@ -1588,6 +1588,9 @@ END
 }
 
 - (IBAction)tankCenter:(id)sender {
+  [boloView tankCenter];
+  return;
+  
   NSRect rect;
   int gotlock = 0;
 
@@ -1625,6 +1628,9 @@ END
 }
 
 - (IBAction)pillCenter:(id)sender {
+  [boloView nextPillCenter];
+  return;
+
   GSPoint square;
   NSRect rect;
   int i, j;
@@ -1748,22 +1754,30 @@ TRY
     }
     else if ([object isEqualToString:GSUp]) {
       if (event) {
-        [self scrollUp:self];
+        [boloView scroll:CGPointMake(0, -16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSDown]) {
       if (event) {
-        [self scrollDown:self];
+        [boloView scroll:CGPointMake(0, 16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSLeft]) {
       if (event) {
-        [self scrollLeft:self];
+        [boloView scroll:CGPointMake(-16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSRight]) {
       if (event) {
-        [self scrollRight:self];
+        [boloView scroll:CGPointMake(16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSTankView]) {
