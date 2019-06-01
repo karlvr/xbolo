@@ -1295,11 +1295,11 @@ END
 }
 
 - (IBAction)scrollUp:(id)sender {
-  [boloView scroll:CGPointMake(0, -16)];
+  [boloView scroll:CGPointMake(0, 16)];
 }
 
 - (IBAction)scrollDown:(id)sender {
-  [boloView scroll:CGPointMake(0, 16)];
+  [boloView scroll:CGPointMake(0, -16)];
 }
 
 - (IBAction)scrollLeft:(id)sender {
@@ -1614,14 +1614,14 @@ TRY
     }
     else if ([object isEqualToString:GSUp]) {
       if (event) {
-        [boloView scroll:CGPointMake(0, -16)];
+        [boloView scroll:CGPointMake(0, 16)];
       } else {
         [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSDown]) {
       if (event) {
-        [boloView scroll:CGPointMake(0, 16)];
+        [boloView scroll:CGPointMake(0, -16)];
       } else {
         [boloView scroll:CGPointZero];
       }
