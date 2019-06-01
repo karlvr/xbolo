@@ -519,6 +519,8 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       }
 
       [self drawSprite:_selector at:make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
+    } else {
+      _selector.hidden = YES;
     }
   }
 
