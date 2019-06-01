@@ -244,12 +244,44 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       [self moveCamera:_player.position animated:YES];
     }
   } else if (!CGPointEqualToPoint(_scroll, CGPointZero)) {
-    [self moveCamera:CGPointAdd(_camera.position, _scroll) animated:NO];
+    [self moveCamera:[self constrainCamera:_scroll] animated:NO];
+  } else {
+    CGPoint constrainedCamera = [self constrainCamera:_scroll];
+    if (!CGPointEqualToPoint(_camera.position, constrainedCamera)) {
+      /* Tank has driven out of constrained range */
+      [self moveCamera:constrainedCamera animated:NO];
+      [self activateAutoScroll];
+    }
   }
+}
+
+/** Comes from client.c where we move tanks and update the fog of war using increasevis decreasevis */
+#define SCROLL_CONSTRAINT 14
+
+- (CGPoint)constrainCamera:(CGPoint)delta {
+  CGPoint camera = CGPointAdd(_camera.position, delta);
+  const CGPoint player = _player.position;
+  const CGFloat limit = SCROLL_CONSTRAINT * 16;
+  if (camera.x < player.x - limit) {
+    camera.x = player.x - limit;
+  }
+  if (camera.x > player.x + limit) {
+    camera.x = player.x + limit;
+  }
+  if (camera.y < player.y - limit) {
+    camera.y = player.y - limit;
+  }
+  if (camera.y > player.y + limit) {
+    camera.y = player.y + limit;
+  }
+  return camera;
 }
 
 - (void)moveCamera:(CGPoint)position animated:(BOOL)animated {
   const CGPoint delta = CGPointSubtract(position, _camera.position);
+  if (CGPointEqualToPoint(delta, CGPointZero)) {
+    return;
+  }
 
   const NSPoint aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
   const BOOL moveCursor = [self.anyView mouse:aPoint inRect:self.anyView.visibleRect];
