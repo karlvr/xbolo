@@ -34,6 +34,7 @@ static SKTextureAtlas *_spritesAtlas;
   SKCameraNode *_camera;
   BOOL _autoScroll;
   BOOL _scrolling;
+  BOOL _pillboxViewMode;
   CGPoint _scroll;
   CGFloat _zoom;
 
@@ -290,6 +291,11 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 }
 
 - (void)scroll:(CGPoint)delta {
+  if (_pillboxViewMode) {
+    /* You can't scroll in pillbox view mode */
+    return;
+  }
+
   _scroll = delta;
   if (!CGPointEqualToPoint(_scroll, CGPointZero)) {
     _autoScroll = NO;
@@ -318,6 +324,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 - (void)activateAutoScroll {
   _scroll = CGPointZero;
   _autoScroll = YES;
+  _pillboxViewMode = NO;
 }
 
 - (void)deactivateAutoScroll {
@@ -632,6 +639,7 @@ CLEANUP
       if (found) {
         [self deactivateAutoScroll];
         [self moveCamera:CGPointMake(square.x * 16, (WIDTH - square.y) * 16) animated:NO];
+        _pillboxViewMode = YES;
       }
       break;
 
