@@ -950,6 +950,7 @@ TRY
           }
           else {
             if (startserverthread()) LOGFAIL(errno)
+            if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
           }
 
           break;
