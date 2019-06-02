@@ -314,7 +314,7 @@ END
 }
 
 int startserverthreadwithtracker(
-    const char trackerhostname[], uint16_t port, const char hostplayername[],
+    const char trackerhostname[], in_port_t trackerPort, uint16_t port, const char hostplayername[],
     const char mapname[], void (*callback)(int status)
   ) {
   pthread_t thread;
@@ -323,6 +323,7 @@ int startserverthreadwithtracker(
 TRY
   if ((server.tracker.hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) LOGFAIL(errno)
   strcpy(server.tracker.hostname, trackerhostname);
+  server.tracker.trackerPort = trackerPort;
   server.tracker.port = port;
   strncpy(server.tracker.hostplayername, hostplayername, MAXNAME - 1);
   strncpy(server.tracker.mapname, mapname, TRKMAPNAMELEN - 1);
@@ -1302,7 +1303,7 @@ TRY
     if (closesock(&lookup)) LOGFAIL(errno)
 
     server.tracker.addr.sin_family = AF_INET;
-    server.tracker.addr.sin_port = htons(TRACKERPORT);
+    server.tracker.addr.sin_port = htons(server.tracker.trackerPort != 0 ? server.tracker.trackerPort : TRACKERPORT);
     bzero(server.tracker.addr.sin_zero, 8);
 
     if (server.tracker.callback) {

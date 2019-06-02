@@ -792,6 +792,38 @@ END
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSMute];
 }
 
+/** Return the hostname part of the trackerString */
+- (NSString *)trackerHostName {
+  NSString *string = [trackerString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSRange r = [string rangeOfString:@":"];
+  if (r.location != NSNotFound) {
+    return [string substringToIndex:r.location];
+  }
+
+  r = [string rangeOfString:@" "];
+  if (r.location != NSNotFound) {
+    return [string substringToIndex:r.location];
+  }
+
+  return string;
+}
+
+/** Return the port part of the trackerString, or 0 */
+- (in_port_t)trackerPort {
+  NSString *string = [trackerString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSRange r = [string rangeOfString:@":"];
+  if (r.location != NSNotFound) {
+    return [[string substringFromIndex:r.location + 1] intValue];
+  }
+
+  r = [string rangeOfString:@" "];
+  if (r.location != NSNotFound) {
+    return [[string substringFromIndex:r.location + 1] intValue];
+  }
+
+  return 0;
+}
+
 // IBAction methods
 
 - (IBAction)closeGame:(id)sender {
@@ -940,13 +972,13 @@ TRY
     if ([mapping localPort] == getservertcpport()) {
       if ([mapping mappingStatus] == TCMPortMappingStatusMapped && [mapping transportProtocol] == TCMPortMappingTransportProtocolBoth) {
         if (hostTrackerBool) {
-          startserverthreadwithtracker(trackerString.UTF8String, [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
+          startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
         }
         else {
           [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
 
           if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-            if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+            if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
           }
           else {
             if (startserverthread()) LOGFAIL(errno)
@@ -1054,7 +1086,7 @@ TRY
       joinProgressStatusTextField.stringValue = @"UPnP Mapping Port...";
     }
     else if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-      if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+      if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
     }
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
@@ -1142,7 +1174,7 @@ TRY
   
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
-  if (listtracker(trackerString.UTF8String, &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
+  if (listtracker([self trackerHostName].UTF8String, [self trackerPort], &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
   if (listener) {
     // "Have you tried turning it off then on again?"
     [self stopListening];

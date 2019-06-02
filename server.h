@@ -27,6 +27,7 @@ struct Server {
   /* tracker */
   struct {
     char *hostname;
+    in_port_t trackerPort;
     int sock;
     struct sockaddr_in addr;
     char hostplayername[MAXNAME];
@@ -354,7 +355,7 @@ int setupserver(
   );
 int startserverthread(void);
 int startserverthreadwithtracker(
-    const char trackerhostname[], uint16_t port, const char hostplayername[],
+    const char trackerhostname[], in_port_t trackerPort, uint16_t port, const char hostplayername[],
     const char mapname[], void (*callback)(int status)
   );
 int stopserver(void);

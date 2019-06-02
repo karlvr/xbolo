@@ -479,7 +479,7 @@ void pauseresumegame(void);
 void togglejoingame(void);
 
 int listtracker(
-    const char trackerhostname[], struct ListNode *node,
+    const char trackerhostname[], in_port_t port, struct ListNode *node,
     void(*trackerprogress)(int statuscode)
   );
 

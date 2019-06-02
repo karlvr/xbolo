@@ -37,6 +37,7 @@
 
 struct TrackerThreadInfo {
   char *hostname;
+  in_port_t port;
   struct ListNode *node;
   void (*trackerstatus)(int);
   int fd;
@@ -411,7 +412,7 @@ TRY
   if (closesock(&lookup)) LOGFAIL(errno)
 
   addr.sin_family = AF_INET;
-  addr.sin_port = htons(TRACKERPORT);
+  addr.sin_port = htons(trackerthreadinfo->port != 0 ? trackerthreadinfo->port : TRACKERPORT);
   bzero(addr.sin_zero, 8);
 //  if ((err = pthread_mutex_unlock(&gethostbynamethreadinfo->parentmutex))) LOGFAIL(err)
 
@@ -556,7 +557,7 @@ CLEANUP
 END
 }
 
-int listtracker(const char trackerhostname[], struct ListNode *node, void(*trackerstatus)(int status)) {
+int listtracker(const char trackerhostname[], const in_port_t port, struct ListNode *node, void(*trackerstatus)(int status)) {
   int err;
   pthread_t thread;
   struct TrackerThreadInfo *trackerthreadinfo;
@@ -567,6 +568,7 @@ TRY
   if ((trackerthreadinfo = (struct TrackerThreadInfo *)malloc(sizeof(struct TrackerThreadInfo))) == NULL) LOGFAIL(errno)
   if ((trackerthreadinfo->hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) LOGFAIL(errno)
   strcpy(trackerthreadinfo->hostname, trackerhostname);
+  trackerthreadinfo->port = port;
   trackerthreadinfo->node = node;
   trackerthreadinfo->trackerstatus = trackerstatus;
 
