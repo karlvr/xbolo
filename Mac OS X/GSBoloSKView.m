@@ -48,7 +48,7 @@ static NSCursor *cursor = nil;
     if (@available(macOS 10.12, *)) {
       self.preferredFramesPerSecond = 16;
     } else {
-      self.preferredFrameRate = 16;
+      self.frameInterval = 60.0 / 16.0;
     }
     self.ignoresSiblingOrder = YES;
     self.shouldCullNonVisibleNodes = YES;
