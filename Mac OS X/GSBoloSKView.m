@@ -74,6 +74,11 @@ static NSCursor *cursor = nil;
   [_scene setSize:self.bounds.size];
 }
 
+- (void)reset {
+  _scene = [[GSBoloScene alloc] initWithSize:self.bounds.size];
+  [self presentScene:_scene];
+}
+
 - (void)refresh {
   [_scene update];
 }

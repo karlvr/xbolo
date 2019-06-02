@@ -82,6 +82,10 @@ CLEANUP
 END
 }
 
+- (void)reset {
+  /* NOOP */
+}
+
 - (void)refresh {
 //    [view eraseSprites];
 //    [view refreshTiles];

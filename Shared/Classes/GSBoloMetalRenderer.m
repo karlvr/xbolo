@@ -21,19 +21,14 @@
 
 - (instancetype)initWithMTLView:(MTKView *)view {
   if (self = [super init]) {
-    CGFloat scale = view.window.backingScaleFactor;
-
-    _scene = [[GSBoloScene alloc] initWithSize:view.drawableSize];
-    _scene.baseZoom = 1.0 / scale;
     _renderer = [SKRenderer rendererWithDevice:view.device];
-    _renderer.scene = _scene;
     _renderer.ignoresSiblingOrder = YES;
     _renderer.shouldCullNonVisibleNodes = YES;
     _renderer.showsNodeCount = YES;
-    _scene.paused = NO;
+
+    [self resetScene:view];
 
     _commandQueue = [view.device newCommandQueue];
-    [_scene didMoveToNonSKView:view];
   }
   return self;
 }
@@ -59,6 +54,16 @@
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
   [_scene setSize:size];
+}
+
+- (void)resetScene:(MTKView *)view {
+  CGFloat scale = view.window.backingScaleFactor;
+
+  _scene = [[GSBoloScene alloc] initWithSize:view.drawableSize];
+  _scene.baseZoom = 1.0 / scale;
+  _renderer.scene = _scene;
+  _scene.paused = NO;
+  [_scene didMoveToNonSKView:view];
 }
 
 @end

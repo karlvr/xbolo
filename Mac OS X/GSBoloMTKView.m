@@ -91,6 +91,10 @@ static NSCursor *cursor = nil;
   _deviceObserver = deviceObserver;
 }
 
+- (void)reset {
+  [_renderer resetScene:self];
+}
+
 - (void)refresh {
   [_renderer.scene update];
 }

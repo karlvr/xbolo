@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) GSXBoloController *boloController;
 
+- (void)reset;
 - (void)refresh;
 - (void)scroll:(CGPoint)delta;
 - (void)scrollToVisible:(Vec2f)point;

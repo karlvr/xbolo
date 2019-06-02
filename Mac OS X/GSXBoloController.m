@@ -983,6 +983,7 @@ TRY
           else {
             if (startserverthread()) LOGFAIL(errno)
             if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+            [boloView reset];
           }
 
           break;
@@ -1091,6 +1092,7 @@ TRY
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
       if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+      [boloView reset];
     }
     if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
       [self startPublishing];
@@ -1204,6 +1206,7 @@ TRY
   [joinProgressIndicator startAnimation:self];
   [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
   if (startclient(joinAddressString.UTF8String, joinPortNumber, playerNameString.UTF8String, joinPasswordBool ? joinPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+  [boloView reset];
 
   //Always stop listening for Bonjour methods.
   [self stopListening];
@@ -3160,6 +3163,7 @@ END
 - (void)registerSuccess {
 TRY
   if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+  [boloView reset];
 
 CLEANUP
   switch (ERROR) {

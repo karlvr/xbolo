@@ -69,6 +69,10 @@
   [_wrapped nextPillCenter];
 }
 
+- (void)reset {
+  [_wrapped reset];
+}
+
 - (void)refresh {
   [_wrapped refresh];
 }

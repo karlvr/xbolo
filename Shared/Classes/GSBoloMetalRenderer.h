@@ -19,6 +19,8 @@ API_AVAILABLE(ios(11), macosx(10.13))
 
 @property (nonatomic, strong, readonly) GSBoloScene *scene;
 
+- (void)resetScene:(MTKView *)view;
+
 @end
 
 NS_ASSUME_NONNULL_END
