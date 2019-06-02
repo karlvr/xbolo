@@ -342,7 +342,10 @@ int stopserver() {
   char buf[10];
   ssize_t r;
 
-  assert(server.setup);
+  /* If the server isn't started, just return */
+  if (server.setup == 0) {
+    return 0;
+  }
 
 TRY
   /* close mainpipe */
