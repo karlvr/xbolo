@@ -3592,6 +3592,12 @@ END
 @implementation GSXBoloController (NetService)
 
 - (void)startPublishing {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self startPublishingOnBackgroundQueue];
+  });
+}
+
+- (void)startPublishingOnBackgroundQueue {
   NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
   broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
   broadcaster.delegate = self;
