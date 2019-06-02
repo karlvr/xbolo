@@ -1033,6 +1033,7 @@ END
   [self stopListening];
   
   NSData *mapData = nil;
+  [newGameWindow makeFirstResponder:nil];
 
 TRY
   if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
@@ -1167,6 +1168,8 @@ END
 
 - (IBAction)joinTrackerRefresh:(id)sender {
 TRY
+  [newGameWindow makeFirstResponder:nil];
+  
   [joinTrackerTableView deselectAll:self];
   joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
@@ -1200,6 +1203,8 @@ END
 
 - (IBAction)joinOK:(id)sender {
 TRY
+  [newGameWindow makeFirstResponder:nil];
+
   joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
   joinProgressIndicator.doubleValue = 0.0;
