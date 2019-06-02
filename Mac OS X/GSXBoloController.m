@@ -3604,7 +3604,7 @@ END
 
 - (void)startPublishingOnBackgroundQueue {
   NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
-  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
+  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:getservertcpport()];
   broadcaster.delegate = self;
   [self updatePublishedInfo];
   [broadcaster publish];
