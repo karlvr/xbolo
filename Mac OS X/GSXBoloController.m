@@ -971,12 +971,12 @@ TRY
   for (TCMPortMapping *mapping in [portMapper portMappings]) {
     if ([mapping localPort] == getservertcpport()) {
       if ([mapping mappingStatus] == TCMPortMappingStatusMapped && [mapping transportProtocol] == TCMPortMappingTransportProtocolBoth) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
+        
         if (hostTrackerBool) {
           startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
         }
         else {
-          [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
-
           if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
             if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
           }
