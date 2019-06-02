@@ -15,6 +15,19 @@
 static SKTextureAtlas *_tilesAtlas;
 static SKTextureAtlas *_spritesAtlas;
 
+typedef enum {
+  ZPositionBuilder = 1,
+  ZPositionOtherTank,
+  ZPositionOtherTankLabel,
+  ZPositionTank,
+  ZPositionShell,
+  ZPositionExplosion,
+  ZPositionParachute,
+  ZPositionSelector,
+  ZPositionCrosshair,
+  ZPositionGlobalLabel,
+} ZPosition;
+
 @interface GSBoloScene() {
   SKTileSet *_tileSet;
   SKTileMapNode *_map;
@@ -165,13 +178,14 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   }
 }
 
-- (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image {
+- (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image zPosition:(ZPosition)zPosition {
   SKSpriteNode *sprite;
   if (*nextSprite < sprites.count) {
     sprite = sprites[*nextSprite];
     *nextSprite += 1;
   } else {
     sprite = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(image)]];
+    sprite.zPosition = zPosition;
     [sprites addObject:sprite];
     [self addChild:sprite];
     *nextSprite += 1;
@@ -183,7 +197,8 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
                  nextLabel:(NSUInteger *)nextLabel
                   fontName:(NSString *)fontName
                   fontSize:(CGFloat)fontSize
-                 fontColor:(NSColor *)fontColor {
+                 fontColor:(NSColor *)fontColor
+                 zPosition:(ZPosition)zPosition {
   SKLabelNode *label;
   if (*nextLabel < labels.count) {
     label = labels[*nextLabel];
@@ -192,6 +207,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     label = [[SKLabelNode alloc] initWithFontNamed:fontName];
     label.fontSize = fontSize;
     label.fontColor = fontColor;
+    label.zPosition = zPosition;
     [labels addObject:label];
     [self addChild:label];
     *nextLabel += 1;
@@ -379,7 +395,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
         case kBuilderWait:
         case kBuilderReturn: {
           GSImage image = (client.players[client.player].seq/5)%2 ? BUILD0IMAGE : BUILD1IMAGE;
-          SKSpriteNode *sprite = [self nextSprite:_builders nextSprite:&nextSprite image:image];
+          SKSpriteNode *sprite = [self nextSprite:_builders nextSprite:&nextSprite image:image zPosition:ZPositionBuilder];
           [self drawSprite:sprite image:image at:client.players[i].builder fraction:calcvis(client.players[i].builder)];
           break;
         }
@@ -399,7 +415,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 
       vis = calcvis(client.players[i].tank);
 
-      SKSpriteNode *sprite = [self nextSprite:_otherPlayers nextSprite:&nextSprite image:FTNK00IMAGE];
+      SKSpriteNode *sprite = [self nextSprite:_otherPlayers nextSprite:&nextSprite image:FTNK00IMAGE zPosition:ZPositionOtherTank];
       if
         (
          (client.players[client.player].alliance & (1 << i)) &&
@@ -412,7 +428,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       }
 
       if (vis > 0.90) {
-        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor]];
+        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor] zPosition:ZPositionOtherTankLabel];
         NSString *text = [NSString stringWithCString:client.players[i].name encoding:NSUTF8StringEncoding];
         [self drawLabel:label text:text at:client.players[i].tank offset:CGPointMake(0, 12)];
       }
@@ -426,6 +442,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     /* draw tank */
     if (!_player) {
       _player = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(PTNK00IMAGE)]];
+      _player.zPosition = ZPositionTank;
       [self addChild:_player];
     }
     GSImage image = (client.players[client.player].boat ? PTKB00IMAGE : PTNK00IMAGE) + (((int)(client.players[client.player].dir/(kPif/8.0) + 0.5))%16);
@@ -450,7 +467,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
         shell = ptrlist(node);
 
         GSImage image = SHELL0IMAGE + (((int)(shell->dir/(kPif/8.0) + 0.5))%16);
-        SKSpriteNode *sprite = [self nextSprite:_shells nextSprite:&nextSprite image:image];
+        SKSpriteNode *sprite = [self nextSprite:_shells nextSprite:&nextSprite image:image zPosition:ZPositionShell];
         [self drawSprite:sprite image:image at:shell->point fraction:fogvis(shell->point)];
       }
     }
@@ -468,7 +485,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     explosion = ptrlist(node);
     f = ((float)explosion->counter)/EXPLOSIONTICKS;
 
-    SKSpriteNode *sprite = [self nextSprite:_explosions nextSprite:&nextSprite image:EXPLO0IMAGE];
+    SKSpriteNode *sprite = [self nextSprite:_explosions nextSprite:&nextSprite image:EXPLO0IMAGE zPosition:ZPositionExplosion];
     [self drawSprite:sprite image:EXPLO0IMAGE + ((EXPLO5IMAGE - EXPLO0IMAGE)*f) at:explosion->point fraction:fogvis(explosion->point)];
 
     node = nextlist(node);
@@ -485,7 +502,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
         explosion = ptrlist(node);
         f = ((float)explosion->counter)/EXPLOSIONTICKS;
 
-        SKSpriteNode *sprite = [self nextSprite:_explosions nextSprite:&nextSprite image:EXPLO0IMAGE];
+        SKSpriteNode *sprite = [self nextSprite:_explosions nextSprite:&nextSprite image:EXPLO0IMAGE zPosition:ZPositionExplosion];
         [self drawSprite:sprite image:EXPLO0IMAGE + ((EXPLO5IMAGE - EXPLO0IMAGE)*f) at:explosion->point fraction:fogvis(explosion->point)];
 
         node = nextlist(node);
@@ -499,7 +516,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   for (i = 0; i < MAX_PLAYERS; i++) {
     if (client.players[i].connected) {
       if (client.players[i].builderstatus == kBuilderParachute) {
-        SKSpriteNode *sprite = [self nextSprite:_parachutingBuilders nextSprite:&nextSprite image:BUILD2IMAGE];
+        SKSpriteNode *sprite = [self nextSprite:_parachutingBuilders nextSprite:&nextSprite image:BUILD2IMAGE zPosition:ZPositionParachute];
         [self drawSprite:sprite at:client.players[i].builder fraction:fogvis(client.players[i].builder)];
       }
     }
@@ -515,6 +532,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 
       if (!_selector) {
         _selector = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(SELETRIMAGE)]];
+        _selector.zPosition = ZPositionSelector;
         [self addChild: _selector];
       }
 
@@ -528,6 +546,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   if (!client.players[client.player].dead) {
     if (!_crosshair) {
       _crosshair = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(CROSSHIMAGE)]];
+      _crosshair.zPosition = ZPositionCrosshair;
       [self addChild:_crosshair];
     }
     [self drawSprite:_crosshair image:CROSSHIMAGE at:add2f(client.players[client.player].tank, mul2f(dir2vec(client.players[client.player].dir), client.range)) fraction:1.0];
@@ -541,6 +560,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       _gameStateLabel.fontColor = [NSColor whiteColor];
       _gameStateLabel.fontSize = 90;
       _gameStateLabel.position = self.position;
+      _gameStateLabel.zPosition = ZPositionGlobalLabel;
       [_camera addChild: _gameStateLabel];
     }
 
