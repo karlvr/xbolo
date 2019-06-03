@@ -1405,7 +1405,7 @@ TRY
         }
         if (client.printmessage && clupdate.hdr.builderdeathsound) {
             char *text;
-            if (asprintf(&text, "%s just lost his builder", client.players[clupdate.hdr.player].name) == -1) LOGFAIL(errno)
+            if (asprintf(&text, "%s just lost their builder", client.players[clupdate.hdr.player].name) == -1) LOGFAIL(errno)
                 client.printmessage(MSGGAME, text);
             free(text);
         }
@@ -7086,7 +7086,7 @@ TRY
   }
   if (client.printmessage) {
       char *text;
-      if (asprintf(&text, "%s just lost his builder", client.players[client.player].name) == -1) LOGFAIL(errno)
+      if (asprintf(&text, "%s just lost their builder", client.players[client.player].name) == -1) LOGFAIL(errno)
           client.printmessage(MSGGAME, text);
       free(text);
   }
