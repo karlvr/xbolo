@@ -352,6 +352,7 @@ int unlockclient(void);
 int keyevent(int mask, int set);
 
 /** builder commands */
+int buildercan(GSPoint p);
 void buildercommand(int type, GSPoint p);
 
 /* alliance requests */
