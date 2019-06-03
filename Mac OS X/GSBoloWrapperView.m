@@ -37,7 +37,7 @@
     if (@available(macOS 10.13, *)) {
       _wrapped = [[GSBoloMTKView alloc] initWithFrame:self.bounds];
       [self addSubview:(NSView *)_wrapped];
-    } else if (@available(macOS 10.9, *)) {
+    } else if (@available(macOS 10.12, *)) {
       _wrapped = [[GSBoloSKView alloc] initWithFrame:self.bounds];
       [self addSubview:(NSView *)_wrapped];
     } else {

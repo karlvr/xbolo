@@ -45,11 +45,7 @@ static NSCursor *cursor = nil;
     [GSBoloViews addView:self];
     self.showsFPS = YES;
     self.showsNodeCount = YES;
-    if (@available(macOS 10.12, *)) {
-      self.preferredFramesPerSecond = 16;
-    } else {
-      self.frameInterval = 60.0 / 16.0;
-    }
+    self.preferredFramesPerSecond = 16;
     self.ignoresSiblingOrder = YES;
     self.shouldCullNonVisibleNodes = YES;
 
