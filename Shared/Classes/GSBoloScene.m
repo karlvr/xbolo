@@ -536,8 +536,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
         [self addChild: _selector];
       }
 
-      Vec2f point = make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5);
-      [self drawSprite:_selector at:point fraction:buildercan(GSMakePoint(floor(point.x), floor(point.y))) ? 1 : 0];
+      [self drawSprite:_selector at:make2f(floor(aPoint.x/16.0) + 0.5, floor(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
     } else {
       _selector.hidden = YES;
     }

@@ -6542,15 +6542,7 @@ ERRHANDLER(0, -1)
 END
 }
 
-int buildercan(GSPoint p) {
-  return client.fog[p.y][p.x] != 0;
-}
-
 void buildercommand(int command, GSPoint p) {
-  /* Check that you can see that tile before allowing the builder to go there */
-  if (!buildercan(p)) {
-    return;
-  }
   if (client.players[client.player].builderstatus != kBuilderParachute && client.nextbuildercommand == BUILDERNILL && !client.players[client.player].dead) {
     client.nextbuildercommand = command;
     client.nextbuildertarget = p;
