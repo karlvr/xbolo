@@ -74,14 +74,14 @@
     {
         robots = [NSMutableArray array];
 
-        NSArray<NSURL *> *searchURLs = [GSRobot searchURLs];
-        for (NSURL *url in searchURLs) {
-            [self _loadRobotsFromPath:[url path] into:robots];
-        }
-
-        NSString *additionalRobotsDir = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSRobotsDir"];
-        if (additionalRobotsDir) {
-            [self _loadRobotsFromPath:additionalRobotsDir into:robots];
+        NSString *overrideRobotsDir = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSRobotsDir"];
+        if (overrideRobotsDir) {
+            [self _loadRobotsFromPath:overrideRobotsDir into:robots];
+        } else {
+            NSArray<NSURL *> *searchURLs = [GSRobot searchURLs];
+            for (NSURL *url in searchURLs) {
+                [self _loadRobotsFromPath:[url path] into:robots];
+            }
         }
     }
     return robots;
