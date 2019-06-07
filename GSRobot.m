@@ -73,17 +73,10 @@
     if(!robots)
     {
         robots = [NSMutableArray array];
-        
-        NSString *myPath = [NSBundle mainBundle].bundlePath;
-        NSString *enclosingPath = myPath.stringByDeletingLastPathComponent;
-        NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
 
-        [self _loadRobotsFromPath:botsPath into:robots];
-
-        NSArray<NSString *> *applicationSupportPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSAllDomainsMask, YES);
-        for (NSString *applicationSupportPath in applicationSupportPaths) {
-            [self _loadRobotsFromPath:[[applicationSupportPath stringByAppendingPathComponent:@"XBolo"] stringByAppendingPathComponent:@"Robots"]
-                                 into:robots];
+        NSArray<NSURL *> *searchURLs = [GSRobot searchURLs];
+        for (NSURL *url in searchURLs) {
+            [self _loadRobotsFromPath:[url path] into:robots];
         }
     }
     return robots;
