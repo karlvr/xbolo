@@ -34,19 +34,25 @@
       [weakSelf boundsDidChange];
     }];
     
-    if (@available(macOS 10.13, *) && [GSBoloMTKView canUseMetal]) {
-      _wrapped = [[GSBoloMTKView alloc] initWithFrame:self.bounds];
-      [self addSubview:(NSView *)_wrapped];
-    } else if (@available(macOS 10.12, *)) {
-      _wrapped = [[GSBoloSKView alloc] initWithFrame:self.bounds];
-      [self addSubview:(NSView *)_wrapped];
-    } else {
-      NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:self.bounds];
-      _wrapped = [[GSBoloDrawRectView alloc] initWithFrame:NSMakeRect(0, 0, 4096, 4096)];
-      NSView *wrappedView = (NSView *)_wrapped;
-      scrollView.documentView = wrappedView;
-      [self addSubview:scrollView];
-      _scrollView = scrollView;
+    if (@available(macOS 10.13, *)) {
+      if ([GSBoloMTKView canUseMetal]) {
+        _wrapped = [[GSBoloMTKView alloc] initWithFrame:self.bounds];
+        [self addSubview:(NSView *)_wrapped];
+      }
+    }
+
+    if (!_wrapped) {
+      if (@available(macOS 10.12, *)) {
+        _wrapped = [[GSBoloSKView alloc] initWithFrame:self.bounds];
+        [self addSubview:(NSView *)_wrapped];
+      } else {
+        NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:self.bounds];
+        _wrapped = [[GSBoloDrawRectView alloc] initWithFrame:NSMakeRect(0, 0, 4096, 4096)];
+        NSView *wrappedView = (NSView *)_wrapped;
+        scrollView.documentView = wrappedView;
+        [self addSubview:scrollView];
+        _scrollView = scrollView;
+      }
     }
   }
 
