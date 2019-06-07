@@ -131,7 +131,7 @@
 
 - (NSString *)name
 {
-    return _bundle.bundlePath.lastPathComponent;
+    return [_bundle.bundlePath.lastPathComponent stringByDeletingPathExtension];
 }
 
 - (BOOL)loadWithError:(NSError**)error
