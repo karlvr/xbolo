@@ -78,6 +78,11 @@
         for (NSURL *url in searchURLs) {
             [self _loadRobotsFromPath:[url path] into:robots];
         }
+
+        NSString *additionalRobotsDir = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSRobotsDir"];
+        if (additionalRobotsDir) {
+            [self _loadRobotsFromPath:additionalRobotsDir into:robots];
+        }
     }
     return robots;
 }
