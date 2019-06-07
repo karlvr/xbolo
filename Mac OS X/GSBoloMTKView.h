@@ -20,6 +20,8 @@ API_AVAILABLE(ios(11), macosx(10.13))
   NSEventModifierFlags modifiers;
 }
 
++ (BOOL)canUseMetal;
+
 @end
 
 NS_ASSUME_NONNULL_END

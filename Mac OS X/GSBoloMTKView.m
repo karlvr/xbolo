@@ -39,6 +39,10 @@ static NSCursor *cursor = nil;
   });
 }
 
++ (BOOL)canUseMetal {
+  return MTLCopyAllDevices().count > 0;
+}
+
 - (instancetype)initWithFrame:(NSRect)frameRect {
   if (self = [super initWithFrame:frameRect device:nil]) {
     [GSBoloViews addView:self];

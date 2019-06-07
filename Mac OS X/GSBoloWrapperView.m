@@ -34,7 +34,7 @@
       [weakSelf boundsDidChange];
     }];
     
-    if (@available(macOS 10.13, *)) {
+    if (@available(macOS 10.13, *) && [GSBoloMTKView canUseMetal]) {
       _wrapped = [[GSBoloMTKView alloc] initWithFrame:self.bounds];
       [self addSubview:(NSView *)_wrapped];
     } else if (@available(macOS 10.12, *)) {
