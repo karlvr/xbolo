@@ -19,7 +19,7 @@ enum {
     BUILDERMINE,
 } ;
 
-enum {
+typedef NS_ENUM(uint8_t, GSTileType) {
     kWallTile         = 0,
     kRiverTile        = 1,
     kSwampTile        = 2,
@@ -115,7 +115,7 @@ struct Builder
 
 @interface GSRobotGameState: NSObject
 @property int worldwidth, worldheight;
-@property int *visibletiles; //!< worldwidth * worldheight elements, row major
+@property GSTileType *visibletiles; //!< worldwidth * worldheight elements, row major
 
 @property Vec2f tankposition;
 @property Vec2f gunsightposition;
