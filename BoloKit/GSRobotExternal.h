@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #if !INTERNAL_GSROBOT_INCLUDE
-enum {
+typedef NS_ENUM(int, GSBuilderOperation) {
     BUILDERNILL = -1,
     BUILDERTREE,
     BUILDERROAD,
@@ -163,7 +163,7 @@ struct Builder
 @property BOOL mine;
 @property BOOL fire;
 
-@property int buildercommand;
+@property GSBuilderOperation buildercommand;
 @property int builderx, buildery;
 
 //! NSStrings containing player names
