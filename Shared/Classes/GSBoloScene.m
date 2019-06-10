@@ -51,10 +51,10 @@ typedef enum {
   CGPoint _scroll;
   CGFloat _zoom;
 
-  NSView *_nonSKView;
+  VIEW_TYPE *_nonSKView;
 }
 
-@property (nonatomic, readonly) NSView *anyView;
+@property (nonatomic, readonly) VIEW_TYPE *anyView;
 
 @end
 
@@ -115,7 +115,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     _parachutingBuilders = [NSMutableArray array];
     _otherPlayerLabels = [NSMutableArray array];
 
-    self.backgroundColor = [NSColor redColor];
+    self.backgroundColor = [COLOR_TYPE redColor];
 
     NSMutableArray<SKTileGroup *> *tileGroups = [NSMutableArray array];
     for (GSImage image = 0; image <= MINE00IMAGE; image++) {
@@ -166,11 +166,11 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   return self;
 }
 
-- (void)didMoveToNonSKView:(NSView *)view {
+- (void)didMoveToNonSKView:(VIEW_TYPE *)view {
   _nonSKView = view;
 }
 
-- (NSView *)anyView {
+- (VIEW_TYPE *)anyView {
   if (_nonSKView) {
     return _nonSKView;
   } else {
@@ -197,7 +197,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
                  nextLabel:(NSUInteger *)nextLabel
                   fontName:(NSString *)fontName
                   fontSize:(CGFloat)fontSize
-                 fontColor:(NSColor *)fontColor
+                 fontColor:(COLOR_TYPE *)fontColor
                  zPosition:(ZPosition)zPosition {
   SKLabelNode *label;
   if (*nextLabel < labels.count) {
@@ -299,13 +299,16 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     return;
   }
 
+#if TARGET_OS_OSX
   const NSPoint aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
   const BOOL moveCursor = [self.anyView mouse:aPoint inRect:self.anyView.visibleRect];
+#endif
 
   if (animated) {
     _scrolling = YES;
 
     SKAction *action = [SKAction moveTo:position duration:0.2];
+#if TARGET_OS_OSX
     if (moveCursor) {
       CGEventRef event = CGEventCreate(NULL);
       CGPoint mouseLocation = CGEventGetLocation(event);
@@ -320,11 +323,13 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
         return value;
       };
     }
+#endif
     [_camera runAction:action completion:^{
       self->_scrolling = NO;
     }];
   } else {
     _camera.position = position;
+#if TARGET_OS_OSX
     if (moveCursor) {
       CGEventRef event = CGEventCreate(NULL);
       CGPoint mouseLocation = CGEventGetLocation(event);
@@ -335,6 +340,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       newMouseLocation.y += delta.y;
       CGWarpMouseCursorPosition(newMouseLocation);
     }
+#endif
   }
 }
 
@@ -428,7 +434,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       }
 
       if (vis > 0.90) {
-        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[NSColor whiteColor] zPosition:ZPositionOtherTankLabel];
+        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[COLOR_TYPE whiteColor] zPosition:ZPositionOtherTankLabel];
         NSString *text = [NSString stringWithCString:client.players[i].name encoding:NSUTF8StringEncoding];
         [self drawLabel:label text:text at:client.players[i].tank offset:CGPointMake(0, 12)];
       }
@@ -524,6 +530,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   hideUnusedNodes(_parachutingBuilders, nextSprite);
 
   /* draw selector */
+#if TARGET_OS_OSX
   {
     NSPoint aPoint;
     aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
@@ -541,6 +548,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       _selector.hidden = YES;
     }
   }
+#endif
 
   /* draw crosshair */
   if (!client.players[client.player].dead) {
@@ -557,7 +565,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   if (client.pause) {
     if (!_gameStateLabel) {
       _gameStateLabel = [[SKLabelNode alloc] initWithFontNamed:@"Helvetica"];
-      _gameStateLabel.fontColor = [NSColor whiteColor];
+      _gameStateLabel.fontColor = [COLOR_TYPE whiteColor];
       _gameStateLabel.fontSize = 90;
       _gameStateLabel.position = self.position;
       _gameStateLabel.zPosition = ZPositionGlobalLabel;
