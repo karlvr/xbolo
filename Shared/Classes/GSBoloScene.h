@@ -10,6 +10,16 @@
 
 #import "bolo.h"
 
+#if TARGET_OS_IOS
+#define VIEW_TYPE UIView
+#define COLOR_TYPE UIColor
+#elif TARGET_OS_OSX
+#define VIEW_TYPE NSView
+#define COLOR_TYPE NSColor
+#else
+#error Unsupported target
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GSBoloScene: SKScene
@@ -23,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tankCenter;
 - (void)nextPillCenter;
 
-- (void)didMoveToNonSKView:(NSView *)view;
+- (void)didMoveToNonSKView:(VIEW_TYPE *)view;
 
 @end
 
