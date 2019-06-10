@@ -344,9 +344,7 @@
         gsdata.messages = messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
-        NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
-        
-        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
+        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata];
         
         [gsdata release];
         [messages release];

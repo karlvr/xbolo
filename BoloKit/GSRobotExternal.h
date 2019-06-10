@@ -176,7 +176,7 @@ NS_SWIFT_NAME(GSRobotProtocol)
 
 @property (class, readonly) int minimumRobotInterfaceVersionRequired;
 - (instancetype)init; // designated initializer
-- (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
+- (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState;
 
 @end
 
