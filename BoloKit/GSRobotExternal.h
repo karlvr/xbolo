@@ -9,7 +9,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#if !INTERNAL_GSROBOT_INCLUDE
 typedef NS_ENUM(int, GSBuilderOperation) {
     BUILDERNILL = -1,
     BUILDERTREE,
@@ -77,7 +76,6 @@ typedef NS_ENUM(uint8_t, GSTileType) {
     kHostilePill15Tile,
     kUnknownTile,
 } ;
-#endif
 
 #if defined(USE_SIMD_H) && USE_SIMD_H
 NS_ASSUME_NONNULL_END
