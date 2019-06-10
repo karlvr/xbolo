@@ -186,7 +186,6 @@
 		B804BAEB22A20AC900741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
 		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
-		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
 		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
@@ -707,8 +706,6 @@
 				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
 				B804BAE722A20A0E00741E7A /* GSBoloScene.h */,
 				B804BAE822A20A0E00741E7A /* GSBoloScene.m */,
-				B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */,
-				B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -873,6 +870,8 @@
 				B804BAD9229FEE9000741E7A /* GSBoloSKView.m */,
 				B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */,
 				B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */,
+				B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */,
+				B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */,
 				B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */,
 				B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */,
 				404D42810FF8525200589EA2 /* GSBuilderStatusView.h */,
@@ -1283,7 +1282,6 @@
 				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
 				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
-				B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
