@@ -6,10 +6,11 @@
 //  Copyright 2009 Robert Chrzanowski. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <SpriteKit/SpriteKit.h>
 
+#import "GSBoloViewProtocol.h"
 
-@interface XBoloView : UIView {
+@interface XBoloView : SKView <GSBoloViewProtocol> {
 
 }
 
