@@ -190,6 +190,7 @@
 		B860A8CC22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
 		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B860A8CD22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
+		B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -712,6 +713,8 @@
 				B804BAE822A20A0E00741E7A /* GSBoloScene.m */,
 				B860A8CA22AEDD9F00E4806A /* XBoloBonjour.h */,
 				B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */,
+				B804BAE222A1D07000741E7A /* GSBoloViews.h */,
+				B804BAE322A1D07000741E7A /* GSBoloViews.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -888,8 +891,6 @@
 				404D42860FF8525200589EA2 /* GSStatusBar.m */,
 				404D42870FF8525200589EA2 /* GSStatusView.h */,
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
-				B804BAE222A1D07000741E7A /* GSBoloViews.h */,
-				B804BAE322A1D07000741E7A /* GSBoloViews.m */,
 				B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */,
 			);
 			name = View;
@@ -1282,6 +1283,7 @@
 				4064445D108251E1008F913C /* tiles.c in Sources */,
 				55C4A55A1CBD732D003A29B0 /* timing.c in Sources */,
 				55C4A54E1CBD71A9003A29B0 /* errchk.c in Sources */,
+				B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */,
 				406444641082520D008F913C /* images.c in Sources */,
 				407ECEFE1087C371002B43CB /* buf.c in Sources */,
 				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
