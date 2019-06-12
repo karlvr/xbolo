@@ -187,7 +187,9 @@
 		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
+		B860A8CC22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
 		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
+		B860A8CD22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -412,6 +414,8 @@
 		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
 		B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloWrapperView.h; sourceTree = "<group>"; };
 		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
+		B860A8CA22AEDD9F00E4806A /* XBoloBonjour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjour.h; sourceTree = "<group>"; };
+		B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjour.m; sourceTree = "<group>"; };
 		B872064B243DD503001304D1 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		B872064C243DD503001304D1 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
 		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
@@ -706,6 +710,8 @@
 				553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */,
 				B804BAE722A20A0E00741E7A /* GSBoloScene.h */,
 				B804BAE822A20A0E00741E7A /* GSBoloScene.m */,
+				B860A8CA22AEDD9F00E4806A /* XBoloBonjour.h */,
+				B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1281,6 +1287,7 @@
 				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
 				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
 				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
+				B860A8CD22AEDD9F00E4806A /* XBoloBonjour.m in Sources */,
 				55C4A5501CBD71DE003A29B0 /* io.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1329,6 +1336,7 @@
 				553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */,
 				408189921082475A00E4D4CA /* bmap_server.c in Sources */,
 				40A593620FBE78FC00F3E650 /* bolo.c in Sources */,
+				B860A8CC22AEDD9F00E4806A /* XBoloBonjour.m in Sources */,
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
 				40A593610FBE78FC00F3E650 /* errchk.c in Sources */,
 				55A4B79C1D2C3E50008A61F6 /* BoloURLHandler.swift in Sources */,

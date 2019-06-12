@@ -9,6 +9,7 @@
 #import "XBoloViewController.h"
 
 #import "XBoloView.h"
+#import "XBoloBonjour.h"
 
 #import "server.h"
 #import "client.h"
@@ -23,6 +24,7 @@ static BOOL muteBool;
 
 @interface XBoloViewController() {
   XBoloView *_boloView;
+  XBoloBonjour *_broadcaster;
 }
 
 @end
@@ -46,6 +48,8 @@ static BOOL muteBool;
 - (void)commonInit {
   controller = self;
   _boloView = [[XBoloView alloc] initWithFrame:CGRectZero];
+
+  _broadcaster = [[XBoloBonjour alloc] init];
 }
 
 - (void)awakeFromNib {
@@ -75,8 +79,10 @@ static BOOL muteBool;
 
 TRY
 //  [_boloView refresh];
+  NSURL *mapURL = [[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"];
+
   NSData *mapData = nil;
-  mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]];
+  mapData = [NSData dataWithContentsOfURL:mapURL];
 
   int timelimit = 1800;
   struct Domination domination;
@@ -96,6 +102,12 @@ TRY
   if (startserverthread()) LOGFAIL(errno)
   if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
   [_boloView reset];
+
+  NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", UIDevice.currentDevice.name, playerNameString];
+  _broadcaster.serviceName = bonjourName;
+  _broadcaster.mapName = [[[mapURL path] lastPathComponent] stringByDeletingPathExtension];
+  [_broadcaster startPublishing];
+  
 CLEANUP
 
 END
