@@ -4,8 +4,8 @@
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
-#import "XBoloBonjourKeys.h"
 #import "GSBoloViews.h"
+#import "XBoloBonjour.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -102,6 +102,7 @@ static NSString * const GSAllowJoinColumn                  = @"GSAllowJoinColumn
 static NSString * const GSPausedColumn                     = @"GSPausedColumn";
 static NSString * const GSHostnameColumn                   = @"GSHostnameColumn";
 static NSString * const GSPortColumn                       = @"GSPortColumn";
+#define GSNetServiceKey @"NetService"
 
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
@@ -220,20 +221,10 @@ static void getlisttrackerstatus(int status);
 - (void)updateTableButtons:(NSTableView *)table;
 @end
 
-@interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
-- (void)startPublishing;
-- (void)updatePublishedInfo;
-- (void)stopPublishing;
-
-- (void)startListening;
-- (void)stopListening;
-- (void)clearBonjourEntries;
-@end
-
 @implementation GSXBoloController {
-  NSNetService *broadcaster;
-  NSNetServiceBrowser *listener;
+  XBoloBonjour *broadcaster;
 }
+
 @synthesize joinAddress = joinAddressString;
 @synthesize joinPort = joinPortNumber;
 @synthesize hostPort = hostPortNumber;
@@ -556,8 +547,63 @@ static void getlisttrackerstatus(int status);
   [self setupRobotsMenu];
   
   // Register for Bonjour Services
+  __weak typeof(self) weakSelf = self;
+
+  broadcaster = [[XBoloBonjour alloc] init];
+  broadcaster.gameInfoBlock = ^(XBoloBonjourGameInfo *gameInfo) {
+    GSXBoloController *strongSelf = weakSelf;
+    if (!strongSelf) {
+      return;
+    }
+
+    NSDictionary *toSet =
+    @{GSHostPlayerColumn: gameInfo.playerName,
+      GSMapNameColumn: gameInfo.mapName,
+      GSPlayersColumn: gameInfo.playerCount,
+      GSPasswordColumn: gameInfo.passReq,
+      GSAllowJoinColumn: gameInfo.canJoin,
+      GSPausedColumn: gameInfo.paused,
+      GSHostnameColumn: gameInfo.hostName,
+      GSPortColumn: gameInfo.port,
+      GSSourceColumn: @(GSServerSourceBonjour),
+      GSNetServiceKey: gameInfo.service};
+
+    NSMutableArray *newTrackArr = strongSelf->joinTrackerArray;
+    if (!newTrackArr) {
+      newTrackArr = [[NSMutableArray alloc] init];
+    }
+
+    NSUInteger idx = [newTrackArr indexOfObjectPassingTest:^BOOL(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+      return obj[GSNetServiceKey] == gameInfo.service;
+    }];
+
+    if (idx != NSNotFound) {
+      [newTrackArr replaceObjectAtIndex:idx withObject:toSet];
+    } else {
+      [newTrackArr addObject:toSet];
+    }
+    [strongSelf setJoinTrackerArray:newTrackArr];
+  };
+  broadcaster.gameInfoRemovedBlock = ^(NSNetService * _Nonnull service) {
+    GSXBoloController *strongSelf = weakSelf;
+    if (!strongSelf) {
+      return;
+    }
+
+    NSDictionary *toRemove;
+    for (NSDictionary *theDict in strongSelf->joinTrackerArray) {
+      if ([theDict[GSNetServiceKey] isEqual:service]) {
+        toRemove = theDict;
+        break;
+      }
+    }
+
+    [strongSelf->joinTrackerArray removeObject:toRemove];
+    [strongSelf setJoinTrackerArray:strongSelf->joinTrackerArray];
+  };
+
   if (![defaults boolForKey:GSDisableBonjour]) {
-    [self startListening];
+    [broadcaster startListening];
   }
   
   _broadcastBonjour = ![defaults boolForKey:GSDisableBonjour];
@@ -850,7 +896,7 @@ END
 
   if (server.setup) {
     stopserver();
-    [self stopPublishing];
+    [broadcaster stopPublishing];
   }
 
   if (!listener) {
@@ -1041,7 +1087,7 @@ END
 
 - (IBAction)hostOK:(id)sender {
   //Always stop listening for Bonjour methods.
-  [self stopListening];
+  [broadcaster stopListening];
   
   NSData *mapData = nil;
   [newGameWindow makeFirstResponder:nil];
@@ -1108,8 +1154,13 @@ TRY
       if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
       [boloView reset];
     }
+
+    NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
+    broadcaster.serviceName = bonjourName;
+    broadcaster.mapName = hostMapString.lastPathComponent.stringByDeletingPathExtension;
+
     if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
-      [self startPublishing];
+      [broadcaster startPublishing];
     }
   }
 
@@ -1197,10 +1248,10 @@ TRY
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
   if (listtracker([self trackerHostName].UTF8String, [self trackerPort], &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
-  if (listener) {
+  if (broadcaster.listening) {
     // "Have you tried turning it off then on again?"
-    [self stopListening];
-    [self startListening];
+    [broadcaster stopListening];
+    [broadcaster startListening];
   }
 
 CLEANUP
@@ -1231,7 +1282,7 @@ TRY
   [boloView reset];
 
   //Always stop listening for Bonjour methods.
-  [self stopListening];
+  [broadcaster stopListening];
 
 CLEANUP
   switch (ERROR) {
@@ -1329,7 +1380,7 @@ END
 
 - (IBAction)toggleJoin:(id)sender {
   togglejoingame();
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)toggleMute:(id)sender {
@@ -1338,22 +1389,22 @@ END
 
 - (IBAction)gamePauseResumeMenu:(id)sender {
   pauseresumegame();
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)kickPlayer:(id)sender {
   kickplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)banPlayer:(id)sender {
   banplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)unbanPlayer:(id)sender {
   unbanplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)scrollUp:(id)sender {
@@ -3701,9 +3752,9 @@ END
 {
   _broadcastBonjour = broadcastBonjour;
   if (broadcaster && !_broadcastBonjour) {
-    [self stopPublishing];
+    [broadcaster stopPublishing];
   } else if (server.running && _broadcastBonjour) {
-    [self startPublishing];
+    [broadcaster startPublishing];
   }
 }
 
@@ -3714,73 +3765,13 @@ END
 
 - (IBAction)joinToggleBonjourListen:(nullable NSButton*)sender
 {
-  if (listener) {
-    [self stopListening];
+  if (broadcaster.listening) {
+    [broadcaster stopListening];
     sender.state = NSOffState;
   } else {
-    [self startListening];
+    [broadcaster startListening];
     sender.state = NSOnState;
   }
-}
-
-@end
-
-@implementation GSXBoloController (NetService)
-
-- (void)startPublishing {
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [self startPublishingOnBackgroundQueue];
-  });
-}
-
-- (void)startPublishingOnBackgroundQueue {
-  NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
-  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:getservertcpport()];
-  broadcaster.delegate = self;
-  [self updatePublishedInfo];
-  [broadcaster publish];
-}
-
-- (void)updatePublishedInfo {
-  if (broadcaster) {
-    lockserver();
-    NSMutableDictionary<NSString *, NSData *> *ourTxtDict = [[NSMutableDictionary alloc] initWithCapacity:6];
-    ourTxtDict[XBoloBonjourPlayerName] = [playerNameString dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloBonjourMapName] = [hostMapString.lastPathComponent.stringByDeletingPathExtension dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloBonjourReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
-    ourTxtDict[XBoloBonjourIsPaused] = server.pause == 0 ? [@"0" dataUsingEncoding:NSASCIIStringEncoding] : [@"1" dataUsingEncoding:NSASCIIStringEncoding];
-    //allowjoin
-    ourTxtDict[XBoloBonjourCanJoin] = server.allowjoin ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
-    int playerCount = 0;
-    for (NSInteger i = 0; i < MAX_PLAYERS; i++) {
-      if (server.players[i].used) {
-        playerCount++;
-      }
-    }
-    unlockserver();
-    ourTxtDict[XBoloBonjourPlayerCount] = [[NSString stringWithFormat:@"%i", playerCount] dataUsingEncoding:NSASCIIStringEncoding];
-    
-    NSData *txtData = [NSNetService dataFromTXTRecordDictionary:ourTxtDict];
-    
-    [broadcaster setTXTRecordData:txtData];
-  }
-}
-
-- (void)stopPublishing {
-  [broadcaster stop];
-  broadcaster = nil;
-}
-
-- (void)startListening {
-  listener = [[NSNetServiceBrowser alloc] init];
-  listener.delegate = self;
-  [listener searchForServicesOfType:XBoloBonjourType inDomain:@""];
-}
-
-- (void)stopListening {
-  [listener stop];
-  listener = nil;
-  [self clearBonjourEntries];
 }
 
 - (void)clearBonjourEntries {
@@ -3791,173 +3782,6 @@ END
     }
   }
   [joinTrackerArray removeObjectsAtIndexes:mutSet];
-  [self setJoinTrackerArray:joinTrackerArray];
-}
-
-#define GSNetServiceKey @"NetService"
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
-{
-  [service resolveWithTimeout:5];
-
-  dispatch_async(dispatch_get_global_queue(0, 0), ^{
-    //usleep(500);
-    sleep(1);
-
-    NSString *playerName = @"unknown";
-    NSString *mapName = @"unknown";
-    NSString *passReq = @"?";
-    NSString *paused = @"?";
-    NSString *canJoin = @"?";
-    NSString *playerCount = @"?";
-    NSData *txtData = [service TXTRecordData];
-    if (txtData) {
-      NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: txtData];
-      id val;
-      val = txtDict[XBoloBonjourPlayerName];
-      if (val) {
-        playerName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-      val = txtDict[XBoloBonjourMapName];
-      if (val) {
-        mapName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-      val = txtDict[XBoloBonjourReqiresPassword];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          passReq = @"No";
-        } else {
-          passReq = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourIsPaused];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          paused = @"No";
-        } else {
-          paused = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourCanJoin];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          canJoin = @"No";
-        } else {
-          canJoin = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourPlayerCount];
-      if (val) {
-        playerCount = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-    }
-    
-    if (!service.hostName) {
-      NSLog(@"Did not get host name from \"%@\"!", service);
-      return;
-    }
-    
-    NSDictionary *toSet =
-    @{GSHostPlayerColumn: playerName,
-      GSMapNameColumn: mapName,
-      GSPlayersColumn: playerCount,
-      GSPasswordColumn: passReq,
-      GSAllowJoinColumn: canJoin,
-      GSPausedColumn: paused,
-      GSHostnameColumn: service.hostName,
-      GSPortColumn: [NSString stringWithFormat:@"%ld", (long)service.port],
-      GSSourceColumn: @(GSServerSourceBonjour),
-      GSNetServiceKey: service};
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-      NSMutableArray *newTrackArr = self->joinTrackerArray;
-      if (!newTrackArr) {
-        newTrackArr = [[NSMutableArray alloc] initWithCapacity: moreComing ? 2 : 1];
-      }
-      [newTrackArr addObject:toSet];
-      [self setJoinTrackerArray:newTrackArr];
-      service.delegate = self;
-    });
-  });
-}
-
-- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data
-{
-  if (sender == broadcaster) {
-    //We should have been the one to change this...
-    return;
-  }
-  NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: data];
-  NSDictionary *toUpdate;
-  for (NSDictionary *theDict in joinTrackerArray) {
-    if ([theDict[GSNetServiceKey] isEqual:sender]) {
-      toUpdate = theDict;
-      break;
-    }
-  }
-  NSAssert(toUpdate != nil, @"Uh, oops");
-  NSMutableDictionary *mutUpdate = [toUpdate copy];
-  NSInteger idx = [joinTrackerArray indexOfObject:toUpdate];
-  
-  NSData *val;
-  val = txtDict[XBoloBonjourPlayerName];
-  if (val) {
-    mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-  val = txtDict[XBoloBonjourMapName];
-  if (val) {
-    mutUpdate[GSMapNameColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-  val = txtDict[XBoloBonjourReqiresPassword];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSPasswordColumn] = @"No";
-    } else {
-      mutUpdate[GSPasswordColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourIsPaused];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSPausedColumn] = @"No";
-    } else {
-      mutUpdate[GSPausedColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourCanJoin];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSAllowJoinColumn] = @"No";
-    } else {
-      mutUpdate[GSAllowJoinColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourPlayerCount];
-  if (val) {
-    mutUpdate[GSPlayersColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-
-  [joinTrackerArray replaceObjectAtIndex:idx withObject:[mutUpdate copy]];
-  [self setJoinTrackerArray:joinTrackerArray];
-}
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
-{
-  NSDictionary *toRemove;
-  for (NSDictionary *theDict in joinTrackerArray) {
-    if ([theDict[GSNetServiceKey] isEqual:service]) {
-      toRemove = theDict;
-      break;
-    }
-  }
-  
-  [joinTrackerArray removeObject:toRemove];
   [self setJoinTrackerArray:joinTrackerArray];
 }
 
