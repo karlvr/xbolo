@@ -10,6 +10,7 @@
 
 #import "XBoloView.h"
 #import "XBoloBonjour.h"
+#import "GSBoloViews.h"
 
 #import "server.h"
 #import "client.h"
@@ -48,6 +49,8 @@ static BOOL muteBool;
 - (void)commonInit {
   controller = self;
   _boloView = [[XBoloView alloc] initWithFrame:CGRectZero];
+
+  [GSBoloViews addView:_boloView];
 
   _broadcaster = [[XBoloBonjour alloc] init];
 }
@@ -211,7 +214,7 @@ END
       }
       if(centerTank)
         [_boloView tankCenter];
-      [_boloView refresh];
+      [GSBoloViews refresh];
 
       if (counter%2) {
         switch (client.players[client.player].builderstatus) {
