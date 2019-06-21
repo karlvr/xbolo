@@ -175,7 +175,7 @@ END
 }
 
 - (void)clientLoopUpdate {
-
+  [_boloView clientLoopUpdate];
 }
 
 - (void)refresh:(NSTimer *)aTimer {

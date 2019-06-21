@@ -184,6 +184,7 @@
 		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		B804BAE922A20A0E00741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
 		B804BAEB22A20AC900741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
+		B84309EB22B2E38300541AD5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B84309EA22B2E38300541AD5 /* Main.storyboard */; };
 		B848CA3F22A257C100C696B2 /* GSBoloMTKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */; };
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
@@ -191,6 +192,7 @@
 		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B860A8CD22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
 		B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
+		B87572C822B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -409,6 +411,7 @@
 		B804BAE522A1D34900741E7A /* GSBoloViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViewProtocol.h; sourceTree = "<group>"; };
 		B804BAE722A20A0E00741E7A /* GSBoloScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloScene.h; sourceTree = "<group>"; };
 		B804BAE822A20A0E00741E7A /* GSBoloScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloScene.m; sourceTree = "<group>"; };
+		B84309EA22B2E38300541AD5 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		B848CA3D22A257C100C696B2 /* GSBoloMTKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMTKView.h; sourceTree = "<group>"; };
 		B848CA3E22A257C100C696B2 /* GSBoloMTKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMTKView.m; sourceTree = "<group>"; };
 		B848CA4022A2611200C696B2 /* GSBoloMetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloMetalRenderer.h; sourceTree = "<group>"; };
@@ -417,6 +420,7 @@
 		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
 		B860A8CA22AEDD9F00E4806A /* XBoloBonjour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjour.h; sourceTree = "<group>"; };
 		B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjour.m; sourceTree = "<group>"; };
+		B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloDriveGestureRecognizer.swift; sourceTree = "<group>"; };
 		B872064B243DD503001304D1 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		B872064C243DD503001304D1 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
 		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
@@ -652,6 +656,7 @@
 				404D430F0FF85B5700589EA2 /* XBoloView.m */,
 				55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */,
 				55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */,
+				B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -684,6 +689,7 @@
 				404D43470FF85BAF00589EA2 /* XBoloViewController.xib */,
 				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
 				55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */,
+				B84309EA22B2E38300541AD5 /* Main.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1086,6 +1092,9 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
+					404D425C0FF84FEA00589EA2 = {
+						DevelopmentTeam = 9A5PCU4FSD;
+					};
 					40A5931E0FBE78FC00F3E650 = {
 						LastSwiftMigration = 1020;
 					};
@@ -1177,6 +1186,7 @@
 				55712C9B1CFA1D9300326A27 /* tankshot.aiff in Resources */,
 				55712C8B1CFA1D9300326A27 /* fbuilderdeath.aiff in Resources */,
 				55712C881CFA1D9300326A27 /* builderdeath.aiff in Resources */,
+				B84309EB22B2E38300541AD5 /* Main.storyboard in Resources */,
 				55712C861CFA1D9300326A27 /* bubbles.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1264,6 +1274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55C4A54F1CBD71C6003A29B0 /* bmap.c in Sources */,
+				B87572C822B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift in Sources */,
 				404D43110FF85B5700589EA2 /* XBoloView.m in Sources */,
 				404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */,
 				55C4A5561CBD72EF003A29B0 /* list.c in Sources */,
@@ -1649,6 +1660,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9A5PCU4FSD;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1686,6 +1698,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				DEVELOPMENT_TEAM = 9A5PCU4FSD;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iPhone/XBolo_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (

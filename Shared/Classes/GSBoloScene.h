@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GSBoloScene: SKScene
 
 @property (nonatomic) CGFloat baseZoom;
+@property (nonatomic) BOOL povMode;
 
 - (void)update;
 - (void)scroll:(CGPoint)delta;

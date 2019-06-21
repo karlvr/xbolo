@@ -254,6 +254,12 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     return;
   }
 
+  if (_povMode && !_pillboxViewMode) {
+//    float dir = client.players[client.player].dir;
+//    _camera.zRotation = dir - M_PI_2;
+    _camera.position = _player.position;
+  }
+
   if (_autoScroll) {
     CGFloat cameraDistance = CGPointDist(_camera.position, _player.position);
     if (cameraDistance > 16 * 8) {
