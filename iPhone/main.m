@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "XBoloViewController.h"
+#import "XBoloAppDelegate.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -20,7 +21,7 @@ int main(int argc, char *argv[]) {
 TRY
     if (initbolo(setplayerstatus, setpillstatus, setbasestatus, settankstatus, playsound, printmessage, joinprogress, clientloopupdate)) LOGFAIL(errno)
 
-    return UIApplicationMain(argc, argv, nil, nil);
+    return UIApplicationMain(argc, argv, nil, NSStringFromClass([XBoloAppDelegate class]));
 CLEANUP
     PCRIT(ERROR);
     printlineinfo();

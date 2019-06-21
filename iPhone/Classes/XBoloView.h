@@ -14,4 +14,6 @@
 
 }
 
+- (void)clientLoopUpdate;
+
 @end
