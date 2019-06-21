@@ -10,13 +10,9 @@
 
 @class XBoloViewController;
 
-@interface XBoloAppDelegate : NSObject <UIApplicationDelegate> {
-    UIWindow *window;
-    XBoloViewController *viewController;
-}
+@interface XBoloAppDelegate : NSObject <UIApplicationDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet XBoloViewController *viewController;
+@property (strong, nonatomic) UIWindow *window;
 
 @end
 
