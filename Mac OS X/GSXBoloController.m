@@ -113,7 +113,7 @@ static NSString * const GSDisableBonjour                  = @"GSDisableBonjour";
 static GSXBoloController *controller = nil;
 
 // sound
-static BOOL muteBool;
+static BOOL muteGlobal;
 
 static NSMutableArray<NSSound*> *bubblessounds;
 static NSMutableArray<NSSound*> *builderdeathsounds;
@@ -789,6 +789,7 @@ END
 
 - (void)setMute:(BOOL)aBool {
   muteBool = aBool;
+  muteGlobal = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSMute];
 }
 
@@ -3860,7 +3861,7 @@ void settankstatus() {
 }
 
 void playsound(int snd) {
-  if (!muteBool) {
+  if (!muteGlobal) {
     int i;
     NSArray *array;
 
