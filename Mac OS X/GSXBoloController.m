@@ -1770,6 +1770,9 @@ END
   else if (action == @selector(closeGame:)) {
     return client_running;
   }
+  else if (action == @selector(boloWindow:)) {
+    return client_running;
+  }
   else if (action == @selector(statusPanel:)) {
     return client_running;
   }
