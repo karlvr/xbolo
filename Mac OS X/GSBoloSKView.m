@@ -162,7 +162,7 @@ static NSCursor *cursor = nil;
 }
 
 - (void)resetCursorRects {
-  [self addCursorRect:self.bounds cursor:cursor];
+  [self addCursorRect:self.visibleRect cursor:cursor];
   [cursor setOnMouseEntered:YES];
 }
 
