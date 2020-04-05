@@ -1764,22 +1764,22 @@ END
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   SEL action;
   action = menuItem.action;
-	if (action == @selector(newGame:)) {
+  if (action == @selector(newGame:)) {
     return !client_running;
-	}
-	else if (action == @selector(closeGame:)) {
+  }
+  else if (action == @selector(closeGame:)) {
     return client_running;
-	}
-	else if (action == @selector(statusPanel:)) {
-		return client_running;
-	}
+  }
+  else if (action == @selector(statusPanel:)) {
+    return client_running;
+  }
   else if (action == @selector(allegiancePanel:)) {
     return client_running;
   }
-	else if (action == @selector(messagesPanel:)) {
-		return client_running;
-	}
-	else if (action == @selector(hostGameType:)) {
+  else if (action == @selector(messagesPanel:)) {
+    return client_running;
+  }
+  else if (action == @selector(hostGameType:)) {
     switch (menuItem.tag) {
     case kDominationGameType:  // Domination
       return YES;
@@ -1799,12 +1799,12 @@ END
     default:
       return NO;
     }
-	}
-	else if (action == @selector(builderToolMenu:)) {
-		menuItem.state = menuItem.tag == builderToolInt ? NSOnState : NSOffState;
-		return YES;
-	}
-	else if (action == @selector(gamePauseResumeMenu:)) {
+  }
+  else if (action == @selector(builderToolMenu:)) {
+    menuItem.state = menuItem.tag == builderToolInt ? NSOnState : NSOffState;
+    return YES;
+  }
+  else if (action == @selector(gamePauseResumeMenu:)) {
     lockserver();
 
     if (server.setup) {
@@ -1817,7 +1817,7 @@ END
       return NO;
     }
   }
-	else if (action == @selector(toggleJoin:)) {
+  else if (action == @selector(toggleJoin:)) {
     lockserver();
 
     if (server.setup) {
@@ -1830,11 +1830,11 @@ END
       return NO;
     }
   }
-	else if (action == @selector(toggleMute:)) {
+  else if (action == @selector(toggleMute:)) {
     menuItem.state = muteBool;
     return YES;
   }
-	else if (action == @selector(kickPlayer:)) {
+  else if (action == @selector(kickPlayer:)) {
     lockserver();
 
     if (server.setup) {
@@ -1863,7 +1863,7 @@ END
     }
     return YES;
   }
-	else if (action == @selector(banPlayer:)) {
+  else if (action == @selector(banPlayer:)) {
     lockserver();
 
     if (server.setup) {
@@ -1891,23 +1891,23 @@ END
       return NO;
     }
   }
-    else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
-    else if (action == @selector(hostToggleBonjourBroadcast:)) {
-      lockserver();
-      
-      if (server.setup) {
-        menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
-        unlockserver();
-        return YES;
-      } else {
-        menuItem.state = NSOffState;
-        unlockserver();
-        return NO;
-      }
+  else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
+  else if (action == @selector(hostToggleBonjourBroadcast:)) {
+    lockserver();
+
+    if (server.setup) {
+      menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
+      unlockserver();
+      return YES;
+    } else {
+      menuItem.state = NSOffState;
+      unlockserver();
+      return NO;
     }
-	else {
-		return YES;
-	}
+  }
+  else {
+      return YES;
+  }
 }
 
 // NSApplication delegate methods
