@@ -3098,6 +3098,10 @@ TRY
         free(text);
         text = NULL;
       }
+
+      if (client.setplayerstatus) {
+        client.setplayerstatus(srsetalliance->player);
+      }
     }
   }
 
@@ -6436,6 +6440,10 @@ TRY
           client.printmessage(MSGGAME, text);
           free(text);
           text = NULL;
+        }
+
+        if (client.setplayerstatus) {
+          client.setplayerstatus(i);
         }
       }
     }

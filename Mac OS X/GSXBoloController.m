@@ -215,6 +215,9 @@ static void getlisttrackerstatus(int status);
 // robots
 - (BOOL)_validateRobotMenuItem: (NSMenuItem *)item;
 - (void)setupRobotsMenu;
+
+// misc
+- (void)updateTableButtons:(NSTableView *)table;
 @end
 
 @interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
@@ -2192,17 +2195,38 @@ TRY
 
     playerRecord[@"Index"] = indexString;
 
-    if (client.players[client.player].seq - client.players[player].lastupdate >= 3*TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor], NSBackgroundColorAttributeName: [NSColor redColor]}];
+    NSColor *backgroundColor = nil;
+    NSString *alliance = nil;
+
+    if (client.player == player) {
+      NSFont *boldFont = playerInfoTableView.font ?
+        [[NSFontManager sharedFontManager] convertFont:playerInfoTableView.font toHaveTrait:NSFontBoldTrait] :
+        [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSFontAttributeName: boldFont}];
+    } else if (client.players[client.player].seq - client.players[player].lastupdate >= 3*TICKSPERSEC) {
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor]}];
+      backgroundColor = [NSColor redColor];
     }
     else if (client.players[client.player].seq - client.players[player].lastupdate >= TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor yellowColor]}];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{}];
+      backgroundColor = [NSColor yellowColor];
+    } else {
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{}];
     }
-    else {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor greenColor]}];
+
+    if (client.player == player) {
+      alliance = @"You";
+    } else if (testalliance(client.player, player)) {
+      alliance = @"Ally";
+    } else if (requestedalliance(client.player, player)) {
+      alliance = @"Requested";
+    } else if (requestedalliance(player, client.player)) {
+      alliance = @"Received";
     }
 
     playerRecord[@"Player"] = name;
+    playerRecord[@"BackgroundColor"] = backgroundColor;
+    playerRecord[@"Alliance"] = alliance;
 
     if (client.player == player) {
       imageView.image = [NSImage imageNamed:@"PlayerStatFriendly"];
@@ -2231,6 +2255,7 @@ TRY
   }
 
   [playerInfoTableView reloadData];
+  [self updateTableButtons:playerInfoTableView];
 
   if (unlockclient()) LOGFAIL(errno)
   gotlock = 0;
@@ -2693,15 +2718,9 @@ END
 	
 }
 
-
-// NSTableView delegate methods
-
-- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
-  NSTableView *table;
+- (void)updateTableButtons:(NSTableView *)table {
   NSInteger i;
   NSDictionary *row;
-
-  table = aNotification.object;
 
   if (table == playerInfoTableView) {
     if (table.numberOfSelectedRows == 0) {
@@ -2709,8 +2728,27 @@ END
       [leaveAllianceButton setEnabled:FALSE];
     }
     else {
-      [requestAllianceButton setEnabled:TRUE];
-      [leaveAllianceButton setEnabled:TRUE];
+      BOOL currentPlayerSelected = NO;
+      BOOL allySelected = NO;
+      BOOL allyRequestedSelected = NO;
+      BOOL enemySelected = NO;
+
+      NSIndexSet *set = playerInfoTableView.selectedRowIndexes;
+      for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
+        int player = [playerInfoArray[i][@"Index"] intValue];
+        if (player == client.player) {
+          currentPlayerSelected = YES;
+        } else if (testalliance(client.player, player)) {
+          allySelected = YES;
+        } else if (requestedalliance(client.player, player)) {
+          allyRequestedSelected = YES;
+        } else {
+          enemySelected = YES;
+        }
+      }
+
+      [requestAllianceButton setEnabled:enemySelected];
+      [leaveAllianceButton setEnabled:allySelected || allyRequestedSelected];
     }
   }
   else if (table == joinTrackerTableView) {
@@ -2720,6 +2758,29 @@ END
       row = joinTrackerArray[i];
       [self setJoinAddress:row[GSHostnameColumn]];
       [self setJoinPort:[row[GSPortColumn] intValue]];
+    }
+  }
+}
+
+// NSTableView delegate methods
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
+  NSTableView *table;
+
+  table = aNotification.object;
+  [self updateTableButtons:table];
+}
+
+- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)rowIndex {
+  if (aTableView == playerInfoTableView) {
+    NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
+    if ([@"Player" isEqualToString:tableColumn.identifier]) {
+      if (playerInfoArray[rowIndex][@"BackgroundColor"]) {
+        [cell setBackgroundColor:playerInfoArray[rowIndex][@"BackgroundColor"]];
+        [cell setDrawsBackground:YES];
+      } else {
+        [cell setDrawsBackground:NO];
+      }
     }
   }
 }
@@ -2810,6 +2871,9 @@ END
   if (showStatusBool) {
     [statusPanel orderFront:self];
   }
+
+  /* Fix allegiancePanel column widths */
+  playerInfoTableView.tableColumns[0].width = MIN(playerInfoTableView.tableColumns[0].minWidth, allegiancePanel.frame.size.width - playerInfoTableView.tableColumns[1].width);
 
   if (showAllegianceBool) {
     [allegiancePanel orderFront:self];
