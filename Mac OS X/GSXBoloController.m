@@ -332,6 +332,9 @@ static void getlisttrackerstatus(int status);
   [allegiancePanel setHidesOnDeactivate:NO];
   [messagesPanel setHidesOnDeactivate:NO];
 
+  /* Fix allegiancePanel column widths */
+  playerInfoTableView.tableColumns[0].width = MAX(playerInfoTableView.tableColumns[0].minWidth, allegiancePanel.frame.size.width - playerInfoTableView.tableColumns[1].width);
+
   // init the host pane
   [self setHostMap:[defaults stringForKey:GSHostMap]];
   [self setHostUPnP:[defaults integerForKey:GSHostUPnP]];
@@ -2881,9 +2884,6 @@ END
   if (showStatusBool) {
     [statusPanel orderFront:self];
   }
-
-  /* Fix allegiancePanel column widths */
-  playerInfoTableView.tableColumns[0].width = MIN(playerInfoTableView.tableColumns[0].minWidth, allegiancePanel.frame.size.width - playerInfoTableView.tableColumns[1].width);
 
   if (showAllegianceBool) {
     [allegiancePanel orderFront:self];
