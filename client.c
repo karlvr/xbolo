@@ -7135,3 +7135,7 @@ int findbase(int x, int y) {
 int testalliance(int p1, int p2) {
   return client.players[p1].used && client.players[p2].used && (client.players[p1].alliance & (1 << p2)) && (client.players[p2].alliance & (1 << p1));
 }
+
+int requestedalliance(int p1, int p2) {
+  return client.players[p1].used && client.players[p2].used && (client.players[p1].alliance & (1 << p2));
+}
