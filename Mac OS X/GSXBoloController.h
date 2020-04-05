@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GSXBoloController : NSObject <NSApplicationDelegate, NSToolbarDelegate, NSTableViewDataSource, NSTableViewDelegate> {
+@interface GSXBoloController : NSObject <NSApplicationDelegate, NSToolbarDelegate, NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate> {
   IBOutlet NSWindow *newGameWindow;
   IBOutlet NSWindow *boloWindow;
   IBOutlet NSWindow *joinProgressWindow;

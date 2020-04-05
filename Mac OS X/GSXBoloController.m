@@ -3676,6 +3676,16 @@ END
 
 @end
 
+@implementation GSXBoloController (NSWindowDelegate)
+
+- (void)windowWillClose:(NSNotification *)notification {
+  if ([notification object] == boloWindow) {
+    [self closeGame:self];
+  }
+}
+
+@end
+
 @implementation GSXBoloController (NetService)
 
 - (void)startPublishing {

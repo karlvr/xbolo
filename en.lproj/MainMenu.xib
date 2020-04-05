@@ -603,7 +603,7 @@
             </connections>
         </customObject>
         <window title="XBolo" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="GSXBoloWindow" animationBehavior="default" id="639" userLabel="XBolo">
-            <windowStyleMask key="styleMask" titled="YES" resizable="YES" texturedBackground="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="63" y="0.0" width="800" height="550"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -2498,6 +2498,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="514" id="1933"/>
             </connections>
+            <point key="canvasLocation" x="873" y="-1770"/>
         </window>
         <window title="Messages" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="GSMessagesPanel" animationBehavior="default" id="1419" userLabel="Messages" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES" utility="YES" texturedBackground="YES"/>
@@ -2526,7 +2527,7 @@ Gw
                         <rect key="frame" x="0.0" y="80" width="256" height="176"/>
                         <clipView key="contentView" drawsBackground="NO" id="b7l-s6-Hhb">
                             <rect key="frame" x="1" y="1" width="254" height="174"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1425">
                                     <rect key="frame" x="0.0" y="306" width="254" height="174"/>
@@ -2609,6 +2610,7 @@ DQ
                 <outlet property="delegate" destination="514" id="1934"/>
                 <outlet property="initialFirstResponder" destination="1436" id="1758"/>
             </connections>
+            <point key="canvasLocation" x="1181" y="-1760"/>
         </window>
         <window title="Allegiance" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="GSAllegiancePanel" animationBehavior="default" id="1621" userLabel="Allegiance" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES" utility="YES" nonactivatingPanel="YES" texturedBackground="YES"/>
