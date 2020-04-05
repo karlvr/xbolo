@@ -98,7 +98,7 @@ static int sendsrbuilderack(int player, int mines, int trees, int pill);
 static int sendsrsmallboom(int player, int x, int y);
 static int sendsrsuperboom(int player, int x, int y);
 static int sendsrhittank(int player, uint32_t dir);
-static int sendsrsetalliance(int player, uint16_t alliance);
+static int sendsrsetalliance(int player, uint16_t alliance, int server_originated);
 static int sendsrtimelimit(uint16_t timeremaining);
 static int sendsrbasecontrol(uint16_t timeleft);
 static int sendsrpause(int counter);
@@ -3137,8 +3137,14 @@ ERRHANDLER(0, -1)
 END
 }
 
+static int testalliance(int p1, int p2) {
+  return server.players[p1].used && server.players[p2].used && (server.players[p1].alliance & (1 << p2)) && (server.players[p2].alliance & (1 << p1));
+}
+
 int recvclsetalliance(int player) {
   struct CLSetAlliance *clsettalliance;
+  int i, j;
+  uint16_t xor;
 
   assert(player >= 0);
   assert(player < MAX_PLAYERS);
@@ -3150,8 +3156,55 @@ TRY
   /* convert byte order*/
   clsettalliance->alliance = ntohs(clsettalliance->alliance);
 
+  xor = server.players[player].alliance ^ clsettalliance->alliance;
+
   server.players[player].alliance = clsettalliance->alliance;
-  sendsrsetalliance(player, clsettalliance->alliance);
+  sendsrsetalliance(player, clsettalliance->alliance, 0);
+
+  /* Ensure symmetric alliances */
+  for (i = 0; i < MAX_PLAYERS; i++) {
+    if (xor & (1 << i) && player != i) {
+      /* player has created an alliance with i */
+      if (server.players[player].alliance & (1 << i) && testalliance(player, i)) {
+        /* go through all other players and check if either player or i has an alliance with them but the other doesn't */
+        for (j = 0; j < MAX_PLAYERS; j++) {
+          if (player != j && i != j) {
+            if (testalliance(player, j) && !testalliance(i, j)) {
+              /* form an alliance between i and j */
+              if (!(server.players[i].alliance & (1 << j))) {
+                server.players[i].alliance |= (1 << j);
+                sendsrsetalliance(i, server.players[i].alliance, 1);
+              }
+              if (!(server.players[j].alliance & (1 << i))) {
+                server.players[j].alliance |= (1 << i);
+                sendsrsetalliance(j, server.players[j].alliance, 1);
+              }
+            } else if (testalliance(i, j) && !testalliance(player, j)) {
+              /* form an alliance between player and j */
+              if (!(server.players[player].alliance & (1 << j))) {
+                server.players[player].alliance |= (1 << j);
+                sendsrsetalliance(player, server.players[player].alliance, 1);
+              }
+              if (!(server.players[j].alliance & (1 << player))) {
+                server.players[j].alliance |= (1 << player);
+                sendsrsetalliance(j, server.players[j].alliance, 1);
+              }
+            }
+          }
+        }
+      }
+      /* player has left an alliance with i */
+      else if (!(server.players[player].alliance & (1 << i)) && server.players[i].alliance & (1 << player)) {
+        /* go through all other players and check if player and i have an alliance with them */
+        for (j = 0; j < MAX_PLAYERS; j++) {
+          if (player != j && i != j && testalliance(player, j) && testalliance(i, j)) {
+            server.players[player].alliance &= ~(1 << j);
+            sendsrsetalliance(player, server.players[player].alliance, 1);
+          }
+        }
+      }
+    }
+  }
 
   /* clear buffer of read data */
   if (readbuf(&server.players[player].recvbuf, NULL, sizeof(struct CLSetAlliance)) == -1) LOGFAIL(errno)
@@ -3786,7 +3839,7 @@ ERRHANDLER(0, -1)
 END
 }
 
-int sendsrsetalliance(int player, uint16_t alliance) {
+int sendsrsetalliance(int player, uint16_t alliance, int server_originated) {
   struct SRSetAlliance srsetalliance;
 
   assert(player >= 0);
@@ -3797,7 +3850,11 @@ TRY
   srsetalliance.player = player;
   srsetalliance.alliance = htons(alliance);
 
-  if (sendtoallex(&srsetalliance, sizeof(srsetalliance), player)) LOGFAIL(errno)
+  if (!server_originated) {
+    if (sendtoallex(&srsetalliance, sizeof(srsetalliance), player)) LOGFAIL(errno)
+  } else {
+    if (sendtoall(&srsetalliance, sizeof(srsetalliance))) LOGFAIL(errno)
+  }
 
 CLEANUP
 ERRHANDLER(0, -1)

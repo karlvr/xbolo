@@ -2910,6 +2910,89 @@ ERRHANDLER(0, -1)
 END
 }
 
+static int alliancecreated(int player) {
+  int i;
+
+TRY
+  if (client.setplayerstatus) {
+    client.setplayerstatus(player);
+  }
+
+  for (i = 0; i < client.nbases; i++) {
+    if (client.bases[i].owner == player) {
+      refresh_client(client.bases[i].x, client.bases[i].y);
+
+      if (client.setbasestatus) {
+        client.setbasestatus(i);
+      }
+    }
+  }
+
+  for (i = 0; i < client.npills; i++) {
+    if (client.pills[i].owner == player) {
+      refresh_client(client.pills[i].x, client.pills[i].y);
+
+      /* fog of war */
+      if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
+        if (increasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
+      }
+
+      if (client.setpillstatus) {
+        client.setpillstatus(i);
+      }
+    }
+  }
+
+  if (increasevis(GSMakeRect(((int)client.players[player].tank.x) - 14, ((int)client.players[player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+CLEANUP
+
+ERRHANDLER(0, -1)
+END
+}
+
+static int alliancedestroyed(int player) {
+  int i;
+
+TRY
+  if (client.setplayerstatus) {
+    client.setplayerstatus(player);
+  }
+
+  for (i = 0; i < client.nbases; i++) {
+    if (client.bases[i].owner == player) {
+      if (client.setbasestatus) {
+        client.setbasestatus(i);
+      }
+
+      refresh_client(client.bases[i].x, client.bases[i].y);
+    }
+  }
+
+  for (i = 0; i < client.npills; i++) {
+    if (client.pills[i].owner == player) {
+      /* fog of war */
+      if (client.pills[i].armour != ONBOARD) {
+        if (refresh_client(client.pills[i].x, client.pills[i].y)) LOGFAIL(errno)
+
+          if (client.pills[i].armour > 0) {
+            if (decreasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
+          }
+      }
+
+      if (client.setpillstatus) {
+        client.setpillstatus(i);
+      }
+    }
+  }
+
+  if (decreasevis(GSMakeRect(((int)client.players[player].tank.x) - 14, ((int)client.players[player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+
+CLEANUP
+
+ERRHANDLER(0, -1)
+END
+}
+
 int recvsrsetalliance() {
   struct SRSetAlliance *srsetalliance;
   int i;
@@ -2926,8 +3009,40 @@ TRY
   xor = client.players[srsetalliance->player].alliance ^ srsetalliance->alliance;
   client.players[srsetalliance->player].alliance = srsetalliance->alliance;
 
+  /* server has updated _our_ alliance bits */
+  if (srsetalliance->player == client.player) {
+    for (i = 0; i < MAX_PLAYERS; i++) {
+      if (xor & (1 << i)) {
+        /* we have now requested an alliance with i */
+        if (client.players[client.player].alliance & (1 << i)) {
+          /* they have also requested an alliance with us */
+          if (client.players[i].alliance & (1 << client.player)) {
+            if (client.printmessage) {
+              if (asprintf(&text, "entered alliance with %s", client.players[i].name) == -1) LOGFAIL(errno)
+              client.printmessage(MSGGAME, text);
+              free(text);
+              text = NULL;
+            }
+
+            if (alliancecreated(i)) LOGFAIL(errno)
+          }
+        } else {
+          /* we have left an alliance with i */
+          if (client.printmessage) {
+            if (asprintf(&text, "left alliance with %s", client.players[i].name) == -1) LOGFAIL(errno)
+            client.printmessage(MSGGAME, text);
+            free(text);
+            text = NULL;
+          }
+
+          if (alliancedestroyed(i)) LOGFAIL(errno)
+        }
+      }
+    }
+  }
+
   /* their alliance bit has changed */
-  if (xor & (1 << client.player)) {
+  if (xor & (1 << client.player) && srsetalliance->player != client.player) {
     /* my alliance bit is set */
     if (client.players[client.player].alliance & (1 << srsetalliance->player)) {
       /* their alliance bit is set */
@@ -2939,36 +3054,7 @@ TRY
           text = NULL;
         }
 
-        if (client.setplayerstatus) {
-          client.setplayerstatus(srsetalliance->player);
-        }
-
-        for (i = 0; i < client.nbases; i++) {
-          if (client.bases[i].owner == srsetalliance->player) {
-            refresh_client(client.bases[i].x, client.bases[i].y);
-
-            if (client.setbasestatus) {
-              client.setbasestatus(i);
-            }
-          }
-        }
-
-        for (i = 0; i < client.npills; i++) {
-          if (client.pills[i].owner == srsetalliance->player) {
-            refresh_client(client.pills[i].x, client.pills[i].y);
-
-            /* fog of war */
-            if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
-              if (increasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
-            }
-
-            if (client.setpillstatus) {
-              client.setpillstatus(i);
-            }
-          }
-        }
-
-        if (increasevis(GSMakeRect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (alliancecreated(srsetalliance->player)) LOGFAIL(errno)
       }
       /* their alliance bit is unset */
       else {
@@ -2979,37 +3065,11 @@ TRY
           text = NULL;
         }
 
-        if (client.setplayerstatus) {
-          client.setplayerstatus(srsetalliance->player);
-        }
+        if (alliancedestroyed(srsetalliance->player)) LOGFAIL(errno)
 
-        for (i = 0; i < client.nbases; i++) {
-          if (client.bases[i].owner == srsetalliance->player) {
-            if (client.setbasestatus) {
-              client.setbasestatus(i);
-            }
-
-            refresh_client(client.bases[i].x, client.bases[i].y);
+        if (client.players[client.player].alliance & (1 << srsetalliance->player)) {
+          if (leavealliance(1 << srsetalliance->player)) LOGFAIL(errno)
           }
-        }
-
-        for (i = 0; i < client.npills; i++) {
-          if (client.pills[i].owner == srsetalliance->player) {
-            /* fog of war */
-            if (client.pills[i].armour != ONBOARD && client.pills[i].armour > 0) {
-              if (refresh_client(client.pills[i].x, client.pills[i].y)) LOGFAIL(errno)
-              if (decreasevis(GSMakeRect(client.pills[i].x - 7, client.pills[i].y - 7, 15, 15))) LOGFAIL(errno)
-            }
-
-            if (client.setpillstatus) {
-              client.setpillstatus(i);
-            }
-          }
-        }
-
-        if (decreasevis(GSMakeRect(((int)client.players[srsetalliance->player].tank.x) - 14, ((int)client.players[srsetalliance->player].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
-
-        if (leavealliance(1 << srsetalliance->player)) LOGFAIL(errno)
       }
     }
     /* my alliance bit is unset */
@@ -6325,7 +6385,7 @@ void clearchangedtiles() {
 
 int requestalliance(uint16_t withplayers) {
   struct CLSetAlliance clsetalliance;
-  int i, j;
+  int i;
   char *text = NULL;
   uint16_t xor;
 
@@ -6350,36 +6410,7 @@ TRY
           text = NULL;
         }
 
-        if (client.setplayerstatus) {
-          client.setplayerstatus(i);
-        }
-
-        for (j = 0; j < client.nbases; j++) {
-          if (client.bases[j].owner == i) {
-            refresh_client(client.bases[j].x, client.bases[j].y);
-
-            if (client.setbasestatus) {
-              client.setbasestatus(j);
-            }
-          }
-        }
-
-        for (j = 0; j < client.npills; j++) {
-          if (client.pills[j].owner == i) {
-            /* fog of war */
-            if (client.pills[j].armour != ONBOARD && client.pills[j].armour > 0) {
-              if (increasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
-            }
-
-            refresh_client(client.pills[j].x, client.pills[j].y);
-
-            if (client.setpillstatus) {
-              client.setpillstatus(j);
-            }
-          }
-        }
-
-        if (increasevis(GSMakeRect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (alliancecreated(i)) LOGFAIL(errno)
       }
       /* their alliance bit is unset */
       else {
@@ -6400,7 +6431,7 @@ END
 
 int leavealliance(uint16_t withplayers) {
   struct CLSetAlliance clsetalliance;
-  int i, j;
+  int i;
   char *text = NULL;
   uint16_t xor;
 
@@ -6425,37 +6456,7 @@ TRY
           text = NULL;
         }
 
-        if (client.setplayerstatus) {
-          client.setplayerstatus(i);
-        }
-
-        for (j = 0; j < client.nbases; j++) {
-          if (client.bases[j].owner == i) {
-            refresh_client(client.bases[j].x, client.bases[j].y);
-            if (client.setbasestatus) {
-              client.setbasestatus(j);
-            }
-          }
-        }
-
-        for (j = 0; j < client.npills; j++) {
-          if (client.pills[j].owner == i) {
-            /* fog of war */
-            if (client.pills[j].armour != ONBOARD) {
-              if (refresh_client(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
-
-              if (client.pills[j].armour > 0) {
-                if (decreasevis(GSMakeRect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
-              }
-            }
-
-            if (client.setpillstatus) {
-              client.setpillstatus(j);
-            }
-          }
-        }
-
-        if (decreasevis(GSMakeRect(((int)client.players[i].tank.x) - 14, ((int)client.players[i].tank.y) - 14, 29, 29)) == -1) LOGFAIL(errno)
+        if (alliancedestroyed(i)) LOGFAIL(errno)
       }
     }
   }
