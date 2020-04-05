@@ -3137,7 +3137,7 @@ ERRHANDLER(0, -1)
 END
 }
 
-static int testalliance(int p1, int p2) {
+static int testserveralliance(int p1, int p2) {
   return server.players[p1].used && server.players[p2].used && (server.players[p1].alliance & (1 << p2)) && (server.players[p2].alliance & (1 << p1));
 }
 
@@ -3165,11 +3165,11 @@ TRY
   for (i = 0; i < MAX_PLAYERS; i++) {
     if (xor & (1 << i) && player != i) {
       /* player has created an alliance with i */
-      if (server.players[player].alliance & (1 << i) && testalliance(player, i)) {
+      if (server.players[player].alliance & (1 << i) && testserveralliance(player, i)) {
         /* go through all other players and check if either player or i has an alliance with them but the other doesn't */
         for (j = 0; j < MAX_PLAYERS; j++) {
           if (player != j && i != j) {
-            if (testalliance(player, j) && !testalliance(i, j)) {
+            if (testserveralliance(player, j) && !testserveralliance(i, j)) {
               /* form an alliance between i and j */
               if (!(server.players[i].alliance & (1 << j))) {
                 server.players[i].alliance |= (1 << j);
@@ -3179,7 +3179,7 @@ TRY
                 server.players[j].alliance |= (1 << i);
                 sendsrsetalliance(j, server.players[j].alliance, 1);
               }
-            } else if (testalliance(i, j) && !testalliance(player, j)) {
+            } else if (testserveralliance(i, j) && !testserveralliance(player, j)) {
               /* form an alliance between player and j */
               if (!(server.players[player].alliance & (1 << j))) {
                 server.players[player].alliance |= (1 << j);
@@ -3197,7 +3197,7 @@ TRY
       else if (!(server.players[player].alliance & (1 << i)) && server.players[i].alliance & (1 << player)) {
         /* go through all other players and check if player and i have an alliance with them */
         for (j = 0; j < MAX_PLAYERS; j++) {
-          if (player != j && i != j && testalliance(player, j) && testalliance(i, j)) {
+          if (player != j && i != j && testserveralliance(player, j) && testserveralliance(i, j)) {
             server.players[player].alliance &= ~(1 << j);
             sendsrsetalliance(player, server.players[player].alliance, 1);
           }

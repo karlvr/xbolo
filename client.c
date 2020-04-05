@@ -187,7 +187,6 @@ static int printmessage(int type, const char *body);
 static int shellcollisiontest(struct Shell *shell, int player);
 static int tanktest(int x, int y);
 static int tankonaboattest(int x, int y);
-static int testalliance(int p1, int p2);
 static int circlesquare(Vec2f point, float radius, GSPoint square);
 
 static int getbuildertaskforcommand(int command, GSPoint at);
@@ -7133,6 +7132,6 @@ int findbase(int x, int y) {
   return -1;
 }
 
-static int testalliance(int p1, int p2) {
+int testalliance(int p1, int p2) {
   return client.players[p1].used && client.players[p2].used && (client.players[p1].alliance & (1 << p2)) && (client.players[p2].alliance & (1 << p1));
 }
