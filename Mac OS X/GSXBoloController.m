@@ -1276,6 +1276,10 @@ CLEANUP
 END
 }
 
+- (IBAction)boloWindow:(id)sender {
+  [boloWindow makeKeyAndOrderFront:self];
+}
+
 - (IBAction)statusPanel:(id)sender {
   if (statusPanel.keyWindow) {
     [boloWindow makeKeyAndOrderFront:self];

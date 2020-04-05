@@ -437,6 +437,11 @@
                             <menuItem isSeparatorItem="YES" id="80">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
+                            <menuItem title="Main Window" keyEquivalent="0" id="shl-I0-v2e" userLabel="Main Window">
+                                <connections>
+                                    <action selector="boloWindow:" target="514" id="3SL-5j-meg"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Status" keyEquivalent="s" id="442">
                                 <connections>
                                     <action selector="statusPanel:" target="514" id="1451"/>
