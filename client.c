@@ -1009,6 +1009,24 @@ TRY
   /* initialize time */
   nexttick = getcurrenttime();
 
+  /* read initial messages already received */
+  if (lockclient()) LOGFAIL(errno)
+  gotlock = 1;
+
+  if (recvclient()) {
+    if (errno != EAGAIN) {
+      LOGFAIL(errno)
+    }
+    else {
+      CLEARERRLOG
+    }
+  } else {
+    LOGFAIL(errno)
+  }
+
+  if (unlockclient()) LOGFAIL(errno)
+  gotlock = 0;
+
   /* main loop */
   for (;;) {
     if ((currenttime = getcurrenttime()) < nexttick) {
