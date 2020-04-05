@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -1702,7 +1702,6 @@ Gw
                                                         <tableColumns>
                                                             <tableColumn identifier="GSSourceColumn" editable="NO" width="20" minWidth="10" maxWidth="20" id="Ana-Gg-Wok">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -1710,7 +1709,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSHostPlayerColumn" editable="NO" width="70" minWidth="10" maxWidth="1000" id="1750">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Host Player">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -1724,7 +1722,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSMapNameColumn" editable="NO" width="104" minWidth="10" maxWidth="1000" id="1751">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Map Name">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -1738,7 +1735,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSPasswordColumn" editable="NO" width="52" minWidth="10" maxWidth="1000" id="1754">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Password">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -1752,7 +1748,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSPlayersColumn" editable="NO" width="44.4521484375" minWidth="29.4521484375" maxWidth="1000" id="1930">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Players">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -1766,7 +1761,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSPausedColumn" editable="NO" width="36.4521484375" minWidth="29.4521484375" maxWidth="1000" id="1931">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Paused">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -1780,7 +1774,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSAllowJoinColumn" editable="NO" width="58.4521484375" minWidth="29.4521484375" maxWidth="1000" id="1932">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Allow Join">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -1794,7 +1787,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSHostnameColumn" editable="NO" width="80" minWidth="40" maxWidth="1000" id="1723">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Hostname">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -1808,7 +1800,6 @@ Gw
                                                             </tableColumn>
                                                             <tableColumn identifier="GSPortColumn" editable="NO" width="62.4521484375" minWidth="29.4521484375" maxWidth="1000" id="1722">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Port">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -2518,7 +2509,7 @@ Gw
                             <constraint firstAttribute="height" constant="63" id="Cup-D9-bc0"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="mini" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="2025">
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="menu" size="9"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -2559,21 +2550,21 @@ Gw
                         <size key="intercellSpacing" width="4" height="2"/>
                         <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="2049">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="menu" size="9"/>
                         </buttonCell>
                         <cells>
                             <column>
                                 <buttonCell type="radio" title="Everyone" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="1487">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
+                                    <font key="font" metaFont="menu" size="9"/>
                                 </buttonCell>
                                 <buttonCell type="radio" title="Allies" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" tag="1" inset="2" id="1488">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
+                                    <font key="font" metaFont="menu" size="9"/>
                                 </buttonCell>
                                 <buttonCell type="radio" title="Nearby" imagePosition="left" alignment="left" controlSize="mini" tag="2" inset="2" id="1489">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
+                                    <font key="font" metaFont="menu" size="9"/>
                                 </buttonCell>
                             </column>
                         </cells>
@@ -2585,7 +2576,7 @@ Gw
                         <rect key="frame" x="192" y="9" width="47" height="16"/>
                         <buttonCell key="cell" type="push" title="Send" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2026">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="menu" size="9"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
 DQ
 </string>
@@ -2639,7 +2630,6 @@ DQ
                                     <tableColumns>
                                         <tableColumn identifier="Player" editable="NO" width="251" minWidth="40" maxWidth="1000" id="1624">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Player">
-                                                <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -2675,7 +2665,7 @@ DQ
                         <rect key="frame" x="9" y="9" width="98" height="16"/>
                         <buttonCell key="cell" type="push" title="Request Alliance" bezelStyle="rounded" alignment="center" controlSize="mini" enabled="NO" borderStyle="border" inset="2" id="2027">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="menu" size="9"/>
                         </buttonCell>
                         <connections>
                             <action selector="requestAlliance:" target="514" id="1648"/>
@@ -2685,7 +2675,7 @@ DQ
                         <rect key="frame" x="113" y="9" width="87" height="16"/>
                         <buttonCell key="cell" type="push" title="Leave Alliance" bezelStyle="rounded" alignment="center" controlSize="mini" enabled="NO" borderStyle="border" inset="2" id="2028">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="menu" size="9"/>
                         </buttonCell>
                         <connections>
                             <action selector="leaveAlliance:" target="514" id="1647"/>
@@ -2707,6 +2697,7 @@ DQ
             <connections>
                 <outlet property="delegate" destination="514" id="1935"/>
             </connections>
+            <point key="canvasLocation" x="1098" y="-1438"/>
         </window>
     </objects>
     <resources>
