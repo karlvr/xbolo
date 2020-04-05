@@ -850,6 +850,10 @@ END
     [self stopPublishing];
   }
 
+  if (!listener) {
+    [self startListening];
+  }
+
   [self newGame:self];
 }
 
@@ -1042,10 +1046,12 @@ END
 TRY
   if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
     NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
+    [self startListening];
   }
   else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
     NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
     [self setHostMap:[NSString string]];
+    [self startListening];
   }
   else {
     NSScanner *scanner;
@@ -1114,6 +1120,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Unable to Open Map File", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [self startListening];
     CLEARERRLOG
     break;
 
@@ -1122,6 +1129,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Incomaptile Map Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [self startListening];
     CLEARERRLOG
     break;
 
@@ -1130,6 +1138,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Port Unavailable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another port.");
+    [self startListening];
     CLEARERRLOG
     break;
 
@@ -1138,6 +1147,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Unexpected Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Error #%d: %s", ERROR, strerror(ERROR));
+    [self startListening];
     CLEARERRLOG
     break;
   }
