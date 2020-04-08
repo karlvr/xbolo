@@ -17,6 +17,7 @@
 #include "errchk.h"
 #include "timing.h"
 #include "resolver.h"
+#include "string.h"
 
 #include <sys/select.h>
 // Ugh, icky hack to get select() working...
@@ -286,10 +287,10 @@ TRY
   client.players[client.player].inputflags = 0;
 
   /* copy name and password */
-  strncpy(client.name, playername, sizeof(client.name) - 1);
+  utf8cpy(client.name, playername, sizeof(client.name));
 
   if ((client.passreq = password != NULL)) {
-    strncpy(client.pass, password, MAXPASS - 1);
+    utf8cpy(client.pass, password, MAXPASS);
   }
   else {
     client.pass[0] = '\0';

@@ -17,6 +17,7 @@
 #include "io.h"
 #include "timing.h"
 #include "resolver.h"
+#include "string.h"
 
 #include <sys/select.h>
 // Ugh, icky hack to get select() working...
@@ -838,7 +839,7 @@ TRY
     }
 
     server.players[i].alliance = 1 << i;
-    strncpy(server.players[i].name, joinpreamble->name, sizeof(server.players[i].name) - 1);
+    utf8cpy(server.players[i].name, joinpreamble->name, sizeof(server.players[i].name));
     rejoin = 0;
   }
   else {
