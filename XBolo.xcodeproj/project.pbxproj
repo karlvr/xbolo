@@ -188,6 +188,7 @@
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4322A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
+		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -412,6 +413,8 @@
 		B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloMetalRenderer.m; sourceTree = "<group>"; };
 		B848CA4722A284B700C696B2 /* GSBoloWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloWrapperView.h; sourceTree = "<group>"; };
 		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
+		B872064B243DD503001304D1 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
+		B872064C243DD503001304D1 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
 		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
@@ -570,6 +573,8 @@
 				407ECEFA1087C371002B43CB /* buf.c */,
 				4014422410ACA4F6008487C8 /* resolver.h */,
 				4014422510ACA4F6008487C8 /* resolver.c */,
+				B872064B243DD503001304D1 /* string.h */,
+				B872064C243DD503001304D1 /* string.c */,
 			);
 			name = "Main XBolo";
 			path = ..;
@@ -1319,6 +1324,7 @@
 			files = (
 				B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */,
 				B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */,
+				B872064D243DD503001304D1 /* string.c in Sources */,
 				B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */,
 				40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */,
 				408189991082495800E4D4CA /* bmap_client.c in Sources */,
