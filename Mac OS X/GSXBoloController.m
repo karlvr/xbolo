@@ -2908,6 +2908,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -2934,6 +2936,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -2962,6 +2966,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -2988,6 +2994,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3016,6 +3024,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3042,6 +3052,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3070,6 +3082,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3096,6 +3110,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3124,6 +3140,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3150,6 +3168,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3178,6 +3198,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3205,6 +3227,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3231,6 +3255,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3275,6 +3301,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3297,6 +3325,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3321,6 +3351,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3343,6 +3375,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3367,6 +3401,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3389,6 +3425,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3413,6 +3451,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Failed to Verify TCP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3436,6 +3476,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Failed to Verify UDP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
 
+  [self startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3458,6 +3500,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+
+  [self startListening];
 
 CLEANUP
   switch (ERROR) {
