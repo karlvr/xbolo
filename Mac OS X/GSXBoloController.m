@@ -3724,7 +3724,9 @@ END
 
 - (void)windowWillClose:(NSNotification *)notification {
   if ([notification object] == boloWindow) {
-    [self closeGame:self];
+    if (client_running) {
+      [self closeGame:self];
+    }
   }
 }
 
