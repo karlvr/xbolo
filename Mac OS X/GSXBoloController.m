@@ -2103,6 +2103,11 @@ END
   else if (aNotification.object == messagesPanel) {
     [self setShowMessages:NO];
   }
+  else if (aNotification.object == boloWindow) {
+    if (client_running) {
+      [self closeGame:self];
+    }
+  }
 }
 
 - (void)setPlayerStatus:(NSString *)aString {
@@ -3715,18 +3720,6 @@ END
   } else {
     [self startListening];
     sender.state = NSOnState;
-  }
-}
-
-@end
-
-@implementation GSXBoloController (NSWindowDelegate)
-
-- (void)windowWillClose:(NSNotification *)notification {
-  if ([notification object] == boloWindow) {
-    if (client_running) {
-      [self closeGame:self];
-    }
   }
 }
 
