@@ -189,12 +189,13 @@
 		B848CA4222A2611200C696B2 /* GSBoloMetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4122A2611200C696B2 /* GSBoloMetalRenderer.m */; };
 		B848CA4922A284B700C696B2 /* GSBoloWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */; };
 		B860A8CC22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
-		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B860A8CD22AEDD9F00E4806A /* XBoloBonjour.m in Sources */ = {isa = PBXBuildFile; fileRef = B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */; };
 		B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
+		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B87572C822B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */; };
 		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
 		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
+		B8DA24E5244A7D4200BDF694 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
@@ -420,9 +421,9 @@
 		B848CA4822A284B700C696B2 /* GSBoloWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloWrapperView.m; sourceTree = "<group>"; };
 		B860A8CA22AEDD9F00E4806A /* XBoloBonjour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjour.h; sourceTree = "<group>"; };
 		B860A8CB22AEDD9F00E4806A /* XBoloBonjour.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjour.m; sourceTree = "<group>"; };
-		B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloDriveGestureRecognizer.swift; sourceTree = "<group>"; };
 		B872064B243DD503001304D1 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		B872064C243DD503001304D1 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
+		B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloDriveGestureRecognizer.swift; sourceTree = "<group>"; };
 		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
@@ -1297,6 +1298,7 @@
 				B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */,
 				406444641082520D008F913C /* images.c in Sources */,
 				407ECEFE1087C371002B43CB /* buf.c in Sources */,
+				B8DA24E5244A7D4200BDF694 /* string.c in Sources */,
 				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
 				55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */,
 				55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */,
