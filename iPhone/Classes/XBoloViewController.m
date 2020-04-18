@@ -55,7 +55,7 @@ static NSMutableArray<AVAudioPlayer*> *hittreesounds;
 static NSMutableArray<AVAudioPlayer*> *treesounds;
 
 
-@interface XBoloViewController() {
+@interface XBoloViewController() <UIGestureRecognizerDelegate> {
   XBoloView *_boloView;
   XBoloBonjour *_broadcaster;
 
@@ -280,10 +280,13 @@ static NSMutableArray<AVAudioPlayer*> *treesounds;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+  self.gameViewContainer.multipleTouchEnabled = YES;
+
   _boloView.frame = self.gameViewContainer.bounds;
   [self.gameViewContainer addSubview:_boloView];
 
   _steerGesture = [[XBoloSteerGestureRecognizer alloc] initWithTarget:nil action:nil];
+  _steerGesture.delegate = self;
   [self.gameViewContainer addGestureRecognizer:_steerGesture];
 
   _driveGesture = [[XBoloDriveGestureRecognizer alloc] initWithTarget:nil action:nil];
@@ -291,9 +294,11 @@ static NSMutableArray<AVAudioPlayer*> *treesounds;
   [controlPanel.driveGestureView addGestureRecognizer:_driveGesture];
 
   _buildGesture = [[XBoloBuildGestureRecognizer alloc] initWithTarget:self action:@selector(doBuildGesture)];
+  _buildGesture.delegate = self;
   [self.gameViewContainer addGestureRecognizer:_buildGesture];
 
   _shootGesture = [[XBoloShootGestureRecognizer alloc] initWithTarget:self action:@selector(doShootGesture)];
+  _shootGesture.delegate = self;
   [self.gameViewContainer addGestureRecognizer:_shootGesture];
 
   /* We need the shoot gesture to fail before the build gesture detects, as shoot is two taps, build is one. */
@@ -541,7 +546,11 @@ END
 }
 
 - (void)doShootGesture {
-  _shoot = YES;
+  if (_shootGesture.state == UIGestureRecognizerStateBegan || _shootGesture.state == UIGestureRecognizerStateChanged) {
+    _shoot = YES;
+  } else {
+    _shoot = NO;
+  }
 }
 
 // mouse event method
@@ -633,7 +642,6 @@ END
   }
 
   if (_shoot) {
-    _shoot = NO;
     keyevent(SHOOTMASK, YES);
   } else {
     keyevent(SHOOTMASK, NO);
@@ -1095,3 +1103,11 @@ void getlisttrackerstatus(int status) {
 void clientloopupdate(void) {
   [controller clientLoopUpdate];
 }
+
+@implementation XBoloViewController (UIGestureRecognizerDelegate)
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+  return YES;
+}
+
+@end

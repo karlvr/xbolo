@@ -8,9 +8,9 @@
 
 import Foundation
 
-//func CGPointDist(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
-//  return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-//}
+private func CGPointDist(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+  return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
 
 class XBoloSteerGestureRecognizer: UIGestureRecognizer {
 
@@ -20,7 +20,7 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
   private var trackingTouch: UITouch?
   private var originalLocation: CGPoint?
 
-  private let deadZone = CGFloat(0.0)
+  private let deadZone = CGFloat(2.0)
   private let maxZone = CGFloat(50.0)
 
 //  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -49,45 +49,48 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
 //  }
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-    guard let trackingTouch = touches.first else { return }
-
     /* If we are already tracking a touch ignore all new touches. */
-    guard self.trackingTouch == nil || self.trackingTouch == trackingTouch else {
-      touches.forEach { (touch) in
-        self.ignore(touch, for: event)
-      }
-      return
-    }
-
-    if self.trackingTouch == nil {
-      self.trackingTouch = trackingTouch
-
-      self.originalLocation = trackingTouch.previousLocation(in: self.view)
-      self.turnLeftRate = 0.0
-      self.turnRightRate = 0.0
-    }
-
-    guard let originalLocation = self.originalLocation else {
-      return
-    }
-    let currentLocation = trackingTouch.location(in: self.view)
-
-    if self.state == .possible {
-      let distance = abs(originalLocation.x - currentLocation.x)
-      if distance > deadZone {
-        print("recognized steer gesture!")
-        self.state = .began
-      } else {
+    if let trackingTouch = self.trackingTouch {
+      if !touches.contains(trackingTouch) {
+        touches.forEach { (touch) in
+          self.ignore(touch, for: event)
+        }
         return
       }
     }
 
+    if trackingTouch == nil {
+      guard let touch = touches.first else {
+        return
+      }
+      let originalLocation = touch.previousLocation(in: view)
+      let currentLocation = touch.location(in: view)
+      let distance = CGPointDist(originalLocation, currentLocation)
+      if distance < deadZone {
+        return
+      }
+
+      print("recognized steer gesture!")
+      self.state = .began
+
+      self.trackingTouch = touch
+      self.originalLocation = originalLocation
+      self.turnLeftRate = 0.0
+      self.turnRightRate = 0.0
+    }
+
+    guard let trackingTouch = self.trackingTouch, let originalLocation = self.originalLocation else {
+      print("Invalid state in steer gesture recognizer")
+      return
+    }
+
+    let currentLocation = trackingTouch.location(in: view)
     let xdiff = currentLocation.x - originalLocation.x
-    if xdiff > deadZone {
+    if xdiff > 0 {
       turnLeftRate = 0
-      turnRightRate = Double((xdiff - deadZone) / maxZone)
-    } else if xdiff < -deadZone {
-      turnLeftRate = Double((-xdiff - deadZone) / maxZone)
+      turnRightRate = Double(xdiff / maxZone)
+    } else if xdiff < 0 {
+      turnLeftRate = Double(-xdiff / maxZone)
       turnRightRate = 0
     }
   }

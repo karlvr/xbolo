@@ -17,7 +17,9 @@ class XBoloBuildGestureRecognizer: UIGestureRecognizer {
   }
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-    state = .failed
+    for touch in touches {
+      self.ignore(touch, for: event)
+    }
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
