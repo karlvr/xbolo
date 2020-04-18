@@ -14,10 +14,12 @@ private func CGPointDist(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
 
 class XBoloSteerGestureRecognizer: UIGestureRecognizer {
 
-  @objc private(set) var angle = CGFloat(0.0)
+  @objc private(set) var angle = 0.0
   @objc private(set) var angleSet = false
+  @objc var tankdir = 0.0
 
   private var trackingTouch: UITouch?
+  private var originalCentre = CGPoint.zero
 
   private let deadZone = CGFloat(1.0)
 
@@ -48,6 +50,14 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
       self.state = .began
 
       self.trackingTouch = touch
+      let location = touch.location(in: view)
+      let tankAngle = tankDirToAngle(tankdir)
+      let radius = CGFloat(10)
+
+      let ydiff = sin(tankAngle) * radius
+      let xdiff = cos(tankAngle) * radius
+      self.originalCentre = CGPoint(x: location.x - xdiff, y: location.y - ydiff)
+      print("touch at \(location) tank angle \(tankAngle) for tank dir \(tankdir) centre at \(self.originalCentre)")
     }
 
     guard let trackingTouch = self.trackingTouch, let view = self.view else {
@@ -56,20 +66,35 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
     }
 
     let currentLocation = trackingTouch.location(in: view)
-    let previousLocation = trackingTouch.previousLocation(in: view)
+//    let previousLocation = trackingTouch.previousLocation(in: view)
+    let previousLocation = originalCentre
     let xdiff = currentLocation.x - previousLocation.x
     let ydiff = currentLocation.y - previousLocation.y
     if abs(xdiff) > deadZone || abs(ydiff) > deadZone {
       let angle = atan2(ydiff, xdiff)
       print("steer angle \(angle)")
-      let boloangle = -angle
-      if boloangle >= 0 {
-        self.angle = boloangle
-      } else {
-        self.angle = CGFloat.pi * 2 + boloangle
-      }
+      self.angle = angleToTankDir(angle)
       self.angleSet = true
+    } else {
+//      self.angleSet = false
     }
+  }
+
+  private func angleToTankDir(_ angle: CGFloat) -> Double {
+    let result = Double(-angle)
+    if result >= 0 {
+      return result
+    } else {
+      return Double.pi * 2 + result
+    }
+  }
+
+  private func tankDirToAngle(_ dir: Double) -> CGFloat {
+    var result = CGFloat(dir)
+    if result > CGFloat.pi {
+      result -= CGFloat.pi * 2
+    }
+    return -result
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {

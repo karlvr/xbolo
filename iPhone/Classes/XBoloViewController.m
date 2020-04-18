@@ -627,6 +627,8 @@ END
     _lastBrakeTick = 0;
   }
 
+  _steerGesture.tankdir = client.players[client.player].dir;
+  
   if (_steerGesture.angleSet) {
     const float dir = client.players[client.player].dir;
     const CGFloat targetdir = _steerGesture.angle;
