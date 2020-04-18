@@ -50,6 +50,7 @@ typedef enum {
   BOOL _pillboxViewMode;
   CGPoint _scroll;
   CGFloat _zoom;
+  NSMutableDictionary<NSString *, SKTexture *> *_textures;
 
   VIEW_TYPE *_nonSKView;
 }
@@ -114,6 +115,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     _explosions = [NSMutableArray array];
     _parachutingBuilders = [NSMutableArray array];
     _otherPlayerLabels = [NSMutableArray array];
+    _textures = [NSMutableDictionary dictionary];
 
     self.backgroundColor = [COLOR_TYPE redColor];
 
@@ -178,13 +180,24 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   }
 }
 
+- (SKTexture *)textureNamed:(NSString *)name {
+  SKTexture *texture = _textures[name];
+  if (texture) {
+    return texture;
+  }
+
+  texture = [_spritesAtlas textureNamed:name];
+  _textures[name] = texture;
+  return texture;
+}
+
 - (SKSpriteNode *)nextSprite:(NSMutableArray<SKSpriteNode *> *)sprites nextSprite:(NSUInteger *)nextSprite image:(GSImage)image zPosition:(ZPosition)zPosition {
   SKSpriteNode *sprite;
   if (*nextSprite < sprites.count) {
     sprite = sprites[*nextSprite];
     *nextSprite += 1;
   } else {
-    sprite = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(image)]];
+    sprite = [[SKSpriteNode alloc] initWithTexture:[self textureNamed:spriteName(image)]];
     sprite.zPosition = zPosition;
     [sprites addObject:sprite];
     [self addChild:sprite];
@@ -217,7 +230,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 
 - (void)drawSprite:(SKSpriteNode *)sprite image:(GSImage)image at:(Vec2f)point fraction:(CGFloat)vis {
   if (vis > 0.00001) {
-    sprite.texture = [_spritesAtlas textureNamed:spriteName(image)];
+    sprite.texture = [self textureNamed:spriteName(image)];
     CGPoint p = CGPointMake(floor(point.x*16.0), floor((FWIDTH - point.y)*16.0));
     sprite.position = p;
     sprite.hidden = NO;
@@ -453,7 +466,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   if (!client.players[client.player].dead) {
     /* draw tank */
     if (!_player) {
-      _player = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(PTNK00IMAGE)]];
+      _player = [[SKSpriteNode alloc] initWithTexture:[self textureNamed:spriteName(PTNK00IMAGE)]];
       _player.zPosition = ZPositionTank;
       [self addChild:_player];
     }
@@ -544,7 +557,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       aPoint = [self convertPointFromView:aPoint];
 
       if (!_selector) {
-        _selector = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(SELETRIMAGE)]];
+        _selector = [[SKSpriteNode alloc] initWithTexture:[self spriteTextureNamed:spriteName(SELETRIMAGE)]];
         _selector.zPosition = ZPositionSelector;
         [self addChild: _selector];
       }
@@ -559,7 +572,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   /* draw crosshair */
   if (!client.players[client.player].dead) {
     if (!_crosshair) {
-      _crosshair = [[SKSpriteNode alloc] initWithTexture:[_spritesAtlas textureNamed:spriteName(CROSSHIMAGE)]];
+      _crosshair = [[SKSpriteNode alloc] initWithTexture:[self textureNamed:spriteName(CROSSHIMAGE)]];
       _crosshair.zPosition = ZPositionCrosshair;
       [self addChild:_crosshair];
     }
