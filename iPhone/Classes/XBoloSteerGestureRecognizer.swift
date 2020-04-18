@@ -20,8 +20,8 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
   private var trackingTouch: UITouch?
   private var originalLocation: CGPoint?
 
-  private let deadZone = CGFloat(2.0)
-  private let maxZone = CGFloat(50.0)
+  private let deadZone = CGFloat(0.0)
+  private let maxZone = CGFloat(2.0)
 
 //  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
 //    /* If we are already tracking a touch ignore all new touches,
@@ -79,13 +79,20 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
       self.turnRightRate = 0.0
     }
 
-    guard let trackingTouch = self.trackingTouch, let originalLocation = self.originalLocation else {
+//    guard let trackingTouch = self.trackingTouch, let originalLocation = self.originalLocation else {
+//      print("Invalid state in steer gesture recognizer")
+//      return
+//    }
+
+    guard let trackingTouch = self.trackingTouch else {
       print("Invalid state in steer gesture recognizer")
       return
     }
 
+    let originalLocation = trackingTouch.previousLocation(in: view)
     let currentLocation = trackingTouch.location(in: view)
     let xdiff = currentLocation.x - originalLocation.x
+    print("steer distance \(xdiff)")
     if xdiff > 0 {
       turnLeftRate = 0
       turnRightRate = Double(xdiff / maxZone)
