@@ -136,11 +136,5 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
   private func clearKeys() {
     self.turnLeftRate = 0.0
     self.turnRightRate = 0.0
-//    if let controller = self.controller {
-//      controller.keyEvent(false, forKnownKey: GSAccelerate)
-//      controller.keyEvent(false, forKnownKey: GSBrake)
-//      controller.keyEvent(false, forKnownKey: GSTurnLeft)
-//      controller.keyEvent(false, forKnownKey: GSTurnRight)
-//    }
   }
 }
