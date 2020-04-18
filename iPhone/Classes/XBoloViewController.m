@@ -334,6 +334,8 @@ TRY
   if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
   [_boloView reset];
 
+  _buildGesture.scene = _boloView.scene;
+
   NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", UIDevice.currentDevice.name, playerNameString];
   _broadcaster.serviceName = bonjourName;
   _broadcaster.mapName = [[[mapURL path] lastPathComponent] stringByDeletingPathExtension];
@@ -537,9 +539,10 @@ END
 #pragma mark - Controls
 
 - (void)doBuildGesture {
-  CGPoint point = [_buildGesture readNextBuildLocation];
 //  CGPoint point = [_buildGesture locationInView:self.gameViewContainer];
-  point = [_boloView convertToScenePointFromViewPoint:point];
+//  point = [_boloView convertToScenePointFromViewPoint:point];
+
+  CGPoint point = [_buildGesture readNextBuildLocation];
   [self mouseEvent:GSMakePoint(point.x/16.0, WIDTH - (int)(point.y/16.0) - 1)];
 
   NSLog(@"BUILD GESTURE");

@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import SpriteKit
 
 class XBoloBuildGestureRecognizer: UIGestureRecognizer {
 
+  @objc var scene: SKScene?
+  
   private var nextBuildLocation: CGPoint?
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -28,7 +31,10 @@ class XBoloBuildGestureRecognizer: UIGestureRecognizer {
     }
 
     if touch.tapCount == 1 {
-      nextBuildLocation = touch.location(in: view)
+      let point = touch.location(in: view)
+      if let scene = self.scene {
+        nextBuildLocation = scene.convertPoint(fromView: point)
+      }
       state = .recognized
       print("build recognized")
     }
