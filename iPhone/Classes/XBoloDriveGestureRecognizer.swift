@@ -8,16 +8,10 @@
 
 import Foundation
 
-func CGPointDist(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
-  return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-}
-
-class XBoloDriverGestureRecognizer: UIGestureRecognizer {
+class XBoloDriveGestureRecognizer: UIGestureRecognizer {
 
   @objc private(set) var accelerateRate = 0.0
   @objc private(set) var brakeRate = 0.0
-  @objc private(set) var turnLeftRate = 0.0
-  @objc private(set) var turnRightRate = 0.0
 
   private var trackingTouch: UITouch?
   private var originalLocation: CGPoint?
@@ -51,8 +45,6 @@ class XBoloDriverGestureRecognizer: UIGestureRecognizer {
     self.recognized = false
     self.accelerateRate = 0.0
     self.brakeRate = 0.0
-    self.turnLeftRate = 0.0
-    self.turnRightRate = 0.0
   }
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -62,7 +54,7 @@ class XBoloDriverGestureRecognizer: UIGestureRecognizer {
     let currentLocation = trackingTouch.location(in: self.view)
 
     if !recognized {
-      let distance = CGPointDist(originalLocation, currentLocation)
+      let distance = abs(originalLocation.y - currentLocation.y)
       if distance > 10 {
         NSLog("recognized drive gesture!")
 //        self.state = .recognized
@@ -82,17 +74,6 @@ class XBoloDriverGestureRecognizer: UIGestureRecognizer {
       accelerateRate = 0
       brakeRate = Double((-ydiff - deadZone) / maxZone)
     }
-
-    let xdiff = currentLocation.x - originalLocation.x
-    if xdiff > deadZone {
-      turnLeftRate = 0
-      turnRightRate = Double((xdiff - deadZone) / maxZone)
-    } else if xdiff < -deadZone {
-      turnLeftRate = Double((-xdiff - deadZone) / maxZone)
-      turnRightRate = 0
-    }
-
-
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -122,8 +103,6 @@ class XBoloDriverGestureRecognizer: UIGestureRecognizer {
   private func clearKeys() {
     self.accelerateRate = 0.0
     self.brakeRate = 0.0
-    self.turnLeftRate = 0.0
-    self.turnRightRate = 0.0
 //    if let controller = self.controller {
 //      controller.keyEvent(false, forKnownKey: GSAccelerate)
 //      controller.keyEvent(false, forKnownKey: GSBrake)

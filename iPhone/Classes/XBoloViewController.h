@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XBoloViewController : UIViewController {
 
 }
+@property (weak, nonatomic) IBOutlet UIView *gameViewContainer;
 
 @end
 

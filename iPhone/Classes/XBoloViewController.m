@@ -7,10 +7,12 @@
 //
 
 #import "XBoloViewController.h"
+#import <AVFoundation/AVFoundation.h>
 
 #import "XBoloView.h"
 #import "XBoloBonjour.h"
 #import "GSBoloViews.h"
+#import "XBolo-Swift.h"
 
 #import "server.h"
 #import "client.h"
@@ -20,16 +22,82 @@
 
 static XBoloViewController *controller = nil;
 
+static int TicksToWaitForRate(double rate) {
+  return (1 - rate) * 15 + 1;
+}
+
 /* Sound */
 static BOOL muteBool;
+
+static NSMutableArray<AVAudioPlayer *> *bubblessounds;
+static NSMutableArray<AVAudioPlayer*> *builderdeathsounds;
+static NSMutableArray<AVAudioPlayer*> *buildsounds;
+static NSMutableArray<AVAudioPlayer*> *sinksounds;
+static NSMutableArray<AVAudioPlayer*> *superboomsounds;
+static NSMutableArray<AVAudioPlayer*> *explosionsounds;
+static NSMutableArray<AVAudioPlayer*> *farbuildsounds;
+static NSMutableArray<AVAudioPlayer*> *farbuilderdeathsounds;
+static NSMutableArray<AVAudioPlayer*> *farexplosionsounds;
+static NSMutableArray<AVAudioPlayer*> *farhittanksounds;
+static NSMutableArray<AVAudioPlayer*> *farhitterrainsounds;
+static NSMutableArray<AVAudioPlayer*> *farhittreesounds;
+static NSMutableArray<AVAudioPlayer*> *farshotsounds;
+static NSMutableArray<AVAudioPlayer*> *farsinksounds;
+static NSMutableArray<AVAudioPlayer*> *farsuperboomsounds;
+static NSMutableArray<AVAudioPlayer*> *fartreesounds;
+static NSMutableArray<AVAudioPlayer*> *minesounds;
+static NSMutableArray<AVAudioPlayer*> *msgreceivedsounds;
+static NSMutableArray<AVAudioPlayer*> *pillshotsounds;
+static NSMutableArray<AVAudioPlayer*> *hittanksounds;
+static NSMutableArray<AVAudioPlayer*> *tankshotsounds;
+static NSMutableArray<AVAudioPlayer*> *hitterrainsounds;
+static NSMutableArray<AVAudioPlayer*> *hittreesounds;
+static NSMutableArray<AVAudioPlayer*> *treesounds;
+
 
 @interface XBoloViewController() {
   XBoloView *_boloView;
   XBoloBonjour *_broadcaster;
+
+  XBoloBuildGestureRecognizer *_buildGesture;
+  int builderToolInt;
+
+  XBoloSteerGestureRecognizer *_steerGesture;
+  XBoloDriveGestureRecognizer *_driveGesture;
+  XBoloShootGestureRecognizer *_shootGesture;
+  BOOL _autoSlowDown;
+  int _ticks;
+  int _lastControlTick;
+  int _lastAccelerateTick;
+  int _lastBrakeTick;
+  int _lastTurnLeftTick;
+  int _lastTurnRightTick;
+  BOOL _shoot;
+  NSTimer *_controlTimer;
 }
 
 @end
 
+@interface AVAudioPlayer (NSSound)
+
++ (AVAudioPlayer *)soundNamed:(NSString *)name;
+
+- (AVAudioPlayer *)copy;
+
+@end
+
+@implementation AVAudioPlayer (NSSound)
+
++ (AVAudioPlayer *)soundNamed:(NSString *)name {
+  NSError *error = nil;
+  return [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:name withExtension:@"aiff"] error:&error];
+}
+
+- (AVAudioPlayer *)copy {
+  return [[AVAudioPlayer alloc] initWithContentsOfURL:self.url error:nil];
+}
+
+@end
 @implementation XBoloViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -53,6 +121,8 @@ static BOOL muteBool;
   [GSBoloViews addView:_boloView];
 
   _broadcaster = [[XBoloBonjour alloc] init];
+
+  _autoSlowDown = YES;
 }
 
 - (void)awakeFromNib {
@@ -60,6 +130,143 @@ static BOOL muteBool;
 
   // schedule a timer
   [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+
+  AVAudioPlayer *sound;
+
+  sound = [AVAudioPlayer soundNamed:@"bubbles"];
+  bubblessounds = [[NSMutableArray alloc] init];
+  [bubblessounds addObject: sound];
+
+  sound = [AVAudioPlayer soundNamed:@"build"];
+  buildsounds = [[NSMutableArray alloc] init];
+  [buildsounds addObject:sound];
+  [buildsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"builderdeath"];
+  builderdeathsounds = [[NSMutableArray alloc] init];
+  [builderdeathsounds addObject:sound];
+  [builderdeathsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"explosion"];
+  explosionsounds = [[NSMutableArray alloc] init];
+  [explosionsounds addObject:sound];
+  [explosionsounds addObject:[sound copy]];
+  [explosionsounds addObject:[sound copy]];
+  [explosionsounds addObject:[sound copy]];
+  [explosionsounds addObject:[sound copy]];
+  [explosionsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fbuild"];
+  farbuildsounds = [[NSMutableArray alloc] init];
+  [farbuildsounds addObject:sound];
+  [farbuildsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fbuilderdeath"];
+  farbuilderdeathsounds = [[NSMutableArray alloc] init];
+  [farbuilderdeathsounds addObject:sound];
+  [farbuilderdeathsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fexplosion"];
+  farexplosionsounds = [[NSMutableArray alloc] init];
+  [farexplosionsounds addObject:sound];
+  [farexplosionsounds addObject:[sound copy]];
+  [farexplosionsounds addObject:[sound copy]];
+  [farexplosionsounds addObject:[sound copy]];
+  [farexplosionsounds addObject:[sound copy]];
+  [farexplosionsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fhittank"];
+  farhittanksounds = [[NSMutableArray alloc] init];
+  [farhittanksounds addObject:sound];
+  [farhittanksounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fhitterrain"];
+  farhitterrainsounds = [[NSMutableArray alloc] init];
+  [farhitterrainsounds addObject:sound];
+  [farhitterrainsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fhittree"];
+  farhittreesounds = [[NSMutableArray alloc] init];
+  [farhittreesounds addObject:sound];
+  [farhittreesounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fshot"];
+  farshotsounds = [[NSMutableArray alloc] init];
+  [farshotsounds addObject:sound];
+  [farshotsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fsink"];
+  farsinksounds = [[NSMutableArray alloc] init];
+  [farsinksounds addObject:sound];
+  [farsinksounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"fsuperboom"];
+  farsuperboomsounds = [[NSMutableArray alloc] init];
+  [farsuperboomsounds addObject:sound];
+  [farsuperboomsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"ftree"];
+  fartreesounds = [[NSMutableArray alloc] init];
+  [fartreesounds addObject:sound];
+  [fartreesounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"hittank"];
+  hittanksounds = [[NSMutableArray alloc] init];
+  [hittanksounds addObject:sound];
+  [hittanksounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"hitterrain"];
+  hitterrainsounds = [[NSMutableArray alloc] init];
+  [hitterrainsounds addObject:sound];
+  [hitterrainsounds addObject:[sound copy]];
+  [hitterrainsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"hittree"];
+  hittreesounds = [[NSMutableArray alloc] init];
+  [hittreesounds addObject:sound];
+  [hittreesounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"mine"];
+  minesounds = [[NSMutableArray alloc] init];
+  [minesounds addObject:sound];
+  [minesounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"msgreceived"];
+  msgreceivedsounds = [[NSMutableArray alloc] init];
+  [msgreceivedsounds addObject:sound];
+  [msgreceivedsounds addObject:[sound copy]];
+  [msgreceivedsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"pillshot"];
+  pillshotsounds = [[NSMutableArray alloc] init];
+  [pillshotsounds addObject:sound];
+  [pillshotsounds addObject:[sound copy]];
+  [pillshotsounds addObject:[sound copy]];
+  [pillshotsounds addObject:[sound copy]];
+  [pillshotsounds addObject:[sound copy]];
+  [pillshotsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"sink"];
+  sinksounds = [[NSMutableArray alloc] init];
+  [sinksounds addObject:sound];
+
+  sound = [AVAudioPlayer soundNamed:@"superboom"];
+  superboomsounds = [[NSMutableArray alloc] init];
+  [superboomsounds addObject:sound];
+
+  sound = [AVAudioPlayer soundNamed:@"tankshot"];
+  tankshotsounds = [[NSMutableArray alloc] init];
+  [tankshotsounds addObject:sound];
+  [tankshotsounds addObject:[sound copy]];
+  [tankshotsounds addObject:[sound copy]];
+  [tankshotsounds addObject:[sound copy]];
+  [tankshotsounds addObject:[sound copy]];
+
+  sound = [AVAudioPlayer soundNamed:@"tree"];
+  treesounds = [[NSMutableArray alloc] init];
+  [treesounds addObject:sound];
+  [treesounds addObject:[sound copy]];
+  [treesounds addObject:[sound copy]];
 }
 
 /*
@@ -73,8 +280,24 @@ static BOOL muteBool;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-  _boloView.frame = self.view.bounds;
-  [self.view addSubview:_boloView];
+  _boloView.frame = self.gameViewContainer.bounds;
+  [self.gameViewContainer addSubview:_boloView];
+
+  _steerGesture = [[XBoloSteerGestureRecognizer alloc] initWithTarget:nil action:nil];
+  [self.gameViewContainer addGestureRecognizer:_steerGesture];
+
+  _driveGesture = [[XBoloDriveGestureRecognizer alloc] initWithTarget:nil action:nil];
+  XBoloControlPanelViewController *controlPanel = self.childViewControllers[0];
+  [controlPanel.driveGestureView addGestureRecognizer:_driveGesture];
+
+  _buildGesture = [[XBoloBuildGestureRecognizer alloc] initWithTarget:self action:@selector(doBuildGesture)];
+  [self.gameViewContainer addGestureRecognizer:_buildGesture];
+
+  _shootGesture = [[XBoloShootGestureRecognizer alloc] initWithTarget:self action:@selector(doShootGesture)];
+  [self.gameViewContainer addGestureRecognizer:_shootGesture];
+
+  /* We need the shoot gesture to fail before the build gesture detects, as shoot is two taps, build is one. */
+  [_buildGesture requireGestureRecognizerToFail:_shootGesture];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -110,6 +333,8 @@ TRY
   _broadcaster.serviceName = bonjourName;
   _broadcaster.mapName = [[[mapURL path] lastPathComponent] stringByDeletingPathExtension];
   [_broadcaster startPublishing];
+
+  _controlTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60 target:self selector:@selector(controlTick) userInfo:nil repeats:YES];
   
 CLEANUP
 
@@ -129,6 +354,10 @@ END
     [super didReceiveMemoryWarning];
 	
 	// Release any cached data, images, etc that aren't in use.
+}
+
+- (BOOL)prefersStatusBarHidden {
+  return YES;
 }
 
 #pragma mark -
@@ -175,7 +404,7 @@ END
 }
 
 - (void)clientLoopUpdate {
-  [_boloView clientLoopUpdate];
+  _ticks++;
 }
 
 - (void)refresh:(NSTimer *)aTimer {
@@ -300,6 +529,117 @@ END
   END
 }
 
+#pragma mark - Controls
+
+- (void)doBuildGesture {
+  CGPoint point = [_buildGesture readNextBuildLocation];
+//  CGPoint point = [_buildGesture locationInView:self.gameViewContainer];
+  point = [_boloView convertToScenePointFromViewPoint:point];
+  [self mouseEvent:GSMakePoint(point.x/16.0, WIDTH - (int)(point.y/16.0) - 1)];
+
+  NSLog(@"BUILD GESTURE");
+}
+
+- (void)doShootGesture {
+  _shoot = YES;
+}
+
+// mouse event method
+- (void)mouseEvent:(GSPoint)point {
+  int gotlock = 0;
+
+TRY
+  if (GSPointInRect(GSMakeRect(0, 0, WIDTH, WIDTH), point)) {
+    // lock client
+    if (lockclient()) LOGFAIL(errno)
+    gotlock = 1;
+
+    buildercommand(builderToolInt, point);
+
+    // unlock client
+    if (unlockclient()) LOGFAIL(errno)
+    gotlock = 0;
+  }
+
+CLEANUP
+  switch (ERROR) {
+  case 0:
+    break;
+
+  default:
+    if (gotlock) {
+      unlockclient();
+    }
+
+    PCRIT(ERROR)
+    printlineinfo();
+    CLEARERRLOG
+    exit(EXIT_FAILURE);
+    break;
+  }
+END
+}
+
+- (void)controlTick {
+  const int ticksDiff = _ticks - _lastControlTick;
+//  if (ticksDiff == 0) {
+//    NSLog(@"drop");
+//    return;
+//  } else if (ticksDiff > 1) {
+//    NSLog(@"skip %i", ticksDiff);
+//  }
+  if (ticksDiff == 0) {
+    return;
+  }
+
+  _lastControlTick = _ticks;
+
+  const double accelerateRate = _driveGesture.accelerateRate;
+  const double brakeRate = _driveGesture.brakeRate;
+  const double turnLeftRate = _steerGesture.turnLeftRate;
+  const double turnRightRate = _steerGesture.turnRightRate;
+
+  if (accelerateRate > 0 && _lastAccelerateTick + TicksToWaitForRate(accelerateRate) <= _ticks) {
+    keyevent(ACCELMASK, 1);
+    keyevent(BRAKEMASK, 0);
+    _lastAccelerateTick = _ticks;
+  } else if (brakeRate > 0 && _lastBrakeTick + TicksToWaitForRate(brakeRate) <= _ticks) {
+    keyevent(BRAKEMASK, 1);
+    _lastBrakeTick = _ticks;
+  } else {
+    keyevent(ACCELMASK, 0);
+    if (_autoSlowDown) {
+      keyevent(BRAKEMASK, 1);
+    } else {
+      keyevent(BRAKEMASK, 0);
+    }
+    _lastAccelerateTick = 0;
+    _lastBrakeTick = 0;
+  }
+
+  if (turnLeftRate > 0 && _lastTurnLeftTick + TicksToWaitForRate(turnLeftRate) <= _ticks) {
+    keyevent(TURNLMASK, 1);
+    _lastTurnLeftTick = _ticks;
+  } else {
+    keyevent(TURNLMASK, 0);
+    _lastTurnLeftTick = 0;
+  }
+  if (turnRightRate > 0 && _lastTurnRightTick + TicksToWaitForRate(turnRightRate) <= _ticks) {
+    keyevent(TURNRMASK, 1);
+    _lastTurnRightTick = _ticks;
+  } else {
+    keyevent(TURNRMASK, 0);
+    _lastTurnRightTick = 0;
+  }
+
+  if (_shoot) {
+    _shoot = NO;
+    keyevent(SHOOTMASK, YES);
+  } else {
+    keyevent(SHOOTMASK, NO);
+  }
+}
+
 @end
 
 #pragma mark -
@@ -332,124 +672,124 @@ void settankstatus() {
 }
 
 void playsound(int snd) {
-//  if (!muteBool) {
-//    int i;
-//    NSArray *array;
-//
-//    @autoreleasepool {
-//
-//      switch (snd) {
-//        case kBubblesSound:
-//          array = bubblessounds;
-//          break;
-//
-//        case kBuildSound:
-//          array = buildsounds;
-//          break;
-//
-//        case kBuilderDeathSound:
-//          array = builderdeathsounds;
-//          break;
-//
-//        case kExplosionSound:
-//          array = explosionsounds;
-//          break;
-//
-//        case kFarBuildSound:
-//          array = farbuildsounds;
-//          break;
-//
-//        case kFarBuilderDeathSound:
-//          array = farbuilderdeathsounds;
-//          break;
-//
-//        case kFarExplosionSound:
-//          array = farexplosionsounds;
-//          break;
-//
-//        case kFarHitTankSound:
-//          array = farhittanksounds;
-//          break;
-//
-//        case kFarHitTerrainSound:
-//          array = farhitterrainsounds;
-//          break;
-//
-//        case kFarHitTreeSound:
-//          array = farhittreesounds;
-//          break;
-//
-//        case kFarShotSound:
-//          array = farshotsounds;
-//          break;
-//
-//        case kFarSinkSound:
-//          array = farsinksounds;
-//          break;
-//
-//        case kFarSuperBoomSound:
-//          array = farsuperboomsounds;
-//          break;
-//
-//        case kFarTreeSound:
-//          array = fartreesounds;
-//          break;
-//
-//        case kHitTankSound:
-//          array = hittanksounds;
-//          break;
-//
-//        case kHitTerrainSound:
-//          array = hitterrainsounds;
-//          break;
-//
-//        case kHitTreeSound:
-//          array = hittreesounds;
-//          break;
-//
-//        case kMineSound:
-//          array = minesounds;
-//          break;
-//
-//        case kMsgReceivedSound:
-//          array = msgreceivedsounds;
-//          break;
-//
-//        case kPillShotSound:
-//          array = pillshotsounds;
-//          break;
-//
-//        case kSinkSound:
-//          array = sinksounds;
-//          break;
-//
-//        case kSuperBoomSound:
-//          array = superboomsounds;
-//          break;
-//
-//        case kTankShotSound:
-//          array = tankshotsounds;
-//          break;
-//
-//        case kTreeSound:
-//          array = treesounds;
-//          break;
-//
-//        default:
-//          array = nil;
-//          break;
-//      }
-//
-//      // start playing sound
-//      for (i = 0; i < array.count; i++) {
-//        if (![array[i] isPlaying]) {
-//          [array[i] play];
-//          break;
-//        }
-//      }
-//
-//    }
-//  }
+  if (!muteBool) {
+    int i;
+    NSArray<AVAudioPlayer *> *array;
+
+    @autoreleasepool {
+
+      switch (snd) {
+        case kBubblesSound:
+          array = bubblessounds;
+          break;
+
+        case kBuildSound:
+          array = buildsounds;
+          break;
+
+        case kBuilderDeathSound:
+          array = builderdeathsounds;
+          break;
+
+        case kExplosionSound:
+          array = explosionsounds;
+          break;
+
+        case kFarBuildSound:
+          array = farbuildsounds;
+          break;
+
+        case kFarBuilderDeathSound:
+          array = farbuilderdeathsounds;
+          break;
+
+        case kFarExplosionSound:
+          array = farexplosionsounds;
+          break;
+
+        case kFarHitTankSound:
+          array = farhittanksounds;
+          break;
+
+        case kFarHitTerrainSound:
+          array = farhitterrainsounds;
+          break;
+
+        case kFarHitTreeSound:
+          array = farhittreesounds;
+          break;
+
+        case kFarShotSound:
+          array = farshotsounds;
+          break;
+
+        case kFarSinkSound:
+          array = farsinksounds;
+          break;
+
+        case kFarSuperBoomSound:
+          array = farsuperboomsounds;
+          break;
+
+        case kFarTreeSound:
+          array = fartreesounds;
+          break;
+
+        case kHitTankSound:
+          array = hittanksounds;
+          break;
+
+        case kHitTerrainSound:
+          array = hitterrainsounds;
+          break;
+
+        case kHitTreeSound:
+          array = hittreesounds;
+          break;
+
+        case kMineSound:
+          array = minesounds;
+          break;
+
+        case kMsgReceivedSound:
+          array = msgreceivedsounds;
+          break;
+
+        case kPillShotSound:
+          array = pillshotsounds;
+          break;
+
+        case kSinkSound:
+          array = sinksounds;
+          break;
+
+        case kSuperBoomSound:
+          array = superboomsounds;
+          break;
+
+        case kTankShotSound:
+          array = tankshotsounds;
+          break;
+
+        case kTreeSound:
+          array = treesounds;
+          break;
+
+        default:
+          array = nil;
+          break;
+      }
+
+      // start playing sound
+      for (i = 0; i < array.count; i++) {
+        if (![array[i] isPlaying]) {
+          [array[i] play];
+          break;
+        }
+      }
+
+    }
+  }
 }
 
 void printmessage(int type, const char *text) {

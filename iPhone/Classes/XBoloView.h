@@ -9,11 +9,12 @@
 #import <SpriteKit/SpriteKit.h>
 
 #import "GSBoloViewProtocol.h"
+#import "XBolo-Swift.h"
 
 @interface XBoloView : SKView <GSBoloViewProtocol> {
 
 }
 
-- (void)clientLoopUpdate;
+- (CGPoint)convertToScenePointFromViewPoint:(CGPoint)pt;
 
 @end
