@@ -14,39 +14,12 @@ private func CGPointDist(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
 
 class XBoloSteerGestureRecognizer: UIGestureRecognizer {
 
-  @objc private(set) var turnLeftRate = 0.0
-  @objc private(set) var turnRightRate = 0.0
+  @objc private(set) var angle = CGFloat(0.0)
+  @objc private(set) var angleSet = false
 
   private var trackingTouch: UITouch?
-  private var originalLocation: CGPoint?
 
   private let deadZone = CGFloat(0.0)
-  private let maxZone = CGFloat(2.0)
-
-//  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-//    /* If we are already tracking a touch ignore all new touches,
-//       or if is a multi-touch event, ignore it.
-//     */
-//    guard self.trackingTouch == nil else {
-//      print("our tracking touch phase \(self.trackingTouch!.phase.rawValue)")
-//      touches.forEach { (touch) in
-//        self.ignore(touch, for: event)
-//      }
-//      return
-//    }
-//
-//    /* Grab our touch to track */
-//    guard let trackingTouch = touches.first else {
-//      return
-//    }
-//
-//    self.state = .began
-//
-//    self.trackingTouch = trackingTouch
-//    self.originalLocation = trackingTouch.location(in: self.view)
-//    self.turnLeftRate = 0.0
-//    self.turnRightRate = 0.0
-//  }
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
     /* If we are already tracking a touch ignore all new touches. */
@@ -59,6 +32,7 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
       }
     }
 
+    /* Acquire a new tracking touch if we don't have one */
     if trackingTouch == nil {
       guard let touch = touches.first else {
         return
@@ -74,32 +48,26 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
       self.state = .began
 
       self.trackingTouch = touch
-      self.originalLocation = originalLocation
-      self.turnLeftRate = 0.0
-      self.turnRightRate = 0.0
     }
 
-//    guard let trackingTouch = self.trackingTouch, let originalLocation = self.originalLocation else {
-//      print("Invalid state in steer gesture recognizer")
-//      return
-//    }
-
-    guard let trackingTouch = self.trackingTouch else {
+    guard let trackingTouch = self.trackingTouch, let view = self.view else {
       print("Invalid state in steer gesture recognizer")
       return
     }
 
-    let originalLocation = trackingTouch.previousLocation(in: view)
     let currentLocation = trackingTouch.location(in: view)
-    let xdiff = currentLocation.x - originalLocation.x
-    print("steer distance \(xdiff)")
-    if xdiff > 0 {
-      turnLeftRate = 0
-      turnRightRate = Double(xdiff / maxZone)
-    } else if xdiff < 0 {
-      turnLeftRate = Double(-xdiff / maxZone)
-      turnRightRate = 0
+    let center = CGPoint(x: view.bounds.size.width / 2.0, y: view.bounds.size.height / 2.0)
+    let xdiff = currentLocation.x - center.x
+    let ydiff = currentLocation.y - center.y
+    let angle = atan2(ydiff, xdiff)
+    print("steer angle \(angle)")
+    let boloangle = -angle
+    if boloangle >= 0 {
+      self.angle = boloangle
+    } else {
+      self.angle = CGFloat.pi * 2 + boloangle
     }
+    self.angleSet = true
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -134,7 +102,7 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
   }
 
   private func clearKeys() {
-    self.turnLeftRate = 0.0
-    self.turnRightRate = 0.0
+    self.angle = 0
+    self.angleSet = false
   }
 }

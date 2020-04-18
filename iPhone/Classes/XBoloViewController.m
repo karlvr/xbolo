@@ -608,8 +608,6 @@ END
 
   const double accelerateRate = _driveGesture.accelerateRate;
   const double brakeRate = _driveGesture.brakeRate;
-  const double turnLeftRate = _steerGesture.turnLeftRate;
-  const double turnRightRate = _steerGesture.turnRightRate;
 
   if (accelerateRate > 0 && _lastAccelerateTick + TicksToWaitForRate(accelerateRate) <= _ticks) {
     keyevent(ACCELMASK, 1);
@@ -629,19 +627,31 @@ END
     _lastBrakeTick = 0;
   }
 
-  if (turnLeftRate > 0 && _lastTurnLeftTick + TicksToWaitForRate(turnLeftRate) <= _ticks) {
-    keyevent(TURNLMASK, 1);
-    _lastTurnLeftTick = _ticks;
+  if (_steerGesture.angleSet) {
+    const float dir = client.players[client.player].dir;
+    const CGFloat targetdir = _steerGesture.angle;
+    float dirdiff = dir - targetdir;
+    if (dirdiff > M_PI) {
+      dirdiff -= M_PI * 2;
+    } else if (dirdiff < -M_PI) {
+      dirdiff += M_PI * 2;
+    }
+
+    const float mindirdiff = 0.01;
+//    NSLog(@"dir %f target %f diff %f", dir, targetdir, dirdiff);
+    if (dirdiff < -mindirdiff) {
+      keyevent(TURNLMASK, 1);
+      keyevent(TURNRMASK, 0);
+    } else if (dirdiff > mindirdiff) {
+      keyevent(TURNRMASK, 1);
+      keyevent(TURNLMASK, 0);
+    } else {
+      keyevent(TURNLMASK, 0);
+      keyevent(TURNRMASK, 0);
+    }
   } else {
     keyevent(TURNLMASK, 0);
-    _lastTurnLeftTick = 0;
-  }
-  if (turnRightRate > 0 && _lastTurnRightTick + TicksToWaitForRate(turnRightRate) <= _ticks) {
-    keyevent(TURNRMASK, 1);
-    _lastTurnRightTick = _ticks;
-  } else {
     keyevent(TURNRMASK, 0);
-    _lastTurnRightTick = 0;
   }
 
   if (_shoot) {
