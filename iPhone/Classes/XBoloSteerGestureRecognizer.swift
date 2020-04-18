@@ -19,7 +19,7 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
 
   private var trackingTouch: UITouch?
 
-  private let deadZone = CGFloat(0.0)
+  private let deadZone = CGFloat(1.0)
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
     /* If we are already tracking a touch ignore all new touches. */
@@ -56,18 +56,20 @@ class XBoloSteerGestureRecognizer: UIGestureRecognizer {
     }
 
     let currentLocation = trackingTouch.location(in: view)
-    let center = CGPoint(x: view.bounds.size.width / 2.0, y: view.bounds.size.height / 2.0)
-    let xdiff = currentLocation.x - center.x
-    let ydiff = currentLocation.y - center.y
-    let angle = atan2(ydiff, xdiff)
-    print("steer angle \(angle)")
-    let boloangle = -angle
-    if boloangle >= 0 {
-      self.angle = boloangle
-    } else {
-      self.angle = CGFloat.pi * 2 + boloangle
+    let previousLocation = trackingTouch.previousLocation(in: view)
+    let xdiff = currentLocation.x - previousLocation.x
+    let ydiff = currentLocation.y - previousLocation.y
+    if abs(xdiff) > deadZone || abs(ydiff) > deadZone {
+      let angle = atan2(ydiff, xdiff)
+      print("steer angle \(angle)")
+      let boloangle = -angle
+      if boloangle >= 0 {
+        self.angle = boloangle
+      } else {
+        self.angle = CGFloat.pi * 2 + boloangle
+      }
+      self.angleSet = true
     }
-    self.angleSet = true
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
