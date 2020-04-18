@@ -18,8 +18,8 @@ class XBoloDriveGestureRecognizer: UIGestureRecognizer {
   private var currentLocation: CGPoint?
   private var recognized = false
 
-  private let deadZone = CGFloat(10.0)
-  private let maxZone = CGFloat(100.0)
+  private let deadZone = CGFloat(5.0)
+  private let maxZone = CGFloat(30.0)
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
     /* If we are already tracking a touch ignore all new touches,
@@ -55,7 +55,7 @@ class XBoloDriveGestureRecognizer: UIGestureRecognizer {
 
     if !recognized {
       let distance = abs(originalLocation.y - currentLocation.y)
-      if distance > 10 {
+      if distance > deadZone {
         NSLog("recognized drive gesture!")
 //        self.state = .recognized
         recognized = true
