@@ -99,6 +99,8 @@ static int recvsrhittank(void);
 static int recvsrsetalliance(void);
 static int recvsrtimelimit(void);
 static int recvsrbasecontrol(void);
+static int recvclient(void);
+static int runclient(void);
 
 /* client send routines */
 

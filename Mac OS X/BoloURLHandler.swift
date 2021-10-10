@@ -20,7 +20,7 @@ import Cocoa
 		}
 		
 		// Only respond to xbolo schemes
-		// TODO: how different is this ffrom nubolo and old bolo?
+		// TODO: how different is this from nubolo and old bolo?
 		guard boloURL.scheme?.caseInsensitiveCompare("xbolo") == .orderedSame else {
 			NSSound.beep()
 			return nil

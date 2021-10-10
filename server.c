@@ -127,6 +127,13 @@ static int removeplayer(int player);
 static int nplayers(void);
 static int cleanupserver(void);
 
+static int sendtrackerupdate(void);
+static int dgramserver(void);
+static int discjoiningplayerserver(void);
+static int joinplayerserver(void);
+static int runserver(void);
+static int registerserver(void);
+
 int initserver() {
   int err;
   int i;
