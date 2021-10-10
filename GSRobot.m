@@ -14,6 +14,7 @@
 #import <BoloKit/GSRobotExternal.h>
 #undef INTERNAL_GSROBOT_INCLUDE
 
+#import <simd/simd.h>
 
 #define ENABLE_LOGGING 0
 

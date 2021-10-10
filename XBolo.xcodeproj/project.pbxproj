@@ -22,7 +22,6 @@
 		402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BF0FC91E2F0018390E /* fsuperboom.aiff */; };
 		402097CC0FC91E2F0018390E /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
 		402098370FC926C00018390E /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
-		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloView.m */; };
 		404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42820FF8525200589EA2 /* GSBuilderStatusView.m */; };
 		404D428E0FF8525200589EA2 /* GSKeyCodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42840FF8525200589EA2 /* GSKeyCodeField.m */; };
@@ -52,7 +51,6 @@
 		406444641082520D008F913C /* images.c in Sources */ = {isa = PBXBuildFile; fileRef = 406444631082520D008F913C /* images.c */; };
 		406444661082520D008F913C /* images.c in Sources */ = {isa = PBXBuildFile; fileRef = 406444631082520D008F913C /* images.c */; };
 		4064465510826647008F913C /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 40644447108250E1008F913C /* terrain.c */; };
-		4064472B10829C15008F913C /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; };
 		407C8B3F0FDC73C1006A71F7 /* tracker.c in Sources */ = {isa = PBXBuildFile; fileRef = 407C8B2A0FDC72CA006A71F7 /* tracker.c */; };
 		407ECEFC1087C371002B43CB /* buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 407ECEFA1087C371002B43CB /* buf.c */; };
 		407ECEFD1087C371002B43CB /* buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 407ECEFA1087C371002B43CB /* buf.c */; };
@@ -95,6 +93,8 @@
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
+		553C838B2712D496002782C0 /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553C83842712D472002782C0 /* TCMPortMapper.framework */; };
+		553C838C2712D497002782C0 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553C83842712D472002782C0 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
@@ -199,6 +199,41 @@
 			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
 			remoteInfo = "XBolo Quick Look Plug-in";
 		};
+		553C83812712D472002782C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F2C65FFF0D50C2D100820CAE;
+			remoteInfo = "Port Map";
+		};
+		553C83832712D472002782C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3180119F0D4DEC8400BE3B28;
+			remoteInfo = TCMPortMapper;
+		};
+		553C83852712D472002782C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F214E5DB0D5F5FE600A06962;
+			remoteInfo = NATEcho;
+		};
+		553C83872712D472002782C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F21B76970DB73CFC00942BC0;
+			remoteInfo = "UPnP Command Line Debug Tool";
+		};
+		553C83892712D472002782C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5590A55320D4F1370001CB58;
+			remoteInfo = PortMapSwift;
+		};
 		55712C381CF9068700326A27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */;
@@ -229,8 +264,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */,
 				55C405EB20CEE0060033C0E2 /* BoloKit.framework in Copy Frameworks */,
+				553C838C2712D497002782C0 /* TCMPortMapper.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,7 +310,6 @@
 		402097BF0FC91E2F0018390E /* fsuperboom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fsuperboom.aiff; sourceTree = "<group>"; };
 		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ftree.aiff; sourceTree = "<group>"; };
 		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = fshot.aiff; sourceTree = "<group>"; };
-		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
 		404D425D0FF84FEA00589EA2 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
 		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSBoloView.h; sourceTree = "<group>"; };
@@ -338,6 +372,7 @@
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		553C83762712D472002782C0 /* Port Map.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Port Map.xcodeproj"; path = "Third-party/TCMPortMapper/Port Map.xcodeproj"; sourceTree = "<group>"; };
 		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
 		553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjourKeys.m; sourceTree = "<group>"; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -442,11 +477,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4064472B10829C15008F913C /* TCMPortMapper.framework in Frameworks */,
 				55C405EA20CEE0060033C0E2 /* BoloKit.framework in Frameworks */,
 				40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */,
 				40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */,
 				40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */,
+				553C838B2712D496002782C0 /* TCMPortMapper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,12 +606,12 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				553C83762712D472002782C0 /* Port Map.xcodeproj */,
 				55712C351CF9065800326A27 /* AppKit.framework */,
 				55540D271CBDD75500EAFC83 /* CoreServices.framework */,
 				40ED89F51114B4AA00B7AF32 /* Carbon.framework */,
 				40ED84361114B0BB00B7AF32 /* Cocoa.framework */,
 				40ED84301114B09B00B7AF32 /* Foundation.framework */,
-				403F6B36105ED526009C8088 /* TCMPortMapper.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -667,6 +702,18 @@
 			isa = PBXGroup;
 			children = (
 				40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		553C83772712D472002782C0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				553C83822712D472002782C0 /* Port Map.app */,
+				553C83842712D472002782C0 /* TCMPortMapper.framework */,
+				553C83862712D472002782C0 /* NATEcho.app */,
+				553C83882712D472002782C0 /* upnpc-static */,
+				553C838A2712D472002782C0 /* PortMapSwift.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1049,6 +1096,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
+				English,
 				Base,
 				en,
 				ja,
@@ -1056,8 +1104,14 @@
 				de,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* XBolo */;
+			packageReferences = (
+			);
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 553C83772712D472002782C0 /* Products */;
+					ProjectRef = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
+				},
 				{
 					ProductGroup = 40E8286B1055A14400B39BB9 /* Products */;
 					ProjectRef = 40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */;
@@ -1082,6 +1136,41 @@
 			fileType = wrapper.cfbundle;
 			path = "XBolo Quick Look Plug-in.qlgenerator";
 			remoteRef = 40E828711055A14400B39BB9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		553C83822712D472002782C0 /* Port Map.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Port Map.app";
+			remoteRef = 553C83812712D472002782C0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		553C83842712D472002782C0 /* TCMPortMapper.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TCMPortMapper.framework;
+			remoteRef = 553C83832712D472002782C0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		553C83862712D472002782C0 /* NATEcho.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = NATEcho.app;
+			remoteRef = 553C83852712D472002782C0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		553C83882712D472002782C0 /* upnpc-static */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "upnpc-static";
+			remoteRef = 553C83872712D472002782C0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		553C838A2712D472002782C0 /* PortMapSwift.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = PortMapSwift.app;
+			remoteRef = 553C83892712D472002782C0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1483,6 +1572,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"USE_SIMD_H=1",
 					"$(inherited)",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
@@ -1551,7 +1641,10 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"USE_SIMD_H=1",
+					"$(inherited)",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_MISSING_PARENTHESES = NO;
