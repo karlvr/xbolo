@@ -49,7 +49,10 @@ typedef NS_ENUM(uint8_t, TCMPortMappingTransportProtocol)  {
 @property (nonatomic) TCMPortMappingTransportProtocol transportProtocol;
 @property (nonatomic) TCMPortMappingStatus mappingStatus;
 
-@property (nonatomic, strong) id userInfo;
+@property (nullable, nonatomic, strong) id userInfo;
+
+@property (nonatomic, nullable, readonly) NSString *externalIPAddress;
+@property (nonatomic, nullable, readonly) NSString *externalIPAddressForURL;
 @end
 
 @interface NSString (TCMPortMapper_IPAdditions)
@@ -74,8 +77,9 @@ typedef NS_ENUM(uint8_t, TCMPortMappingTransportProtocol)  {
 - (void)removePortMapping:(TCMPortMapping *)aMapping;
 - (void)refresh;
 
-- (BOOL)isAtWork;
-- (BOOL)isRunning;
+@property (nonatomic, readonly) BOOL isAtWork;
+@property (nonatomic, readonly) BOOL isRunning;
+
 - (void)start;
 - (void)stop;
 - (void)stopBlocking;
@@ -93,6 +97,7 @@ typedef NS_ENUM(uint8_t, TCMPortMappingTransportProtocol)  {
 
 @property (nonatomic, readonly, nullable) NSString *externalIPAddress;
 @property (nonatomic, readonly) NSString *localIPAddress;
+@property (nonatomic, strong, readonly, nullable) NSString *securedIPv6Address;
 @property (nonatomic, readonly, nullable) NSString *localBonjourHostName;
 
 @property (nonatomic, strong, nullable) NSString *mappingProtocol;
@@ -101,4 +106,10 @@ typedef NS_ENUM(uint8_t, TCMPortMappingTransportProtocol)  {
 @property (nonatomic, readonly, nullable) NSString *routerHardwareAddress;
 @end
 
+// internal use only
+@interface TCMPortMapping ()
+- (void)setUniqueID:(char  * _Nullable)uniqueID forProtocol:(TCMPortMappingTransportProtocol)protocol;
+- (char * _Nullable)uniqueIDForProtocol:(TCMPortMappingTransportProtocol)protocol;
+- (BOOL)isActivePinhole;
+@end
 NS_ASSUME_NONNULL_END
