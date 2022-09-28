@@ -11,13 +11,13 @@ import UIKit
 @IBDesignable
 class XStatusBar: UIView {
   
-  @objc(XStatusBarType) enum StatusBarType: Int {
-    case Horizontal
-    case Vertical
+  @objc(XStatusBarType) enum BarType: Int {
+    case horizontal
+    case vertical
   }
   
   @IBInspectable
-  @objc var barType: StatusBarType = StatusBarType.Horizontal {
+  @objc var barType: BarType = BarType.horizontal {
     didSet {
       if oldValue != barType {
         setNeedsDisplay()
@@ -38,12 +38,12 @@ class XStatusBar: UIView {
   // An empty implementation adversely affects performance during animation.
   override func draw(_ rect: CGRect) {
     switch barType {
-    case .Horizontal:
+    case .horizontal:
       UIColor.green.set()
       let path = UIBezierPath(rect: CGRect(x: 0.0, y: 0.0, width: self.frame.width * value, height: self.frame.height))
       path.fill()
       
-    case .Vertical:
+    case .vertical:
       UIColor.green.set()
       let path = UIBezierPath(rect: CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height * value))
       path.fill()

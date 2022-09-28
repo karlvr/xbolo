@@ -65,10 +65,10 @@ int16_t ftoi16(float s);
 Vec2f make2f(float x, float y);
 #if defined(USE_SIMD_H) && USE_SIMD_H
 #define neg2f(v) -(v)
-#define add2f(v1, v2) (v1 + v2)
-#define sub2f(v1, v2) (v1 - v2)
-#define mul2f(v1, s) (v1 * s)
-#define div2f(v1, s) (v1 / s)
+#define add2f(v1, v2) ((v1) + (v2))
+#define sub2f(v1, v2) ((v1) - (v2))
+#define mul2f(v1, s) ((v1) * s)
+#define div2f(v1, s) ((v1) / s)
 #define dot2f vector_dot
 #define mag2f vector_length
 #define unit2f vector_normalize
@@ -159,7 +159,8 @@ static inline bool __isequal2f(Vec2f v1, Vec2f v2) {
 }
 
 static inline Vec2f __tan2f(float theta) {
-  return make2f(cosf(theta), sinf(theta));
+  struct __float2 vals = __sincosf_stret(theta);
+  return make2f(vals.__cosval, vals.__sinval);
 }
 
 static inline float ___atan2f(Vec2f dir) {
