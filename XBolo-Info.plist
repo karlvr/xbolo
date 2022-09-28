@@ -103,6 +103,7 @@
 				</array>
 				<key>public.filename-extension</key>
 				<array>
+					<string>bolomap</string>
 					<string>map</string>
 					<string>bmap</string>
 					<string>bol</string>

@@ -150,14 +150,14 @@ END
   }
   else {
     /* draw image */
-    [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+    [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositingOperationCopy fraction:1.0];
 
     /* draw mine */
     if (isMinedTile(client.seentiles, point.x, point.y)) {
       NSRect mineImageRect;
 
       mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-      [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+      [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositingOperationSourceOver fraction:1.0];
     }
 
     /* draw fog */
@@ -203,14 +203,14 @@ END
       }
       else {
         /* draw image */
-        [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+        [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositingOperationCopy fraction:1.0];
 
         /* draw mine */
         if (isMinedTile(client.seentiles, x, y)) {
           NSRect mineImageRect;
 
           mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-          [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+          [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositingOperationSourceOver fraction:1.0];
         }
 
         /* draw fog */
@@ -286,14 +286,14 @@ END
     }
     else {
       /* draw image */
-      [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+      [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositingOperationCopy fraction:1.0];
 
       /* draw mine */
       if (isMinedTile(client.seentiles, p->x, p->y)) {
         NSRect mineImageRect;
 
         mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-        [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+        [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositingOperationSourceOver fraction:1.0];
       }
 
       /* draw fog */
@@ -495,11 +495,11 @@ END
     UInt32 carbonModifiers;
     carbonModifiers = GetCurrentKeyModifiers();
     modifiers =
-      (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
-      (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSShiftKeyMask : 0) |
-      (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSControlKeyMask : 0) |
-      (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSAlternateKeyMask : 0) |
-      (carbonModifiers & cmdKey ? NSCommandKeyMask : 0);
+    (carbonModifiers & alphaLock ? NSEventModifierFlagCapsLock : 0) |
+    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSEventModifierFlagShift : 0) |
+    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSEventModifierFlagControl : 0) |
+    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSEventModifierFlagOption : 0) |
+    (carbonModifiers & cmdKey ? NSEventModifierFlagCommand : 0);
 //    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
 //    (carbonModifiers &  ? NSHelpKeyMask : 0) |
 //    (carbonModifiers &  ? NSFunctionKeyMask : 0);
@@ -526,7 +526,7 @@ END
 - (void)flagsChanged:(NSEvent *)theEvent {
   NSEventModifierFlags oldModifiers;
   oldModifiers = modifiers;
-  modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = theEvent.modifierFlags & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad | NSEventModifierFlagHelp | NSEventModifierFlagFunction);
   if (modifiers & (oldModifiers ^ modifiers)) {
     [boloController keyEvent:YES forKey:theEvent.keyCode];
   }
@@ -536,7 +536,7 @@ END
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-  if (theEvent.type == NSLeftMouseUp) {
+  if (theEvent.type == NSEventTypeLeftMouseUp) {
     NSPoint point;
 
     point = [self convertPoint:theEvent.locationInWindow fromView:nil];
