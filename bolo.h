@@ -509,14 +509,14 @@ struct BOLO_Preamble {
   uint8_t pause;
   uint8_t gametype;
   
-  union {
-    struct {
+  union BOLO_GameType {
+    struct BOLO_GameType_Domination {
       uint8_t type;
       uint8_t basecontrol;
     } domination;
   } __attribute__((__packed__)) game;
   
-  struct {
+  struct BOLO_Player {
     uint8_t used;
     uint8_t connected;
     uint32_t seq;

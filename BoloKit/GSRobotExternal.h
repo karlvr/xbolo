@@ -19,7 +19,7 @@ enum {
     BUILDERMINE,
 } ;
 
-enum {
+NS_ENUM(int) {
     kWallTile         = 0,
     kRiverTile        = 1,
     kSwampTile        = 2,
@@ -83,7 +83,7 @@ enum {
 NS_ASSUME_NONNULL_END
 #include <simd/simd.h>
 NS_ASSUME_NONNULL_BEGIN
-typedef vector_float2 Vec2f;
+typedef simd_packed_float2 Vec2f;
 #else
 typedef struct Vec2f {
     float x;

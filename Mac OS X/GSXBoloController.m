@@ -92,15 +92,15 @@ static NSString * const GSShowAllegiance                   = @"GSShowAllegianceB
 static NSString * const GSShowMessages                     = @"GSShowMessagesBool";
 
 // tracker table view columns
-static NSString * const GSSourceColumn                     = @"GSSourceColumn";
-static NSString * const GSHostPlayerColumn                 = @"GSHostPlayerColumn";
-static NSString * const GSMapNameColumn                    = @"GSMapNameColumn";
-static NSString * const GSPlayersColumn                    = @"GSPlayersColumn";
-static NSString * const GSPasswordColumn                   = @"GSPasswordColumn";
-static NSString * const GSAllowJoinColumn                  = @"GSAllowJoinColumn";
-static NSString * const GSPausedColumn                     = @"GSPausedColumn";
-static NSString * const GSHostnameColumn                   = @"GSHostnameColumn";
-static NSString * const GSPortColumn                       = @"GSPortColumn";
+static NSUserInterfaceItemIdentifier const GSSourceColumn     = @"GSSourceColumn";
+static NSUserInterfaceItemIdentifier const GSHostPlayerColumn = @"GSHostPlayerColumn";
+static NSUserInterfaceItemIdentifier const GSMapNameColumn    = @"GSMapNameColumn";
+static NSUserInterfaceItemIdentifier const GSPlayersColumn    = @"GSPlayersColumn";
+static NSUserInterfaceItemIdentifier const GSPasswordColumn   = @"GSPasswordColumn";
+static NSUserInterfaceItemIdentifier const GSAllowJoinColumn  = @"GSAllowJoinColumn";
+static NSUserInterfaceItemIdentifier const GSPausedColumn     = @"GSPausedColumn";
+static NSUserInterfaceItemIdentifier const GSHostnameColumn   = @"GSHostnameColumn";
+static NSUserInterfaceItemIdentifier const GSPortColumn       = @"GSPortColumn";
 
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
@@ -3621,8 +3621,8 @@ END
     [robotLock lock];
     if(newRobot != robot)
     {
-        NSError *err = [newRobot load];
-        if(err)
+      NSError *err;
+        if(![newRobot loadWithError:&err])
         {
             [NSApp presentError: err];
         }
@@ -3732,7 +3732,7 @@ END
 
 - (void)startPublishing {
   NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
-  broadcaster = [[NSNetService alloc] initWithDomain:@"" type:XBoloBonjourType name:bonjourName port:hostPortNumber];
+  broadcaster = [[NSNetService alloc] initWithDomain:@"local." type:XBoloBonjourType name:bonjourName port:hostPortNumber];
   broadcaster.delegate = self;
   [self updatePublishedInfo];
   [broadcaster publish];

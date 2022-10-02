@@ -39,7 +39,8 @@
 + (NSArray<NSURL*>*) searchURLs
 {
     static NSArray<NSURL*> *savedURLs = nil;
-    if (savedURLs == nil) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         @autoreleasepool {
             NSFileManager *fm = [NSFileManager defaultManager];
             NSMutableArray<NSURL*> *tmpURLs = [[NSMutableArray alloc] initWithCapacity:5];
@@ -62,10 +63,9 @@
             }
             
             savedURLs = [tmpURLs copy];
-            [tmpURLs release];
         }
-    }
-    return [[savedURLs retain] autorelease];
+    });
+    return savedURLs;
 }
 
 + (NSArray *)availableRobots
@@ -91,7 +91,7 @@
                 LOG(@"availableRobots: bundle:%@", bundle);
                 if([bundle load])
                 {
-                    [robots addObject: [[[self alloc] initWithBundle: bundle] autorelease]];
+                    [robots addObject: [[self alloc] initWithBundle: bundle]];
                     LOG(@"availableRobots: load succeeded");
                 }
             }
@@ -103,7 +103,7 @@
 - (instancetype)initWithBundle: (NSBundle *)bundle
 {
     if((self = [self init])) {
-        _bundle = [bundle retain];
+        _bundle = bundle;
         _condLock = [[NSConditionLock alloc] initWithCondition: NO_NEW_DATA];
         _messages = [[NSMutableArray alloc] init];
     }
@@ -113,11 +113,6 @@
 - (void)dealloc
 {
     [self unload];
-    [_bundle release];
-    [_messages release];
-    [_condLock release];
-    
-    [super dealloc];
 }
 
 - (NSString *)name
@@ -127,30 +122,21 @@
 
 - (BOOL)loadWithError:(NSError**)error
 {
-    NSError *err = [self load];
-    if (err) {
-        if (error) {
-            *error = err;
-        }
-        return NO;
-    }
-    return YES;
-}
-
-- (NSError *)load
-{
     Class class = _bundle.principalClass;
     if([class minimumRobotInterfaceVersionRequired] > GS_ROBOT_CURRENT_INTERFACE_VERSION)
     {
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The robot could not be loaded because it requires a newer version of XBolo.",
                                   NSLocalizedRecoverySuggestionErrorKey: @"Check to see if a newer version of XBolo is available, and try again."};
-        return [NSError errorWithDomain: NSPOSIXErrorDomain code: EINVAL userInfo: userInfo];
+        if (error) {
+            *error = [NSError errorWithDomain: NSPOSIXErrorDomain code: EINVAL userInfo: userInfo];
+        }
+        return NO;
     }
     
     _robot = [[class alloc] init];
     _halt = NO;
     [NSThread detachNewThreadSelector: @selector(_watcherThread) toTarget: self withObject: nil];
-    return nil; // no errors, never any error, hooray!
+    return YES; // no errors, never any error, hooray!
 }
 
 - (void)unload
@@ -161,7 +147,6 @@
     [_condLock lockWhenCondition: THREAD_EXITED];
     [_condLock unlock];
     
-    [_robot release];
     _robot = nil;
 }
 
@@ -169,7 +154,7 @@
 {
     NSParameterAssert(_robot);
     
-    GSRobotGameState *gameState = [[GSRobotGameState new] autorelease];
+    GSRobotGameState *gameState = [GSRobotGameState new];
     gameState.worldwidth = WIDTH;
     gameState.worldheight = WIDTH;
     
@@ -309,8 +294,7 @@
     }
     else
     {
-        [_gamestate release];
-        _gamestate = [gameState retain];
+        _gamestate = gameState;
         [_condLock unlockWithCondition: NEW_DATA];
     }
 }
@@ -331,7 +315,7 @@
             return;
         }
         
-        GSRobotGameState *gsdata = [_gamestate retain];
+        GSRobotGameState *gsdata = _gamestate;
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
         gsdata.messages = messages;
@@ -339,10 +323,7 @@
         
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
         
-        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
-        
-        [gsdata release];
-        [messages release];
+        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata freeFunction: (void *)CFRelease freeContext: (void *)CFBridgingRetain(objectsToDestroy)];
         
         int keys = 0;
         if(commandState.accelerate) keys |= ACCELMASK;

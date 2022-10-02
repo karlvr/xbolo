@@ -134,7 +134,7 @@
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
-		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; };
 		C2BFADE31055937F009A1EE7 /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 /* End PBXBuildFile section */
 

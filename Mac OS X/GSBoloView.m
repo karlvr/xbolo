@@ -30,6 +30,7 @@ static int dirtytiles(struct ListNode *list, GSRect rect);
 - (void)drawSprites;
 - (void)drawSprite:(int)tile at:(Vec2f)point fraction:(CGFloat)fraction;
 - (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
+- (void)drawString:(NSString *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
 - (void)dirtyTiles:(NSRect)rect;
 @end
 
@@ -434,7 +435,7 @@ TRY
     rect = self.visibleRect;
 
     if (client.pause == -1) {
-      [self drawLabel:"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
+      [self drawString:@"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:@{NSFontAttributeName: [NSFont fontWithName:@"Helvetica" size:90], NSForegroundColorAttributeName: [NSColor whiteColor]}];
     }
     else {
       if (asprintf(&string, "Resume in %d", client.pause) == -1) LOGFAIL(errno)
@@ -478,10 +479,14 @@ END
 }
 
 - (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr {
-  NSString *string;
+  NSString *string = @(label);
+  
+  [self drawString:string at:point withAttributes:attr];
+}
+
+- (void)drawString:(NSString *)string at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr {
   NSRect rect;
 
-  string = @(label);
   rect.size = [string sizeWithAttributes:attr];
   rect.origin.x = point.x*16.0 - rect.size.width*0.5;
   rect.origin.y = FWIDTH*16.0 - point.y*16.0 + 8.0;

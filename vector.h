@@ -48,8 +48,8 @@ struct Vec2u8 {
 } ;
 
 #if defined(USE_SIMD_H) && USE_SIMD_H
-typedef vector_float2 Vec2f;
-typedef vector_int2 Vec2i32;
+typedef simd_packed_float2 Vec2f;
+typedef simd_packed_int2 Vec2i32;
 #else
 typedef struct Vec2f Vec2f;
 typedef struct Vec2i32 Vec2i32;
@@ -67,8 +67,8 @@ Vec2f make2f(float x, float y);
 #define neg2f(v) -(v)
 #define add2f(v1, v2) ((v1) + (v2))
 #define sub2f(v1, v2) ((v1) - (v2))
-#define mul2f(v1, s) ((v1) * s)
-#define div2f(v1, s) ((v1) / s)
+#define mul2f(v1, s) ((v1) * (s))
+#define div2f(v1, s) ((v1) / (s))
 #define dot2f vector_dot
 #define mag2f vector_length
 #define unit2f vector_normalize

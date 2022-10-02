@@ -307,7 +307,7 @@ struct CLUpdateExplosion {
 
 struct CLUpdate {
   /** header */
-  struct {
+  struct CLUpdateHeader {
     uint8_t player;
     int32_t seq[MAX_PLAYERS];
     uint8_t tankstatus;

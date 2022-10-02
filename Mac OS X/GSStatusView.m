@@ -19,7 +19,7 @@
 }
 
 - (void)drawRect:(NSRect)rect {
-  [[NSImage  imageNamed:@"StatusBackground"] drawInRect:rect fromRect:rect operation:NSCompositeCopy fraction:1.0f];
+  [[NSImage  imageNamed:@"StatusBackground"] drawInRect:rect fromRect:rect operation:NSCompositingOperationCopy fraction:1.0f];
 }
 
 @end

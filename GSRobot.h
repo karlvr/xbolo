@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)name;
 
 - (BOOL)loadWithError:(NSError*__nullable*__nullable)error;
-- (nullable NSError *)load NS_SWIFT_UNAVAILABLE("Use `load() throws` instead");
 
 /// just cleans up memory, does not actually unload code (which is enormously dangerous)
 - (void)unload;
