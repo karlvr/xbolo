@@ -283,8 +283,9 @@ bool isequal2i8(Vec2i8 v1, Vec2i8 v2) {
 
 #undef tan2f
 Vec2f tan2f(float theta) {
-  struct __float2 vals = __sincosf_stret(theta);
-  return make2f(vals.__cosval, vals.__sinval);
+  float cosVal, sinVal;
+  __sincosf(theta, &sinVal, &cosVal);
+  return make2f(cosVal, sinVal);
 }
 
 #undef _atan2f

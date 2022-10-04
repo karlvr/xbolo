@@ -91,10 +91,10 @@ float _atan2f(Vec2f dir);
 Vec2i32 make2i32(int32_t x, int32_t y);
 #if defined(USE_SIMD_H) && USE_SIMD_H
 #define neg2i32(v) -(v)
-#define add2i32(v1, v2) (v1 + v2)
-#define sub2i32(v1, v2) (v1 - v2)
-#define mul2i32(v1, s) (v1 * s)
-#define div2i32(v1, s) (v1 / s)
+#define add2i32(v1, v2) ((v1) + (v2))
+#define sub2i32(v1, v2) ((v1) - (v2))
+#define mul2i32(v1, s) ((v1) * (s))
+#define div2i32(v1, s) ((v1) / (s))
 #else
 Vec2i32 neg2i32(Vec2i32 v);
 Vec2i32 add2i32(Vec2i32 v1, Vec2i32 v2);
@@ -159,8 +159,9 @@ static inline bool __isequal2f(Vec2f v1, Vec2f v2) {
 }
 
 static inline Vec2f __tan2f(float theta) {
-  struct __float2 vals = __sincosf_stret(theta);
-  return make2f(vals.__cosval, vals.__sinval);
+  float cosVal, sinVal;
+  __sincosf(theta, &sinVal, &cosVal);
+  return make2f(cosVal, sinVal);
 }
 
 static inline float ___atan2f(Vec2f dir) {
