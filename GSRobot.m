@@ -74,30 +74,38 @@
     if(!robots)
     {
         robots = [NSMutableArray array];
-        
-        NSURL *myPath = [NSBundle mainBundle].bundleURL;
-        NSURL *enclosingPath = myPath.URLByDeletingLastPathComponent;
-        NSURL *botsPath = [enclosingPath URLByAppendingPathComponent: @"Robots"];
-        NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:botsPath includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
 
-        LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);
-        
-        for (NSURL *fullURL in enumerator)
-        {
-            LOG(@"availableRobots: checking file %@", fullURL);
-            if([fullURL.pathExtension compare: @"xbolorobot"] == NSOrderedSame)
-            {
-                NSBundle *bundle = [NSBundle bundleWithURL:fullURL];
-                LOG(@"availableRobots: bundle:%@", bundle);
-                if([bundle load])
-                {
-                    [robots addObject: [[self alloc] initWithBundle: bundle]];
-                    LOG(@"availableRobots: load succeeded");
-                }
+        NSString *overrideRobotsDir = [[NSUserDefaults standardUserDefaults] stringForKey: @"GSRobotsDir"];
+        if (overrideRobotsDir) {
+            [self _loadRobotsFromPath:overrideRobotsDir into:robots];
+        } else {
+            NSArray<NSURL *> *searchURLs = [GSRobot searchURLs];
+            for (NSURL *url in searchURLs) {
+                [self _loadRobotsFromPath:[url path] into:robots];
             }
         }
     }
     return robots;
+}
+
++ (void)_loadRobotsFromPath:(NSString *)botsPath into:(NSMutableArray *)robots {
+    NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:botsPath] includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
+    LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);
+
+    for (NSURL *fullURL in enumerator)
+    {
+        LOG(@"availableRobots: checking file %@", fullURL);
+        if([fullURL.pathExtension compare: @"xbolorobot"] == NSOrderedSame)
+        {
+            NSBundle *bundle = [NSBundle bundleWithURL:fullURL];
+            LOG(@"availableRobots: bundle:%@", bundle);
+            if([bundle load])
+            {
+                [robots addObject: [[self alloc] initWithBundle: bundle]];
+                LOG(@"availableRobots: load succeeded");
+            }
+        }
+    }
 }
 
 - (instancetype)initWithBundle: (NSBundle *)bundle
@@ -117,7 +125,7 @@
 
 - (NSString *)name
 {
-    return _bundle.bundlePath.lastPathComponent;
+    return [_bundle.bundlePath.lastPathComponent stringByDeletingPathExtension];
 }
 
 - (BOOL)loadWithError:(NSError**)error
@@ -162,7 +170,7 @@
     float gunAngle = client.players[client.player].dir;
     float gunDeltaX = cos(gunAngle) * client.range;
     float gunDeltaY = -sin(gunAngle) * client.range;
-    gameState.gunsightposition = simd_make_float2(gameState.tankposition.x + gunDeltaX, gameState.tankposition.y + gunDeltaY);
+    gameState.gunsightposition = __make2f(gameState.tankposition.x + gunDeltaX, gameState.tankposition.y + gunDeltaY);
     
     gameState.tankdirection = gunAngle * 8 / M_PI - 0.5;
     if(gameState.tankdirection < 0) gameState.tankdirection += 16;
@@ -321,9 +329,7 @@
         gsdata.messages = messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
         
-        NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
-        
-        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata freeFunction: (void *)CFRelease freeContext: (void *)CFBridgingRetain(objectsToDestroy)];
+        GSRobotCommandState *commandState = [_robot stepXBoloRobotWithGameState: gsdata];
         
         int keys = 0;
         if(commandState.accelerate) keys |= ACCELMASK;

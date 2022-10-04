@@ -738,5 +738,5 @@ GSImage mapImage(GSTile tiles[][256], int x, int y) {
 			return NBAS00IMAGE;
 	}
 
-	return -1;
+	return UNKNOWNIMAGE;
 }

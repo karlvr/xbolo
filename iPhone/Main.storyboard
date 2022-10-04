@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cHm-wc-lIl">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Bolo View Controller-->
+        <scene sceneID="kGU-0I-L0k">
+            <objects>
+                <viewController id="cHm-wc-lIl" customClass="XBoloViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="g1R-ro-OdG">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gMV-9z-IiR">
+                                <rect key="frame" x="0.0" y="0.0" width="198" height="768"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="198" id="Fc4-vT-Baq"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="Ehc-kD-Fc4" kind="embed" id="FUL-VQ-jQo"/>
+                                </connections>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tTW-x4-MDk">
+                                <rect key="frame" x="198" y="0.0" width="826" height="768"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="tTW-x4-MDk" firstAttribute="top" secondItem="q3c-Kf-SsI" secondAttribute="top" id="CUf-Zm-YCU"/>
+                            <constraint firstItem="gMV-9z-IiR" firstAttribute="bottom" secondItem="q3c-Kf-SsI" secondAttribute="bottom" id="DMO-6k-Edk"/>
+                            <constraint firstItem="gMV-9z-IiR" firstAttribute="leading" secondItem="q3c-Kf-SsI" secondAttribute="leading" id="VoB-EH-c45"/>
+                            <constraint firstItem="tTW-x4-MDk" firstAttribute="leading" secondItem="gMV-9z-IiR" secondAttribute="trailing" id="aGn-vc-3jV"/>
+                            <constraint firstItem="tTW-x4-MDk" firstAttribute="bottom" secondItem="q3c-Kf-SsI" secondAttribute="bottom" id="tGa-jM-BbY"/>
+                            <constraint firstItem="tTW-x4-MDk" firstAttribute="trailing" secondItem="q3c-Kf-SsI" secondAttribute="trailing" id="tx7-7j-cn4"/>
+                            <constraint firstItem="gMV-9z-IiR" firstAttribute="top" secondItem="q3c-Kf-SsI" secondAttribute="top" id="wCY-4K-m3P"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="q3c-Kf-SsI"/>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="gameViewContainer" destination="tTW-x4-MDk" id="oyY-ZL-EjJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="foB-gx-0Zy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138.8671875" y="70.3125"/>
+        </scene>
+        <!--Bolo Status View Controller-->
+        <scene sceneID="j4E-dw-UGh">
+            <objects>
+                <viewController id="Ehc-kD-Fc4" userLabel="Bolo Status View Controller" customClass="XBoloControlPanelViewController" customModule="XBolo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6jV-qB-cSA">
+                        <rect key="frame" x="0.0" y="0.0" width="198" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="StatusBackground" translatesAutoresizingMaskIntoConstraints="NO" id="6tD-d9-PNk">
+                                <rect key="frame" x="0.0" y="0.0" width="198" height="274"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tkl-64-7ZI">
+                                <rect key="frame" x="0.0" y="429" width="198" height="339"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.4274570942" green="0.42743998770000002" blue="0.42745155099999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    </view>
+                    <connections>
+                        <outlet property="driveGestureView" destination="Tkl-64-7ZI" id="W5U-ih-Rgp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cJg-V4-INI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-366.796875" y="408.59375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="StatusBackground" width="198" height="274"/>
+    </resources>
+</document>

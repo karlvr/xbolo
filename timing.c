@@ -14,7 +14,7 @@
 #include <ConditionalMacros.h>
 #endif
 
-#if defined(__MACH__) && !TARGET_OS_IPHONE
+#if defined(__MACH__)
 #include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
@@ -26,7 +26,7 @@ static struct timespec timebase;
 void initializegetcurrenttime(void) __attribute__ ((constructor)); // get it to be called automatically at startup
 
 void initializegetcurrenttime(void) {
-#if defined(__MACH__) && !TARGET_OS_IPHONE
+#if defined(__MACH__)
   mach_timebase_info(&gMachTimebase);
 #elif _POSIX_TIMERS
   clock_gettime(CLOCK_MONOTONIC, &timebase);
@@ -36,10 +36,15 @@ void initializegetcurrenttime(void) {
 }
 
 uint64_t getcurrenttime(void) {  // in nanoseconds from system boot
-#if defined(__MACH__) && !TARGET_OS_IPHONE
-  uint64_t absolute = mach_absolute_time();
-  Nanoseconds nano = AbsoluteToNanoseconds(*(AbsoluteTime *)&absolute);
-  return *(uint64_t *)&nano;
+#if defined(__MACH__)
+  static mach_timebase_info_data_t s_timebase_info;
+
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    (void) mach_timebase_info(&s_timebase_info);
+  });
+
+  return ((mach_absolute_time() * s_timebase_info.numer) / s_timebase_info.denom);
 #elif _POSIX_TIMERS
   struct timespec time;
   clock_gettime(CLOCK_MONOTONIC, &time);

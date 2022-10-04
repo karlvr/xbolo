@@ -1,10 +1,11 @@
 #import "GSXBoloController.h"
-#import "GSBoloView.h"
+#import "GSBoloViews.h"
 #import "GSRobot.h"
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
-#import "XBoloBonjourKeys.h"
+#import "GSBoloViews.h"
+#import "XBoloBonjour.h"
 
 #include "bolo.h"
 #include "server.h"
@@ -101,6 +102,7 @@ static NSUserInterfaceItemIdentifier const GSAllowJoinColumn  = @"GSAllowJoinCol
 static NSUserInterfaceItemIdentifier const GSPausedColumn     = @"GSPausedColumn";
 static NSUserInterfaceItemIdentifier const GSHostnameColumn   = @"GSHostnameColumn";
 static NSUserInterfaceItemIdentifier const GSPortColumn       = @"GSPortColumn";
+#define GSNetServiceKey @"NetService"
 
 // message panel
 static NSString * const GSMessageTarget                   = @"GSMessageTarget";
@@ -112,7 +114,7 @@ static NSString * const GSDisableBonjour                  = @"GSDisableBonjour";
 static GSXBoloController *controller = nil;
 
 // sound
-static BOOL muteBool;
+static BOOL muteGlobal;
 
 static NSMutableArray<NSSound*> *bubblessounds;
 static NSMutableArray<NSSound*> *builderdeathsounds;
@@ -214,22 +216,15 @@ static void getlisttrackerstatus(int status);
 // robots
 - (BOOL)_validateRobotMenuItem: (NSMenuItem *)item;
 - (void)setupRobotsMenu;
-@end
 
-@interface GSXBoloController (NetService) <NSNetServiceDelegate, NSNetServiceBrowserDelegate>
-- (void)startPublishing;
-- (void)updatePublishedInfo;
-- (void)stopPublishing;
-
-- (void)startListening;
-- (void)stopListening;
-- (void)clearBonjourEntries;
+// misc
+- (void)updateTableButtons:(NSTableView *)table;
 @end
 
 @implementation GSXBoloController {
-  NSNetService *broadcaster;
-  NSNetServiceBrowser *listener;
+  XBoloBonjour *broadcaster;
 }
+
 @synthesize joinAddress = joinAddressString;
 @synthesize joinPort = joinPortNumber;
 @synthesize hostPort = hostPortNumber;
@@ -333,6 +328,9 @@ static void getlisttrackerstatus(int status);
   [statusPanel setHidesOnDeactivate:NO];
   [allegiancePanel setHidesOnDeactivate:NO];
   [messagesPanel setHidesOnDeactivate:NO];
+
+  /* Fix allegiancePanel column widths */
+  playerInfoTableView.tableColumns[0].width = MAX(playerInfoTableView.tableColumns[0].minWidth, allegiancePanel.frame.size.width - playerInfoTableView.tableColumns[1].width);
 
   // init the host pane
   [self setHostMap:[defaults stringForKey:GSHostMap]];
@@ -603,8 +601,63 @@ static void getlisttrackerstatus(int status);
   [self setupRobotsMenu];
   
   // Register for Bonjour Services
+  __weak typeof(self) weakSelf = self;
+
+  broadcaster = [[XBoloBonjour alloc] init];
+  broadcaster.gameInfoBlock = ^(XBoloBonjourGameInfo *gameInfo) {
+    GSXBoloController *strongSelf = weakSelf;
+    if (!strongSelf) {
+      return;
+    }
+
+    NSDictionary *toSet =
+    @{GSHostPlayerColumn: gameInfo.playerName,
+      GSMapNameColumn: gameInfo.mapName,
+      GSPlayersColumn: gameInfo.playerCount,
+      GSPasswordColumn: gameInfo.passReq,
+      GSAllowJoinColumn: gameInfo.canJoin,
+      GSPausedColumn: gameInfo.paused,
+      GSHostnameColumn: gameInfo.hostName,
+      GSPortColumn: gameInfo.port,
+      GSSourceColumn: @(GSServerSourceBonjour),
+      GSNetServiceKey: gameInfo.service};
+
+    NSMutableArray *newTrackArr = strongSelf->joinTrackerArray;
+    if (!newTrackArr) {
+      newTrackArr = [[NSMutableArray alloc] init];
+    }
+
+    NSUInteger idx = [newTrackArr indexOfObjectPassingTest:^BOOL(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+      return obj[GSNetServiceKey] == gameInfo.service;
+    }];
+
+    if (idx != NSNotFound) {
+      [newTrackArr replaceObjectAtIndex:idx withObject:toSet];
+    } else {
+      [newTrackArr addObject:toSet];
+    }
+    [strongSelf setJoinTrackerArray:newTrackArr];
+  };
+  broadcaster.gameInfoRemovedBlock = ^(NSNetService * _Nonnull service) {
+    GSXBoloController *strongSelf = weakSelf;
+    if (!strongSelf) {
+      return;
+    }
+
+    NSDictionary *toRemove;
+    for (NSDictionary *theDict in strongSelf->joinTrackerArray) {
+      if ([theDict[GSNetServiceKey] isEqual:service]) {
+        toRemove = theDict;
+        break;
+      }
+    }
+
+    [strongSelf->joinTrackerArray removeObject:toRemove];
+    [strongSelf setJoinTrackerArray:strongSelf->joinTrackerArray];
+  };
+
   if (![defaults boolForKey:GSDisableBonjour]) {
-    [self startListening];
+    [broadcaster startListening];
   }
   
   _broadcastBonjour = ![defaults boolForKey:GSDisableBonjour];
@@ -842,7 +895,40 @@ END
 
 - (void)setMute:(BOOL)aBool {
   muteBool = aBool;
+  muteGlobal = aBool;
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSMute];
+}
+
+/** Return the hostname part of the trackerString */
+- (NSString *)trackerHostName {
+  NSString *string = [trackerString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSRange r = [string rangeOfString:@":"];
+  if (r.location != NSNotFound) {
+    return [string substringToIndex:r.location];
+  }
+
+  r = [string rangeOfString:@" "];
+  if (r.location != NSNotFound) {
+    return [string substringToIndex:r.location];
+  }
+
+  return string;
+}
+
+/** Return the port part of the trackerString, or 0 */
+- (in_port_t)trackerPort {
+  NSString *string = [trackerString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSRange r = [string rangeOfString:@":"];
+  if (r.location != NSNotFound) {
+    return [[string substringFromIndex:r.location + 1] intValue];
+  }
+
+  r = [string rangeOfString:@" "];
+  if (r.location != NSNotFound) {
+    return [[string substringFromIndex:r.location + 1] intValue];
+  }
+
+  return 0;
 }
 
 // IBAction methods
@@ -864,7 +950,11 @@ END
 
   if (server.setup) {
     stopserver();
-    [self stopPublishing];
+    [broadcaster stopPublishing];
+  }
+
+  if (!broadcaster.listening) {
+    [broadcaster startListening];
   }
 
   [self newGame:self];
@@ -992,17 +1082,19 @@ TRY
   for (TCMPortMapping *mapping in [portMapper portMappings]) {
     if ([mapping localPort] == getservertcpport()) {
       if ([mapping mappingStatus] == TCMPortMappingStatusMapped && [mapping transportProtocol] == TCMPortMappingTransportProtocolBoth) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
+        
         if (hostTrackerBool) {
-          startserverthreadwithtracker(trackerString.UTF8String, [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
+          startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
         }
         else {
-          [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
-
           if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-            if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+            if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
           }
           else {
             if (startserverthread()) LOGFAIL(errno)
+            if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+            [boloView reset];
           }
 
           break;
@@ -1049,17 +1141,20 @@ END
 
 - (IBAction)hostOK:(id)sender {
   //Always stop listening for Bonjour methods.
-  [self stopListening];
+  [broadcaster stopListening];
   
-  NSData *mapData;
+  NSData *mapData = nil;
+  [newGameWindow makeFirstResponder:nil];
 
 TRY
-  if (hostMapString.length == 0) {
+  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
     NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
+    [broadcaster startListening];
   }
-  else if ((mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
+  else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
     NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
     [self setHostMap:[NSString string]];
+    [broadcaster startListening];
   }
   else {
     NSScanner *scanner;
@@ -1106,14 +1201,20 @@ TRY
       joinProgressStatusTextField.stringValue = @"UPnP Mapping Port...";
     }
     else if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-      if (startserverthreadwithtracker(trackerString.UTF8String, getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+      if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
     }
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
       if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+      [boloView reset];
     }
+
+    NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
+    broadcaster.serviceName = bonjourName;
+    broadcaster.mapName = hostMapString.lastPathComponent.stringByDeletingPathExtension;
+
     if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
-      [self startPublishing];
+      [broadcaster startPublishing];
     }
   }
 
@@ -1127,6 +1228,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Unable to Open Map File", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [broadcaster startListening];
     CLEARERRLOG
     break;
 
@@ -1135,6 +1237,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Incomaptile Map Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [broadcaster startListening];
     CLEARERRLOG
     break;
 
@@ -1143,6 +1246,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Port Unavailable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another port.");
+    [broadcaster startListening];
     CLEARERRLOG
     break;
 
@@ -1151,6 +1255,7 @@ CLEANUP
     [joinProgressIndicator stopAnimation:self];
     [NSApp endSheet:joinProgressWindow];
     NSBeginAlertSheet(@"Unexpected Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Error #%d: %s", ERROR, strerror(ERROR));
+    [broadcaster startListening];
     CLEARERRLOG
     break;
   }
@@ -1185,6 +1290,8 @@ END
 
 - (IBAction)joinTrackerRefresh:(id)sender {
 TRY
+  [newGameWindow makeFirstResponder:nil];
+  
   [joinTrackerTableView deselectAll:self];
   joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
@@ -1194,11 +1301,11 @@ TRY
   
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
-  if (listtracker(trackerString.UTF8String, &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
-  if (listener) {
+  if (listtracker([self trackerHostName].UTF8String, [self trackerPort], &trackerlist, getlisttrackerstatus)) LOGFAIL(errno)
+  if (broadcaster.listening) {
     // "Have you tried turning it off then on again?"
-    [self stopListening];
-    [self startListening];
+    [broadcaster stopListening];
+    [broadcaster startListening];
   }
 
 CLEANUP
@@ -1218,15 +1325,18 @@ END
 
 - (IBAction)joinOK:(id)sender {
 TRY
+  [newGameWindow makeFirstResponder:nil];
+
   joinProgressStatusTextField.stringValue = @"";
   [joinProgressIndicator setIndeterminate:YES];
   joinProgressIndicator.doubleValue = 0.0;
   [joinProgressIndicator startAnimation:self];
   [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
   if (startclient(joinAddressString.UTF8String, joinPortNumber, playerNameString.UTF8String, joinPasswordBool ? joinPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+  [boloView reset];
 
   //Always stop listening for Bonjour methods.
-  [self stopListening];
+  [broadcaster stopListening];
 
 CLEANUP
   switch (ERROR) {
@@ -1287,6 +1397,10 @@ CLEANUP
 END
 }
 
+- (IBAction)boloWindow:(id)sender {
+  [boloWindow makeKeyAndOrderFront:self];
+}
+
 - (IBAction)statusPanel:(id)sender {
   if (statusPanel.keyWindow) {
     [boloWindow makeKeyAndOrderFront:self];
@@ -1320,7 +1434,7 @@ END
 
 - (IBAction)toggleJoin:(id)sender {
   togglejoingame();
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)toggleMute:(id)sender {
@@ -1329,94 +1443,38 @@ END
 
 - (IBAction)gamePauseResumeMenu:(id)sender {
   pauseresumegame();
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)kickPlayer:(id)sender {
   kickplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)banPlayer:(id)sender {
   banplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)unbanPlayer:(id)sender {
   unbanplayer((int)[sender tag]);
-  [self updatePublishedInfo];
+  [broadcaster updatePublishedInfo];
 }
 
 - (IBAction)scrollUp:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, 16)];
 }
 
 - (IBAction)scrollDown:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.y -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x;
-    cgpoint.y = screen.frame.size.height - nspoint.y - 64.0;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(0, -16)];
 }
 
 - (IBAction)scrollLeft:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x -= 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x + 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(-16, 0)];
 }
 
 - (IBAction)scrollRight:(id)sender {
-  NSScreen *screen;
-  NSRect rect;
-  NSPoint nspoint;
-  CGPoint cgpoint;
-
-  rect = boloView.visibleRect;
-  rect.origin.x += 64.0/kZoomLevels[zoomLevel];
-  [boloView scrollRectToVisible:rect];
-
-  nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:boloWindow.mouseLocationOutsideOfEventStream fromView:boloWindow.contentView] inRect:boloView.visibleRect] && (screen = boloWindow.screen)) {
-    cgpoint.x = nspoint.x - 64.0;
-    cgpoint.y = screen.frame.size.height - nspoint.y;
-    CGWarpMouseCursorPosition(cgpoint);
-  }
+  [boloView scroll:CGPointMake(16, 0)];
 }
 
 - (IBAction)requestAlliance:(id)sender {
@@ -1595,36 +1653,18 @@ END
 // map interface actions
 
 - (IBAction)zoomIn:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel < MAX_ZOOM) {
     zoomLevel++;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x + 0.25*visRect.size.width, visRect.origin.y + 0.25*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
 - (IBAction)zoomOut:(id)sender {
-  NSSize size;
-  NSRect visRect;
-
   if (zoomLevel > 0) {
     zoomLevel--;
     CGFloat zoom = kZoomLevels[zoomLevel];
-    visRect = boloView.visibleRect;
-    size.width = 4096.0*zoom;
-    size.height = 4096.0*zoom;
-    [boloView setFrameSize:size];
-    [boloView setBoundsSize:NSMakeSize(4096.0, 4096.0)];
-    [boloView scrollPoint:NSMakePoint(visRect.origin.x - 0.5*visRect.size.width, visRect.origin.y - 0.5*visRect.size.height)];
-    [boloView setNeedsDisplay:YES];
+    [boloView zoomTo:zoom];
   }
 }
 
@@ -1641,121 +1681,61 @@ END
 }
 
 - (IBAction)tankCenter:(id)sender {
-  NSRect rect;
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
-  rect = boloView.visibleRect;
-
   if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
+    gotlock = 1;
 
-  rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
-  rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
+  [boloView tankCenter];
 
   if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
-
-  [boloView scrollRectToVisible:rect];
+    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
-  case 0:
-    break;
+    case 0:
+      return;
 
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
 
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
   }
 END
 }
 
 - (IBAction)pillCenter:(id)sender {
-  GSPoint square;
-  NSRect rect;
-  int i, j;
-  int gotlock = 0;
+  BOOL gotlock = 0;
 
 TRY
-  rect = boloView.visibleRect;
-  square.x = (rect.origin.x + rect.size.width*0.5)/16.0;
-  square.y = FWIDTH - ((rect.origin.y + rect.size.height*0.5)/16.0);
-
   if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
+    gotlock = 1;
 
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0 &&
-        square.x == client.pills[i].x && square.y == client.pills[i].y
-        ) {
-      for (j = (i + 1)%client.npills; j != i; j = (j + 1)%client.npills) {
-        if (
-            client.pills[j].owner == client.player &&
-            client.pills[j].armour != ONBOARD && client.pills[j].armour != 0
-            ) {
-          square.x = client.pills[j].x;
-          square.y = client.pills[j].y;
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-          rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-          rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-          SUCCESS
-        }
-      }
-      
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
-  
-  for (i = 0; i < client.npills; i++) {
-    if (
-        client.pills[i].owner == client.player &&
-        client.pills[i].armour != ONBOARD && client.pills[i].armour != 0
-        ) {
-      square.x = client.pills[i].x;
-      square.y = client.pills[i].y;
-      if (unlockclient()) LOGFAIL(errno)
-      gotlock = 0;
-      rect.origin.x = ((square.x + 0.5)*16.0) - rect.size.width*0.5;
-      rect.origin.y = ((FWIDTH - (square.y + 0.5))*16.0) - rect.size.height*0.5;
-      SUCCESS
-    }
-  }
+  [boloView nextPillCenter];
 
   if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
+    gotlock = 0;
 
 CLEANUP
   switch (ERROR) {
-  case 0:
-    [boloView scrollRectToVisible:rect];
-    break;
+    case 0:
+      return;
 
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
+    default:
+      if (gotlock) {
+        unlockclient();
+      }
 
-    PCRIT(ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    exit(EXIT_FAILURE);
-    break;
+      PCRIT(ERROR)
+      printlineinfo();
+      CLEARERRLOG
+      exit(EXIT_FAILURE);
   }
 END
 }
@@ -1801,22 +1781,30 @@ TRY
     }
     else if ([object isEqualToString:GSUp]) {
       if (event) {
-        [self scrollUp:self];
+        [boloView scroll:CGPointMake(0, 16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSDown]) {
       if (event) {
-        [self scrollDown:self];
+        [boloView scroll:CGPointMake(0, -16)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSLeft]) {
       if (event) {
-        [self scrollLeft:self];
+        [boloView scroll:CGPointMake(-16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSRight]) {
       if (event) {
-        [self scrollRight:self];
+        [boloView scroll:CGPointMake(16, 0)];
+      } else {
+        [boloView scroll:CGPointZero];
       }
     }
     else if ([object isEqualToString:GSTankView]) {
@@ -1897,22 +1885,25 @@ END
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem {
   SEL action;
   action = menuItem.action;
-	if (action == @selector(newGame:)) {
+  if (action == @selector(newGame:)) {
     return !client_running;
-	}
-	else if (action == @selector(closeGame:)) {
+  }
+  else if (action == @selector(closeGame:)) {
     return client_running;
-	}
-	else if (action == @selector(statusPanel:)) {
-		return client_running;
-	}
+  }
+  else if (action == @selector(boloWindow:)) {
+    return client_running;
+  }
+  else if (action == @selector(statusPanel:)) {
+    return client_running;
+  }
   else if (action == @selector(allegiancePanel:)) {
     return client_running;
   }
-	else if (action == @selector(messagesPanel:)) {
-		return client_running;
-	}
-	else if (action == @selector(hostGameType:)) {
+  else if (action == @selector(messagesPanel:)) {
+    return client_running;
+  }
+  else if (action == @selector(hostGameType:)) {
     switch (menuItem.tag) {
     case kDominationGameType:  // Domination
       return YES;
@@ -1932,12 +1923,12 @@ END
     default:
       return NO;
     }
-	}
-	else if (action == @selector(builderToolMenu:)) {
-		menuItem.state = menuItem.tag == builderToolInt ? NSOnState : NSOffState;
-		return YES;
-	}
-	else if (action == @selector(gamePauseResumeMenu:)) {
+  }
+  else if (action == @selector(builderToolMenu:)) {
+    menuItem.state = menuItem.tag == builderToolInt ? NSOnState : NSOffState;
+    return YES;
+  }
+  else if (action == @selector(gamePauseResumeMenu:)) {
     lockserver();
 
     if (server.setup) {
@@ -1950,7 +1941,7 @@ END
       return NO;
     }
   }
-	else if (action == @selector(toggleJoin:)) {
+  else if (action == @selector(toggleJoin:)) {
     lockserver();
 
     if (server.setup) {
@@ -1963,11 +1954,11 @@ END
       return NO;
     }
   }
-	else if (action == @selector(toggleMute:)) {
+  else if (action == @selector(toggleMute:)) {
     menuItem.state = muteBool;
     return YES;
   }
-	else if (action == @selector(kickPlayer:)) {
+  else if (action == @selector(kickPlayer:)) {
     lockserver();
 
     if (server.setup) {
@@ -1996,7 +1987,7 @@ END
     }
     return YES;
   }
-	else if (action == @selector(banPlayer:)) {
+  else if (action == @selector(banPlayer:)) {
     lockserver();
 
     if (server.setup) {
@@ -2024,23 +2015,23 @@ END
       return NO;
     }
   }
-    else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
-    else if (action == @selector(hostToggleBonjourBroadcast:)) {
-      lockserver();
-      
-      if (server.setup) {
-        menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
-        unlockserver();
-        return YES;
-      } else {
-        menuItem.state = NSOffState;
-        unlockserver();
-        return NO;
-      }
+  else if (action == @selector(choseRobotMenuItem:)) return [self _validateRobotMenuItem: menuItem];
+  else if (action == @selector(hostToggleBonjourBroadcast:)) {
+    lockserver();
+
+    if (server.setup) {
+      menuItem.state = _broadcastBonjour ? NSOnState: NSOffState;
+      unlockserver();
+      return YES;
+    } else {
+      menuItem.state = NSOffState;
+      unlockserver();
+      return NO;
     }
-	else {
-		return YES;
-	}
+  }
+  else {
+      return YES;
+  }
 }
 
 // NSApplication delegate methods
@@ -2217,6 +2208,11 @@ END
   else if (aNotification.object == messagesPanel) {
     [self setShowMessages:NO];
   }
+  else if (aNotification.object == boloWindow) {
+    if (client_running) {
+      [self closeGame:self];
+    }
+  }
 }
 
 - (void)setPlayerStatus:(NSString *)aString {
@@ -2322,17 +2318,38 @@ TRY
 
     playerRecord[@"Index"] = indexString;
 
-    if (client.players[client.player].seq - client.players[player].lastupdate >= 3*TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor], NSBackgroundColorAttributeName: [NSColor redColor]}];
+    NSColor *backgroundColor = nil;
+    NSString *alliance = nil;
+
+    if (client.player == player) {
+      NSFont *boldFont = playerInfoTableView.font ?
+        [[NSFontManager sharedFontManager] convertFont:playerInfoTableView.font toHaveTrait:NSFontBoldTrait] :
+        [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSFontAttributeName: boldFont}];
+    } else if (client.players[client.player].seq - client.players[player].lastupdate >= 3*TICKSPERSEC) {
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor]}];
+      backgroundColor = [NSColor redColor];
     }
     else if (client.players[client.player].seq - client.players[player].lastupdate >= TICKSPERSEC) {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor yellowColor]}];
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{}];
+      backgroundColor = [NSColor yellowColor];
+    } else {
+      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{}];
     }
-    else {
-      name = [[NSAttributedString alloc] initWithString:@(client.players[player].name) attributes:@{NSBackgroundColorAttributeName: [NSColor greenColor]}];
+
+    if (client.player == player) {
+      alliance = @"You";
+    } else if (testalliance(client.player, player)) {
+      alliance = @"Ally";
+    } else if (requestedalliance(client.player, player)) {
+      alliance = @"Requested";
+    } else if (requestedalliance(player, client.player)) {
+      alliance = @"Received";
     }
 
     playerRecord[@"Player"] = name;
+    playerRecord[@"BackgroundColor"] = backgroundColor;
+    playerRecord[@"Alliance"] = alliance;
 
     if (client.player == player) {
       imageView.image = [NSImage imageNamed:@"PlayerStatFriendly"];
@@ -2361,6 +2378,7 @@ TRY
   }
 
   [playerInfoTableView reloadData];
+  [self updateTableButtons:playerInfoTableView];
 
   if (unlockclient()) LOGFAIL(errno)
   gotlock = 0;
@@ -2703,19 +2721,16 @@ TRY
           rect.origin.x = ((client.players[client.player].tank.x + 0.5)*16.0) - rect.size.width*0.5;
           rect.origin.y = ((FWIDTH - (client.players[client.player].tank.y + 0.5))*16.0) - rect.size.height*0.5;
 
-          if (unlockclient()) LOGFAIL(errno)
-          gotlock = 0;
-
-          [boloView scrollRectToVisible:rect];  /* potential to call drawRect: which locks client */
+          [boloView scrollToVisible:client.players[client.player].tank];
         }
         if (unlockclient()) LOGFAIL(errno)
-        gotlock = 1;
+        gotlock = 0;
 
         client.spawned = 0;
       }
       if(centerTank)
         [self tankCenter:nil];
-      [GSBoloView refresh];
+      [GSBoloViews refresh];
 
       if (counter%2) {
         switch (client.players[client.player].builderstatus) {
@@ -2826,15 +2841,9 @@ END
 	
 }
 
-
-// NSTableView delegate methods
-
-- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
-  NSTableView *table;
+- (void)updateTableButtons:(NSTableView *)table {
   NSInteger i;
   NSDictionary *row;
-
-  table = aNotification.object;
 
   if (table == playerInfoTableView) {
     if (table.numberOfSelectedRows == 0) {
@@ -2842,8 +2851,27 @@ END
       [leaveAllianceButton setEnabled:FALSE];
     }
     else {
-      [requestAllianceButton setEnabled:TRUE];
-      [leaveAllianceButton setEnabled:TRUE];
+      BOOL currentPlayerSelected = NO;
+      BOOL allySelected = NO;
+      BOOL allyRequestedSelected = NO;
+      BOOL enemySelected = NO;
+
+      NSIndexSet *set = playerInfoTableView.selectedRowIndexes;
+      for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
+        int player = [playerInfoArray[i][@"Index"] intValue];
+        if (player == client.player) {
+          currentPlayerSelected = YES;
+        } else if (testalliance(client.player, player)) {
+          allySelected = YES;
+        } else if (requestedalliance(client.player, player)) {
+          allyRequestedSelected = YES;
+        } else {
+          enemySelected = YES;
+        }
+      }
+
+      [requestAllianceButton setEnabled:enemySelected];
+      [leaveAllianceButton setEnabled:allySelected || allyRequestedSelected];
     }
   }
   else if (table == joinTrackerTableView) {
@@ -2853,6 +2881,29 @@ END
       row = joinTrackerArray[i];
       [self setJoinAddress:row[GSHostnameColumn]];
       [self setJoinPort:[row[GSPortColumn] intValue]];
+    }
+  }
+}
+
+// NSTableView delegate methods
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
+  NSTableView *table;
+
+  table = aNotification.object;
+  [self updateTableButtons:table];
+}
+
+- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)rowIndex {
+  if (aTableView == playerInfoTableView) {
+    NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
+    if ([@"Player" isEqualToString:tableColumn.identifier]) {
+      if (playerInfoArray[rowIndex][@"BackgroundColor"]) {
+        [cell setBackgroundColor:playerInfoArray[rowIndex][@"BackgroundColor"]];
+        [cell setDrawsBackground:YES];
+      } else {
+        [cell setDrawsBackground:NO];
+      }
     }
   }
 }
@@ -2967,6 +3018,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -2993,6 +3046,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3021,6 +3076,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3047,6 +3104,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3075,6 +3134,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3101,6 +3162,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3129,6 +3192,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3155,6 +3220,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3183,6 +3250,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3209,6 +3278,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3237,6 +3308,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3263,6 +3336,8 @@ TRY
   if (server.setup) {
     if (stopserver()) LOGFAIL(errno)
   }
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3291,6 +3366,8 @@ TRY
     if (stopserver()) LOGFAIL(errno)
   }
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3309,6 +3386,7 @@ END
 - (void)registerSuccess {
 TRY
   if (startclient("localhost", getservertcpport(), playerNameString.UTF8String, hostPasswordBool ? hostPasswordString.UTF8String : NULL)) LOGFAIL(errno)
+  [boloView reset];
 
 CLEANUP
   switch (ERROR) {
@@ -3333,6 +3411,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3355,6 +3435,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3379,6 +3461,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3401,6 +3485,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3425,6 +3511,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3447,6 +3535,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3471,6 +3561,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Failed to Verify TCP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3494,6 +3586,8 @@ TRY
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Failed to Verify UDP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
 
+  [broadcaster startListening];
+
 CLEANUP
   switch (ERROR) {
   case 0:
@@ -3516,6 +3610,8 @@ TRY
   [joinProgressIndicator stopAnimation:self];
   [NSApp endSheet:joinProgressWindow];
   NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+
+  [broadcaster startListening];
 
 CLEANUP
   switch (ERROR) {
@@ -3710,9 +3806,9 @@ END
 {
   _broadcastBonjour = broadcastBonjour;
   if (broadcaster && !_broadcastBonjour) {
-    [self stopPublishing];
+    [broadcaster stopPublishing];
   } else if (server.running && _broadcastBonjour) {
-    [self startPublishing];
+    [broadcaster startPublishing];
   }
 }
 
@@ -3723,67 +3819,13 @@ END
 
 - (IBAction)joinToggleBonjourListen:(nullable NSButton*)sender
 {
-  if (listener) {
-    [self stopListening];
+  if (broadcaster.listening) {
+    [broadcaster stopListening];
     sender.state = NSOffState;
   } else {
-    [self startListening];
+    [broadcaster startListening];
     sender.state = NSOnState;
   }
-}
-
-@end
-
-@implementation GSXBoloController (NetService)
-
-- (void)startPublishing {
-  NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
-  broadcaster = [[NSNetService alloc] initWithDomain:@"local." type:XBoloBonjourType name:bonjourName port:hostPortNumber];
-  broadcaster.delegate = self;
-  [self updatePublishedInfo];
-  [broadcaster publish];
-}
-
-- (void)updatePublishedInfo {
-  if (broadcaster) {
-    lockserver();
-    NSMutableDictionary<NSString *, NSData *> *ourTxtDict = [[NSMutableDictionary alloc] initWithCapacity:6];
-    ourTxtDict[XBoloBonjourPlayerName] = [playerNameString dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloBonjourMapName] = [hostMapString.lastPathComponent.stringByDeletingPathExtension dataUsingEncoding:NSUTF8StringEncoding];
-    ourTxtDict[XBoloBonjourReqiresPassword] = hostPasswordBool ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
-    ourTxtDict[XBoloBonjourIsPaused] = server.pause == 0 ? [@"0" dataUsingEncoding:NSASCIIStringEncoding] : [@"1" dataUsingEncoding:NSASCIIStringEncoding];
-    //allowjoin
-    ourTxtDict[XBoloBonjourCanJoin] = server.allowjoin ? [@"1" dataUsingEncoding:NSASCIIStringEncoding] : [@"0" dataUsingEncoding:NSASCIIStringEncoding];
-    int playerCount = 0;
-    for (NSInteger i = 0; i < MAX_PLAYERS; i++) {
-      if (server.players[i].used) {
-        playerCount++;
-      }
-    }
-    unlockserver();
-    ourTxtDict[XBoloBonjourPlayerCount] = [[NSString stringWithFormat:@"%i", playerCount] dataUsingEncoding:NSASCIIStringEncoding];
-    
-    NSData *txtData = [NSNetService dataFromTXTRecordDictionary:ourTxtDict];
-    
-    [broadcaster setTXTRecordData:txtData];
-  }
-}
-
-- (void)stopPublishing {
-  [broadcaster stop];
-  broadcaster = nil;
-}
-
-- (void)startListening {
-  listener = [[NSNetServiceBrowser alloc] init];
-  listener.delegate = self;
-  [listener searchForServicesOfType:XBoloBonjourType inDomain:@""];
-}
-
-- (void)stopListening {
-  [listener stop];
-  listener = nil;
-  [self clearBonjourEntries];
 }
 
 - (void)clearBonjourEntries {
@@ -3794,173 +3836,6 @@ END
     }
   }
   [joinTrackerArray removeObjectsAtIndexes:mutSet];
-  [self setJoinTrackerArray:joinTrackerArray];
-}
-
-#define GSNetServiceKey @"NetService"
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
-{
-  [service resolveWithTimeout:5];
-
-  dispatch_async(dispatch_get_global_queue(0, 0), ^{
-    //usleep(500);
-    sleep(1);
-
-    NSString *playerName = @"unknown";
-    NSString *mapName = @"unknown";
-    NSString *passReq = @"?";
-    NSString *paused = @"?";
-    NSString *canJoin = @"?";
-    NSString *playerCount = @"?";
-    NSData *txtData = [service TXTRecordData];
-    if (txtData) {
-      NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: txtData];
-      id val;
-      val = txtDict[XBoloBonjourPlayerName];
-      if (val) {
-        playerName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-      val = txtDict[XBoloBonjourMapName];
-      if (val) {
-        mapName = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-      val = txtDict[XBoloBonjourReqiresPassword];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          passReq = @"No";
-        } else {
-          passReq = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourIsPaused];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          paused = @"No";
-        } else {
-          paused = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourCanJoin];
-      if (val) {
-        NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-        if ([passBool isEqualToString:@"0"]) {
-          canJoin = @"No";
-        } else {
-          canJoin = @"Yes";
-        }
-      }
-      val = txtDict[XBoloBonjourPlayerCount];
-      if (val) {
-        playerCount = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-      }
-    }
-    
-    if (!service.hostName) {
-      NSLog(@"Did not get host name from \"%@\"!", service);
-      return;
-    }
-    
-    NSDictionary *toSet =
-    @{GSHostPlayerColumn: playerName,
-      GSMapNameColumn: mapName,
-      GSPlayersColumn: playerCount,
-      GSPasswordColumn: passReq,
-      GSAllowJoinColumn: canJoin,
-      GSPausedColumn: paused,
-      GSHostnameColumn: service.hostName,
-      GSPortColumn: [NSString stringWithFormat:@"%ld", (long)service.port],
-      GSSourceColumn: @(GSServerSourceBonjour),
-      GSNetServiceKey: service};
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-      NSMutableArray *newTrackArr = self->joinTrackerArray;
-      if (!newTrackArr) {
-        newTrackArr = [[NSMutableArray alloc] initWithCapacity: moreComing ? 2 : 1];
-      }
-      [newTrackArr addObject:toSet];
-      [self setJoinTrackerArray:newTrackArr];
-      service.delegate = self;
-    });
-  });
-}
-
-- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data
-{
-  if (sender == broadcaster) {
-    //We should have been the one to change this...
-    return;
-  }
-  NSDictionary *txtDict = [NSNetService dictionaryFromTXTRecordData: data];
-  NSDictionary *toUpdate;
-  for (NSDictionary *theDict in joinTrackerArray) {
-    if ([theDict[GSNetServiceKey] isEqual:sender]) {
-      toUpdate = theDict;
-      break;
-    }
-  }
-  NSAssert(toUpdate != nil, @"Uh, oops");
-  NSMutableDictionary *mutUpdate = [toUpdate copy];
-  NSInteger idx = [joinTrackerArray indexOfObject:toUpdate];
-  
-  NSData *val;
-  val = txtDict[XBoloBonjourPlayerName];
-  if (val) {
-    mutUpdate[GSHostPlayerColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-  val = txtDict[XBoloBonjourMapName];
-  if (val) {
-    mutUpdate[GSMapNameColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-  val = txtDict[XBoloBonjourReqiresPassword];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSPasswordColumn] = @"No";
-    } else {
-      mutUpdate[GSPasswordColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourIsPaused];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSPausedColumn] = @"No";
-    } else {
-      mutUpdate[GSPausedColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourCanJoin];
-  if (val) {
-    NSString *passBool = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-    if ([passBool isEqualToString:@"0"]) {
-      mutUpdate[GSAllowJoinColumn] = @"No";
-    } else {
-      mutUpdate[GSAllowJoinColumn] = @"Yes";
-    }
-  }
-  val = txtDict[XBoloBonjourPlayerCount];
-  if (val) {
-    mutUpdate[GSPlayersColumn] = [[NSString alloc] initWithData:val encoding:NSUTF8StringEncoding];
-  }
-
-  [joinTrackerArray replaceObjectAtIndex:idx withObject:[mutUpdate copy]];
-  [self setJoinTrackerArray:joinTrackerArray];
-}
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
-{
-  NSDictionary *toRemove;
-  for (NSDictionary *theDict in joinTrackerArray) {
-    if ([theDict[GSNetServiceKey] isEqual:service]) {
-      toRemove = theDict;
-      break;
-    }
-  }
-  
-  [joinTrackerArray removeObject:toRemove];
   [self setJoinTrackerArray:joinTrackerArray];
 }
 
@@ -3994,7 +3869,7 @@ void settankstatus() {
 }
 
 void playsound(int snd) {
-  if (!muteBool) {
+  if (!muteGlobal) {
     int i;
     NSArray *array;
 

@@ -157,6 +157,14 @@ NSMutableDictionary *nameDictionary;
   return self;
 }
 
+- (instancetype)initTextCell:(NSString *)string {
+  return [self initWithKeyCode:(unsigned short)-1];
+}
+
+- (instancetype)initImageCell:(NSImage *)image {
+  return [self initWithKeyCode:(unsigned short)-1];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)decoder {
   self = [super initWithCoder:decoder];
   if (decoder.allowsKeyedCoding) {

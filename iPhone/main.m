@@ -8,9 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+#import "XBoloViewController.h"
+#import "XBoloAppDelegate.h"
+
+#include "bolo.h"
+#include "server.h"
+#include "client.h"
+#include "errchk.h"
+
 int main(int argc, char *argv[]) {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  int retVal = UIApplicationMain(argc, argv, nil, nil);
-  [pool release];
-  return retVal;
+  @autoreleasepool {
+TRY
+    if (initbolo(setplayerstatus, setpillstatus, setbasestatus, settankstatus, playsound, printmessage, joinprogress, clientloopupdate)) LOGFAIL(errno)
+
+    return UIApplicationMain(argc, argv, nil, NSStringFromClass([XBoloAppDelegate class]));
+CLEANUP
+    PCRIT(ERROR);
+    printlineinfo();
+    CLEARERRLOG
+    exit(EXIT_FAILURE);
+END
+  }
 }

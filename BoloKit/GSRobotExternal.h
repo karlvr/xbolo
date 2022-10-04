@@ -9,8 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#if !INTERNAL_GSROBOT_INCLUDE
-enum {
+typedef NS_ENUM(int, GSBuilderOperation) {
     BUILDERNILL = -1,
     BUILDERTREE,
     BUILDERROAD,
@@ -19,7 +18,7 @@ enum {
     BUILDERMINE,
 } ;
 
-NS_ENUM(int) {
+typedef NS_ENUM(uint8_t, GSTileType) {
     kWallTile         = 0,
     kRiverTile        = 1,
     kSwampTile        = 2,
@@ -77,7 +76,6 @@ NS_ENUM(int) {
     kHostilePill15Tile,
     kUnknownTile,
 } ;
-#endif
 
 #if defined(USE_SIMD_H) && USE_SIMD_H
 NS_ASSUME_NONNULL_END
@@ -115,7 +113,7 @@ struct Builder
 
 @interface GSRobotGameState: NSObject
 @property int worldwidth, worldheight;
-@property int *visibletiles; //!< worldwidth * worldheight elements, row major
+@property GSTileType *visibletiles; //!< worldwidth * worldheight elements, row major
 
 @property Vec2f tankposition;
 @property Vec2f gunsightposition;
@@ -163,7 +161,7 @@ struct Builder
 @property BOOL mine;
 @property BOOL fire;
 
-@property int buildercommand;
+@property GSBuilderOperation buildercommand;
 @property int builderx, buildery;
 
 //! NSStrings containing player names
@@ -178,7 +176,7 @@ NS_SWIFT_NAME(GSRobotProtocol)
 
 @property (class, readonly) int minimumRobotInterfaceVersionRequired;
 - (instancetype)init; // designated initializer
-- (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState freeFunction: (void (*)(void *))freeF freeContext: (void *)freeCtx;
+- (GSRobotCommandState *)stepXBoloRobotWithGameState: (GSRobotGameState *)gameState;
 
 @end
 

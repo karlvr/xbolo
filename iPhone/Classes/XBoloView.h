@@ -6,11 +6,15 @@
 //  Copyright 2009 Robert Chrzanowski. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <SpriteKit/SpriteKit.h>
 
+#import "GSBoloViewProtocol.h"
+#import "XBolo-Swift.h"
 
-@interface XBoloView : UIView {
+@interface XBoloView : SKView <GSBoloViewProtocol> {
 
 }
+
+- (CGPoint)convertToScenePointFromViewPoint:(CGPoint)pt;
 
 @end

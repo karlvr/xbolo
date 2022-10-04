@@ -11,10 +11,11 @@
 #include "client.h"
 
 @class GSKeyCodeField, GSBoloView, GSRobot, GSStatusBar, GSBuilderStatusView;
+@protocol GSBoloViewProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GSXBoloController : NSObject <NSApplicationDelegate, NSToolbarDelegate, NSTableViewDataSource, NSTableViewDelegate> {
+@interface GSXBoloController : NSObject <NSApplicationDelegate, NSToolbarDelegate, NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate> {
   IBOutlet NSWindow *newGameWindow;
   IBOutlet NSWindow *boloWindow;
   IBOutlet NSWindow *joinProgressWindow;
@@ -79,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
   IBOutlet GSKeyCodeField *prefPillViewField;
 
   // Main View Outlets
-  IBOutlet GSBoloView *boloView;
+  IBOutlet NSView<GSBoloViewProtocol> *boloView;
   IBOutlet NSView *builderToolView;
 
   /* Status Window Outlets */

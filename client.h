@@ -57,7 +57,7 @@ struct Client {
 
   GSTile terrain[WIDTH][WIDTH];
   GSTile seentiles[WIDTH][WIDTH];
-  int images[WIDTH][WIDTH];
+  GSImage images[WIDTH][WIDTH];
   int fog[WIDTH][WIDTH];
 
   struct {
@@ -357,6 +357,8 @@ void buildercommand(int type, GSPoint p);
 /* alliance requests */
 int requestalliance(uint16_t withplayers);
 int leavealliance(uint16_t withplayers);
+int testalliance(int p1, int p2);
+int requestedalliance(int p1, int p2);
 
 /** chat messages */
 int sendmessage(const char *text, int to);

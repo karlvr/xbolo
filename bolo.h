@@ -31,10 +31,6 @@
 #define MAX_STARTS          (16)
 #define MAX_PILL_SPEED      (50)
 #define MINE_WIDTH          (10)
-#define X_MIN_MINE          (10)
-#define Y_MIN_MINE          (10)
-#define X_MAX_MINE          (245)
-#define Y_MAX_MINE          (245)
 #define NET_GAME_IDENT      ("XBOLOGAM")
 #define MAP_FILE_IDENT      ("BMAPBOLO")
 #define MAP_FILE_IDENT_LEN  (8)
@@ -483,7 +479,7 @@ void pauseresumegame(void);
 void togglejoingame(void);
 
 int listtracker(
-    const char trackerhostname[], struct ListNode *node,
+    const char trackerhostname[], in_port_t port, struct ListNode *node,
     void(*trackerprogress)(int statuscode)
   );
 
