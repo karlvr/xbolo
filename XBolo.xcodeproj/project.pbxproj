@@ -74,6 +74,8 @@
 		553C838F2712DBAB002782C0 /* Sounds.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 553C838D2712DBAB002782C0 /* Sounds.xcassets */; };
 		553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
+		55513F4928ECCC80009C15F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4828ECCC80009C15F6 /* Foundation.framework */; };
+		55513F4B28ECCC85009C15F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4A28ECCC85009C15F6 /* UIKit.framework */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
 		5562F91820D064140007248E /* XBolo.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 5562F91A20D064140007248E /* XBolo.scriptTerminology */; };
 		55712B8B1CF8ED7B00326A27 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55712B8A1CF8ED7B00326A27 /* main.m */; };
@@ -317,6 +319,8 @@
 		553C838D2712DBAB002782C0 /* Sounds.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sounds.xcassets; sourceTree = "<group>"; };
 		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
 		553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjourKeys.m; sourceTree = "<group>"; };
+		55513F4828ECCC80009C15F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		55513F4A28ECCC85009C15F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		5562F91920D064140007248E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.scriptTerminology; name = en; path = en.lproj/XBolo.scriptTerminology; sourceTree = "<group>"; };
 		55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XBolo Map Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -393,6 +397,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55513F4B28ECCC85009C15F6 /* UIKit.framework in Frameworks */,
+				55513F4928ECCC80009C15F6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +550,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55513F4A28ECCC85009C15F6 /* UIKit.framework */,
+				55513F4828ECCC80009C15F6 /* Foundation.framework */,
 				553C83762712D472002782C0 /* Port Map.xcodeproj */,
 				55712C351CF9065800326A27 /* AppKit.framework */,
 				55540D271CBDD75500EAFC83 /* CoreServices.framework */,
@@ -1407,7 +1415,6 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1482,7 +1489,6 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1540,24 +1546,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iPhone/XBolo_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NOBSERVER,
 					"$(inherited)",
 				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
@@ -1581,23 +1579,15 @@
 					NOBSERVER,
 					"$(inherited)",
 				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iPhone/iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "iPhone/iPhone-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -1694,9 +1684,11 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
 				GENERATE_PKGINFO_FILE = NO;
 				INFOPLIST_FILE = "XBolo-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.4.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
@@ -1729,9 +1721,11 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "XBolo-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.4.2;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
@@ -1749,7 +1743,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBoloMapEditor;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -1791,7 +1784,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = XBoloMapEditor;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;

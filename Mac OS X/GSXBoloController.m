@@ -269,6 +269,9 @@ static void getlisttrackerstatus(int status);
   prefToolbar.delegate = self;
   prefToolbar.selectedItemIdentifier = GSToolbarPlayerInfoItemIdentifier;
   preferencesWindow.toolbar = prefToolbar;
+  if (@available(macOS 11.0, *)) {
+    preferencesWindow.toolbarStyle = NSWindowToolbarStylePreference;
+  }
 
   // init bolo toolbar items
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
@@ -305,6 +308,9 @@ static void getlisttrackerstatus(int status);
   boloToolbar.delegate = self;
   [boloToolbar setAllowsUserCustomization:YES];
   boloWindow.toolbar = boloToolbar;
+  if (@available(macOS 11.0, *)) {
+    boloWindow.toolbarStyle = NSWindowToolbarStyleExpanded;
+  }
 
   // init status bars
   playerShellsStatusBar.type = GSStatusBarVertical;
@@ -330,7 +336,7 @@ static void getlisttrackerstatus(int status);
 
   // init the host pane
   [self setHostMap:[defaults stringForKey:GSHostMap]];
-  [self setHostUPnP:[defaults integerForKey:GSHostUPnP]];
+  [self setHostUPnP:[defaults boolForKey:GSHostUPnP]];
   if([defaults boolForKey:@"GSHostPortNumberRandom"])
     [self setHostPort:(random() % 40000) + 2000];
   else
@@ -607,7 +613,7 @@ static void getlisttrackerstatus(int status);
 // accessor methods
 
 @synthesize hostMap=hostMapString;
-- (void)setHostMapString:(NSString *)aString {
+- (void)setHostMap:(NSString *)aString {
   hostMapString = [aString copy];
   hostMapField.stringValue = [[NSFileManager defaultManager] displayNameAtPath:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMap];
@@ -872,7 +878,7 @@ END
   }
   
   [panel beginSheetModalForWindow:newGameWindow completionHandler:^(NSInteger returnCode) {
-    if (returnCode == NSOKButton) {
+    if (returnCode == NSModalResponseOK) {
       [self setHostMap:panel.URLs[0].path];
     }
   }];

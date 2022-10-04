@@ -25,7 +25,7 @@ NSString *const GSXBoloErrorDomain = @"GSXBoloErrorDomain";
 static NSImage *img = nil;
 static NSImage *sprites = nil;
 
-@interface GSXBoloMap (Private)
+@interface GSXBoloMap ()
 - (void)remapImagesInRect:(GSRect)rect;
 - (void)drawSprite:(GSImage)sprite at:(GSPoint)world;
 @end
@@ -33,10 +33,11 @@ static NSImage *sprites = nil;
 @implementation GSXBoloMap
 
 + (void)initialize {
-  if (self == [GSXBoloMap class]) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     assert((img = [NSImage imageNamed:@"Tiles"]) != nil);
     assert((sprites = [NSImage imageNamed:@"Sprites"]) != nil);
-  }
+  });
 }
 
 - (instancetype)init {

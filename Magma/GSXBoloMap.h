@@ -74,4 +74,4 @@
 
 @end
 
-extern NSString *const GSXBoloErrorDomain;
+extern NSErrorDomain const GSXBoloErrorDomain;

@@ -14,7 +14,7 @@
 
 @class GSXBoloMap, GSTileRect;
 
-@interface GSXBoloMapView : NSView {
+@interface GSXBoloMapView : NSView <NSUserInterfaceValidations> {
   IBOutlet GSXBoloMap *boloMap;
 
   // variables shared by most tools

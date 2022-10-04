@@ -953,7 +953,7 @@ static NSMutableArray *boloMapViews = nil;
 - (IBAction)center:(id)sender {
   NSRect rect = GSRect2NSRect([boloMap mapRect]);
   NSSize size = self.visibleRect.size;
-  [self scrollRectToVisible:NSInsetRect(rect, (NSWidth(rect) - size.width) * 0.5f, (NSHeight(rect) - size.height) * 0.5f)];
+  [self scrollRectToVisible:NSInsetRect(rect, (NSWidth(rect) - size.width) * 0.5, (NSHeight(rect) - size.height) * 0.5)];
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem {

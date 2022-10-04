@@ -1286,6 +1286,10 @@ ERRHANDLER(0, -1)
 END
 }
 
+static float intToFloat(uint32_t val) {
+  return *((float *)&val);
+}
+
 int dgramclient() {
   struct CLUpdate clupdate;
   struct CLUpdateShell *clupdateshells;
@@ -1358,15 +1362,15 @@ TRY
         client.players[clupdate.hdr.player].dead = clupdate.hdr.tankstatus == kTankDead;
         client.players[clupdate.hdr.player].boat = clupdate.hdr.tankstatus == kTankOnBoat;
         client.players[clupdate.hdr.player].dir = clupdate.hdr.tankdir*((k2Pif)/FWIDTH);
-        client.players[clupdate.hdr.player].tank.x = *((float *)&clupdate.hdr.tankx);
-        client.players[clupdate.hdr.player].tank.y = *((float *)&clupdate.hdr.tanky);
-        client.players[clupdate.hdr.player].speed = *((float *)&clupdate.hdr.tankspeed);
-        client.players[clupdate.hdr.player].turnspeed = *((float *)&clupdate.hdr.tankturnspeed);
-        client.players[clupdate.hdr.player].kickdir = *((float *)&clupdate.hdr.tankkickdir);
-        client.players[clupdate.hdr.player].kickspeed = *((float *)&clupdate.hdr.tankkickspeed);
+        client.players[clupdate.hdr.player].tank.x = intToFloat(clupdate.hdr.tankx);
+        client.players[clupdate.hdr.player].tank.y = intToFloat(clupdate.hdr.tanky);
+        client.players[clupdate.hdr.player].speed = intToFloat(clupdate.hdr.tankspeed);
+        client.players[clupdate.hdr.player].turnspeed = intToFloat(clupdate.hdr.tankturnspeed);
+        client.players[clupdate.hdr.player].kickdir = intToFloat(clupdate.hdr.tankkickdir);
+        client.players[clupdate.hdr.player].kickspeed = intToFloat(clupdate.hdr.tankkickspeed);
         client.players[clupdate.hdr.player].builderstatus = clupdate.hdr.builderstatus;
-        client.players[clupdate.hdr.player].builder.x = *((float *)&clupdate.hdr.builderx);
-        client.players[clupdate.hdr.player].builder.y = *((float *)&clupdate.hdr.buildery);
+        client.players[clupdate.hdr.player].builder.x = intToFloat(clupdate.hdr.builderx);
+        client.players[clupdate.hdr.player].builder.y = intToFloat(clupdate.hdr.buildery);
         client.players[clupdate.hdr.player].buildertarget.x = clupdate.hdr.buildertargetx;
         client.players[clupdate.hdr.player].buildertarget.y = clupdate.hdr.buildertargety;
         client.players[clupdate.hdr.player].builderwait = clupdate.hdr.builderwait;

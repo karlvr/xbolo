@@ -75,10 +75,10 @@
     {
         robots = [NSMutableArray array];
         
-        NSString *myPath = [NSBundle mainBundle].bundlePath;
-        NSString *enclosingPath = myPath.stringByDeletingLastPathComponent;
-        NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
-        NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:botsPath] includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
+        NSURL *myPath = [NSBundle mainBundle].bundleURL;
+        NSURL *enclosingPath = myPath.URLByDeletingLastPathComponent;
+        NSURL *botsPath = [enclosingPath URLByAppendingPathComponent: @"Robots"];
+        NSEnumerator<NSURL*> *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:botsPath includingPropertiesForKeys:nil options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles) error:NULL] objectEnumerator];
 
         LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);
         
