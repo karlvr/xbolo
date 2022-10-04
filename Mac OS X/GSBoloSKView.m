@@ -107,11 +107,11 @@ static NSCursor *cursor = nil;
     UInt32 carbonModifiers;
     carbonModifiers = GetCurrentKeyModifiers();
     modifiers =
-    (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
-    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSShiftKeyMask : 0) |
-    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSControlKeyMask : 0) |
-    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSAlternateKeyMask : 0) |
-    (carbonModifiers & cmdKey ? NSCommandKeyMask : 0);
+    (carbonModifiers & alphaLock ? NSEventModifierFlagCapsLock : 0) |
+    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSEventModifierFlagShift : 0) |
+    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSEventModifierFlagControl : 0) |
+    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSEventModifierFlagOption : 0) |
+    (carbonModifiers & cmdKey ? NSEventModifierFlagCommand : 0);
     //    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
     //    (carbonModifiers &  ? NSHelpKeyMask : 0) |
     //    (carbonModifiers &  ? NSFunctionKeyMask : 0);
@@ -138,7 +138,7 @@ static NSCursor *cursor = nil;
 - (void)flagsChanged:(NSEvent *)theEvent {
   NSEventModifierFlags oldModifiers;
   oldModifiers = modifiers;
-  modifiers = theEvent.modifierFlags & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = theEvent.modifierFlags & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad | NSEventModifierFlagHelp | NSEventModifierFlagFunction);
   if (modifiers & (oldModifiers ^ modifiers)) {
     [boloController keyEvent:YES forKey:theEvent.keyCode];
   }
@@ -148,7 +148,7 @@ static NSCursor *cursor = nil;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-  if (theEvent.type == NSLeftMouseUp) {
+  if (theEvent.type == NSEventTypeLeftMouseUp) {
     NSPoint point;
 
     point = [self convertPoint:theEvent.locationInWindow fromView:nil];

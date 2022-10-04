@@ -557,7 +557,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       aPoint = [self convertPointFromView:aPoint];
 
       if (!_selector) {
-        _selector = [[SKSpriteNode alloc] initWithTexture:[self spriteTextureNamed:spriteName(SELETRIMAGE)]];
+        _selector = [[SKSpriteNode alloc] initWithTexture:[self textureNamed:spriteName(SELETRIMAGE)]];
         _selector.zPosition = ZPositionSelector;
         [self addChild: _selector];
       }
