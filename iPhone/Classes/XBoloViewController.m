@@ -89,12 +89,13 @@ static NSMutableArray<AVAudioPlayer*> *treesounds;
 @implementation AVAudioPlayer (NSSound)
 
 + (AVAudioPlayer *)soundNamed:(NSString *)name {
+  NSDataAsset *asset = [[NSDataAsset alloc] initWithName:[@"Sounds/" stringByAppendingString:name]];
   NSError *error = nil;
-  return [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:name withExtension:@"aiff"] error:&error];
+  return [[AVAudioPlayer alloc] initWithData:asset.data fileTypeHint:@"public.aiff-audio" error:&error];
 }
 
 - (AVAudioPlayer *)copy {
-  return [[AVAudioPlayer alloc] initWithContentsOfURL:self.url error:nil];
+  return [[AVAudioPlayer alloc] initWithData:self.data error:NULL];
 }
 
 @end
