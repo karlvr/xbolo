@@ -104,15 +104,8 @@ static NSCursor *cursor = nil;
 - (BOOL)becomeFirstResponder {
   BOOL okToChange;
   if ((okToChange = [super becomeFirstResponder])) {
-    UInt32 carbonModifiers;
-    carbonModifiers = GetCurrentKeyModifiers();
     modifiers =
-    (carbonModifiers & alphaLock ? NSEventModifierFlagCapsLock : 0) |
-    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSEventModifierFlagShift : 0) |
-    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSEventModifierFlagControl : 0) |
-    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSEventModifierFlagOption : 0) |
-    (carbonModifiers & cmdKey ? NSEventModifierFlagCommand : 0);
-    //    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
+    [NSEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad);
     //    (carbonModifiers &  ? NSHelpKeyMask : 0) |
     //    (carbonModifiers &  ? NSFunctionKeyMask : 0);
   }

@@ -42,7 +42,7 @@ size_t RoundBytesPerRow(size_t bytesPerRow) {
 - (void)refreshTiles;
 - (void)drawSprites;
 - (void)drawSprite:(int)tile at:(Vec2f)point fraction:(CGFloat)fraction;
-- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
+- (void)drawLabel:(const char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
 - (void)drawString:(NSString *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr;
 - (void)dirtyTiles:(NSRect)rect;
 @end
@@ -638,7 +638,7 @@ END
   }
 }
 
-- (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr {
+- (void)drawLabel:(const char *)label at:(Vec2f)point withAttributes:(NSDictionary<NSAttributedStringKey, id> *)attr {
   NSString *string = @(label);
   
   [self drawString:string at:point withAttributes:attr];
@@ -657,15 +657,8 @@ END
 - (BOOL)becomeFirstResponder {
   BOOL okToChange;
   if ((okToChange = [super becomeFirstResponder])) {
-    UInt32 carbonModifiers;
-    carbonModifiers = GetCurrentKeyModifiers();
     modifiers =
-    (carbonModifiers & alphaLock ? NSEventModifierFlagCapsLock : 0) |
-    (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSEventModifierFlagShift : 0) |
-    (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSEventModifierFlagControl : 0) |
-    (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSEventModifierFlagOption : 0) |
-    (carbonModifiers & cmdKey ? NSEventModifierFlagCommand : 0);
-//    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
+    [NSEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad);
 //    (carbonModifiers &  ? NSHelpKeyMask : 0) |
 //    (carbonModifiers &  ? NSFunctionKeyMask : 0);
   }
