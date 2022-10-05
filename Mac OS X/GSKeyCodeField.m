@@ -1,145 +1,147 @@
 #import "GSKeyCodeField.h"
 #include <Carbon/Carbon.h>
 
-NSMutableDictionary *nameDictionary;
+NSDictionary<NSNumber*, NSString*> *nameDictionary;
 
 @implementation GSKeyCodeFieldCell
 @synthesize keyCode;
 
 + (void)initialize {
-  if (self == [GSKeyCodeFieldCell class]) {
-    nameDictionary = [[NSMutableDictionary alloc] init];
-    nameDictionary[[NSString stringWithFormat:@"%d", 0]] = @"A";
-    nameDictionary[[NSString stringWithFormat:@"%d", 1]] = @"S";
-    nameDictionary[[NSString stringWithFormat:@"%d", 2]] = @"D";
-    nameDictionary[[NSString stringWithFormat:@"%d", 3]] = @"F";
-    nameDictionary[[NSString stringWithFormat:@"%d", 4]] = @"H";
-    nameDictionary[[NSString stringWithFormat:@"%d", 5]] = @"G";
-    nameDictionary[[NSString stringWithFormat:@"%d", 6]] = @"Z";
-    nameDictionary[[NSString stringWithFormat:@"%d", 7]] = @"X";
-    nameDictionary[[NSString stringWithFormat:@"%d", 8]] = @"C";
-    nameDictionary[[NSString stringWithFormat:@"%d", 9]] = @"V";
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    nameDictionary = @{
+      @0: @"A",
+      @1: @"S",
+      @2: @"D",
+      @3: @"F",
+      @4: @"H",
+      @5: @"G",
+      @6: @"Z",
+      @7: @"X",
+      @8: @"C",
+      @9: @"V",
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 11]] = @"B";
-    nameDictionary[[NSString stringWithFormat:@"%d", 12]] = @"Q";
-    nameDictionary[[NSString stringWithFormat:@"%d", 13]] = @"W";
-    nameDictionary[[NSString stringWithFormat:@"%d", 14]] = @"E";
-    nameDictionary[[NSString stringWithFormat:@"%d", 15]] = @"R";
-    nameDictionary[[NSString stringWithFormat:@"%d", 16]] = @"Y";
-    nameDictionary[[NSString stringWithFormat:@"%d", 17]] = @"T";
-    nameDictionary[[NSString stringWithFormat:@"%d", 18]] = @"1";
-    nameDictionary[[NSString stringWithFormat:@"%d", 19]] = @"2";
-    nameDictionary[[NSString stringWithFormat:@"%d", 20]] = @"3";
-    nameDictionary[[NSString stringWithFormat:@"%d", 21]] = @"4";
-    nameDictionary[[NSString stringWithFormat:@"%d", 22]] = @"6";
-    nameDictionary[[NSString stringWithFormat:@"%d", 23]] = @"5";
-    nameDictionary[[NSString stringWithFormat:@"%d", 24]] = @"=";
-    nameDictionary[[NSString stringWithFormat:@"%d", 25]] = @"9";
-    nameDictionary[[NSString stringWithFormat:@"%d", 26]] = @"7";
-    nameDictionary[[NSString stringWithFormat:@"%d", 27]] = @"-";
-    nameDictionary[[NSString stringWithFormat:@"%d", 28]] = @"8";
-    nameDictionary[[NSString stringWithFormat:@"%d", 29]] = @"0";
-    nameDictionary[[NSString stringWithFormat:@"%d", 30]] = @"]";
-    nameDictionary[[NSString stringWithFormat:@"%d", 31]] = @"O";
-    nameDictionary[[NSString stringWithFormat:@"%d", 32]] = @"U";
-    nameDictionary[[NSString stringWithFormat:@"%d", 33]] = @"[";
-    nameDictionary[[NSString stringWithFormat:@"%d", 34]] = @"I";
-    nameDictionary[[NSString stringWithFormat:@"%d", 35]] = @"P";
-    nameDictionary[[NSString stringWithFormat:@"%d", 36]] = @"Return";
-    nameDictionary[[NSString stringWithFormat:@"%d", 37]] = @"L";
-    nameDictionary[[NSString stringWithFormat:@"%d", 38]] = @"J";
-    nameDictionary[[NSString stringWithFormat:@"%d", 39]] = @"'";
-    nameDictionary[[NSString stringWithFormat:@"%d", 40]] = @"K";
-    nameDictionary[[NSString stringWithFormat:@"%d", 41]] = @";";
-    nameDictionary[[NSString stringWithFormat:@"%d", 42]] = @"\\";
-    nameDictionary[[NSString stringWithFormat:@"%d", 43]] = @",";
-    nameDictionary[[NSString stringWithFormat:@"%d", 44]] = @"/";
-    nameDictionary[[NSString stringWithFormat:@"%d", 45]] = @"N";
-    nameDictionary[[NSString stringWithFormat:@"%d", 46]] = @"M";
-    nameDictionary[[NSString stringWithFormat:@"%d", 47]] = @".";
-    nameDictionary[[NSString stringWithFormat:@"%d", 48]] = @"Tab";
-    nameDictionary[[NSString stringWithFormat:@"%d", 49]] = @"Spacebar";
-    nameDictionary[[NSString stringWithFormat:@"%d", 50]] = @"`";
-    nameDictionary[[NSString stringWithFormat:@"%d", 51]] = @"Delete";
-    nameDictionary[[NSString stringWithFormat:@"%d", 52]] = @"Enter";
-    nameDictionary[[NSString stringWithFormat:@"%d", 53]] = @"Escape";
+      @11: @"B",
+      @12: @"Q",
+      @13: @"W",
+      @14: @"E",
+      @15: @"R",
+      @16: @"Y",
+      @17: @"T",
+      @18: @"1",
+      @19: @"2",
+      @20: @"3",
+      @21: @"4",
+      @22: @"6",
+      @23: @"5",
+      @24: @"=",
+      @25: @"9",
+      @26: @"7",
+      @27: @"-",
+      @28: @"8",
+      @29: @"0",
+      @30: @"]",
+      @31: @"O",
+      @32: @"U",
+      @33: @"[",
+      @34: @"I",
+      @35: @"P",
+      @36: @"Return",
+      @37: @"L",
+      @38: @"J",
+      @39: @"'",
+      @40: @"K",
+      @41: @";",
+      @42: @"\\",
+      @43: @",",
+      @44: @"/",
+      @45: @"N",
+      @46: @"M",
+      @47: @".",
+      @48: @"Tab",
+      @49: @"Spacebar",
+      @50: @"`",
+      @51: @"Delete",
+      @52: @"Enter",
+      @53: @"Escape",
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 55]] = @"Command";
-    nameDictionary[[NSString stringWithFormat:@"%d", 56]] = @"Shift";
-    nameDictionary[[NSString stringWithFormat:@"%d", 57]] = @"Caps Lock";
-    nameDictionary[[NSString stringWithFormat:@"%d", 58]] = @"Option";
-    nameDictionary[[NSString stringWithFormat:@"%d", 59]] = @"Control";
-    nameDictionary[[NSString stringWithFormat:@"%d", 60]] = @"Fn Shift";
-
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 63]] = @"Function";
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 65]] = @".";
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 67]] = @"*";
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 69]] = @"+";
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 71]] = @"Clear";
+      @55: @"Command",
+      @56: @"Shift",
+      @57: @"Caps Lock",
+      @58: @"Option",
+      @59: @"Control",
+      @60: @"Fn Shift",
 
 
+      @63: @"Function",
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 75]] = @"/";
-    nameDictionary[[NSString stringWithFormat:@"%d", 76]] = @"Enter";
+      @65: @".",
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 78]] = @"-";
+      @67: @"*",
 
+      @69: @"+",
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 81]] = @"=";
-    nameDictionary[[NSString stringWithFormat:@"%d", 82]] = @"0";
-    nameDictionary[[NSString stringWithFormat:@"%d", 83]] = @"1";
-    nameDictionary[[NSString stringWithFormat:@"%d", 84]] = @"2";
-    nameDictionary[[NSString stringWithFormat:@"%d", 85]] = @"3";
-    nameDictionary[[NSString stringWithFormat:@"%d", 86]] = @"4";
-    nameDictionary[[NSString stringWithFormat:@"%d", 87]] = @"5";
-    nameDictionary[[NSString stringWithFormat:@"%d", 88]] = @"6";
-    nameDictionary[[NSString stringWithFormat:@"%d", 89]] = @"7";
-
-    nameDictionary[[NSString stringWithFormat:@"%d", 91]] = @"8";
-    nameDictionary[[NSString stringWithFormat:@"%d", 92]] = @"9";
+      @71: @"Clear",
 
 
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 96]] = @"F5";
-    nameDictionary[[NSString stringWithFormat:@"%d", 97]] = @"F6";
-    nameDictionary[[NSString stringWithFormat:@"%d", 98]] = @"F7";
-    nameDictionary[[NSString stringWithFormat:@"%d", 99]] = @"F3";
-    nameDictionary[[NSString stringWithFormat:@"%d", 100]] = @"F8";
-    nameDictionary[[NSString stringWithFormat:@"%d", 101]] = @"F9";
-    
-    nameDictionary[[NSString stringWithFormat:@"%d", 103]] = @"F11";
+      @75: @"/",
+      @76: @"Enter",
+
+      @78: @"-",
+
+
+      @81: @"=",
+      @82: @"0",
+      @83: @"1",
+      @84: @"2",
+      @85: @"3",
+      @86: @"4",
+      @87: @"5",
+      @88: @"6",
+      @89: @"7",
+
+      @91: @"8",
+      @92: @"9",
 
 
 
+      @96: @"F5",
+      @97: @"F6",
+      @98: @"F7",
+      @99: @"F3",
+      @100: @"F8",
+      @101: @"F9",
+      
+      @103: @"F11",
 
 
 
 
-    nameDictionary[[NSString stringWithFormat:@"%d", 109]] = @"F10";
-    nameDictionary[[NSString stringWithFormat:@"%d", 110]] = @"Fn Enter";
-    nameDictionary[[NSString stringWithFormat:@"%d", 111]] = @"F12";
-    
-    
-    
-    nameDictionary[[NSString stringWithFormat:@"%d", 115]] = @"Home";
-    nameDictionary[[NSString stringWithFormat:@"%d", 116]] = @"Page Up";
-    nameDictionary[[NSString stringWithFormat:@"%d", 117]] = @"Fn Delete";
-    nameDictionary[[NSString stringWithFormat:@"%d", 118]] = @"F4";
-    nameDictionary[[NSString stringWithFormat:@"%d", 119]] = @"End";
-    nameDictionary[[NSString stringWithFormat:@"%d", 120]] = @"F2";
-    nameDictionary[[NSString stringWithFormat:@"%d", 121]] = @"Page Down";
-    nameDictionary[[NSString stringWithFormat:@"%d", 122]] = @"F1";
-    nameDictionary[[NSString stringWithFormat:@"%d", 123]] = @"Left Arrow";
-    nameDictionary[[NSString stringWithFormat:@"%d", 124]] = @"Right Arrow";
-    nameDictionary[[NSString stringWithFormat:@"%d", 125]] = @"Down Arrow";
-    nameDictionary[[NSString stringWithFormat:@"%d", 126]] = @"Up Arrow";
-    nameDictionary[[NSString stringWithFormat:@"%d", 127]] = @"Num Lock";
-  }
+
+
+
+      @109: @"F10",
+      @110: @"Fn Enter",
+      @111: @"F12",
+      
+      
+      
+      @115: @"Home",
+      @116: @"Page Up",
+      @117: @"Fn Delete",
+      @118: @"F4",
+      @119: @"End",
+      @120: @"F2",
+      @121: @"Page Down",
+      @122: @"F1",
+      @123: @"Left Arrow",
+      @124: @"Right Arrow",
+      @125: @"Down Arrow",
+      @126: @"Up Arrow",
+      @127: @"Num Lock",
+    };
+  });
 }
 
 // ---------------------------------------------------------
@@ -264,7 +266,7 @@ NSMutableDictionary *nameDictionary;
     string = [NSString string];
   }
   else {
-    string = nameDictionary[[NSString stringWithFormat:@"%hu", keyCode]];
+    string = nameDictionary[@(keyCode)];
     if (string == nil) {
       string = [NSString stringWithFormat:@"%hu", keyCode];
     }

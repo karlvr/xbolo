@@ -1663,6 +1663,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
@@ -1692,6 +1693,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
@@ -1776,6 +1778,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1978;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1820,6 +1823,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1978;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1883,6 +1887,7 @@
 				INFOPLIST_FILE = Magma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.XBolo-Map-Editor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1924,6 +1929,7 @@
 				INFOPLIST_FILE = Magma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.XBolo-Map-Editor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
