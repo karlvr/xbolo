@@ -9,7 +9,10 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>bolomap</string>
 				<string>map</string>
+				<string>bmap</string>
+				<string>bol</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>XBoloMap</string>
@@ -42,11 +45,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>XBLO</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSMainNibFile</key>
@@ -58,7 +61,6 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.image</string>
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
