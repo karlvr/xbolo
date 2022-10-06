@@ -68,6 +68,12 @@
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
+		5512E8B528EECAA200366E1F /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5512E8B428EECAA200366E1F /* Quartz.framework */; };
+		5512E8B928EECAA200366E1F /* PreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8B828EECAA200366E1F /* PreviewViewController.m */; };
+		5512E8BC28EECAA200366E1F /* PreviewProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8BB28EECAA200366E1F /* PreviewProvider.m */; };
+		5512E8BF28EECAA200366E1F /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5512E8BD28EECAA200366E1F /* PreviewViewController.xib */; };
+		5512E8C428EECAA200366E1F /* newQLGenerator.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5512E8CB28EECBAA00366E1F /* QLShared.c in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8CA28EECBAA00366E1F /* QLShared.c */; };
 		553C838B2712D496002782C0 /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553C83842712D472002782C0 /* TCMPortMapper.framework */; };
 		553C838C2712D497002782C0 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553C83842712D472002782C0 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		553C838E2712DBAB002782C0 /* Sounds.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 553C838D2712DBAB002782C0 /* Sounds.xcassets */; };
@@ -174,6 +180,13 @@
 			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
 			remoteInfo = "XBolo Quick Look Plug-in";
 		};
+		5512E8C228EECAA200366E1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5512E8B228EECAA200366E1F;
+			remoteInfo = newQLGenerator;
+		};
 		553C83812712D472002782C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 553C83762712D472002782C0 /* Port Map.xcodeproj */;
@@ -263,6 +276,17 @@
 			name = "Copy Plugins";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5512E8C828EECAA200366E1F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5512E8C428EECAA200366E1F /* newQLGenerator.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55712C3A1CF9068700326A27 /* Embed QuickLook PlugIn */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -334,6 +358,17 @@
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		5512E8B328EECAA200366E1F /* newQLGenerator.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = newQLGenerator.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5512E8B428EECAA200366E1F /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		5512E8B728EECAA200366E1F /* PreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
+		5512E8B828EECAA200366E1F /* PreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewViewController.m; sourceTree = "<group>"; };
+		5512E8BA28EECAA200366E1F /* PreviewProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewProvider.h; sourceTree = "<group>"; };
+		5512E8BB28EECAA200366E1F /* PreviewProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewProvider.m; sourceTree = "<group>"; };
+		5512E8BE28EECAA200366E1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
+		5512E8C028EECAA200366E1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5512E8C128EECAA200366E1F /* newQLGenerator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = newQLGenerator.entitlements; sourceTree = "<group>"; };
+		5512E8C928EECBAA00366E1F /* QLSharedStructs.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = QLSharedStructs.h; path = "XBolo Quick Look Plug-in/QLSharedStructs.h"; sourceTree = SOURCE_ROOT; usesTabs = 0; };
+		5512E8CA28EECBAA00366E1F /* QLShared.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.c; name = QLShared.c; path = "XBolo Quick Look Plug-in/QLShared.c"; sourceTree = SOURCE_ROOT; usesTabs = 0; };
 		553C83762712D472002782C0 /* Port Map.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Port Map.xcodeproj"; path = "Third-party/TCMPortMapper/Port Map.xcodeproj"; sourceTree = "<group>"; };
 		553C838D2712DBAB002782C0 /* Sounds.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sounds.xcassets; sourceTree = "<group>"; };
 		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
@@ -472,6 +507,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5512E8B028EECAA200366E1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5512E8B528EECAA200366E1F /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55712B811CF8ED7B00326A27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -507,6 +550,7 @@
 				55712B841CF8ED7B00326A27 /* XBolo Map Editor.app */,
 				55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */,
 				55C405E320CEE0060033C0E2 /* BoloKit.framework */,
+				5512E8B328EECAA200366E1F /* newQLGenerator.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -523,6 +567,7 @@
 				55712C2F1CF903A600326A27 /* Shared */,
 				55F4E5121D2877BC00CC90E0 /* Standard Autopilot */,
 				55C405E420CEE0060033C0E2 /* BoloKit */,
+				5512E8B628EECAA200366E1F /* newQLGenerator */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -603,6 +648,7 @@
 				40ED89F51114B4AA00B7AF32 /* Carbon.framework */,
 				40ED84361114B0BB00B7AF32 /* Cocoa.framework */,
 				40ED84301114B09B00B7AF32 /* Foundation.framework */,
+				5512E8B428EECAA200366E1F /* Quartz.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -698,6 +744,24 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		5512E8B628EECAA200366E1F /* newQLGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				5512E8CA28EECBAA00366E1F /* QLShared.c */,
+				5512E8C928EECBAA00366E1F /* QLSharedStructs.h */,
+				5512E8B728EECAA200366E1F /* PreviewViewController.h */,
+				5512E8B828EECAA200366E1F /* PreviewViewController.m */,
+				5512E8BA28EECAA200366E1F /* PreviewProvider.h */,
+				5512E8BB28EECAA200366E1F /* PreviewProvider.m */,
+				5512E8BD28EECAA200366E1F /* PreviewViewController.xib */,
+				5512E8C028EECAA200366E1F /* Info.plist */,
+				5512E8C128EECAA200366E1F /* newQLGenerator.entitlements */,
+			);
+			indentWidth = 4;
+			path = newQLGenerator;
+			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		553C83772712D472002782C0 /* Products */ = {
 			isa = PBXGroup;
@@ -998,6 +1062,7 @@
 				40A5936D0FBE78FC00F3E650 /* Frameworks */,
 				40E827AF10558D7600B39BB9 /* Copy Plugins */,
 				403F6B8F105EDAD9009C8088 /* Copy Frameworks */,
+				5512E8C828EECAA200366E1F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -1005,11 +1070,29 @@
 				553C83922712E316002782C0 /* PBXTargetDependency */,
 				40E828751055A15E00B39BB9 /* PBXTargetDependency */,
 				55C405E920CEE0060033C0E2 /* PBXTargetDependency */,
+				5512E8C328EECAA200366E1F /* PBXTargetDependency */,
 			);
 			name = "Mac OS X";
 			productName = XBolo;
 			productReference = 40A593760FBE78FD00F3E650 /* XBolo.app */;
 			productType = "com.apple.product-type.application";
+		};
+		5512E8B228EECAA200366E1F /* newQLGenerator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5512E8C528EECAA200366E1F /* Build configuration list for PBXNativeTarget "newQLGenerator" */;
+			buildPhases = (
+				5512E8AF28EECAA200366E1F /* Sources */,
+				5512E8B028EECAA200366E1F /* Frameworks */,
+				5512E8B128EECAA200366E1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = newQLGenerator;
+			productName = newQLGenerator;
+			productReference = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		55712B831CF8ED7B00326A27 /* XBolo Map Editor */ = {
 			isa = PBXNativeTarget;
@@ -1072,7 +1155,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Robert Chrzanowski";
 				TargetAttributes = {
 					404D425C0FF84FEA00589EA2 = {
@@ -1080,6 +1163,10 @@
 					};
 					40A5931E0FBE78FC00F3E650 = {
 						LastSwiftMigration = 1300;
+					};
+					5512E8B228EECAA200366E1F = {
+						CreatedOnToolsVersion = 14.0.1;
+						ProvisioningStyle = Automatic;
 					};
 					55712B831CF8ED7B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1127,6 +1214,7 @@
 				55712B831CF8ED7B00326A27 /* XBolo Map Editor */,
 				55F4E5101D2877BC00CC90E0 /* Standard Autopilot */,
 				55C405E220CEE0060033C0E2 /* BoloKit */,
+				5512E8B228EECAA200366E1F /* newQLGenerator */,
 			);
 		};
 /* End PBXProject section */
@@ -1207,6 +1295,14 @@
 				B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
 				5562F91820D064140007248E /* XBolo.scriptTerminology in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5512E8B128EECAA200366E1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5512E8BF28EECAA200366E1F /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1360,6 +1456,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5512E8AF28EECAA200366E1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5512E8CB28EECBAA00366E1F /* QLShared.c in Sources */,
+				5512E8B928EECAA200366E1F /* PreviewViewController.m in Sources */,
+				5512E8BC28EECAA200366E1F /* PreviewProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55712B801CF8ED7B00326A27 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1407,6 +1513,11 @@
 			name = "XBolo Quick Look Plug-in";
 			targetProxy = 40E828741055A15E00B39BB9 /* PBXContainerItemProxy */;
 		};
+		5512E8C328EECAA200366E1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5512E8B228EECAA200366E1F /* newQLGenerator */;
+			targetProxy = 5512E8C228EECAA200366E1F /* PBXContainerItemProxy */;
+		};
 		553C83922712E316002782C0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = TCMPortMapper;
@@ -1436,6 +1547,14 @@
 				089C165DFE840E0CC02AAC07 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5512E8BD28EECAA200366E1F /* PreviewViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5512E8BE28EECAA200366E1F /* Base */,
+			);
+			name = PreviewViewController.xib;
 			sourceTree = "<group>";
 		};
 		5562F91A20D064140007248E /* XBolo.scriptTerminology */ = {
@@ -1543,6 +1662,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1616,6 +1736,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1849,6 +1970,75 @@
 				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		5512E8C628EECAA200366E1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = newQLGenerator/newQLGenerator.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1978;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = newQLGenerator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = newQLGenerator;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 0.4.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		5512E8C728EECAA200366E1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = newQLGenerator/newQLGenerator.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1978;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = newQLGenerator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = newQLGenerator;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 0.4.2;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -2096,6 +2286,15 @@
 			buildConfigurations = (
 				40A593720FBE78FC00F3E650 /* Debug */,
 				40A593730FBE78FC00F3E650 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5512E8C528EECAA200366E1F /* Build configuration list for PBXNativeTarget "newQLGenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5512E8C628EECAA200366E1F /* Debug */,
+				5512E8C728EECAA200366E1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
