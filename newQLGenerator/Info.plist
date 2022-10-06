@@ -7,7 +7,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>QLIsDataBasedPreview</key>
-			<false/>
+			<true/>
 			<key>QLSupportedContentTypes</key>
 			<array>
 				<string>com.gengasw.xbolo.map</string>
@@ -18,7 +18,7 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.quicklook.preview</string>
 		<key>NSExtensionPrincipalClass</key>
-		<string>PreviewViewController</string>
+		<string>PreviewProvider</string>
 	</dict>
 	<key>UTImportedTypeDeclarations</key>
 	<array>

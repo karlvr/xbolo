@@ -1,39 +1,17 @@
 //
-//  PreviewProvider.m
-//  newQLGenerator
+//  ThumbnailProvider.m
+//  MapThumbnails
 //
 //  Created by C.W. Betts on 10/6/22.
 //  Copyright © 2022 Robert Chrzanowski. All rights reserved.
 //
 
-#import "PreviewProvider.h"
+#import "ThumbnailProvider.h"
 #include "QLSharedStructs.h"
 
-@implementation PreviewProvider
+@implementation ThumbnailProvider
 
-/*
-
- Use a QLPreviewProvider to provide data-based previews.
- 
- To set up your extension as a data-based preview extension:
-
- - Modify the extension's Info.plist by setting
-   <key>QLIsDataBasedPreview</key>
-   <true/>
- 
- - Add the supported content types to QLSupportedContentTypes array in the extension's Info.plist.
-
- - Change the NSExtensionPrincipalClass to this class.
-   e.g.
-   <key>NSExtensionPrincipalClass</key>
-   <string>PreviewProvider</string>
- 
- - Implement providePreviewForFileRequest:completionHandler:
- 
- */
-
-- (void)providePreviewForFileRequest:(QLFilePreviewRequest *)request completionHandler:(void (^)(QLPreviewReply * _Nullable reply, NSError * _Nullable error))handler
-{
+- (void)provideThumbnailForFileRequest:(QLFileThumbnailRequest *)request completionHandler:(void (^)(QLThumbnailReply * _Nullable, NSError * _Nullable))handler {
 	NSError *err;
 	NSData *data = [NSData dataWithContentsOfURL:request.fileURL options:0 error:&err];
 	if (!data) {
@@ -41,7 +19,8 @@
 		return;
 	}
 	
-	QLPreviewReply* reply = [[QLPreviewReply alloc] initWithContextSize:CGSizeMake(256, 256) isBitmap:NO drawingBlock:^BOOL(CGContextRef  _Nonnull context, QLPreviewReply * _Nonnull reply, NSError *__autoreleasing  _Nullable * _Nullable error) {
+	//TODO: scale based on request.maximumSize
+	handler([QLThumbnailReply replyWithContextSize:CGSizeMake(256, 256) drawingBlock:^BOOL(CGContextRef  _Nonnull context) {
 		const void *buf = data.bytes;
 		size_t nbytes = data.length;
 
@@ -73,37 +52,22 @@
 		preamble = buf;
 
 		if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 		
 		if (preamble->version != CURRENTMAPVERSION) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 		
 		if (preamble->npills > MAX_PILLS) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 		
 		if (preamble->nbases > MAX_BASES) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 
 		if (preamble->nstarts > MAXSTARTS) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 
@@ -112,9 +76,6 @@
 			preamble->npills*sizeof(struct BMAP_PillInfo) +
 			preamble->nbases*sizeof(struct BMAP_BaseInfo) +
 			preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
 			return NO;
 		}
 
@@ -218,9 +179,6 @@
 			}
 			
 			if (drawrun(context, run, runData + offset + sizeof(struct BMAP_Run)) == -1) {
-				if (error) {
-					*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-				}
 				return NO;
 			}
 			
@@ -246,10 +204,7 @@
 		}
 		
 		return YES;
-	}];
-	
-	handler(reply, nil);
+	}], nil);
 }
 
 @end
-

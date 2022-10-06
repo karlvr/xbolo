@@ -69,9 +69,7 @@
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
 		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
 		5512E8B528EECAA200366E1F /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5512E8B428EECAA200366E1F /* Quartz.framework */; };
-		5512E8B928EECAA200366E1F /* PreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8B828EECAA200366E1F /* PreviewViewController.m */; };
 		5512E8BC28EECAA200366E1F /* PreviewProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8BB28EECAA200366E1F /* PreviewProvider.m */; };
-		5512E8BF28EECAA200366E1F /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5512E8BD28EECAA200366E1F /* PreviewViewController.xib */; };
 		5512E8C428EECAA200366E1F /* newQLGenerator.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5512E8CB28EECBAA00366E1F /* QLShared.c in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8CA28EECBAA00366E1F /* QLShared.c */; };
 		553C838B2712D496002782C0 /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553C83842712D472002782C0 /* TCMPortMapper.framework */; };
@@ -80,6 +78,10 @@
 		553C838F2712DBAB002782C0 /* Sounds.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 553C838D2712DBAB002782C0 /* Sounds.xcassets */; };
 		553F04771D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
 		553F04781D71EFAB005D0983 /* XBoloBonjourKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */; };
+		5547C89128EF7C1600905024 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5547C89028EF7C1600905024 /* QuickLookThumbnailing.framework */; };
+		5547C89528EF7C1600905024 /* ThumbnailProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5547C89428EF7C1600905024 /* ThumbnailProvider.m */; };
+		5547C89928EF7C1600905024 /* MapThumbnails.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5547C88F28EF7C1600905024 /* MapThumbnails.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5547C8A528EF7CAD00905024 /* QLShared.c in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8CA28EECBAA00366E1F /* QLShared.c */; };
 		55513F4928ECCC80009C15F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4828ECCC80009C15F6 /* Foundation.framework */; };
 		55513F4B28ECCC85009C15F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4A28ECCC85009C15F6 /* UIKit.framework */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
@@ -229,6 +231,13 @@
 			remoteGlobalIDString = 3180119E0D4DEC8400BE3B28;
 			remoteInfo = TCMPortMapper;
 		};
+		5547C89728EF7C1600905024 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5547C88E28EF7C1600905024;
+			remoteInfo = MapThumbnails;
+		};
 		55712C381CF9068700326A27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */;
@@ -283,6 +292,17 @@
 			dstSubfolderSpec = 13;
 			files = (
 				5512E8C428EECAA200366E1F /* newQLGenerator.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5547C89A28EF7C1600905024 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5547C89928EF7C1600905024 /* MapThumbnails.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,11 +380,8 @@
 		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		5512E8B328EECAA200366E1F /* newQLGenerator.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = newQLGenerator.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5512E8B428EECAA200366E1F /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
-		5512E8B728EECAA200366E1F /* PreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
-		5512E8B828EECAA200366E1F /* PreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewViewController.m; sourceTree = "<group>"; };
 		5512E8BA28EECAA200366E1F /* PreviewProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewProvider.h; sourceTree = "<group>"; };
 		5512E8BB28EECAA200366E1F /* PreviewProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewProvider.m; sourceTree = "<group>"; };
-		5512E8BE28EECAA200366E1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
 		5512E8C028EECAA200366E1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5512E8C128EECAA200366E1F /* newQLGenerator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = newQLGenerator.entitlements; sourceTree = "<group>"; };
 		5512E8C928EECBAA00366E1F /* QLSharedStructs.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = QLSharedStructs.h; path = "XBolo Quick Look Plug-in/QLSharedStructs.h"; sourceTree = SOURCE_ROOT; usesTabs = 0; };
@@ -373,6 +390,11 @@
 		553C838D2712DBAB002782C0 /* Sounds.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sounds.xcassets; sourceTree = "<group>"; };
 		553F04751D71EECB005D0983 /* XBoloBonjourKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XBoloBonjourKeys.h; sourceTree = "<group>"; };
 		553F04761D71EFAB005D0983 /* XBoloBonjourKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBoloBonjourKeys.m; sourceTree = "<group>"; };
+		5547C88F28EF7C1600905024 /* MapThumbnails.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MapThumbnails.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5547C89028EF7C1600905024 /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
+		5547C89328EF7C1600905024 /* ThumbnailProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThumbnailProvider.h; sourceTree = "<group>"; };
+		5547C89428EF7C1600905024 /* ThumbnailProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThumbnailProvider.m; sourceTree = "<group>"; };
+		5547C89628EF7C1600905024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55513F4828ECCC80009C15F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		55513F4A28ECCC85009C15F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -515,6 +537,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5547C88C28EF7C1600905024 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5547C89128EF7C1600905024 /* QuickLookThumbnailing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55712B811CF8ED7B00326A27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -551,6 +581,7 @@
 				55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */,
 				55C405E320CEE0060033C0E2 /* BoloKit.framework */,
 				5512E8B328EECAA200366E1F /* newQLGenerator.appex */,
+				5547C88F28EF7C1600905024 /* MapThumbnails.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -568,6 +599,7 @@
 				55F4E5121D2877BC00CC90E0 /* Standard Autopilot */,
 				55C405E420CEE0060033C0E2 /* BoloKit */,
 				5512E8B628EECAA200366E1F /* newQLGenerator */,
+				5547C89228EF7C1600905024 /* MapThumbnails */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -649,6 +681,7 @@
 				40ED84361114B0BB00B7AF32 /* Cocoa.framework */,
 				40ED84301114B09B00B7AF32 /* Foundation.framework */,
 				5512E8B428EECAA200366E1F /* Quartz.framework */,
+				5547C89028EF7C1600905024 /* QuickLookThumbnailing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -750,11 +783,8 @@
 			children = (
 				5512E8CA28EECBAA00366E1F /* QLShared.c */,
 				5512E8C928EECBAA00366E1F /* QLSharedStructs.h */,
-				5512E8B728EECAA200366E1F /* PreviewViewController.h */,
-				5512E8B828EECAA200366E1F /* PreviewViewController.m */,
 				5512E8BA28EECAA200366E1F /* PreviewProvider.h */,
 				5512E8BB28EECAA200366E1F /* PreviewProvider.m */,
-				5512E8BD28EECAA200366E1F /* PreviewViewController.xib */,
 				5512E8C028EECAA200366E1F /* Info.plist */,
 				5512E8C128EECAA200366E1F /* newQLGenerator.entitlements */,
 			);
@@ -789,6 +819,18 @@
 			);
 			path = Classes;
 			sourceTree = "<group>";
+		};
+		5547C89228EF7C1600905024 /* MapThumbnails */ = {
+			isa = PBXGroup;
+			children = (
+				5547C89328EF7C1600905024 /* ThumbnailProvider.h */,
+				5547C89428EF7C1600905024 /* ThumbnailProvider.m */,
+				5547C89628EF7C1600905024 /* Info.plist */,
+			);
+			indentWidth = 4;
+			path = MapThumbnails;
+			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		55712B851CF8ED7B00326A27 /* Magma */ = {
 			isa = PBXGroup;
@@ -1011,10 +1053,12 @@
 				404D42590FF84FEA00589EA2 /* Resources */,
 				404D425A0FF84FEA00589EA2 /* Sources */,
 				404D425B0FF84FEA00589EA2 /* Frameworks */,
+				5547C89A28EF7C1600905024 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5547C89828EF7C1600905024 /* PBXTargetDependency */,
 			);
 			name = iPhone;
 			productName = iPhone;
@@ -1094,6 +1138,23 @@
 			productReference = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		5547C88E28EF7C1600905024 /* MapThumbnails */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5547C8A428EF7C1600905024 /* Build configuration list for PBXNativeTarget "MapThumbnails" */;
+			buildPhases = (
+				5547C88B28EF7C1600905024 /* Sources */,
+				5547C88C28EF7C1600905024 /* Frameworks */,
+				5547C88D28EF7C1600905024 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MapThumbnails;
+			productName = MapThumbnails;
+			productReference = 5547C88F28EF7C1600905024 /* MapThumbnails.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		55712B831CF8ED7B00326A27 /* XBolo Map Editor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55712B941CF8ED7B00326A27 /* Build configuration list for PBXNativeTarget "XBolo Map Editor" */;
@@ -1168,6 +1229,11 @@
 						CreatedOnToolsVersion = 14.0.1;
 						ProvisioningStyle = Automatic;
 					};
+					5547C88E28EF7C1600905024 = {
+						CreatedOnToolsVersion = 14.0.1;
+						DevelopmentTeam = 9A5PCU4FSD;
+						ProvisioningStyle = Automatic;
+					};
 					55712B831CF8ED7B00326A27 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -1215,6 +1281,7 @@
 				55F4E5101D2877BC00CC90E0 /* Standard Autopilot */,
 				55C405E220CEE0060033C0E2 /* BoloKit */,
 				5512E8B228EECAA200366E1F /* newQLGenerator */,
+				5547C88E28EF7C1600905024 /* MapThumbnails */,
 			);
 		};
 /* End PBXProject section */
@@ -1302,7 +1369,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5512E8BF28EECAA200366E1F /* PreviewViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5547C88D28EF7C1600905024 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1461,8 +1534,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5512E8CB28EECBAA00366E1F /* QLShared.c in Sources */,
-				5512E8B928EECAA200366E1F /* PreviewViewController.m in Sources */,
 				5512E8BC28EECAA200366E1F /* PreviewProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5547C88B28EF7C1600905024 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5547C89528EF7C1600905024 /* ThumbnailProvider.m in Sources */,
+				5547C8A528EF7CAD00905024 /* QLShared.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1523,6 +1604,11 @@
 			name = TCMPortMapper;
 			targetProxy = 553C83912712E316002782C0 /* PBXContainerItemProxy */;
 		};
+		5547C89828EF7C1600905024 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5547C88E28EF7C1600905024 /* MapThumbnails */;
+			targetProxy = 5547C89728EF7C1600905024 /* PBXContainerItemProxy */;
+		};
 		55712C391CF9068700326A27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "XBolo Quick Look Plug-in";
@@ -1547,14 +1633,6 @@
 				089C165DFE840E0CC02AAC07 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5512E8BD28EECAA200366E1F /* PreviewViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5512E8BE28EECAA200366E1F /* Base */,
-			);
-			name = PreviewViewController.xib;
 			sourceTree = "<group>";
 		};
 		5562F91A20D064140007248E /* XBolo.scriptTerminology */ = {
@@ -1662,6 +1740,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1978;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1699,6 +1778,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 0.4.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1736,6 +1816,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1978;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1754,6 +1835,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 0.4.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -1784,7 +1866,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
@@ -1814,7 +1895,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
 				SDKROOT = iphoneos;
@@ -1899,7 +1979,6 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1978;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1908,7 +1987,6 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					INTERNAL_GSROBOT_INCLUDE,
 					"$(inherited)",
@@ -1922,7 +2000,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.4.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
@@ -1944,14 +2021,12 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1978;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					INTERNAL_GSROBOT_INCLUDE,
 					"$(inherited)",
@@ -1961,7 +2036,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.4.2;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo;
 				PRODUCT_NAME = XBolo;
@@ -1986,7 +2060,6 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1978;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2000,7 +2073,6 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MARKETING_VERSION = 0.4.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
@@ -2023,7 +2095,6 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1978;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -2033,12 +2104,81 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MARKETING_VERSION = 0.4.2;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		5547C89B28EF7C1600905024 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9A5PCU4FSD;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MapThumbnails/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MapThumbnails;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.MapThumbnails;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5547C89C28EF7C1600905024 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9A5PCU4FSD;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MapThumbnails/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MapThumbnails;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.MapThumbnails;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -2203,6 +2343,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2211,6 +2352,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2226,6 +2368,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2234,6 +2377,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.maddthesane.Standard-Autopilot";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2295,6 +2439,15 @@
 			buildConfigurations = (
 				5512E8C628EECAA200366E1F /* Debug */,
 				5512E8C728EECAA200366E1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5547C8A428EF7C1600905024 /* Build configuration list for PBXNativeTarget "MapThumbnails" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5547C89B28EF7C1600905024 /* Debug */,
+				5547C89C28EF7C1600905024 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
