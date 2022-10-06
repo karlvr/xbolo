@@ -10,6 +10,9 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>map</string>
+				<string>bmap</string>
+				<string>bol</string>
+				<string>bolomap</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>XBoloMap</string>

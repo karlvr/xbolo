@@ -43,7 +43,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     if (nbytes < sizeof(struct BMAP_Preamble)) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     preamble = buf;
@@ -51,31 +51,31 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     if (preamble->version != CURRENTMAPVERSION) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     if (preamble->npills > MAX_PILLS) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     if (preamble->nbases > MAX_BASES) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     if (preamble->nstarts > MAXSTARTS) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     if (nbytes <
@@ -85,7 +85,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
         preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
       //QLThumbnailRequestFlushContext(thumbnail, context);
       CFRelease(context);
-      return noErr;
+      return -1;
     }
 
     pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
@@ -191,7 +191,7 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
       if (drawrun(context, run, runData + offset + sizeof(struct BMAP_Run)) == -1) {
         //QLThumbnailRequestFlushContext(thumbnail, context);
         CFRelease(context);
-        return noErr;
+        return -1;
       }
 
       offset += run.datalen;
