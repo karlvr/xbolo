@@ -35,3 +35,93 @@
 "Receiving Server Data" = "Receiving Server Data";
 
 "Receving Map Data" = "Receving Map Data";
+
+// Error strings
+
+"UPnP Failed" = "UPnP Failed";
+
+"UPnP was unable to map to a port.  Please check your router settings." = "UPnP was unable to map to a port.  Please check your router settings.";
+
+"No map chosen." = "No map chosen";
+
+"Please try another map." = "Please try another map.";
+
+"Error occured when openning map." = "Error occured when openning map";
+
+"Unable to Open Map File" = "Unable to Open Map File";
+
+"Please choose another map." = "Please choose another map.";
+
+"Incomaptile Map Version" = "Incompatible Map Version";
+
+"Port Unavailable" = "Port Unavailable";
+
+"Please choose another port." = "Please choose another port.";
+
+"Unexpected Error" = "Unexpected Error";
+
+"Error Resolving Hostname" = "Error Resolving Hostname";
+
+"Network Error" = "Network Error";
+
+"Connection establishment timed out without establishing a connection." = "Connection establishment timed out without establishing a connection.";
+
+"The attempt to connect was forcefully rejected." = "The attempt to connect was forcefully rejected.";
+
+"The network is not reachable from this host." = "The network is not reachable from this host.";
+
+"The remote host is not reachable from this host." = "The remote host is not reachable from this host.";
+
+"Server Error" = "Server Error";
+
+"Server version doesn't match." = "Server version doesn't match.";
+
+"Host is not allowing new players in the game." = "Host is not allowing new players in the game.";
+
+"Password rejected." = "Password rejected.";
+
+"Server is full." = "Server is full.";
+
+"Time limit reached on server." = "Time limit reached on server.";
+
+"Host has banned you from the game." = "Host has banned you from the game.";
+
+"Protocol error." = "Protocol error.";
+
+"Connection Reset by Peer." = "Connection Reset by Peer.";
+
+"Error Resolving Tracker" = "Error Resolving Tracker";
+
+"Tracker Timed Out" = "Tracker Timed Out";
+
+"Could not connect to the tracker." = "Could not connect to the tracker.";
+
+"Tracker Connection Refused" = "Tracker Connection Refused";
+
+"Connection was refused by the tracker." = "Connection was refused by the tracker.";
+
+"Tracker Host Down" = "Tracker Host Down";
+
+"Tracker is not responding." = "Tracker is not responding.";
+
+"Tracker Host Unreachable" = "Tracker Host Unreachable";
+
+"Check your network connectivity." = "Check your network connectivity.";
+
+"Incompatible Version" = "Incompatible Version";
+
+"Check your network connectivity." = "Check your network connectivity.";
+
+"Failed to Verify TCP Port Forwarded" = "Failed to Verify TCP Port Forwarded";
+
+"Failed to Verify UDP Port Forwarded" = "Failed to Verify UDP Port Forwarded";
+
+"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again." = "Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.";
+
+"Connection Error" = "Connection Error";
+
+"Connection Reset by Peer." = "Connection Reset by Peer.";
+
+"There is a key conflict." = "There is a key conflict";
+
+"There is a conflict with %@ and %@.  Change one of them." = "There is a conflict with %@ and %@.  Change one of them.";

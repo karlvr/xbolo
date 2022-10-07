@@ -1105,7 +1105,7 @@ TRY
 
         [joinProgressWindow orderOut:self];
         [joinProgressIndicator stopAnimation:self];
-        [NSApp endSheet:joinProgressWindow];
+        [newGameWindow endSheet:joinProgressWindow];
 
         [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
 
@@ -1117,7 +1117,12 @@ TRY
 
         [portMapper start];
 
-        NSBeginAlertSheet(@"UPnP Failed", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"UPnP was unable to map to a port.  Please check your router settings.");
+        NSAlert *alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"UPnP Failed", @"UPnP Failed");
+        alert.informativeText = NSLocalizedString(@"UPnP was unable to map to a port.  Please check your router settings.", @"UPnP Failed reason");
+        [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+          //do nothing
+        }];
 
         if (stopserver()) LOGFAIL(errno)
       }
@@ -1148,11 +1153,21 @@ END
 
 TRY
   if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
-    NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"No map chosen.", @"No map chosen.");
+    alert.informativeText = NSLocalizedString(@"Please try another map.", @"Please try another map.");
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [broadcaster startListening];
   }
   else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
-    NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Error occured when openning map.", @"Error occured when openning map.");
+    alert.informativeText = NSLocalizedString(@"Please try another map.", @"Please try another map.");
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [self setHostMap:[NSString string]];
     [broadcaster startListening];
   }
@@ -1184,11 +1199,13 @@ TRY
       paused = 1;
     }
 
-    joinProgressStatusTextField.stringValue = @"Starting...";
+    joinProgressStatusTextField.stringValue = NSLocalizedString(@"Starting...", @"Starting...");
     [joinProgressIndicator setIndeterminate:YES];
     joinProgressIndicator.doubleValue = 0.0;
     [joinProgressIndicator startAnimation:self];
-    [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+    [newGameWindow beginSheet:joinProgressWindow completionHandler:^(NSModalResponse returnCode) {
+      
+    }];
 
     if (setupserver(paused, mapData.bytes, mapData.length, hostUPnPBool ? 0 : hostPortNumber, hostPasswordBool ? hostPasswordString.UTF8String : NULL, hostTimeLimitBool ? timelimit : 0, hostHiddenMinesBool, 0, hostGameTypeNumber, &domination)) LOGFAIL(errno)
 
@@ -1219,6 +1236,7 @@ TRY
   }
 
 CLEANUP
+  NSAlert *alert;
   switch (ERROR) {
   case 0:
     break;
@@ -1226,8 +1244,13 @@ CLEANUP
   case ECORFILE:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Unable to Open Map File", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [newGameWindow endSheet:joinProgressWindow];
+    alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Unable to Open Map File", @"Unable to Open Map File");
+    alert.informativeText = NSLocalizedString(@"Please choose another map.", @"Please choose another map.");
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [broadcaster startListening];
     CLEARERRLOG
     break;
@@ -1235,8 +1258,13 @@ CLEANUP
   case EINCMPAT:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Incomaptile Map Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [newGameWindow endSheet:joinProgressWindow];
+    alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Incomaptile Map Version", @"Incompatible Map Version");
+    alert.informativeText = NSLocalizedString(@"Please choose another map.", @"Please choose another map.");
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [broadcaster startListening];
     CLEARERRLOG
     break;
@@ -1244,8 +1272,13 @@ CLEANUP
   case EADDRINUSE:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Port Unavailable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another port.");
+    [newGameWindow endSheet:joinProgressWindow];
+    alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Port Unavailable", @"Port Unavailable");
+    alert.informativeText = NSLocalizedString(@"Please choose another port.", @"Please choose another port.");
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [broadcaster startListening];
     CLEARERRLOG
     break;
@@ -1253,8 +1286,13 @@ CLEANUP
   default:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Unexpected Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Error #%d: %s", ERROR, strerror(ERROR));
+    [newGameWindow endSheet:joinProgressWindow];
+    alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Unexpected Error", @"Unexpected Error");
+    alert.informativeText = [NSString stringWithFormat:@"Error #%d: %s", ERROR, strerror(ERROR)];
+    [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     [broadcaster startListening];
     CLEARERRLOG
     break;
@@ -1297,7 +1335,9 @@ TRY
   [joinProgressIndicator setIndeterminate:YES];
   joinProgressIndicator.doubleValue = 0.0;
   [joinProgressIndicator startAnimation:self];
-  [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+  [newGameWindow beginSheet:joinProgressWindow completionHandler:^(NSModalResponse returnCode) {
+    // do nothing
+  }];
   
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
@@ -1331,7 +1371,9 @@ TRY
   [joinProgressIndicator setIndeterminate:YES];
   joinProgressIndicator.doubleValue = 0.0;
   [joinProgressIndicator startAnimation:self];
-  [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+  [newGameWindow beginSheet:joinProgressWindow completionHandler:^(NSModalResponse returnCode) {
+    // do nothing
+  }];
   if (startclient(joinAddressString.UTF8String, joinPortNumber, playerNameString.UTF8String, joinPasswordBool ? joinPasswordString.UTF8String : NULL)) LOGFAIL(errno)
   [boloView reset];
 
@@ -1381,7 +1423,7 @@ TRY
   /* close modal window */
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
 
 CLEANUP
   switch (ERROR) {
@@ -2987,7 +3029,7 @@ END
   [boloView setNeedsDisplay:YES];
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
   [newGameWindow orderOut:self];
   [boloWindow makeKeyAndOrderFront:self];
 
@@ -3010,8 +3052,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Hostname", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Error Resolving Hostname", @"Error Resolving Hostname");
+  alert.informativeText = eString;
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3039,8 +3086,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection establishment timed out without establishing a connection.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Network Error", @"Network Error");
+  alert.informativeText = NSLocalizedString(@"Connection establishment timed out without establishing a connection.", @"Connection establishment timed out without establishing a connection.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3068,8 +3120,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The attempt to connect was forcefully rejected.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Network Error", @"Network Error");
+  alert.informativeText = NSLocalizedString(@"The attempt to connect was forcefully rejected.", @"The attempt to connect was forcefully rejected.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3097,8 +3154,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The network is not reachable from this host.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Network Error", @"Network Error");
+  alert.informativeText = NSLocalizedString(@"The network is not reachable from this host.", @"The network is not reachable from this host.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3126,8 +3188,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The remote host is not reachable from this host.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Network Error", @"Network Error");
+  alert.informativeText = NSLocalizedString(@"The remote host is not reachable from this host.", @"The remote host is not reachable from this host.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3155,8 +3222,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Server version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Server version doesn't match.", @"Server version doesn't match.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3184,8 +3256,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Host is not allowing new players in the game.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Host is not allowing new players in the game.", @"Host is not allowing new players in the game.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3213,8 +3290,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Password rejected.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Password rejected.", @"Password rejected.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3242,8 +3324,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Server is full.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Server is full.", @"Server is full.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3271,8 +3358,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Time limit reached on server.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Time limit reached on server.", @"Time limit reached on server.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3300,8 +3392,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Host has banned you from the game.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Host has banned you from the game.", @"Host has banned you from the game.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3329,8 +3426,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Protocol error.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Protocol error.", @"Protocol error.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3358,8 +3460,13 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Server Error", @"Server Error");
+  alert.informativeText = NSLocalizedString(@"Connection Reset by Peer.", @"Connection Reset by Peer.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3408,8 +3515,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"%@", eString);
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Error Resolving Tracker", @"Error Resolving Tracker");
+  alert.informativeText = eString;
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3433,8 +3545,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Timed Out", @"Tracker Timed Out");
+  alert.informativeText = NSLocalizedString(@"Could not connect to the tracker.", @"Could not connect to the tracker.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3458,8 +3575,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Connection Refused", @"Tracker Connection Refused");
+  alert.informativeText = NSLocalizedString(@"Connection was refused by the tracker.", @"Connection was refused by the tracker.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3483,8 +3605,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Host Down", @"Tracker Host Down");
+  alert.informativeText = NSLocalizedString(@"Tracker is not responding.", @"Tracker is not responding.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3508,8 +3635,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Host Unreachable", @"Tracker Host Unreachable");
+  alert.informativeText = NSLocalizedString(@"Check your network connectivity.", @"Check your network connectivity.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3533,8 +3665,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Incompatible Version", @"Incompatible Version");
+  alert.informativeText = NSLocalizedString(@"Check your network connectivity.", @"Check your network connectivity.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3558,8 +3695,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Failed to Verify TCP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Failed to Verify TCP Port Forwarded", @"Failed to Verify TCP Port Forwarded");
+  alert.informativeText = NSLocalizedString(@"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.", @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3583,8 +3725,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Failed to Verify UDP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Failed to Verify UDP Port Forwarded", @"Failed to Verify UDP Port Forwarded");
+  alert.informativeText = NSLocalizedString(@"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.", @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3608,8 +3755,13 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Connection Error", @"Connection Error");
+  alert.informativeText = NSLocalizedString(@"Connection Reset by Peer.", @"Connection Reset by Peer.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 
   [broadcaster startListening];
 
@@ -3632,40 +3784,65 @@ END
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Timed Out", @"Tracker Timed Out");
+  alert.informativeText = NSLocalizedString(@"Could not connect to the tracker.", @"Could not connect to the tracker.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 }
 
 - (void)getListTrackerConnectionRefused {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Connection Refused", @"Tracker Connection Refused");
+  alert.informativeText = NSLocalizedString(@"Connection was refused by the tracker.", @"Connection was refused by the tracker.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 }
 
 - (void)getListTrackerHostDown {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Host Down", @"Tracker Host Down");
+  alert.informativeText = NSLocalizedString(@"Tracker is not responding.", @"Tracker is not responding.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 }
 
 - (void)getListTrackerHostUnreachable {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Tracker Host Unreachable", @"Tracker Host Unreachable");
+  alert.informativeText = NSLocalizedString(@"Check your network connectivity.", @"Check your network connectivity.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 }
 
 - (void)getListTrackerBadVersion {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Incompatible Version", @"Incompatible Version");
+  alert.informativeText = NSLocalizedString(@"Tracker version doesn't match.", @"Tracker version doesn't match.");
+  [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    //do nothing
+  }];
 }
 
 - (void)getListTrackerSuccess {
@@ -3677,7 +3854,7 @@ END
 
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
 
   // convert list to NSArray for displaying
   table = [NSMutableArray array];
@@ -4280,7 +4457,12 @@ int setKey(NSMutableDictionary<NSString*,NSString*> *dict, NSWindow *win, GSKeyC
   object = dict[key];
 
   if (object != nil) {
-    [[NSAlert alertWithMessageText:@"There is a key conflict." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There is a conflict with %@ and %@.  Change one of them.", object, newObject] beginSheetModalForWindow:win modalDelegate:nil didEndSelector:nil contextInfo:NULL];
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"There is a key conflict.", @"There is a key conflict");
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"There is a conflict with %@ and %@.  Change one of them.", @"There is a conflict with %@ and %@.  Change one of them."), object, newObject];
+    [alert beginSheetModalForWindow:win completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
     return -1;
   }
   else {
