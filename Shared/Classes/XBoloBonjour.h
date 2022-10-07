@@ -12,14 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XBoloBonjourGameInfo: NSObject
 
-@property (nonatomic, strong) NSString *playerName;
-@property (nonatomic, strong) NSString *mapName;
-@property (nonatomic, strong) NSString *playerCount;
-@property (nonatomic, strong) NSString *passReq;
-@property (nonatomic, strong) NSString *canJoin;
-@property (nonatomic, strong) NSString *paused;
-@property (nonatomic, strong) NSString *hostName;
-@property (nonatomic, strong) NSString *port;
+@property (nonatomic, copy) NSString *playerName;
+@property (nonatomic, copy) NSString *mapName;
+@property (nonatomic, copy) NSString *playerCount;
+@property (nonatomic, copy) NSString *passReq;
+@property (nonatomic, copy) NSString *canJoin;
+@property (nonatomic, copy) NSString *paused;
+@property (nonatomic, copy) NSString *hostName;
+@property (nonatomic, copy) NSString *port;
 @property (nonatomic, strong) NSNetService *service;
 
 @end
@@ -28,9 +28,9 @@ typedef void (^XBoloBonjourFoundGameInfoBlock)(XBoloBonjourGameInfo *gameInfo);
 
 @interface XBoloBonjour : NSObject
 
-@property (nonatomic, strong) NSString *serviceName;
+@property (nonatomic, copy) NSString *serviceName;
 @property (nonatomic, readonly, getter=isListening) BOOL listening;
-@property (nonatomic, strong) NSString *mapName;
+@property (nonatomic, copy) NSString *mapName;
 
 @property (nonatomic, copy, nullable) XBoloBonjourFoundGameInfoBlock gameInfoBlock;
 @property (nonatomic, copy, nullable) void (^gameInfoRemovedBlock)(NSNetService *service);
