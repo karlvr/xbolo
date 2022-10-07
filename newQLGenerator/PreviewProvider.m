@@ -41,12 +41,58 @@
 		return;
 	}
 	
+	const void *buf = data.bytes;
+	size_t nbytes = data.length;
+
+	__block const struct BMAP_Preamble *preamble;
+
+	if (nbytes < sizeof(struct BMAP_Preamble)) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	preamble = buf;
+
+	
+	if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->version != CURRENTMAPVERSION) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->npills > MAX_PILLS) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->nbases > MAX_BASES) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	if (preamble->nstarts > MAXSTARTS) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	if (nbytes <
+		sizeof(struct BMAP_Preamble) +
+		preamble->npills*sizeof(struct BMAP_PillInfo) +
+		preamble->nbases*sizeof(struct BMAP_BaseInfo) +
+		preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
 	QLPreviewReply* reply = [[QLPreviewReply alloc] initWithContextSize:CGSizeMake(256, 256) isBitmap:NO drawingBlock:^BOOL(CGContextRef  _Nonnull context, QLPreviewReply * _Nonnull reply, NSError *__autoreleasing  _Nullable * _Nullable error) {
 		const void *buf = data.bytes;
 		size_t nbytes = data.length;
 
 		int i;
-		const struct BMAP_Preamble *preamble;
 		const struct BMAP_PillInfo *pillInfos;
 		const struct BMAP_BaseInfo *baseInfos;
 		const struct BMAP_StartInfo *startInfos;
@@ -65,12 +111,6 @@
 		/* invert y axis */
 		CGContextTranslateCTM(context, 0, 256);
 		CGContextScaleCTM(context, 1, -1);
-
-		if (nbytes < sizeof(struct BMAP_Preamble)) {
-		  return NO;
-		}
-
-		preamble = buf;
 
 		if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
 			if (error) {

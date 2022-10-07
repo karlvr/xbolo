@@ -19,6 +19,53 @@
 		return;
 	}
 	
+	const void *buf = data.bytes;
+	size_t nbytes = data.length;
+
+	__block const struct BMAP_Preamble *preamble;
+
+	if (nbytes < sizeof(struct BMAP_Preamble)) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	preamble = buf;
+
+	
+	if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->version != CURRENTMAPVERSION) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->npills > MAX_PILLS) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (preamble->nbases > MAX_BASES) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	if (preamble->nstarts > MAXSTARTS) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+
+	if (nbytes <
+		sizeof(struct BMAP_Preamble) +
+		preamble->npills*sizeof(struct BMAP_PillInfo) +
+		preamble->nbases*sizeof(struct BMAP_BaseInfo) +
+		preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
 	//TODO: scale based on request.maximumSize
 	handler([QLThumbnailReply replyWithContextSize:CGSizeMake(256, 256) drawingBlock:^BOOL(CGContextRef  _Nonnull context) {
 		const void *buf = data.bytes;
