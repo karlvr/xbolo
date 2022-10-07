@@ -125,3 +125,9 @@
 "There is a key conflict." = "There is a key conflict";
 
 "There is a conflict with %@ and %@.  Change one of them." = "There is a conflict with %@ and %@.  Change one of them.";
+
+// Mine Laying text field
+
+"Mines May Be Hidden" = "Mines May Be Hidden";
+
+"Mines Will Always Be Visible" = "Mines Will Always Be Visible";

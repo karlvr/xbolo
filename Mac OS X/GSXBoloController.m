@@ -732,10 +732,10 @@ static void getlisttrackerstatus(int status);
   hostHiddenMinesSwitch.state = aBool ? NSOnState : NSOffState;
 
   if (aBool) {
-    hostHiddenMinesTextField.stringValue = @"Mines May Be Hidden";
+    hostHiddenMinesTextField.stringValue = NSLocalizedString(@"Mines May Be Hidden", @"Mines May Be Hidden");
   }
   else {
-    hostHiddenMinesTextField.stringValue = @"Mines Will Always Be Visible";
+    hostHiddenMinesTextField.stringValue = NSLocalizedString(@"Mines Will Always Be Visible", @"Mines Will Always Be Visible");
   }
 
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostHiddenMines];
