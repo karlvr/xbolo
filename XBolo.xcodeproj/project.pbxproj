@@ -82,6 +82,7 @@
 		5547C89528EF7C1600905024 /* ThumbnailProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5547C89428EF7C1600905024 /* ThumbnailProvider.m */; };
 		5547C89928EF7C1600905024 /* MapThumbnails.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5547C88F28EF7C1600905024 /* MapThumbnails.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5547C8A528EF7CAD00905024 /* QLShared.c in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8CA28EECBAA00366E1F /* QLShared.c */; };
+		5547C8AF28F2205F00905024 /* newQLGenerator.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		55513F4928ECCC80009C15F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4828ECCC80009C15F6 /* Foundation.framework */; };
 		55513F4B28ECCC85009C15F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4A28ECCC85009C15F6 /* UIKit.framework */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
@@ -238,6 +239,13 @@
 			remoteGlobalIDString = 5547C88E28EF7C1600905024;
 			remoteInfo = MapThumbnails;
 		};
+		5547C8B028F2205F00905024 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5512E8B228EECAA200366E1F;
+			remoteInfo = newQLGenerator;
+		};
 		55712C381CF9068700326A27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */;
@@ -302,6 +310,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				5547C8AF28F2205F00905024 /* newQLGenerator.appex in Embed Foundation Extensions */,
 				5547C89928EF7C1600905024 /* MapThumbnails.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -1059,6 +1068,7 @@
 			);
 			dependencies = (
 				5547C89828EF7C1600905024 /* PBXTargetDependency */,
+				5547C8B128F2205F00905024 /* PBXTargetDependency */,
 			);
 			name = iPhone;
 			productName = iPhone;
@@ -1609,6 +1619,11 @@
 			target = 5547C88E28EF7C1600905024 /* MapThumbnails */;
 			targetProxy = 5547C89728EF7C1600905024 /* PBXContainerItemProxy */;
 		};
+		5547C8B128F2205F00905024 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5512E8B228EECAA200366E1F /* newQLGenerator */;
+			targetProxy = 5547C8B028F2205F00905024 /* PBXContainerItemProxy */;
+		};
 		55712C391CF9068700326A27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "XBolo Quick Look Plug-in";
@@ -1716,6 +1731,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1779,7 +1795,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MARKETING_VERSION = 0.4.2;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1793,6 +1810,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1837,6 +1855,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MARKETING_VERSION = 0.4.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2050,7 +2069,6 @@
 		5512E8C628EECAA200366E1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2058,34 +2076,36 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = newQLGenerator/newQLGenerator.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9A5PCU4FSD;
+				"DEVELOPMENT_TEAM[sdk=iphonesimulator*]" = 9A5PCU4FSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = newQLGenerator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = newQLGenerator;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=iphoneos*]" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		5512E8C728EECAA200366E1F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2093,8 +2113,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = newQLGenerator/newQLGenerator.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9A5PCU4FSD;
+				"DEVELOPMENT_TEAM[sdk=iphonesimulator*]" = 9A5PCU4FSD;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -2102,20 +2126,23 @@
 				INFOPLIST_FILE = newQLGenerator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = newQLGenerator;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=iphoneos*]" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.newQLGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		5547C89B28EF7C1600905024 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2127,19 +2154,13 @@
 				DEVELOPMENT_TEAM = 9A5PCU4FSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MapThumbnails/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MapThumbnails;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.MapThumbnails;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -2152,7 +2173,6 @@
 		5547C89C28EF7C1600905024 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2169,9 +2189,8 @@
 				INFOPLIST_FILE = MapThumbnails/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MapThumbnails;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 Robert Chrzanowski. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gengasw.xbolo.MapThumbnails;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

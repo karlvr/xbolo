@@ -11,27 +11,6 @@
 
 @implementation PreviewProvider
 
-/*
-
- Use a QLPreviewProvider to provide data-based previews.
- 
- To set up your extension as a data-based preview extension:
-
- - Modify the extension's Info.plist by setting
-   <key>QLIsDataBasedPreview</key>
-   <true/>
- 
- - Add the supported content types to QLSupportedContentTypes array in the extension's Info.plist.
-
- - Change the NSExtensionPrincipalClass to this class.
-   e.g.
-   <key>NSExtensionPrincipalClass</key>
-   <string>PreviewProvider</string>
- 
- - Implement providePreviewForFileRequest:completionHandler:
- 
- */
-
 - (void)providePreviewForFileRequest:(QLFilePreviewRequest *)request completionHandler:(void (^)(QLPreviewReply * _Nullable reply, NSError * _Nullable error))handler
 {
 	NSError *err;
@@ -41,49 +20,48 @@
 		return;
 	}
 	
-	const void *buf = data.bytes;
+	const void *preBuf = data.bytes;
 	size_t nbytes = data.length;
 
-	__block const struct BMAP_Preamble *preamble;
+	const struct BMAP_Preamble *prePreamble;
 
 	if (nbytes < sizeof(struct BMAP_Preamble)) {
 		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
 		return;
 	}
 
-	preamble = buf;
+	prePreamble = preBuf;
+	
+	if (strncmp((const char *)prePreamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (prePreamble->version != CURRENTMAPVERSION) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (prePreamble->npills > MAX_PILLS) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
+	
+	if (prePreamble->nbases > MAX_BASES) {
+		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
+		return;
+	}
 
-	
-	if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
-		return;
-	}
-	
-	if (preamble->version != CURRENTMAPVERSION) {
-		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
-		return;
-	}
-	
-	if (preamble->npills > MAX_PILLS) {
-		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
-		return;
-	}
-	
-	if (preamble->nbases > MAX_BASES) {
-		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
-		return;
-	}
-
-	if (preamble->nstarts > MAXSTARTS) {
+	if (prePreamble->nstarts > MAXSTARTS) {
 		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
 		return;
 	}
 
 	if (nbytes <
 		sizeof(struct BMAP_Preamble) +
-		preamble->npills*sizeof(struct BMAP_PillInfo) +
-		preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-		preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
+		prePreamble->npills*sizeof(struct BMAP_PillInfo) +
+		prePreamble->nbases*sizeof(struct BMAP_BaseInfo) +
+		prePreamble->nstarts*sizeof(struct BMAP_StartInfo)) {
 		handler(nil, [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}]);
 		return;
 	}
@@ -93,12 +71,13 @@
 		size_t nbytes = data.length;
 
 		int i;
+		const struct BMAP_Preamble *preamble;
 		const struct BMAP_PillInfo *pillInfos;
 		const struct BMAP_BaseInfo *baseInfos;
 		const struct BMAP_StartInfo *startInfos;
 		const void *runData;
-		int runDataLen;
-		int offset;
+		size_t runDataLen;
+		ssize_t offset;
 		int minx = 256, maxx = 0, miny = 256, maxy = 0;
 
 		/* turn off antialiasing */
@@ -112,58 +91,14 @@
 		CGContextTranslateCTM(context, 0, 256);
 		CGContextScaleCTM(context, 1, -1);
 
-		if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
-		
-		if (preamble->version != CURRENTMAPVERSION) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
-		
-		if (preamble->npills > MAX_PILLS) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
-		
-		if (preamble->nbases > MAX_BASES) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
-
-		if (preamble->nstarts > MAXSTARTS) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
-
-		if (nbytes <
-			sizeof(struct BMAP_Preamble) +
-			preamble->npills*sizeof(struct BMAP_PillInfo) +
-			preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-			preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-			if (error) {
-				*error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:@{NSURLErrorKey: request.fileURL}];
-			}
-			return NO;
-		}
+		preamble = buf;
 
 		pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
 		baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);
 		startInfos = (struct BMAP_StartInfo *)(baseInfos + preamble->nbases);
 		runData = (void *)(startInfos + preamble->nstarts);
 		runDataLen =
-		  (int)(nbytes - (sizeof(struct BMAP_Preamble) +
+		  (nbytes - (sizeof(struct BMAP_Preamble) +
 					preamble->npills*sizeof(struct BMAP_PillInfo) +
 					preamble->nbases*sizeof(struct BMAP_BaseInfo) +
 					preamble->nstarts*sizeof(struct BMAP_StartInfo)));
