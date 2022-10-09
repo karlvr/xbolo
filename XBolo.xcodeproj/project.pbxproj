@@ -143,7 +143,6 @@
 		55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */; };
 		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
-		55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
 		B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAD9229FEE9000741E7A /* GSBoloSKView.m */; };
 		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
@@ -450,7 +449,6 @@
 		55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPhone-Bridging-Header.h"; sourceTree = "<group>"; };
 		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
 		55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XBuilderStatusView.swift; sourceTree = "<group>"; };
-		55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = vector_Swift.swift; sourceTree = "<group>"; };
 		55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Standard Autopilot.xbolorobot"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -702,7 +700,6 @@
 				404D43450FF85B9C00589EA2 /* main.m */,
 				55D1E20E1CFB77BE003C0B00 /* Classes */,
 				404D430D0FF8593700589EA2 /* Resources */,
-				55D1E2161CFB8B88003C0B00 /* vector_Swift.swift */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -1434,7 +1431,6 @@
 				404D43110FF85B5700589EA2 /* XBoloView.m in Sources */,
 				404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */,
 				55C4A5561CBD72EF003A29B0 /* list.c in Sources */,
-				55D1E2171CFB8B88003C0B00 /* vector_Swift.swift in Sources */,
 				55C4A5551CBD72E9003A29B0 /* bolo.c in Sources */,
 				404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */,
 				404D43460FF85B9C00589EA2 /* main.m in Sources */,
@@ -1801,7 +1797,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1861,7 +1857,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -2028,7 +2024,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = "-Wall";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2062,7 +2057,6 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "Mac OS X/Mac OS X-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
 			};

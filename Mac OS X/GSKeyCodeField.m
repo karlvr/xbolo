@@ -1,7 +1,7 @@
 #import "GSKeyCodeField.h"
 #include <Carbon/Carbon.h>
 
-NSDictionary<NSNumber*, NSString*> *nameDictionary;
+static NSDictionary<NSNumber*, NSString*> *nameDictionary;
 
 @implementation GSKeyCodeFieldCell
 @synthesize keyCode;
