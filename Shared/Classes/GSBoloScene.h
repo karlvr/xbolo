@@ -12,10 +12,8 @@
 
 #if TARGET_OS_IOS
 #define VIEW_TYPE UIView
-#define COLOR_TYPE UIColor
 #elif TARGET_OS_OSX
 #define VIEW_TYPE NSView
-#define COLOR_TYPE NSColor
 #else
 #error Unsupported target
 #endif

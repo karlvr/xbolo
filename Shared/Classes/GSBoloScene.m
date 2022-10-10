@@ -117,7 +117,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
     _otherPlayerLabels = [NSMutableArray array];
     _textures = [NSMutableDictionary dictionary];
 
-    self.backgroundColor = [COLOR_TYPE redColor];
+    self.backgroundColor = [SKColor redColor];
 
     NSMutableArray<SKTileGroup *> *tileGroups = [NSMutableArray array];
     for (GSImage image = 0; image <= MINE00IMAGE; image++) {
@@ -210,7 +210,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
                  nextLabel:(NSUInteger *)nextLabel
                   fontName:(NSString *)fontName
                   fontSize:(CGFloat)fontSize
-                 fontColor:(COLOR_TYPE *)fontColor
+                 fontColor:(SKColor *)fontColor
                  zPosition:(ZPosition)zPosition {
   SKLabelNode *label;
   if (*nextLabel < labels.count) {
@@ -453,7 +453,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
       }
 
       if (vis > 0.90) {
-        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[COLOR_TYPE whiteColor] zPosition:ZPositionOtherTankLabel];
+        SKLabelNode *label = [self nextLabel:_otherPlayerLabels nextLabel:&nextLabel fontName:@"Helvetica" fontSize:9 fontColor:[SKColor whiteColor] zPosition:ZPositionOtherTankLabel];
         NSString *text = [NSString stringWithCString:client.players[i].name encoding:NSUTF8StringEncoding];
         [self drawLabel:label text:text at:client.players[i].tank offset:CGPointMake(0, 12)];
       }
@@ -584,7 +584,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   if (client.pause) {
     if (!_gameStateLabel) {
       _gameStateLabel = [[SKLabelNode alloc] initWithFontNamed:@"Helvetica"];
-      _gameStateLabel.fontColor = [COLOR_TYPE whiteColor];
+      _gameStateLabel.fontColor = [SKColor whiteColor];
       _gameStateLabel.fontSize = 90;
       _gameStateLabel.position = self.position;
       _gameStateLabel.zPosition = ZPositionGlobalLabel;
