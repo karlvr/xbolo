@@ -429,7 +429,7 @@
 		55712BFC1CF8F00100326A27 /* mouseZoomIn.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = mouseZoomIn.tiff; sourceTree = "<group>"; };
 		55712BFD1CF8F00100326A27 /* mouseZoomLimit.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = mouseZoomLimit.tiff; sourceTree = "<group>"; };
 		55712BFE1CF8F00100326A27 /* mouseZoomOut.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = mouseZoomOut.tiff; sourceTree = "<group>"; };
-		55712C1A1CF8F04D00326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		55712C1A1CF8F04D00326A27 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		55712C1D1CF8F05600326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		55712C201CF8F0C300326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GSXBoloMap.xib; sourceTree = "<group>"; };
 		55712C231CF8F0D000326A27 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };

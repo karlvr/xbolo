@@ -108,7 +108,7 @@ TRY
     printf("Starting Server\n");
     if (
         startserverthreadwithtracker(
-          tracker, getservertcpport(), hostplayer,
+          tracker, 0, getservertcpport(), hostplayer,
           mapname, registercallback
         )
       ) LOGFAIL(errno)
