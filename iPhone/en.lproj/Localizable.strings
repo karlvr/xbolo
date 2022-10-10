@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  XBolo
+
+  Created by C.W. Betts on 10/10/22.
+  Copyright © 2022 Robert Chrzanowski. All rights reserved.
+*/
+
+"Starting..." = "Starting…";
+
+"UPnP Mapping Port..." = "UPnP Mapping Port…";
+
+"Resolving Tracker..." = "Resolving Tracker…";
+
+"Connecting to Tracker..." = "Connecting to Tracker…";
+
+"Sending Data..." = "Sending Data…";
+
+"Testing TCP Port..." = "Testing TCP Port…";
+
+"Testing UDP Port..." = "Testing UDP Port…";
+
+"Receving Game List..." = "Receving Game List…";
+
+// Join Progress
+
+"Resolving Hostname..." = "Resolving Hostname…";
+
+"Connecting..." = "Connecting…";
+
+"Sending Client Data" = "Sending Client Data";
+
+"Receiving Server Data" = "Receiving Server Data";
+
+"Receving Map Data" = "Receving Map Data";

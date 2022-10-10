@@ -91,7 +91,7 @@ static NSMutableArray<AVAudioPlayer*> *treesounds;
 + (AVAudioPlayer *)soundNamed:(NSString *)name {
   NSDataAsset *asset = [[NSDataAsset alloc] initWithName:[@"Sounds/" stringByAppendingString:name]];
   NSError *error = nil;
-  return [[AVAudioPlayer alloc] initWithData:asset.data fileTypeHint:@"public.aiff-audio" error:&error];
+  return [[AVAudioPlayer alloc] initWithData:asset.data fileTypeHint:asset.typeIdentifier error:&error];
 }
 
 - (AVAudioPlayer *)copy {
@@ -664,8 +664,6 @@ END
   }
 }
 
-@end
-
 #pragma mark -
 
 void setplayerstatus(int player) {
@@ -1119,8 +1117,6 @@ void getlisttrackerstatus(int status) {
 void clientloopupdate(void) {
   [controller clientLoopUpdate];
 }
-
-@implementation XBoloViewController (UIGestureRecognizerDelegate)
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
   return YES;

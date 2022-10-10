@@ -83,6 +83,8 @@
 		5547C89928EF7C1600905024 /* MapThumbnails.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5547C88F28EF7C1600905024 /* MapThumbnails.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5547C8A528EF7CAD00905024 /* QLShared.c in Sources */ = {isa = PBXBuildFile; fileRef = 5512E8CA28EECBAA00366E1F /* QLShared.c */; };
 		5547C8AF28F2205F00905024 /* newQLGenerator.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5512E8B328EECAA200366E1F /* newQLGenerator.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5547C8C028F4004B00905024 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5547C8C228F4004B00905024 /* Localizable.strings */; };
+		5547C8C328F4017600905024 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		55513F4928ECCC80009C15F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4828ECCC80009C15F6 /* Foundation.framework */; };
 		55513F4B28ECCC85009C15F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55513F4A28ECCC85009C15F6 /* UIKit.framework */; };
 		55540D281CBDD75500EAFC83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55540D271CBDD75500EAFC83 /* CoreServices.framework */; };
@@ -403,6 +405,7 @@
 		5547C89328EF7C1600905024 /* ThumbnailProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThumbnailProvider.h; sourceTree = "<group>"; };
 		5547C89428EF7C1600905024 /* ThumbnailProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThumbnailProvider.m; sourceTree = "<group>"; };
 		5547C89628EF7C1600905024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5547C8C128F4004B00905024 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55513F4828ECCC80009C15F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		55513F4A28ECCC85009C15F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		55540D271CBDD75500EAFC83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -764,6 +767,7 @@
 				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
 				55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */,
 				B84309EA22B2E38300541AD5 /* Main.storyboard */,
+				5547C8C228F4004B00905024 /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1348,6 +1352,7 @@
 				B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */,
 				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
+				5547C8C028F4004B00905024 /* Localizable.strings in Resources */,
 				55712C821CFA1AC300326A27 /* Images.xcassets in Resources */,
 				553C838F2712DBAB002782C0 /* Sounds.xcassets in Resources */,
 			);
@@ -1485,6 +1490,7 @@
 				4081876F1080C92500E4D4CA /* main.c in Sources */,
 				408188441080EF9200E4D4CA /* rect.c in Sources */,
 				4081881E1080EF2800E4D4CA /* server.c in Sources */,
+				5547C8C328F4017600905024 /* string.c in Sources */,
 				4064465510826647008F913C /* terrain.c in Sources */,
 				408188581080EFE800E4D4CA /* timing.c in Sources */,
 				408188431080EF9200E4D4CA /* vector.c in Sources */,
@@ -1644,6 +1650,14 @@
 				089C165DFE840E0CC02AAC07 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5547C8C228F4004B00905024 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5547C8C128F4004B00905024 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		5562F91A20D064140007248E /* XBolo.scriptTerminology */ = {
