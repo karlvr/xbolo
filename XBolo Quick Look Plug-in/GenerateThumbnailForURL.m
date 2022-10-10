@@ -11,16 +11,50 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
   NSData *data;
   const void *buf;
   size_t nbytes;
+  const struct BMAP_Preamble *preamble;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
   buf = data.bytes;
   nbytes = data.length;
 
+  if (nbytes < sizeof(struct BMAP_Preamble)) {
+    return noErr;
+  }
+  
+  preamble = buf;
+  
+  if (strncmp((const char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
+    return noErr;
+  }
+  
+  if (preamble->version != CURRENTMAPVERSION) {
+    return noErr;
+  }
+  
+  if (preamble->npills > MAX_PILLS) {
+    return noErr;
+  }
+  
+  if (preamble->nbases > MAX_BASES) {
+    return noErr;
+  }
+  
+  if (preamble->nstarts > MAXSTARTS) {
+    return noErr;
+  }
+  
+  if (nbytes <
+      sizeof(struct BMAP_Preamble) +
+      preamble->npills*sizeof(struct BMAP_PillInfo) +
+      preamble->nbases*sizeof(struct BMAP_BaseInfo) +
+      preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
+    return noErr;
+  }
+  
   CGContextRef context = QLThumbnailRequestCreateContext(thumbnail, CGSizeMake(256, 256), false, NULL);
 
   if(context) {
     int i;
-    const struct BMAP_Preamble *preamble;
     const struct BMAP_PillInfo *pillInfos;
     const struct BMAP_BaseInfo *baseInfos;
     const struct BMAP_StartInfo *startInfos;
@@ -39,54 +73,6 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     /* invert y axis */
     CGContextTranslateCTM(context, 0, 256);
     CGContextScaleCTM(context, 1, -1);
-
-    if (nbytes < sizeof(struct BMAP_Preamble)) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    preamble = buf;
-
-    if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    if (preamble->version != CURRENTMAPVERSION) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    if (preamble->npills > MAX_PILLS) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    if (preamble->nbases > MAX_BASES) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    if (preamble->nstarts > MAXSTARTS) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
-
-    if (nbytes <
-        sizeof(struct BMAP_Preamble) +
-        preamble->npills*sizeof(struct BMAP_PillInfo) +
-        preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-        preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-      //QLThumbnailRequestFlushContext(thumbnail, context);
-      CFRelease(context);
-      return -1;
-    }
 
     pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
     baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);

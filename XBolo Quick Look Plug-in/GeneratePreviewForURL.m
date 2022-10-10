@@ -12,16 +12,50 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
   NSData *data;
   const void *buf;
   size_t nbytes;
+  const struct BMAP_Preamble *preamble;
 
   data = [NSData dataWithContentsOfURL:(__bridge NSURL *)url];
   buf = data.bytes;
   nbytes = data.length;
 
+  if (nbytes < sizeof(struct BMAP_Preamble)) {
+    return noErr;
+  }
+  
+  preamble = buf;
+  
+  if (strncmp((const char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
+    return noErr;
+  }
+  
+  if (preamble->version != CURRENTMAPVERSION) {
+    return noErr;
+  }
+  
+  if (preamble->npills > MAX_PILLS) {
+    return noErr;
+  }
+  
+  if (preamble->nbases > MAX_BASES) {
+    return noErr;
+  }
+  
+  if (preamble->nstarts > MAXSTARTS) {
+    return noErr;
+  }
+  
+  if (nbytes <
+      sizeof(struct BMAP_Preamble) +
+      preamble->npills*sizeof(struct BMAP_PillInfo) +
+      preamble->nbases*sizeof(struct BMAP_BaseInfo) +
+      preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
+    return noErr;
+  }
+  
   CGContextRef context = QLPreviewRequestCreateContext(preview, CGSizeMake(256, 256), false, NULL);
 
   if(context) {
     int i;
-    const struct BMAP_Preamble *preamble;
     const struct BMAP_PillInfo *pillInfos;
     const struct BMAP_BaseInfo *baseInfos;
     const struct BMAP_StartInfo *startInfos;
@@ -40,54 +74,6 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     /* invert y axis */
     CGContextTranslateCTM(context, 0, 256);
     CGContextScaleCTM(context, 1, -1);
-
-    if (nbytes < sizeof(struct BMAP_Preamble)) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    preamble = buf;
-
-    if (strncmp((char *)preamble->ident, MAPFILEIDENT, MAPFILEIDENTLEN) != 0) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    if (preamble->version != CURRENTMAPVERSION) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    if (preamble->npills > MAX_PILLS) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    if (preamble->nbases > MAX_BASES) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    if (preamble->nstarts > MAXSTARTS) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
-
-    if (nbytes <
-        sizeof(struct BMAP_Preamble) +
-        preamble->npills*sizeof(struct BMAP_PillInfo) +
-        preamble->nbases*sizeof(struct BMAP_BaseInfo) +
-        preamble->nstarts*sizeof(struct BMAP_StartInfo)) {
-      //QLPreviewRequestFlushContext(preview, context);
-      CFRelease(context);
-      return noErr;
-    }
 
     pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
     baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);
@@ -190,9 +176,9 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
       }
 
       if (drawrun(context, run, runData + offset + sizeof(struct BMAP_Run)) == -1) {
-        //QLPreviewRequestFlushContext(preview, context);
+        QLPreviewRequestFlushContext(preview, context);
         CFRelease(context);
-        return noErr;
+        return -1;
       }
 
       offset += run.datalen;
