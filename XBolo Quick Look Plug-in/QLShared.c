@@ -12,7 +12,6 @@
 
 static int setterraincolor(CGContextRef context, BoloTerrainTypes tile);
 static int readnibble(const void *buf, size_t i);
-static CGColorSpaceRef myGetGenericRGBSpace(void);
 
 int drawrun(CGContextRef context, struct BMAP_Run run, const void *buf) {
   int i;
@@ -125,193 +124,139 @@ int readnibble(const void *buf, size_t i) {
   return i%2 ? *(uint8_t *)(buf + i/2) & 0x0f : (*(uint8_t *)(buf + i/2) & 0xf0) >> 4;
 }
 
-CGColorSpaceRef myGetGenericRGBSpace(void) {
-  // Only create the color space once.
-  static CGColorSpaceRef colorSpace = NULL;
+static CGColorRef red = NULL;
+static CGColorRef green = NULL;
+static CGColorRef darkGreen = NULL;
+static CGColorRef blue = NULL;
+static CGColorRef darkBlue = NULL;
+static CGColorRef yellow = NULL;
+static CGColorRef cyan = NULL;
+static CGColorRef darkCyan = NULL;
+static CGColorRef brown = NULL;
+static CGColorRef lightBrown = NULL;
+static CGColorRef veryLightBrown = NULL;
+static CGColorRef darkBrown = NULL;
+static CGColorRef grey = NULL;
+static CGColorRef black = NULL;
+
+static dispatch_once_t onceColorToken = 0;
+static dispatch_block_t initColors = ^{
+  CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+  // R,G,B,A
+  const CGFloat opaqueRed[4] = { 1, 0, 0, 1 };
+  const CGFloat opaqueGreen[4] = { 0, 1, 0, 1 };
+  const CGFloat opaqueDarkGreen[4] = { 0, 0.502, 0, 1 };
+  const CGFloat opaqueBlue[4] = { 0, 0, 1, 1 };
+  const CGFloat opaqueDarkBlue[4] = { 0, 0, 0.475, 1 };
+  const CGFloat opaqueYellow[4] = { 1, 1, 0, 1 };
+  const CGFloat opaqueCyan[4] = { 0, 1, 1, 1 };
+  const CGFloat opaqueDarkCyan[4] = { 0, 0.502, 0.502, 1 };
+  const CGFloat opaqueBrown[4] = { 0.702, 0.475, 0.059, 1 };
+  const CGFloat opaqueLightBrown[4] = { 0.875, 0.596, 0.075, 1 };
+  const CGFloat opaqueVeryLightBrown[4] = { 0.918, 0.647, 0.482, 1 };
+  const CGFloat opaqueDarkBrown[4] = { 0.502, 0.251, 0.0, 1 };
+  const CGFloat opaqueGrey[4] = { 0.502, 0.502, 0.502, 1 };
+  const CGFloat opaqueBlack[4] = { 0, 0, 0, 1 };
+
+  // Only create the CGColor objects once.
+  red = CGColorCreate(space, opaqueRed);
+  green = CGColorCreate(space, opaqueGreen);
+  darkGreen = CGColorCreate(space, opaqueDarkGreen);
+  blue = CGColorCreate(space, opaqueBlue);
+  darkBlue = CGColorCreate(space, opaqueDarkBlue);
+  yellow = CGColorCreate(space, opaqueYellow);
+  cyan = CGColorCreate(space, opaqueCyan);
+  darkCyan = CGColorCreate(space, opaqueDarkCyan);
+  brown = CGColorCreate(space, opaqueBrown);
+  lightBrown = CGColorCreate(space, opaqueLightBrown);
+  veryLightBrown = CGColorCreate(space, opaqueVeryLightBrown);
+  darkBrown = CGColorCreate(space, opaqueDarkBrown);
+  grey = CGColorCreate(space, opaqueGrey);
+  black = CGColorCreate(space, opaqueBlack);
   
-  if (colorSpace == NULL) {
-    colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
-  }
-  
-  return colorSpace;
-}
+  CGColorSpaceRelease(space);
+};
 
 CGColorRef myGetRedColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef red = NULL;
-  
-  if (red == NULL) {
-    // R,G,B,A
-    CGFloat opaqueRed[4] = { 1, 0, 0, 1 };
-    red = CGColorCreate(myGetGenericRGBSpace(), opaqueRed);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return red;
 }
 
 CGColorRef myGetGreenColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef green = NULL;
-  
-  if (green == NULL) {
-    // R,G,B,A
-    CGFloat opaqueGreen[4] = { 0, 1, 0, 1 };
-    green = CGColorCreate(myGetGenericRGBSpace(), opaqueGreen);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return green;
 }
 
 CGColorRef myGetDarkGreenColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef darkGreen = NULL;
-  
-  if (darkGreen == NULL) {
-    // R,G,B,A
-    CGFloat opaqueDarkGreen[4] = { 0, 0.502, 0, 1 };
-    darkGreen = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkGreen);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return darkGreen;
 }
 
 CGColorRef myGetBlueColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef blue = NULL;
-  if (blue == NULL) {
-    // R,G,B,A
-    CGFloat opaqueBlue[4] = { 0, 0, 1, 1 };
-    blue = CGColorCreate(myGetGenericRGBSpace(), opaqueBlue);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return blue;
 }
 
 CGColorRef myGetDarkBlueColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef darkBlue = NULL;
-  if (darkBlue == NULL) {
-    // R,G,B,A
-    CGFloat opaqueDarkBlue[4] = { 0, 0, 0.475, 1 };
-    darkBlue = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkBlue);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return darkBlue;
 }
 
 CGColorRef myGetYellowColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef yellow = NULL;
-  
-  if (yellow == NULL) {
-    // R,G,B,A
-    CGFloat opaqueYellow[4] = { 1, 1, 0, 1 };
-    yellow = CGColorCreate(myGetGenericRGBSpace(), opaqueYellow);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return yellow;
 }
 
 CGColorRef myGetCyanColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef cyan = NULL;
-  
-  if (cyan == NULL) {
-    // R,G,B,A
-    CGFloat opaqueCyan[4] = { 0, 1, 1, 1 };
-    cyan = CGColorCreate(myGetGenericRGBSpace(), opaqueCyan);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return cyan;
 }
 
 CGColorRef myGetDarkCyanColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef darkCyan = NULL;
-  
-  if (darkCyan == NULL) {
-    // R,G,B,A
-    CGFloat opaqueDarkCyan[4] = { 0, 0.502, 0.502, 1 };
-    darkCyan = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkCyan);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return darkCyan;
 }
 
 CGColorRef myGetBrownColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef brown = NULL;
-  
-  if (brown == NULL) {
-    // R,G,B,A
-    CGFloat opaqueBrown[4] = { 0.702, 0.475, 0.059, 1 };
-    brown = CGColorCreate(myGetGenericRGBSpace(), opaqueBrown);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return brown;
 }
 
 CGColorRef myGetLightBrownColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef lightBrown = NULL;
-  
-  if (lightBrown == NULL) {
-    // R,G,B,A
-    CGFloat opaqueLightBrown[4] = { 0.875, 0.596, 0.075, 1 };
-    lightBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueLightBrown);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return lightBrown;
 }
 
 CGColorRef myGetVeryLightBrownColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef veryLightBrown = NULL;
-  
-  if (veryLightBrown == NULL) {
-    // R,G,B,A
-    CGFloat opaqueVeryLightBrown[4] = { 0.918, 0.647, 0.482, 1 };
-    veryLightBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueVeryLightBrown);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return veryLightBrown;
 }
 
 CGColorRef myGetDarkBrownColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef darkBrown = NULL;
-  
-  if (darkBrown == NULL) {
-    // R,G,B,A
-    CGFloat opaqueDarkBrown[4] = { 0.502, 0.251, 0.0, 1 };
-    darkBrown = CGColorCreate(myGetGenericRGBSpace(), opaqueDarkBrown);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return darkBrown;
 }
 
 CGColorRef myGetGreyColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef grey = NULL;
-  
-  if (grey == NULL) {
-    // R,G,B,A
-    CGFloat opaqueGrey[4] = { 0.502, 0.502, 0.502, 1 };
-    grey = CGColorCreate(myGetGenericRGBSpace(), opaqueGrey);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return grey;
 }
 
 CGColorRef myGetBlackColor(void) {
-  // Only create the CGColor object once.
-  static CGColorRef black = NULL;
-  
-  if (black == NULL) {
-    // R,G,B,A
-    CGFloat opaqueBlack[4] = { 0, 0, 0, 1 };
-    black = CGColorCreate(myGetGenericRGBSpace(), opaqueBlack);
-  }
+  dispatch_once(&onceColorToken, initColors);
   
   return black;
 }
