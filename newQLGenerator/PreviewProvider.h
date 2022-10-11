@@ -6,7 +6,7 @@
 //  Copyright © 2022 Robert Chrzanowski. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <Quartz/Quartz.h>
 
 @interface PreviewProvider : QLPreviewProvider <QLPreviewingController>

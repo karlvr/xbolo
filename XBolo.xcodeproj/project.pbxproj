@@ -448,6 +448,8 @@
 		55C405E520CEE0060033C0E2 /* BoloKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoloKit.h; sourceTree = "<group>"; };
 		55C405E620CEE0060033C0E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C405EF20CEE04E0033C0E2 /* GSRobotExternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSRobotExternal.m; sourceTree = "<group>"; };
+		55C6549B28F56BFB00D11E28 /* newQLGenerator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "newQLGenerator-Bridging-Header.h"; sourceTree = "<group>"; };
+		55C6549C28F56BFC00D11E28 /* PreviewProviderSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProviderSwift.swift; sourceTree = "<group>"; };
 		55D1E20C1CFB774C003C0B00 /* iPhone.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iPhone.xcassets; sourceTree = "<group>"; };
 		55D1E20F1CFB7BE0003C0B00 /* iPhone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPhone-Bridging-Header.h"; sourceTree = "<group>"; };
 		55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XStatusBar.swift; sourceTree = "<group>"; };
@@ -795,8 +797,10 @@
 				5512E8C928EECBAA00366E1F /* QLSharedStructs.h */,
 				5512E8BA28EECAA200366E1F /* PreviewProvider.h */,
 				5512E8BB28EECAA200366E1F /* PreviewProvider.m */,
+				55C6549C28F56BFC00D11E28 /* PreviewProviderSwift.swift */,
 				5512E8C028EECAA200366E1F /* Info.plist */,
 				5512E8C128EECAA200366E1F /* newQLGenerator.entitlements */,
+				55C6549B28F56BFB00D11E28 /* newQLGenerator-Bridging-Header.h */,
 			);
 			indentWidth = 4;
 			path = newQLGenerator;
@@ -1238,6 +1242,7 @@
 					};
 					5512E8B228EECAA200366E1F = {
 						CreatedOnToolsVersion = 14.0.1;
+						LastSwiftMigration = 1400;
 						ProvisioningStyle = Automatic;
 					};
 					5547C88E28EF7C1600905024 = {
@@ -2080,6 +2085,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -2108,6 +2114,9 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "newQLGenerator/newQLGenerator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2116,6 +2125,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -2144,6 +2154,8 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "newQLGenerator/newQLGenerator-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
