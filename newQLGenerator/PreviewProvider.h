@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#if __MAC_OS_X_VERSION_MIN_REQUIRED
 #import <Quartz/Quartz.h>
+#else
+#import <QuickLook/QuickLook.h>
+#endif
 
 @interface PreviewProvider : QLPreviewProvider <QLPreviewingController>
 
