@@ -68,9 +68,7 @@ NSString *spriteName(GSImage image) {
 
 void hideUnusedNodes(NSArray<SKNode *> *nodes, NSUInteger fromIndex) {
   NSUInteger count = nodes.count;
-  for (NSUInteger i = fromIndex; i < count; i++) {
-    nodes[i].hidden = YES;
-  }
+  [[nodes subarrayWithRange:NSMakeRange(fromIndex, count - fromIndex)] makeObjectsPerformSelector:@selector(setHidden:) withObject:@YES];
 }
 
 CGFloat CGPointDist(CGPoint a, CGPoint b) {

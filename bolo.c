@@ -43,7 +43,7 @@ struct TrackerThreadInfo {
   int fd;
 } ;
 
-static struct {
+static struct TrackerInfo {
   pthread_mutex_t mutex;
   int sock;
 } tracker;
