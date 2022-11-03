@@ -38,6 +38,10 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>XBolo Robot</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.gengasw.xbolo.brains</string>
+			</array>
 			<key>CFBundleTypeRole</key>
 			<string>None</string>
 			<key>LSTypeIsPackage</key>
@@ -112,6 +116,24 @@
 					<string>map</string>
 					<string>bmap</string>
 					<string>bol</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+				<string>com.apple.bundle</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>com.gengasw.xbolo.brains</string>
+			<key>UTTypeDescription</key>
+			<string>XBolo Brain</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xbolorobot</string>
 				</array>
 			</dict>
 		</dict>
