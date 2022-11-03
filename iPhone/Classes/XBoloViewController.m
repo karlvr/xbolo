@@ -311,7 +311,7 @@ static NSMutableArray<AVAudioPlayer*> *treesounds;
 
 TRY
 //  [_boloView refresh];
-  NSURL *mapURL = [[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"];
+  NSURL *mapURL = [[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"bmap"];
 
   NSData *mapData = nil;
   mapData = [NSData dataWithContentsOfURL:mapURL];

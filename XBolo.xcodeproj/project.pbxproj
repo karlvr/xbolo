@@ -158,8 +158,8 @@
 		B860A8CE22B1805A00E4806A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		B872064D243DD503001304D1 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B87572C822B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */; };
-		B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
-		B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.map */; };
+		B8BD70AE22A31ADD00F07A00 /* Everard Island.bmap in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.bmap */; };
+		B8BD70AF22A31ADD00F07A00 /* Everard Island.bmap in Resources */ = {isa = PBXBuildFile; fileRef = B8BD70AD22A31ADD00F07A00 /* Everard Island.bmap */; };
 		B8DA24E5244A7D4200BDF694 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = B872064C243DD503001304D1 /* string.c */; };
 		B8DA24E7244A7DFA00BDF694 /* XBoloControlPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DA24E6244A7DFA00BDF694 /* XBoloControlPanelViewController.swift */; };
 		B8DA24EA244A7FB900BDF694 /* XBoloSteerGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DA24E9244A7FB900BDF694 /* XBoloSteerGestureRecognizer.swift */; };
@@ -477,7 +477,7 @@
 		B872064B243DD503001304D1 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		B872064C243DD503001304D1 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
 		B87572C722B2C6F00038D626 /* XBoloDriveGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloDriveGestureRecognizer.swift; sourceTree = "<group>"; };
-		B8BD70AD22A31ADD00F07A00 /* Everard Island.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Everard Island.map"; sourceTree = "<group>"; };
+		B8BD70AD22A31ADD00F07A00 /* Everard Island.bmap */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Everard Island.bmap"; sourceTree = "<group>"; };
 		B8DA24E6244A7DFA00BDF694 /* XBoloControlPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloControlPanelViewController.swift; sourceTree = "<group>"; };
 		B8DA24E9244A7FB900BDF694 /* XBoloSteerGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloSteerGestureRecognizer.swift; sourceTree = "<group>"; };
 		B8DA24EB244A85F200BDF694 /* XBoloBuildGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XBoloBuildGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -984,7 +984,7 @@
 		B8BD70AC22A31AC800F07A00 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B8BD70AD22A31ADD00F07A00 /* Everard Island.map */,
+				B8BD70AD22A31ADD00F07A00 /* Everard Island.bmap */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1354,7 +1354,7 @@
 			files = (
 				404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */,
 				55D1E20D1CFB774C003C0B00 /* iPhone.xcassets in Resources */,
-				B8BD70AF22A31ADD00F07A00 /* Everard Island.map in Resources */,
+				B8BD70AF22A31ADD00F07A00 /* Everard Island.bmap in Resources */,
 				55712C851CFA1B9800326A27 /* Images.xcassets in Resources */,
 				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
 				5547C8C028F4004B00905024 /* Localizable.strings in Resources */,
@@ -1376,7 +1376,7 @@
 				40A5934C0FBE78FC00F3E650 /* DefaultPreferences.plist in Resources */,
 				558243651CBD7ABB006BDC14 /* Images.xcassets in Resources */,
 				55A4B79F1D2C3FBD008A61F6 /* XBolo.scriptSuite in Resources */,
-				B8BD70AE22A31ADD00F07A00 /* Everard Island.map in Resources */,
+				B8BD70AE22A31ADD00F07A00 /* Everard Island.bmap in Resources */,
 				558243631CBD7A63006BDC14 /* MainMenu.xib in Resources */,
 				5562F91820D064140007248E /* XBolo.scriptTerminology in Resources */,
 			);

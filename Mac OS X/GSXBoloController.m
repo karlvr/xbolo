@@ -1152,7 +1152,7 @@ END
   [newGameWindow makeFirstResponder:nil];
 
 TRY
-  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"map"]]) == nil) {
+  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"bmap"]]) == nil) {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"No map chosen.", @"No map chosen.");
     alert.informativeText = NSLocalizedString(@"Please try another map.", @"Please try another map.");
