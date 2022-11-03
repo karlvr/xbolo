@@ -149,7 +149,7 @@ NS_ASSUME_NONNULL_BEGIN
   IBOutlet GSStatusBar *playerTreesStatusBar;
 
   // host pane data
-  NSString *hostMapString;
+  NSURL *hostMapURL;
   unsigned short hostPortNumber;
   BOOL hostPasswordBool;
   BOOL hostUPnPBool;
@@ -320,7 +320,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mouseEvent:(GSPoint)point;
 
 // accessor methods
-@property (nonatomic, copy) NSString * hostMap;
+@property (nonatomic, copy, nullable) NSURL * hostMap;
 @property (nonatomic) BOOL hostUPnP;
 @property (nonatomic) unsigned short hostPort;
 @property (nonatomic) BOOL hasHostPassword;
@@ -350,31 +350,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (getter=isMuted, nonatomic) BOOL mute;
 
 - (void)requestConnectionToServer:(NSString*)servStr port:(unsigned short)port password:(nullable NSString*)pass;
-
-
-- (void)setMuteBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setPlayerNameString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setJoinPasswordBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setJoinPasswordString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setAutoSlowdownBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setTrackerString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setHostMapString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setHostUPnPBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setHostPasswordBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setHostPasswordString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setHostTimeLimitBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setHostTimeLimitString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setHostHiddenMinesBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setHostTrackerBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setHostGameTypeNumber:(int)aInt UNAVAILABLE_ATTRIBUTE;
-- (void)setHostDominationTypeNumber:(int)newHostDominationTypeNumber UNAVAILABLE_ATTRIBUTE;
-- (void)setHostDominationBaseControlString:(NSString *)string UNAVAILABLE_ATTRIBUTE;
-- (void)setPrefPaneIdentifierString:(NSString *)aString UNAVAILABLE_ATTRIBUTE;
-- (void)setShowStatusBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setShowAllegianceBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setShowMessagesBool:(BOOL)aBool UNAVAILABLE_ATTRIBUTE;
-- (void)setBuilderToolInteger:(int)anInt UNAVAILABLE_ATTRIBUTE;
-- (void)setMessageTargetInteger:(int)anInt UNAVAILABLE_ATTRIBUTE;
 
 @end
 

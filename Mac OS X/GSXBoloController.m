@@ -333,7 +333,7 @@ static void getlisttrackerstatus(int status);
   playerInfoTableView.tableColumns[0].width = MAX(playerInfoTableView.tableColumns[0].minWidth, allegiancePanel.frame.size.width - playerInfoTableView.tableColumns[1].width);
 
   // init the host pane
-  [self setHostMap:[defaults stringForKey:GSHostMap]];
+  [self setHostMap:[defaults URLForKey:GSHostMap]];
   [self setHostUPnP:[defaults boolForKey:GSHostUPnP]];
   if([defaults boolForKey:@"GSHostPortNumberRandom"])
     [self setHostPort:(random() % 40000) + 2000];
@@ -665,11 +665,21 @@ static void getlisttrackerstatus(int status);
 
 // accessor methods
 
-@synthesize hostMap=hostMapString;
-- (void)setHostMap:(NSString *)aString {
-  hostMapString = [aString copy];
-  hostMapField.stringValue = [[NSFileManager defaultManager] displayNameAtPath:aString];
-  [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMap];
+@synthesize hostMap=hostMapURL;
+- (void)setHostMap:(NSURL *)aString {
+  if (!aString) {
+    hostMapURL = nil;
+    hostMapField.stringValue = @"";
+  } else {
+    hostMapURL = [aString copy];
+    id hostMapName = nil;
+    if ([aString getResourceValue:&hostMapName forKey:NSURLLocalizedNameKey error:NULL]) {
+      hostMapField.stringValue = hostMapName;
+    } else {
+      hostMapField.stringValue = aString.lastPathComponent;
+    }
+    [[NSUserDefaults standardUserDefaults] setURL:aString forKey:GSHostMap];
+  }
 }
 
 @synthesize hostUPnP=hostUPnPBool;
@@ -963,13 +973,13 @@ END
 - (IBAction)hostChoose:(id)sender {
   NSOpenPanel *panel = [NSOpenPanel openPanel];
   panel.allowedFileTypes = @[NSFileTypeForHFSTypeCode('BMAP'), @"map", @"com.gengasw.xbolo.map"];
-  if (hostMapString.length > 0) {
-    panel.directoryURL = [NSURL fileURLWithPath:hostMapString.stringByDeletingLastPathComponent];
+  if (hostMapURL != nil) {
+    panel.directoryURL = hostMapURL.URLByDeletingLastPathComponent;
   }
   
   [panel beginSheetModalForWindow:newGameWindow completionHandler:^(NSInteger returnCode) {
     if (returnCode == NSModalResponseOK) {
-      [self setHostMap:panel.URLs[0].path];
+      [self setHostMap:panel.URLs[0]];
     }
   }];
 }
@@ -1085,11 +1095,11 @@ TRY
         [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
         
         if (hostTrackerBool) {
-          startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], [mapping externalPort], playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback);
+          startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], [mapping externalPort], playerNameString.UTF8String, hostMapURL.lastPathComponent.UTF8String, registercallback);
         }
         else {
           if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-            if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+            if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapURL.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
           }
           else {
             if (startserverthread()) LOGFAIL(errno)
@@ -1152,7 +1162,7 @@ END
   [newGameWindow makeFirstResponder:nil];
 
 TRY
-  if (hostMapString.length == 0 && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"bmap"]]) == nil) {
+  if (hostMapURL == nil && (mapData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"bmap"]]) == nil) {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"No map chosen.", @"No map chosen.");
     alert.informativeText = NSLocalizedString(@"Please try another map.", @"Please try another map.");
@@ -1161,14 +1171,14 @@ TRY
     }];
     [broadcaster startListening];
   }
-  else if (mapData == nil && (mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
+  else if (mapData == nil && (mapData = [NSData dataWithContentsOfURL:hostMapURL]) == nil) {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"Error occured when openning map.", @"Error occured when openning map.");
     alert.informativeText = NSLocalizedString(@"Please try another map.", @"Please try another map.");
     [alert beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
       //do nothing
     }];
-    [self setHostMap:[NSString string]];
+    [self setHostMap:nil];
     [broadcaster startListening];
   }
   else {
@@ -1218,7 +1228,7 @@ TRY
       joinProgressStatusTextField.stringValue = @"UPnP Mapping Port...";
     }
     else if (hostTrackerBool) {  /* not using UPnP but registering with tracker */
-      if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapString.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
+      if (startserverthreadwithtracker([self trackerHostName].UTF8String, [self trackerPort], getservertcpport(), playerNameString.UTF8String, hostMapURL.lastPathComponent.UTF8String, registercallback)) LOGFAIL(errno)
     }
     else {  /* not using UPnP and not registering with tracker */
       if (startserverthread()) LOGFAIL(errno)
@@ -1228,7 +1238,7 @@ TRY
 
     NSString *bonjourName = [NSString stringWithFormat:@"%@ (%@)", [NSHost currentHost].localizedName, playerNameString];
     broadcaster.serviceName = bonjourName;
-    broadcaster.mapName = hostMapString.lastPathComponent.stringByDeletingPathExtension;
+    broadcaster.mapName = hostMapURL.lastPathComponent.stringByDeletingPathExtension;
 
     if (_broadcastBonjour) { /* always check if we're broadcasting via Bonjour */
       [broadcaster startPublishing];
@@ -2117,7 +2127,7 @@ END
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   if (!client_running) {
-    [self setHostMap:filename];
+    [self setHostMap:[NSURL fileURLWithPath:filename]];
     [newGameTabView selectFirstTabViewItem:self];
     [newGameWindow makeKeyAndOrderFront:self];
     return YES;
