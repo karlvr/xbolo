@@ -949,12 +949,14 @@ END
   [allegiancePanel orderOut:self];
   [messagesPanel orderOut:self];
 
-  /* remove port mapping */
-  for (TCMPortMapping *portMapping in [portMapper portMappings]) {
-    [portMapper removePortMapping:portMapping];
+  if (hostUPnPBool) {
+    /* remove port mapping */
+    for (TCMPortMapping *portMapping in [portMapper portMappings]) {
+      [portMapper removePortMapping:portMapping];
+    }
+    
+    [portMapper start];
   }
-
-  [portMapper start];
 
   stopclient();
 
