@@ -150,6 +150,7 @@ NS_ASSUME_NONNULL_BEGIN
 
   // host pane data
   NSURL *hostMapURL;
+  NSURL *defaultHostMapURL;
   unsigned short hostPortNumber;
   BOOL hostPasswordBool;
   BOOL hostUPnPBool;
