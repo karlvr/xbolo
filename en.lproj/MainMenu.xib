@@ -518,6 +518,7 @@
                 <outlet property="hostHiddenMinesSwitch" destination="1765" id="1768"/>
                 <outlet property="hostHiddenMinesTextField" destination="1766" id="1769"/>
                 <outlet property="hostMapField" destination="1067" id="1105"/>
+                <outlet property="hostMapResetButton" destination="l9O-kS-6hz" id="bd9-6w-IyP"/>
                 <outlet property="hostPasswordField" destination="1161" id="1184"/>
                 <outlet property="hostPasswordSwitch" destination="1163" id="1183"/>
                 <outlet property="hostPortField" destination="1044" id="1106"/>
@@ -1549,14 +1550,14 @@ Gw
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l9O-kS-6hz">
-                                            <rect key="frame" x="478" y="383" width="83" height="32"/>
+                                            <rect key="frame" x="485" y="383" width="69" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mFf-Nv-srz">
+                                            <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mFf-Nv-srz">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hostRemove:" target="514" id="X9E-oa-yEa"/>
+                                                <action selector="hostResetMap:" target="514" id="6NJ-es-vVJ"/>
                                             </connections>
                                         </button>
                                     </subviews>

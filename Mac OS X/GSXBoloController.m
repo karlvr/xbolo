@@ -351,6 +351,9 @@ static void getlisttrackerstatus(int status);
   defaultHostMapURL = [[NSBundle mainBundle] URLForResource:@"Everard Island" withExtension:@"bmap"];
   if (!hostMapURL && defaultHostMapURL) {
     [self setHostMap:defaultHostMapURL];
+    hostMapResetButton.enabled = false;
+  } else {
+    hostMapResetButton.enabled = true;
   }
 
   // init host domination pane
@@ -686,6 +689,7 @@ static void getlisttrackerstatus(int status);
     }
     [[NSUserDefaults standardUserDefaults] setURL:aURL forKey:GSHostMap];
   }
+  hostMapResetButton.enabled = hostMapURL != defaultHostMapURL;
 }
 
 @synthesize hostUPnP=hostUPnPBool;
@@ -992,7 +996,7 @@ END
   }];
 }
 
-- (IBAction)hostRemove:(id)sender {
+- (IBAction)hostResetMap:(id)sender {
   [self setHostMap:defaultHostMapURL];
 }
 
