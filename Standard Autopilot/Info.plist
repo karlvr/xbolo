@@ -23,6 +23,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Robert Chrzanowski. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>$(PRODUCT_MODULE_NAME).StandardAutopilot</string>
+	<string>$(PRODUCT_MODULE_NAME).BaseCollectorBrain</string>
 </dict>
 </plist>

@@ -146,6 +146,12 @@
 		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
+		AA0001011D28781E00CC90E0 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001021D28781E00CC90E0 /* GameConstants.swift */; };
+		AA0001031D28781E00CC90E0 /* WorldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001041D28781E00CC90E0 /* WorldModel.swift */; };
+		AA0001051D28781E00CC90E0 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001061D28781E00CC90E0 /* Navigation.swift */; };
+		AA0001071D28781E00CC90E0 /* Steering.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001081D28781E00CC90E0 /* Steering.swift */; };
+		AA0001091D28781E00CC90E0 /* Aiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010A1D28781E00CC90E0 /* Aiming.swift */; };
+		AA00010B1D28781E00CC90E0 /* BaseCollectorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010C1D28781E00CC90E0 /* BaseCollectorBrain.swift */; };
 		B804BADA229FEE9000741E7A /* GSBoloSKView.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAD9229FEE9000741E7A /* GSBoloSKView.m */; };
 		B804BAE422A1D07000741E7A /* GSBoloViews.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE322A1D07000741E7A /* GSBoloViews.m */; };
 		B804BAE922A20A0E00741E7A /* GSBoloScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B804BAE822A20A0E00741E7A /* GSBoloScene.m */; };
@@ -458,6 +464,12 @@
 		55F4E5131D2877BC00CC90E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Standard Autopilot-Bridging-Header.h"; sourceTree = "<group>"; };
 		55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardAutopilot.swift; sourceTree = "<group>"; };
+		AA0001021D28781E00CC90E0 /* GameConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameConstants.swift; sourceTree = "<group>"; };
+		AA0001041D28781E00CC90E0 /* WorldModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldModel.swift; sourceTree = "<group>"; };
+		AA0001061D28781E00CC90E0 /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
+		AA0001081D28781E00CC90E0 /* Steering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Steering.swift; sourceTree = "<group>"; };
+		AA00010A1D28781E00CC90E0 /* Aiming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aiming.swift; sourceTree = "<group>"; };
+		AA00010C1D28781E00CC90E0 /* BaseCollectorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCollectorBrain.swift; sourceTree = "<group>"; };
 		B804BAD8229FEE9000741E7A /* GSBoloSKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloSKView.h; sourceTree = "<group>"; };
 		B804BAD9229FEE9000741E7A /* GSBoloSKView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSBoloSKView.m; sourceTree = "<group>"; };
 		B804BAE222A1D07000741E7A /* GSBoloViews.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSBoloViews.h; sourceTree = "<group>"; };
@@ -975,11 +987,33 @@
 				55F4E5131D2877BC00CC90E0 /* Info.plist */,
 				55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */,
 				55F4E5181D28781D00CC90E0 /* Standard Autopilot-Bridging-Header.h */,
+				AA000201AAAA000000CC90E0 /* Foundation */,
+				AA000202AAAA000000CC90E0 /* Brains */,
 			);
 			indentWidth = 4;
 			path = "Standard Autopilot";
 			sourceTree = "<group>";
 			usesTabs = 1;
+		};
+		AA000201AAAA000000CC90E0 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				AA0001021D28781E00CC90E0 /* GameConstants.swift */,
+				AA0001041D28781E00CC90E0 /* WorldModel.swift */,
+				AA0001061D28781E00CC90E0 /* Navigation.swift */,
+				AA0001081D28781E00CC90E0 /* Steering.swift */,
+				AA00010A1D28781E00CC90E0 /* Aiming.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		AA000202AAAA000000CC90E0 /* Brains */ = {
+			isa = PBXGroup;
+			children = (
+				AA00010C1D28781E00CC90E0 /* BaseCollectorBrain.swift */,
+			);
+			path = Brains;
+			sourceTree = "<group>";
 		};
 		B8BD70AC22A31AC800F07A00 /* Resources */ = {
 			isa = PBXGroup;
@@ -1600,6 +1634,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */,
+				AA0001011D28781E00CC90E0 /* GameConstants.swift in Sources */,
+				AA0001031D28781E00CC90E0 /* WorldModel.swift in Sources */,
+				AA0001051D28781E00CC90E0 /* Navigation.swift in Sources */,
+				AA0001071D28781E00CC90E0 /* Steering.swift in Sources */,
+				AA0001091D28781E00CC90E0 /* Aiming.swift in Sources */,
+				AA00010B1D28781E00CC90E0 /* BaseCollectorBrain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
