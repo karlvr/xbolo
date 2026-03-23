@@ -418,7 +418,7 @@ TRY
 
   /* connect */
   trackerthreadinfo->trackerstatus(kGetListTrackerCONNECTING);
-  if ((connect(tracker.sock, (void *)&addr, INET_ADDRSTRLEN))) LOGFAIL(errno)
+  if ((connect(tracker.sock, (void *)&addr, sizeof(struct sockaddr_in)))) LOGFAIL(errno)
 
   /* send preamble */
   bcopy(TRACKERIDENT, preamble.ident, sizeof(preamble.ident));

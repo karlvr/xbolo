@@ -553,7 +553,7 @@ TRY
     client.joinprogress(kJoinCONNECTING, 0.0);
   }
   
-  if ((connect(client.cntlsock, (struct sockaddr *)&client.srvaddr, INET_ADDRSTRLEN))) {
+  if ((connect(client.cntlsock, (struct sockaddr *)&client.srvaddr, sizeof(struct sockaddr_in)))) {
     if (errno != EINPROGRESS) LOGFAIL(errno)
   }
   
@@ -588,7 +588,7 @@ TRY
       SUCCESS
     }
     else if (FD_ISSET(client.cntlsock, &writefds)) {
-      if (connect(client.cntlsock, (struct sockaddr *)&client.srvaddr, INET_ADDRSTRLEN) && errno != EISCONN) LOGFAIL(errno)
+      if (connect(client.cntlsock, (struct sockaddr *)&client.srvaddr, sizeof(struct sockaddr_in)) && errno != EISCONN) LOGFAIL(errno)
       break;
     }
   }
@@ -597,7 +597,7 @@ TRY
   struct sockaddr_in saddr;
   socklen_t addrlen;
 
-  addrlen = INET_ADDRSTRLEN;
+  addrlen = sizeof(struct sockaddr_in);
   if (getsockname(client.cntlsock, (struct sockaddr *)&saddr, &addrlen)) LOGFAIL(errno)
 
   /* bind dgramsock to local address */
@@ -610,7 +610,7 @@ TRY
   }
 
   /* set remote end for dgramsock */
-  if ((connect(client.dgramsock, (struct sockaddr *)&client.srvaddr, INET_ADDRSTRLEN))) LOGFAIL(errno)
+  if ((connect(client.dgramsock, (struct sockaddr *)&client.srvaddr, sizeof(struct sockaddr_in)))) LOGFAIL(errno)
 
   bcopy(NET_GAME_IDENT, joinpreamble.ident, sizeof(NET_GAME_IDENT));
   joinpreamble.version = NET_GAME_VERSION;

@@ -121,13 +121,13 @@ TRY
   bzero(addr.sin_zero, 8);
 
   /* bind listensock to name */
-  if (bind(listensock, (void *)&addr, INET_ADDRSTRLEN)) LOGFAIL(errno)
+  if (bind(listensock, (void *)&addr, sizeof(struct sockaddr_in))) LOGFAIL(errno)
 
   /* begin listening */
   if (listen(listensock, 3)) LOGFAIL(errno)
 
   for (;;) {
-    addrlen = INET_ADDRSTRLEN;
+    addrlen = sizeof(struct sockaddr_in);
 
     sock = accept(listensock, (void *)&addr, &addrlen);
     if (sock == -1) {
@@ -203,7 +203,7 @@ TRY
       bzero(addr.sin_zero, 8);
 
       /* connect to tcp port */
-      if (connect(testsock, (struct sockaddr *)&testaddr, INET_ADDRSTRLEN)) {
+      if (connect(testsock, (struct sockaddr *)&testaddr, sizeof(struct sockaddr_in))) {
         msg = kTrackerTCPPortClosed;
         if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
         if (closesock(&sock)) LOGFAIL(errno)
@@ -225,7 +225,7 @@ TRY
       bzero(addr.sin_zero, 8);
 
       /* designate the destination for the dgram socket */
-      if (connect(testsock, (void *)&testaddr, INET_ADDRSTRLEN)) LOGFAIL(errno)
+      if (connect(testsock, (void *)&testaddr, sizeof(struct sockaddr_in))) LOGFAIL(errno)
 
       for (i = 0; i < NUDP; i++) {
         fd_set readfds;

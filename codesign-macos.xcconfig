@@ -1,0 +1,12 @@
+//
+//  codesign.xcconfig
+//  XBolo
+//
+//  Created by Karl von Randow on 28/03/20.
+//  Copyright © 2020 Robert Chrzanowski. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+PRODUCT_BUNDLE_IDENTIFIER=com.xk72.xbolo
+DEVELOPMENT_TEAM=9A5PCU4FSD

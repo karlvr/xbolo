@@ -268,7 +268,7 @@ TRY
   bzero(addr.sin_zero, 8);
 
   /* bind listensock to name */
-  while (bind(server.listensock, (void *)&addr, INET_ADDRSTRLEN)) {
+  while (bind(server.listensock, (void *)&addr, sizeof(struct sockaddr_in))) {
     if (errno != EAGAIN) {
       LOGFAIL(errno)
     }
@@ -276,11 +276,11 @@ TRY
     usleep(10000);
   }
 
-  addrlen = INET_ADDRSTRLEN;
+  addrlen = sizeof(struct sockaddr_in);
   if (getsockname(server.listensock, (void *)&addr, &addrlen)) LOGFAIL(errno)
 
   /* bind dgramsock to name */
-  while (bind(server.dgramsock, (void *)&addr, INET_ADDRSTRLEN)) {
+  while (bind(server.dgramsock, (void *)&addr, sizeof(struct sockaddr_in))) {
     if (errno != EAGAIN) {
       LOGFAIL(errno)
     }
@@ -640,7 +640,7 @@ int dgramserver() {
 
 TRY
   for (;;) {
-    addrlen = INET_ADDRSTRLEN;
+    addrlen = sizeof(struct sockaddr_in);
 
     if ((r = recvfrom(server.dgramsock, &clupdate, sizeof(clupdate), O_NONBLOCK, (struct sockaddr *)&addr, &addrlen)) == -1) {
       if (errno == EAGAIN) {
@@ -702,7 +702,7 @@ TRY
         /* send update to all other players */
         for (i = 0; i < MAX_PLAYERS; i++) {
           if (i != clupdate.hdr.player && server.players[i].cntlsock != -1) {
-            if (sendto(server.dgramsock, &clupdate, r, 0, (void *)&server.players[i].dgramaddr, INET_ADDRSTRLEN) == -1) {
+            if (sendto(server.dgramsock, &clupdate, r, 0, (void *)&server.players[i].dgramaddr, sizeof(struct sockaddr_in)) == -1) {
               if (errno != EAGAIN) LOGFAIL(errno)
             }
           }
@@ -1323,7 +1323,7 @@ TRY
     if ((flags = fcntl(server.tracker.sock, F_GETFL, 0)) == -1) LOGFAIL(errno)
     if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK)) {};
 
-    if ((connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, INET_ADDRSTRLEN))) {
+    if ((connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, sizeof(struct sockaddr_in)))) {
       if (errno != EINPROGRESS) LOGFAIL(errno)
     }
 
@@ -1357,7 +1357,7 @@ TRY
         SUCCESS
       }
       else if (FD_ISSET(server.tracker.sock, &writefds)) {
-        if (connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, INET_ADDRSTRLEN) && errno != EISCONN) LOGFAIL(errno)
+        if (connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, sizeof(struct sockaddr_in)) && errno != EISCONN) LOGFAIL(errno)
         break;
       }
     }
@@ -1471,7 +1471,7 @@ TRY
         ssize_t r;
 
         for (;;) {
-          addrlen = INET_ADDRSTRLEN;
+          addrlen = sizeof(struct sockaddr_in);
 
           if ((r = recvfrom(server.dgramsock, &clupdate, sizeof(clupdate), O_NONBLOCK, (void *)&addr, &addrlen)) == -1) {
             if (errno == EAGAIN) {
@@ -1804,7 +1804,7 @@ TRY
         /* accept new connections */
         if (FD_ISSET(server.listensock, &readfds)) {
           socklen_t addrlen;
-          addrlen = INET_ADDRSTRLEN;
+          addrlen = sizeof(struct sockaddr_in);
           if ((server.joiningplayer.cntlsock = accept(server.listensock, (void *)&server.joiningplayer.addr, &addrlen)) == -1) LOGFAIL(errno)
         }
 
@@ -4477,7 +4477,7 @@ int getservertcpport() {
   struct sockaddr_in addr;
   socklen_t addrlen;
 
-  addrlen = INET_ADDRSTRLEN;
+  addrlen = sizeof(struct sockaddr_in);
   getsockname(server.listensock, (void *)&addr, &addrlen);
   return ntohs(addr.sin_port);
 }
@@ -4486,7 +4486,7 @@ int getserverudpport() {
   struct sockaddr_in addr;
   socklen_t addrlen;
 
-  addrlen = INET_ADDRSTRLEN;
+  addrlen = sizeof(struct sockaddr_in);
   getsockname(server.dgramsock, (void *)&addr, &addrlen);
   return ntohs(addr.sin_port);
 }
