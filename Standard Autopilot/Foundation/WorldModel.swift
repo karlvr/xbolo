@@ -102,15 +102,15 @@ class WorldModel {
             for x in 0..<width {
                 let tile = tiles[y * width + x]
                 switch tile {
-                case .kFriendlyBaseTile:
+                case .friendlyBaseTile:
                     let info = BaseInfo(pos: TilePos(x: x, y: y), ownership: .friendly)
                     bases.append(info)
                     friendlyBases.append(info)
-                case .kHostileBaseTile:
+                case .hostileBaseTile:
                     let info = BaseInfo(pos: TilePos(x: x, y: y), ownership: .hostile)
                     bases.append(info)
                     hostileBases.append(info)
-                case .kNeutralBaseTile:
+                case .neutralBaseTile:
                     let info = BaseInfo(pos: TilePos(x: x, y: y), ownership: .neutral)
                     bases.append(info)
                     neutralBases.append(info)
@@ -128,7 +128,7 @@ class WorldModel {
         guard let tiles = tiles,
               pos.x >= 0, pos.x < width,
               pos.y >= 0, pos.y < height else {
-            return .kUnknownTile
+            return .unknownTile
         }
         return tiles[pos.y * width + pos.x]
     }
@@ -163,10 +163,10 @@ class WorldModel {
 
     private func parsePillTile(_ tile: GSTileType, x: Int, y: Int) -> PillInfo? {
         let raw = tile.rawValue
-        let friendlyStart = GSTileType.kFriendlyPill00Tile.rawValue
-        let friendlyEnd = GSTileType.kFriendlyPill15Tile.rawValue
-        let hostileStart = GSTileType.kHostilePill00Tile.rawValue
-        let hostileEnd = GSTileType.kHostilePill15Tile.rawValue
+        let friendlyStart = GSTileType.friendlyPill00Tile.rawValue
+        let friendlyEnd = GSTileType.friendlyPill15Tile.rawValue
+        let hostileStart = GSTileType.hostilePill00Tile.rawValue
+        let hostileEnd = GSTileType.hostilePill15Tile.rawValue
 
         if raw >= friendlyStart && raw <= friendlyEnd {
             let armor = Int(raw - friendlyStart)
@@ -181,46 +181,46 @@ class WorldModel {
     static func classifyTile(_ tile: GSTileType) -> TerrainClass {
         switch tile {
         // Fast terrain
-        case .kRoadTile, .kMinedRoadTile:
+        case .roadTile, .minedRoadTile:
             return .passable(cost: 1.0)
-        case .kBoatTile:
+        case .boatTile:
             return .passable(cost: 1.0)
         // Bases are passable (and desirable!)
-        case .kFriendlyBaseTile, .kHostileBaseTile, .kNeutralBaseTile:
+        case .friendlyBaseTile, .hostileBaseTile, .neutralBaseTile:
             return .passable(cost: 1.0)
 
         // Medium terrain
-        case .kGrassTile, .kMinedGrassTile:
+        case .grassTile, .minedGrassTile:
             return .passable(cost: 1.33)
-        case .kCraterTile, .kMinedCraterTile:
+        case .craterTile, .minedCraterTile:
             return .passable(cost: 1.33)
 
         // Slow terrain
-        case .kSwampTile, .kMinedSwampTile:
+        case .swampTile, .minedSwampTile:
             return .passable(cost: 2.0)
-        case .kRubbleTile, .kMinedRubbleTile:
+        case .rubbleTile, .minedRubbleTile:
             return .passable(cost: 2.5)
 
         // Very slow terrain
-        case .kForestTile, .kMinedForestTile:
+        case .forestTile, .minedForestTile:
             return .passable(cost: 2.67)
 
         // Impassable
-        case .kWallTile, .kDamagedWallTile:
+        case .wallTile, .damagedWallTile:
             return .impassable
-        case .kRiverTile:
+        case .riverTile:
             return .impassable
-        case .kSeaTile, .kMinedSeaTile:
+        case .seaTile, .minedSeaTile:
             return .impassable
 
         // Pillboxes - hostile ones are dangerous, friendly ones passable
         default:
             let raw = tile.rawValue
-            if raw >= GSTileType.kFriendlyPill00Tile.rawValue && raw <= GSTileType.kFriendlyPill15Tile.rawValue {
+            if raw >= GSTileType.friendlyPill00Tile.rawValue && raw <= GSTileType.friendlyPill15Tile.rawValue {
                 return .passable(cost: 1.5)
-            } else if raw >= GSTileType.kHostilePill00Tile.rawValue && raw <= GSTileType.kHostilePill15Tile.rawValue {
+            } else if raw >= GSTileType.hostilePill00Tile.rawValue && raw <= GSTileType.hostilePill15Tile.rawValue {
                 return .impassable // Don't path through hostile pillboxes
-            } else if tile == .kUnknownTile {
+            } else if tile == .unknownTile {
                 return .unknown
             }
             return .passable(cost: 2.0) // Default fallback
