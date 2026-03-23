@@ -2269,6 +2269,9 @@ TRY
 
   cltouch = (struct CLTouch *)server.players[player].recvbuf.ptr;
 
+  if (cltouch->x < 1 || cltouch->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (cltouch->y < 1 || cltouch->y + 1 >= WIDTH) LOGFAIL(EINVAL)
+
   /* interact with terrain */
   switch (server.terrain[cltouch->y][cltouch->x]) {
   case kMinedSeaTerrain:
@@ -2303,6 +2306,9 @@ int recvclgrabtile(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLGrabTile)) FAIL(EAGAIN)
   clgrabtile = (struct CLGrabTile *)server.players[player].recvbuf.ptr;
+
+  if (clgrabtile->x < 1 || clgrabtile->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clgrabtile->y < 1 || clgrabtile->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   /* grab pills */
   if ((pill = findpill(clgrabtile->x, clgrabtile->y)) != -1) {
@@ -2379,6 +2385,9 @@ TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLGrabTrees)) FAIL(EAGAIN)
   clgrabtrees = (struct CLGrabTrees *)server.players[player].recvbuf.ptr;
 
+  if (clgrabtrees->x < 1 || clgrabtrees->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clgrabtrees->y < 1 || clgrabtrees->y + 1 >= WIDTH) LOGFAIL(EINVAL)
+
   switch (server.terrain[clgrabtrees->y][clgrabtrees->x]) {
   case kForestTerrain:
     server.terrain[clgrabtrees->y][clgrabtrees->x] = kGrassTerrain3;
@@ -2424,6 +2433,9 @@ int recvclbuildroad(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildRoad)) FAIL(EAGAIN)
   clbuildroad = (struct CLBuildRoad *)server.players[player].recvbuf.ptr;
+
+  if (clbuildroad->x < 1 || clbuildroad->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clbuildroad->y < 1 || clbuildroad->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   switch (server.terrain[clbuildroad->y][clbuildroad->x]) {
   case kRiverTerrain:
@@ -2484,6 +2496,9 @@ int recvclbuildwall(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildWall)) FAIL(EAGAIN)
   clbuildwall = (struct CLBuildWall *)server.players[player].recvbuf.ptr;
+
+  if (clbuildwall->x < 1 || clbuildwall->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clbuildwall->y < 1 || clbuildwall->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   switch (server.terrain[clbuildwall->y][clbuildwall->x]) {
   case kSwampTerrain0:
@@ -2549,6 +2564,9 @@ TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildBoat)) FAIL(EAGAIN)
   clbuildboat = (struct CLBuildBoat *)server.players[player].recvbuf.ptr;
 
+  if (clbuildboat->x < 1 || clbuildboat->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clbuildboat->y < 1 || clbuildboat->y + 1 >= WIDTH) LOGFAIL(EINVAL)
+
   switch (server.terrain[clbuildboat->y][clbuildboat->x]) {
   case kRiverTerrain:
     server.terrain[clbuildboat->y][clbuildboat->x] = kBoatTerrain;
@@ -2589,6 +2607,10 @@ int recvclbuildpill(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildPill)) FAIL(EAGAIN)
   clbuildpill = (struct CLBuildPill *)server.players[player].recvbuf.ptr;
+
+  if (clbuildpill->pill >= server.npills) LOGFAIL(EINVAL)
+  if (clbuildpill->x < 1 || clbuildpill->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clbuildpill->y < 1 || clbuildpill->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   if (findpill(clbuildpill->x, clbuildpill->y) == -1 && findbase(clbuildpill->x, clbuildpill->y) == -1) {
     switch (server.terrain[clbuildpill->y][clbuildpill->x]) {
@@ -2666,6 +2688,9 @@ TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLRepairPill)) FAIL(EAGAIN)
   clrepairpill = (struct CLRepairPill *)server.players[player].recvbuf.ptr;
 
+  if (clrepairpill->x < 1 || clrepairpill->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clrepairpill->y < 1 || clrepairpill->y + 1 >= WIDTH) LOGFAIL(EINVAL)
+
   if ((pill = findpill(clrepairpill->x, clrepairpill->y)) != -1 && findbase(clrepairpill->x, clrepairpill->y) == -1) {
     switch (server.terrain[clrepairpill->y][clrepairpill->x]) {
     case kSwampTerrain0:
@@ -2737,6 +2762,9 @@ int recvclplacemine(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLPlaceMine)) FAIL(EAGAIN)
   clplacemine = (struct CLPlaceMine *)server.players[player].recvbuf.ptr;
+
+  if (clplacemine->x < 1 || clplacemine->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clplacemine->y < 1 || clplacemine->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   switch (server.terrain[clplacemine->y][clplacemine->x]) {
   case kSwampTerrain0:
@@ -2836,6 +2864,9 @@ int recvcldamage(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLDamage)) FAIL(EAGAIN)
   cldamage = (struct CLDamage *)server.players[player].recvbuf.ptr;
+
+  if (cldamage->x < 1 || cldamage->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (cldamage->y < 1 || cldamage->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   if ((pill = findpill(cldamage->x, cldamage->y)) != -1) {
     if (server.pills[pill].armour > 0) {
@@ -3068,6 +3099,9 @@ TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLSmallBoom)) FAIL(EAGAIN)
   clsmallboom = (struct CLSmallBoom *)server.players[player].recvbuf.ptr;
 
+  if (clsmallboom->x < 1 || clsmallboom->x + 1 >= WIDTH) LOGFAIL(EINVAL)
+  if (clsmallboom->y < 1 || clsmallboom->y + 1 >= WIDTH) LOGFAIL(EINVAL)
+
   if (explosionat(player, clsmallboom->x, clsmallboom->y)) LOGFAIL(errno)
 
   /* clear buffer of read data */
@@ -3087,6 +3121,9 @@ int recvclsuperboom(int player) {
 TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLSuperBoom)) FAIL(EAGAIN)
   clsuperboom = (struct CLSuperBoom *)server.players[player].recvbuf.ptr;
+
+  if (clsuperboom->x + 2 >= WIDTH || clsuperboom->y + 2 >= WIDTH) LOGFAIL(EINVAL)
+  if (clsuperboom->x < 1 || clsuperboom->y < 1) LOGFAIL(EINVAL)
 
   if (superboomat(player, clsuperboom->x, clsuperboom->y)) LOGFAIL(errno)
 
