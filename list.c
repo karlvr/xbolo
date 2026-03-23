@@ -72,7 +72,9 @@ struct ListNode *removelist(struct ListNode *node, void (*releasefunc)(void *)) 
 
   next = node->next;
 
-  releasefunc(node->ptr);
+  if (releasefunc != NULL) {
+    releasefunc(node->ptr);
+  }
   free(node);
 
   return next;
@@ -85,7 +87,9 @@ void clearlist(struct ListNode *list, void (*releasefunc)(void *)) {
 
   for (node = list->next; node != NULL; node = next) {
     next = node->next;
-    releasefunc(node->ptr);
+    if (releasefunc != NULL) {
+      releasefunc(node->ptr);
+    }
     free(node);
   }
 
