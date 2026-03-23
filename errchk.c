@@ -90,8 +90,12 @@ void pushlineinfo(const char *file, const char *function, size_t line) {
     assert((node->stack = realloc(node->stack, node->size*sizeof(struct LineInfo))) != NULL);
   }
 
-  strncpy(node->stack[node->used].file, file, sizeof(node->stack[node->used].file) - 1);
-  strncpy(node->stack[node->used].function, function, sizeof(node->stack[node->used].function) - 1);
+  const size_t file_max = sizeof(node->stack[node->used].file) - 1;
+  strncpy(node->stack[node->used].file, file, file_max);
+  node->stack[node->used].file[file_max] = '\0';
+  const size_t func_max = sizeof(node->stack[node->used].function) - 1;
+  strncpy(node->stack[node->used].function, function, func_max);
+  node->stack[node->used].function[func_max] = '\0';
   node->stack[node->used].line = line;
   node->used++;
 

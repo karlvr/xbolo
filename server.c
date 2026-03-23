@@ -246,6 +246,7 @@ TRY
 
   if ((server.passreq = (password != NULL))) {
     strncpy(server.pass, password, MAXPASS - 1);
+    server.pass[MAXPASS - 1] = '\0';
   }
   else {
     server.pass[0] = '\0';
@@ -335,7 +336,9 @@ TRY
   server.tracker.trackerPort = trackerPort;
   server.tracker.port = port;
   strncpy(server.tracker.hostplayername, hostplayername, MAXNAME - 1);
+  server.tracker.hostplayername[MAXNAME - 1] = '\0';
   strncpy(server.tracker.mapname, mapname, TRKMAPNAMELEN - 1);
+  server.tracker.mapname[TRKMAPNAMELEN - 1] = '\0';
   server.tracker.callback = callback;
 
   if ((err = pthread_create(&thread, NULL, servermainthread, NULL))) LOGFAIL(err)
@@ -538,6 +541,7 @@ TRY
   if (server.players[player].cntlsock != -1) {
     if ((bannedplayer = (struct BannedPlayer *)malloc(sizeof(struct BannedPlayer))) == NULL) LOGFAIL(errno)
     strncpy(bannedplayer->name, server.players[player].name, MAXNAME - 1);
+    bannedplayer->name[MAXNAME - 1] = '\0';
     bannedplayer->sin_addr = server.players[player].addr.sin_addr;
     if (addlist(&server.bannedplayers, bannedplayer)) LOGFAIL(errno)
     bannedplayer = NULL;
@@ -1401,7 +1405,9 @@ TRY
     /* send game data */
     msg = kTrackerHost;
     strncpy((char *)trackerhost.playername, server.tracker.hostplayername, TRKPLYRNAMELEN - 1);
+    ((char *)trackerhost.playername)[TRKPLYRNAMELEN - 1] = '\0';
     strncpy((char *)trackerhost.mapname, server.tracker.mapname, TRKMAPNAMELEN - 1);
+    ((char *)trackerhost.mapname)[TRKMAPNAMELEN - 1] = '\0';
     trackerhost.port = htons(server.tracker.port);
     trackerhost.timelimit = htonl(server.timelimit);
     trackerhost.passreq = server.passreq;
@@ -1594,7 +1600,9 @@ int sendtrackerupdate() {
 
 TRY
   strncpy((char *)trackerhost.playername, server.tracker.hostplayername, TRKPLYRNAMELEN - 1);
+  ((char *)trackerhost.playername)[TRKPLYRNAMELEN - 1] = '\0';
   strncpy((char *)trackerhost.mapname, server.tracker.mapname, TRKMAPNAMELEN - 1);
+  ((char *)trackerhost.mapname)[TRKMAPNAMELEN - 1] = '\0';
   trackerhost.port = htons(server.tracker.port);
   trackerhost.gametype = server.gametype;
   trackerhost.timelimit = server.timelimit;

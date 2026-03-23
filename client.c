@@ -738,7 +738,9 @@ TRY
     client.players[i].seq = ntohl(bolopreamble.players[i].seq);
 
     strncpy(client.players[i].name, (char *)bolopreamble.players[i].name, MAXNAME - 1);
+    client.players[i].name[MAXNAME - 1] = '\0';
     strncpy(client.players[i].host, (char *)bolopreamble.players[i].host, MAXHOST - 1);
+    client.players[i].host[MAXHOST - 1] = '\0';
 
     client.players[i].builderstatus = kBuilderReady;
     client.players[i].alliance = ntohs(bolopreamble.players[i].alliance);
@@ -2019,8 +2021,12 @@ TRY
   client.players[srplayerjoin->player].connected = 1;
   client.players[srplayerjoin->player].seq = 0;
   client.players[srplayerjoin->player].lastupdate = client.players[client.player].seq;
-  strncpy(client.players[srplayerjoin->player].name, srplayerjoin->name, sizeof(client.players[srplayerjoin->player].name) - 1);
-  strncpy(client.players[srplayerjoin->player].host, srplayerjoin->host, sizeof(client.players[srplayerjoin->player].host) - 1);
+  const size_t name_max = sizeof(client.players[srplayerjoin->player].name) - 1;
+  strncpy(client.players[srplayerjoin->player].name, srplayerjoin->name, name_max);
+  client.players[srplayerjoin->player].name[name_max] = '\0';
+  const size_t host_max = sizeof(client.players[srplayerjoin->player].host) - 1;
+  strncpy(client.players[srplayerjoin->player].host, srplayerjoin->host, host_max);
+  client.players[srplayerjoin->player].host[host_max] = '\0';
 
   client.players[srplayerjoin->player].alliance = 1 << srplayerjoin->player;
 
