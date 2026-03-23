@@ -40,6 +40,8 @@
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #endif
 
+#define MAX_MESSAGE_LENGTH 256
+
 struct Server server;
 
 //static int sendplayerbufserver(int player);
@@ -2091,6 +2093,7 @@ TRY
 
   /* check for complete string following struct */
   for (i = sizeof(struct CLSendMesg) ; i < server.players[player].recvbuf.nbytes; i++) {
+    if (i - sizeof(struct CLSendMesg) >= MAX_MESSAGE_LENGTH) LOGFAIL(EINVAL)
     if (((char *)server.players[player].recvbuf.ptr)[i] == '\0') {
       break;
     }
