@@ -32,6 +32,7 @@
 #include <assert.h>
 #include <netdb.h>
 #include <math.h>
+#include <sys/time.h>
 #include <netinet/tcp.h>
 #include <pthread.h>
 #include <fcntl.h>
@@ -1815,6 +1816,15 @@ TRY
           socklen_t addrlen;
           addrlen = sizeof(struct sockaddr_in);
           if ((server.joiningplayer.cntlsock = accept(server.listensock, (void *)&server.joiningplayer.addr, &addrlen)) == -1) LOGFAIL(errno)
+
+          /* Set receive timeout to prevent a slow or malicious client from
+             blocking the server thread indefinitely with MSG_WAITALL */
+          {
+            struct timeval rcvtimeout;
+            rcvtimeout.tv_sec = 30;
+            rcvtimeout.tv_usec = 0;
+            if (setsockopt(server.joiningplayer.cntlsock, SOL_SOCKET, SO_RCVTIMEO, &rcvtimeout, sizeof(rcvtimeout)) == -1) LOGFAIL(errno)
+          }
         }
 
         /* send buf to tracker sock */

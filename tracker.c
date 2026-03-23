@@ -4,6 +4,7 @@
 #include <strings.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -137,6 +138,14 @@ TRY
       else {
         continue;
       }
+    }
+
+    /* Set receive timeout to prevent slow client DoS */
+    {
+      struct timeval rcvtimeout;
+      rcvtimeout.tv_sec = 30;
+      rcvtimeout.tv_usec = 0;
+      if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &rcvtimeout, sizeof(rcvtimeout)) == -1) LOGFAIL(errno)
     }
 
     threadinfo = (struct ThreadInfo *)malloc(sizeof(struct ThreadInfo));
