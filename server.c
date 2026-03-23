@@ -329,8 +329,7 @@ int startserverthreadwithtracker(
   int err;
 
 TRY
-  if ((server.tracker.hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) LOGFAIL(errno)
-  strcpy(server.tracker.hostname, trackerhostname);
+  if ((server.tracker.hostname = strdup(trackerhostname)) == NULL) LOGFAIL(errno)
   server.tracker.trackerPort = trackerPort;
   server.tracker.port = port;
   strncpy(server.tracker.hostplayername, hostplayername, MAXNAME - 1);

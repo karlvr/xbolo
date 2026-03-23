@@ -566,8 +566,7 @@ int listtracker(const char trackerhostname[], const in_port_t port, struct ListN
 
 TRY
   if ((trackerthreadinfo = (struct TrackerThreadInfo *)malloc(sizeof(struct TrackerThreadInfo))) == NULL) LOGFAIL(errno)
-  if ((trackerthreadinfo->hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) LOGFAIL(errno)
-  strcpy(trackerthreadinfo->hostname, trackerhostname);
+  if ((trackerthreadinfo->hostname = strdup(trackerhostname)) == NULL) LOGFAIL(errno)
   trackerthreadinfo->port = port;
   trackerthreadinfo->node = node;
   trackerthreadinfo->trackerstatus = trackerstatus;

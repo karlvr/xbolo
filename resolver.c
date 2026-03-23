@@ -48,8 +48,7 @@ int nslookup(const char *hostname) {
 
 TRY
   if ((info = (struct GetHostByName *)malloc(sizeof(struct GetHostByName))) == NULL) LOGFAIL(errno)
-  if ((info->hostname = (char *)malloc(strlen(hostname) + 1)) == NULL) LOGFAIL(errno)
-  strcpy(info->hostname, hostname);
+  if ((info->hostname = strdup(hostname)) == NULL) LOGFAIL(errno)
 
   if (pipe(fildes)) {
     fildes[0] = -1;

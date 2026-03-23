@@ -307,8 +307,7 @@ TRY
   }
 
   /* copy hostname */
-  if ((client.hostname = (char *)malloc(strlen(hostname) + 1)) == NULL) LOGFAIL(errno)
-  strcpy(client.hostname, hostname);
+  if ((client.hostname = strdup(hostname)) == NULL) LOGFAIL(errno)
 
   /* set port number */
   client.srvaddr.sin_port = htons(port);
