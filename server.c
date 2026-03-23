@@ -3160,6 +3160,9 @@ TRY
   clrefuel = (struct CLRefuel *)server.players[player].recvbuf.ptr;
 
   if (clrefuel->base < server.nbases) {
+    clrefuel->armour = MIN(clrefuel->armour, server.bases[clrefuel->base].armour);
+    clrefuel->shells = MIN(clrefuel->shells, server.bases[clrefuel->base].shells);
+    clrefuel->mines = MIN(clrefuel->mines, server.bases[clrefuel->base].mines);
     server.bases[clrefuel->base].armour -= clrefuel->armour;
     server.bases[clrefuel->base].shells -= clrefuel->shells;
     server.bases[clrefuel->base].mines -= clrefuel->mines;
