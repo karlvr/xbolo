@@ -6,6 +6,7 @@
 #import "GSKeyCodeField.h"
 #import "GSBoloViews.h"
 #import "XBoloBonjour.h"
+#import <AVFoundation/AVFoundation.h>
 
 #include "bolo.h"
 #include "server.h"
@@ -116,32 +117,54 @@ static GSXBoloController *controller = nil;
 // sound
 static BOOL muteGlobal;
 
-static NSMutableArray<NSSound*> *bubblessounds;
-static NSMutableArray<NSSound*> *builderdeathsounds;
-static NSMutableArray<NSSound*> *buildsounds;
-static NSMutableArray<NSSound*> *sinksounds;
-static NSMutableArray<NSSound*> *superboomsounds;
-static NSMutableArray<NSSound*> *explosionsounds;
-static NSMutableArray<NSSound*> *farbuildsounds;
-static NSMutableArray<NSSound*> *farbuilderdeathsounds;
-static NSMutableArray<NSSound*> *farexplosionsounds;
-static NSMutableArray<NSSound*> *farhittanksounds;
-static NSMutableArray<NSSound*> *farhitterrainsounds;
-static NSMutableArray<NSSound*> *farhittreesounds;
-static NSMutableArray<NSSound*> *farshotsounds;
-static NSMutableArray<NSSound*> *farsinksounds;
-static NSMutableArray<NSSound*> *farsuperboomsounds;
-static NSMutableArray<NSSound*> *fartreesounds;
-static NSMutableArray<NSSound*> *minesounds;
-static NSMutableArray<NSSound*> *msgreceivedsounds;
-static NSMutableArray<NSSound*> *pillshotsounds;
-static NSMutableArray<NSSound*> *hittanksounds;
-static NSMutableArray<NSSound*> *tankshotsounds;
-static NSMutableArray<NSSound*> *hitterrainsounds;
-static NSMutableArray<NSSound*> *hittreesounds;
-static NSMutableArray<NSSound*> *treesounds;
+static NSMutableArray<AVAudioPlayer*> *bubblessounds;
+static NSMutableArray<AVAudioPlayer*> *builderdeathsounds;
+static NSMutableArray<AVAudioPlayer*> *buildsounds;
+static NSMutableArray<AVAudioPlayer*> *sinksounds;
+static NSMutableArray<AVAudioPlayer*> *superboomsounds;
+static NSMutableArray<AVAudioPlayer*> *explosionsounds;
+static NSMutableArray<AVAudioPlayer*> *farbuildsounds;
+static NSMutableArray<AVAudioPlayer*> *farbuilderdeathsounds;
+static NSMutableArray<AVAudioPlayer*> *farexplosionsounds;
+static NSMutableArray<AVAudioPlayer*> *farhittanksounds;
+static NSMutableArray<AVAudioPlayer*> *farhitterrainsounds;
+static NSMutableArray<AVAudioPlayer*> *farhittreesounds;
+static NSMutableArray<AVAudioPlayer*> *farshotsounds;
+static NSMutableArray<AVAudioPlayer*> *farsinksounds;
+static NSMutableArray<AVAudioPlayer*> *farsuperboomsounds;
+static NSMutableArray<AVAudioPlayer*> *fartreesounds;
+static NSMutableArray<AVAudioPlayer*> *minesounds;
+static NSMutableArray<AVAudioPlayer*> *msgreceivedsounds;
+static NSMutableArray<AVAudioPlayer*> *pillshotsounds;
+static NSMutableArray<AVAudioPlayer*> *hittanksounds;
+static NSMutableArray<AVAudioPlayer*> *tankshotsounds;
+static NSMutableArray<AVAudioPlayer*> *hitterrainsounds;
+static NSMutableArray<AVAudioPlayer*> *hittreesounds;
+static NSMutableArray<AVAudioPlayer*> *treesounds;
 
 static NSMutableArray<NSSpeechSynthesizer*> *speechSynthesizers;
+
+@interface AVAudioPlayer (GSXBoloSound)
+
++ (AVAudioPlayer *)soundNamed:(NSString *)name;
+
+- (AVAudioPlayer *)copy;
+
+@end
+
+@implementation AVAudioPlayer (GSXBoloSound)
+
++ (AVAudioPlayer *)soundNamed:(NSString *)name {
+  NSDataAsset *asset = [[NSDataAsset alloc] initWithName:[@"Sounds/" stringByAppendingString:name]];
+  NSError *error = nil;
+  return [[AVAudioPlayer alloc] initWithData:asset.data fileTypeHint:asset.typeIdentifier error:&error];
+}
+
+- (AVAudioPlayer *)copy {
+  return [[AVAudioPlayer alloc] initWithData:self.data error:NULL];
+}
+
+@end
 
 static struct ListNode trackerlist;
 
@@ -239,7 +262,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)awakeFromNib {
   NSUserDefaults *defaults;
-  NSSound *sound;
+  AVAudioPlayer *sound;
 
   controller = self;
   defaults = [NSUserDefaults standardUserDefaults];
@@ -399,29 +422,21 @@ static void getlisttrackerstatus(int status);
   [self setMute:[defaults boolForKey:GSMute]];
 
   // allocate sounds
-  NSDataAsset *soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/bubbles"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"bubbles"];
+  sound = [AVAudioPlayer soundNamed:@"bubbles"];
   bubblessounds = [[NSMutableArray alloc] init];
   [bubblessounds addObject:sound];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/build"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"build"];
+  sound = [AVAudioPlayer soundNamed:@"build"];
   buildsounds = [[NSMutableArray alloc] init];
   [buildsounds addObject:sound];
   [buildsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/builderdeath"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"builderdeath"];
+  sound = [AVAudioPlayer soundNamed:@"builderdeath"];
   builderdeathsounds = [[NSMutableArray alloc] init];
   [builderdeathsounds addObject:sound];
   [builderdeathsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/explosion"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"explosion"];
+  sound = [AVAudioPlayer soundNamed:@"explosion"];
   explosionsounds = [[NSMutableArray alloc] init];
   [explosionsounds addObject:sound];
   [explosionsounds addObject:[sound copy]];
@@ -430,23 +445,17 @@ static void getlisttrackerstatus(int status);
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fbuild"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fbuild"];
+  sound = [AVAudioPlayer soundNamed:@"fbuild"];
   farbuildsounds = [[NSMutableArray alloc] init];
   [farbuildsounds addObject:sound];
   [farbuildsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fbuilderdeath"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fbuilderdeath"];
+  sound = [AVAudioPlayer soundNamed:@"fbuilderdeath"];
   farbuilderdeathsounds = [[NSMutableArray alloc] init];
   [farbuilderdeathsounds addObject:sound];
   [farbuilderdeathsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fexplosion"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fexplosion"];
+  sound = [AVAudioPlayer soundNamed:@"fexplosion"];
   farexplosionsounds = [[NSMutableArray alloc] init];
   [farexplosionsounds addObject:sound];
   [farexplosionsounds addObject:[sound copy]];
@@ -455,95 +464,69 @@ static void getlisttrackerstatus(int status);
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fhittank"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fhittank"];
+  sound = [AVAudioPlayer soundNamed:@"fhittank"];
   farhittanksounds = [[NSMutableArray alloc] init];
   [farhittanksounds addObject:sound];
   [farhittanksounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fhitterrain"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fhitterrain"];
+  sound = [AVAudioPlayer soundNamed:@"fhitterrain"];
   farhitterrainsounds = [[NSMutableArray alloc] init];
   [farhitterrainsounds addObject:sound];
   [farhitterrainsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fhittree"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fhittree"];
+  sound = [AVAudioPlayer soundNamed:@"fhittree"];
   farhittreesounds = [[NSMutableArray alloc] init];
   [farhittreesounds addObject:sound];
   [farhittreesounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fshot"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fshot"];
+  sound = [AVAudioPlayer soundNamed:@"fshot"];
   farshotsounds = [[NSMutableArray alloc] init];
   [farshotsounds addObject:sound];
   [farshotsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fsink"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fsink"];
+  sound = [AVAudioPlayer soundNamed:@"fsink"];
   farsinksounds = [[NSMutableArray alloc] init];
   [farsinksounds addObject:sound];
   [farsinksounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/fsuperboom"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"fsuperboom"];
+  sound = [AVAudioPlayer soundNamed:@"fsuperboom"];
   farsuperboomsounds = [[NSMutableArray alloc] init];
   [farsuperboomsounds addObject:sound];
   [farsuperboomsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/ftree"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"ftree"];
+  sound = [AVAudioPlayer soundNamed:@"ftree"];
   fartreesounds = [[NSMutableArray alloc] init];
   [fartreesounds addObject:sound];
   [fartreesounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/hittank"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"hittank"];
+  sound = [AVAudioPlayer soundNamed:@"hittank"];
   hittanksounds = [[NSMutableArray alloc] init];
   [hittanksounds addObject:sound];
   [hittanksounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/hitterrain"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"hitterrain"];
+  sound = [AVAudioPlayer soundNamed:@"hitterrain"];
   hitterrainsounds = [[NSMutableArray alloc] init];
   [hitterrainsounds addObject:sound];
   [hitterrainsounds addObject:[sound copy]];
   [hitterrainsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/hittree"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"hittree"];
+  sound = [AVAudioPlayer soundNamed:@"hittree"];
   hittreesounds = [[NSMutableArray alloc] init];
   [hittreesounds addObject:sound];
   [hittreesounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/mine"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"mine"];
+  sound = [AVAudioPlayer soundNamed:@"mine"];
   minesounds = [[NSMutableArray alloc] init];
   [minesounds addObject:sound];
   [minesounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/msgreceived"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"msgreceived"];
+  sound = [AVAudioPlayer soundNamed:@"msgreceived"];
   msgreceivedsounds = [[NSMutableArray alloc] init];
   [msgreceivedsounds addObject:sound];
   [msgreceivedsounds addObject:[sound copy]];
   [msgreceivedsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/pillshot"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"pillshot"];
+  sound = [AVAudioPlayer soundNamed:@"pillshot"];
   pillshotsounds = [[NSMutableArray alloc] init];
   [pillshotsounds addObject:sound];
   [pillshotsounds addObject:[sound copy]];
@@ -552,21 +535,15 @@ static void getlisttrackerstatus(int status);
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/sink"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"sink"];
+  sound = [AVAudioPlayer soundNamed:@"sink"];
   sinksounds = [[NSMutableArray alloc] init];
   [sinksounds addObject:sound];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/superboom"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"superboom"];
+  sound = [AVAudioPlayer soundNamed:@"superboom"];
   superboomsounds = [[NSMutableArray alloc] init];
   [superboomsounds addObject:sound];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/tankshot"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"tankshot"];
+  sound = [AVAudioPlayer soundNamed:@"tankshot"];
   tankshotsounds = [[NSMutableArray alloc] init];
   [tankshotsounds addObject:sound];
   [tankshotsounds addObject:[sound copy]];
@@ -574,9 +551,7 @@ static void getlisttrackerstatus(int status);
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
 
-  soundAsset = [[NSDataAsset alloc] initWithName:@"Sounds/tree"];
-  sound = [[NSSound alloc] initWithData:soundAsset.data];
-  [sound setName:@"tree"];
+  sound = [AVAudioPlayer soundNamed:@"tree"];
   treesounds = [[NSMutableArray alloc] init];
   [treesounds addObject:sound];
   [treesounds addObject:[sound copy]];
@@ -4074,7 +4049,7 @@ void settankstatus() {
 void playsound(int snd) {
   if (!muteGlobal) {
     int i;
-    NSArray *array;
+    NSArray<AVAudioPlayer *> *array;
 
     @autoreleasepool {
 
@@ -4183,6 +4158,7 @@ void playsound(int snd) {
       // start playing sound
       for (i = 0; i < array.count; i++) {
         if (![array[i] isPlaying]) {
+          [array[i] setCurrentTime:0];
           [array[i] play];
           break;
         }
