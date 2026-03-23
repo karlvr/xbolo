@@ -2635,14 +2635,16 @@ TRY
       server.pills[clbuildpill->pill].x = clbuildpill->x;
       server.pills[clbuildpill->pill].y = clbuildpill->y;
       server.pills[clbuildpill->pill].owner = player;
-      server.pills[clbuildpill->pill].armour = clbuildpill->trees*4;
-
-      if (server.pills[clbuildpill->pill].armour > MAX_PILL_ARMOUR) {
-        clbuildpill->trees = (server.pills[clbuildpill->pill].armour - MAX_PILL_ARMOUR)/4;
-        server.pills[clbuildpill->pill].armour = MAX_PILL_ARMOUR;
-      }
-      else {
-        clbuildpill->trees = 0;
+      {
+        int armour_to_set = clbuildpill->trees*4;
+        if (armour_to_set > MAX_PILL_ARMOUR) {
+          clbuildpill->trees = (armour_to_set - MAX_PILL_ARMOUR)/4;
+          armour_to_set = MAX_PILL_ARMOUR;
+        }
+        else {
+          clbuildpill->trees = 0;
+        }
+        server.pills[clbuildpill->pill].armour = armour_to_set;
       }
 
       sendsrbuildpill(clbuildpill->pill);
@@ -2711,14 +2713,16 @@ TRY
     case kDamagedWallTerrain1:
     case kDamagedWallTerrain2:
     case kDamagedWallTerrain3:
-      server.pills[pill].armour += clrepairpill->trees*4;
-
-      if (server.pills[pill].armour > MAX_PILL_ARMOUR) {
-        clrepairpill->trees = (server.pills[pill].armour - MAX_PILL_ARMOUR)/4;
-        server.pills[pill].armour = MAX_PILL_ARMOUR;
-      }
-      else {
-        clrepairpill->trees = 0;
+      {
+        int armour_to_add = clrepairpill->trees*4;
+        if (server.pills[pill].armour + armour_to_add > MAX_PILL_ARMOUR) {
+          armour_to_add = MAX_PILL_ARMOUR - server.pills[pill].armour;
+          clrepairpill->trees = (clrepairpill->trees*4 - armour_to_add)/4;
+        }
+        else {
+          clrepairpill->trees = 0;
+        }
+        server.pills[pill].armour += armour_to_add;
       }
 
       sendsrrepairpill(pill);
