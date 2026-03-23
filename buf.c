@@ -94,9 +94,10 @@ END
 ssize_t readbuf(struct Buf *buf, void *data, size_t nbytes) {
   assert(buf != NULL);
   assert(buf->ptr != NULL);
-  assert(nbytes <= buf->nbytes);
 
 TRY
+  if (nbytes > buf->nbytes) LOGFAIL(EOVERFLOW)
+
   if (data) {
     bcopy(buf->ptr, data, nbytes);
   }
