@@ -110,7 +110,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         // Check if target base ownership changed (someone else captured it)
         let currentTile = world.tile(at: target.pos)
-        if currentTile == kFriendlyBaseTile {
+        if currentTile == .kFriendlyBaseTile {
             // Already ours! Pick a new target.
             state = .scanning
             return
@@ -159,9 +159,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         // Check if base is now captured
         let currentTile = world.tile(at: target.pos)
-        if currentTile == kFriendlyBaseTile || currentTile == kNeutralBaseTile {
+        if currentTile == .kFriendlyBaseTile || currentTile == .kNeutralBaseTile {
             // Base is no longer hostile - drive onto it to claim
-            if currentTile == kNeutralBaseTile {
+            if currentTile == .kNeutralBaseTile {
                 let steer = steering.steerToward(target: target.pos.vec2f, gameState: gameState)
                 applySteeringToCmd(steer, cmd: cmd)
             } else {
@@ -261,7 +261,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
             // Check if base is still friendly
             let tile = world.tile(at: base.pos)
-            if tile != kFriendlyBaseTile {
+            if tile != .kFriendlyBaseTile {
                 // Base was captured from us!
                 state = .scanning
                 return
