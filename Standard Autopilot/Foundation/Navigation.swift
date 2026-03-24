@@ -93,11 +93,12 @@ class Pathfinder {
                 let borderAdd = world.borderCost(at: neighbor)
 
                 // Penalty for stepping from water to land when on a boat.
-                // Losing the boat makes all subsequent water tiles impassable/expensive,
-                // so this one-time cost discourages leaving water prematurely.
+                // Scales with destination terrain cost: exiting onto road (1.0)
+                // is much cheaper than exiting onto grass (1.33) or swamp (5.33).
+                // This makes the pathfinder prefer boat exit points near roads.
                 var transitionCost: Float = 0
                 if world.hasBoat && world.isWaterTile(at: current.pos) && !world.isWaterTile(at: neighbor) {
-                    transitionCost = 15.0
+                    transitionCost = 10.0 + cost * 15.0
                 }
 
                 let moveCost = baseCost * dangerMult + borderAdd + transitionCost
