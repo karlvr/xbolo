@@ -161,26 +161,22 @@ class SteeringController {
 
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
 
-        // In precision mode (corridors, boat near land): stop accelerating
-        // when approaching a turn so the tank coasts through at lower speed.
-        // IMPORTANT: only set accelerate=false, never decelerate=true.
-        // Setting decelerate causes the same permanent stall as the old corner
-        // braking — the tank stops, is still near the corner, brakes again forever.
-        // By just releasing the gas, the tank slows naturally but keeps inching
-        // forward, eventually passing the waypoint and resuming acceleration.
+        // In precision mode (corridors, boat near land): slow down before
+        // corners. Measure distance to the CORNER waypoint (where the turn
+        // actually happens), not the intermediate waypoint before it.
         if needsPrecision && output.accelerate {
-            let distToTarget = distance(tankPos, waypoints[lookAheadIdx].vec2f)
-            if distToTarget < 1.5 {
-                let hasCorner = lookAheadIdx + 1 < waypoints.count && {
-                    let dx1 = waypoints[lookAheadIdx].x - waypoints[max(lookAheadIdx - 1, 0)].x
-                    let dy1 = waypoints[lookAheadIdx].y - waypoints[max(lookAheadIdx - 1, 0)].y
-                    let dx2 = waypoints[lookAheadIdx + 1].x - waypoints[lookAheadIdx].x
-                    let dy2 = waypoints[lookAheadIdx + 1].y - waypoints[lookAheadIdx].y
-                    return dx1 != dx2 || dy1 != dy2
-                }()
-                if hasCorner {
+            // Find the corner: where direction changes within the next few waypoints
+            if let cornerWpIdx = (lookAheadIdx + 1..<min(lookAheadIdx + 4, waypoints.count)).first(where: { i in
+                let dx1 = waypoints[i].x - waypoints[i - 1].x
+                let dy1 = waypoints[i].y - waypoints[i - 1].y
+                let dx0 = waypoints[i - 1].x - waypoints[max(i - 2, 0)].x
+                let dy0 = waypoints[i - 1].y - waypoints[max(i - 2, 0)].y
+                return dx1 != dx0 || dy1 != dy0
+            }) {
+                let distToCorner = distance(tankPos, waypoints[cornerWpIdx].vec2f)
+                if distToCorner < 1.5 {
                     output.accelerate = false
-                    // Do NOT set decelerate — let the tank coast, don't brake to a stop
+                    output.decelerate = true
                 }
             }
         }
