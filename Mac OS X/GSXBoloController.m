@@ -417,7 +417,8 @@ static void getlisttrackerstatus(int status);
   [self setKeyConfigDict:[defaults dictionaryForKey:GSKeyConfigDict]];
 
   // schedule a timer
-  [NSTimer scheduledTimerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+  NSTimer *refreshTimer = [NSTimer timerWithTimeInterval:0.0625 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+  [NSRunLoop.currentRunLoop addTimer:refreshTimer forMode:NSRunLoopCommonModes];
 
   // init sound
   [self setMute:[defaults boolForKey:GSMute]];
