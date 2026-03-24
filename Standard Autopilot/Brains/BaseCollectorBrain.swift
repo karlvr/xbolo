@@ -102,9 +102,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         let tankTile = tilePosFromVec2f(gameState.tankposition)
 
-        // Mark the current chunk as explored
-        let currentChunk = chunkFor(tankTile)
-        exploredChunks.insert(currentChunk)
+        // Mark all chunks within the tank's visibility range (14 tiles) as explored.
+        // This means the tank doesn't need to travel to the center of each chunk —
+        // simply being able to see into it is enough.
+        markVisibleChunksExplored(tankTile: tankTile)
 
         // Detect respawn: tank teleported far away (spawned at a new location).
         let teleported = lastTankTile.x >= 0
@@ -375,11 +376,11 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             return
         }
 
-        // Pick an explore target if we don't have one or have arrived
+        // Check if we can already see the explore target chunk (no need to walk right up to it)
         if let target = exploreTarget {
-            let dist = tankTile.floatDistance(to: target)
-            if dist < 2.0 {
-                // Arrived at explore target — pick a new one
+            let targetChunk = chunkFor(target)
+            if exploredChunks.contains(targetChunk) {
+                // We can see it from here — pick a new target
                 exploreTarget = nil
                 exploreFailCount = 0
             }
@@ -436,6 +437,23 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
     // MARK: - Exploration
 
+    /// The tank's visibility radius in tiles (the game uses a 29x29 rect = 14 tiles each side).
+    private let visibilityRange = 14
+
+    /// Mark all chunks that fall within the tank's visibility as explored.
+    private func markVisibleChunksExplored(tankTile: TilePos) {
+        let minCX = max(0, (tankTile.x - visibilityRange) / chunkSize)
+        let maxCX = min(kWorldWidth / chunkSize - 1, (tankTile.x + visibilityRange) / chunkSize)
+        let minCY = max(0, (tankTile.y - visibilityRange) / chunkSize)
+        let maxCY = min(kWorldHeight / chunkSize - 1, (tankTile.y + visibilityRange) / chunkSize)
+
+        for cy in minCY...maxCY {
+            for cx in minCX...maxCX {
+                exploredChunks.insert(ChunkPos(cx: cx, cy: cy))
+            }
+        }
+    }
+
     private func chunkFor(_ pos: TilePos) -> ChunkPos {
         return ChunkPos(cx: pos.x / chunkSize, cy: pos.y / chunkSize)
     }
@@ -477,16 +495,47 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         currentPath = nil
     }
 
-    /// Pick the nearest unexplored chunk center to navigate toward.
+    /// Check whether a chunk is adjacent to (or contains) any known land tiles.
+    /// Chunks that are entirely deep sea with no land neighbors are deprioritized
+    /// since bolo maps have a central landmass surrounded by ocean.
+    private func chunkNearLand(_ chunk: ChunkPos) -> Bool {
+        // Check this chunk and its 8 neighbors for any non-sea, non-unknown tiles
+        for dcy in -1...1 {
+            for dcx in -1...1 {
+                let cx = chunk.cx + dcx
+                let cy = chunk.cy + dcy
+                guard cx >= 0, cx < kWorldWidth / chunkSize,
+                      cy >= 0, cy < kWorldHeight / chunkSize else { continue }
+
+                let baseX = cx * chunkSize
+                let baseY = cy * chunkSize
+                // Sample a few positions in the chunk
+                for sy in stride(from: 0, to: chunkSize, by: 4) {
+                    for sx in stride(from: 0, to: chunkSize, by: 4) {
+                        let t = world.tile(at: TilePos(x: baseX + sx, y: baseY + sy))
+                        if t != .seaTile && t != .minedSeaTile && t != .unknownTile {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    /// Pick the nearest unexplored chunk to navigate toward.
+    /// Prefers chunks near known land; only explores deep sea as a last resort.
     private func pickExploreTarget(tankTile: TilePos) -> TilePos? {
         let chunksX = kWorldWidth / chunkSize
         let chunksY = kWorldHeight / chunkSize
         let tankChunk = chunkFor(tankTile)
 
-        var bestTarget: TilePos?
-        var bestDist: Float = .infinity
+        var bestLandTarget: TilePos?
+        var bestLandDist: Float = .infinity
+        var bestSeaTarget: TilePos?
+        var bestSeaDist: Float = .infinity
 
-        // Search in expanding rings from the tank's chunk to find nearest unexplored
+        // Search in expanding rings from the tank's chunk
         let maxRadius = max(chunksX, chunksY)
         for radius in 1...maxRadius {
             for dcx in -radius...radius {
@@ -507,17 +556,26 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                         continue
                     }
                     let dist = target.floatDistance(to: tankTile)
-                    if dist < bestDist {
-                        bestDist = dist
-                        bestTarget = target
+
+                    if chunkNearLand(chunk) {
+                        if dist < bestLandDist {
+                            bestLandDist = dist
+                            bestLandTarget = target
+                        }
+                    } else {
+                        if dist < bestSeaDist {
+                            bestSeaDist = dist
+                            bestSeaTarget = target
+                        }
                     }
                 }
             }
-            // If we found something in this ring, no need to search further
-            if bestTarget != nil { return bestTarget }
+            // Prefer land targets; only use sea if no land target in any ring
+            if bestLandTarget != nil { return bestLandTarget }
         }
 
-        return bestTarget
+        // Fall back to deep sea exploration only if no land chunks remain
+        return bestSeaTarget
     }
 
     // MARK: - State Reset
