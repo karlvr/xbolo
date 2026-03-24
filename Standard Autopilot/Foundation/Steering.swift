@@ -155,20 +155,22 @@ class SteeringController {
             }
         }
 
-        NSLog("[Steer] tank=(%.1f,%.1f) dir=%d startIdx=%d lookAhead=%d target=(%.1f,%.1f) prec=%d",
-              tankPos.x, tankPos.y, gameState.tankdirection, startIdx, lookAheadIdx,
-              steerTarget.x, steerTarget.y, needsPrecision ? 1 : 0)
-
         // In precision mode, offset the steering target away from adjacent
         // walls/land. Waypoints are at tile centers (0.5 from walls), but
         // TANKRADIUS is 0.375, leaving only 0.125 margin. Nudging the target
         // gives the steering a clear correction vector away from the wall.
         var steerTarget = waypoints[lookAheadIdx].vec2f
+		NSLog("[Steer] tank=(%.1f,%.1f) dir=%d startIdx=%d lookAhead=%d target=(%.1f,%.1f) prec=%d",
+			tankPos.x, tankPos.y, gameState.tankdirection, startIdx, lookAheadIdx,
+			steerTarget.x, steerTarget.y, needsPrecision ? 1 : 0)
+
         if needsPrecision, let w = world {
             let wp = waypoints[lookAheadIdx]
             var nudgeX: Float = 0
             var nudgeY: Float = 0
-            let nudgeAmount: Float = 0.25
+            // Must be large enough that the angle exceeds the steering dead
+            // zone (11.25°). At 1 tile distance: atan(0.4/1.0) = 21.8° > 11.25°.
+            let nudgeAmount: Float = 0.4
 
             // Check each cardinal direction for walls/land-while-on-boat
             let left = TilePos(x: wp.x - 1, y: wp.y)
