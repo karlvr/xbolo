@@ -115,7 +115,15 @@ class SteeringController {
             }
         }
 
+        NSLog("[Steer] tank=(%.1f,%.1f) startIdx=%d lookAheadIdx=%d target=(%d,%d) wpCount=%d",
+              tankPos.x, tankPos.y, startIdx, lookAheadIdx,
+              waypoints[lookAheadIdx].x, waypoints[lookAheadIdx].y, waypoints.count)
+
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
+
+        NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
+              output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
+              output.left ? 1 : 0, output.right ? 1 : 0)
 
         // Slow down before corners: if there's a direction change within
         // the next few waypoints, brake so we don't overshoot the turn.
