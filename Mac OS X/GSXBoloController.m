@@ -295,7 +295,8 @@ static void getlisttrackerstatus(int status);
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
   [builderToolItem setLabel:NSLocalizedString(@"Builder Tool", nil)];
   builderToolItem.view = builderToolView;
-  builderToolItem.minSize = builderToolView.frame.size;
+  [builderToolView.widthAnchor constraintEqualToConstant:builderToolView.frame.size.width].active = YES;
+  [builderToolView.heightAnchor constraintEqualToConstant:builderToolView.frame.size.height].active = YES;
 
   tankCenterItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSTankCenterItemIdentifier];
   [tankCenterItem setLabel:NSLocalizedString(@"Tank Center", nil)];
