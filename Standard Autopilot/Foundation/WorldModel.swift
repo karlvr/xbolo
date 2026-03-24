@@ -75,6 +75,7 @@ class WorldModel {
     private(set) var friendlyBases: [BaseInfo] = []
     private(set) var hostileBases: [BaseInfo] = []
     private(set) var neutralBases: [BaseInfo] = []
+    private(set) var hasBoat: Bool = false
 
     private var tiles: UnsafeMutablePointer<GSTileType>?
     private var width: Int = 0
@@ -85,6 +86,7 @@ class WorldModel {
         tiles = gameState.visibletiles
         width = Int(gameState.worldwidth)
         height = Int(gameState.worldheight)
+        hasBoat = gameState.tankhasboat != 0
 
         bases.removeAll()
         pills.removeAll()
@@ -140,11 +142,36 @@ class WorldModel {
     }
 
     /// Get the movement cost for pathfinding. Returns nil if impassable.
+    /// Accounts for boat status: with a boat, water is fast; without, it's
+    /// very slow (river) or deadly (sea).
     func movementCost(at pos: TilePos) -> Float? {
+        let t = tile(at: pos)
+
+        // Boat-aware water handling
+        if hasBoat {
+            switch t {
+            case .riverTile, .seaTile, .minedSeaTile:
+                // With a boat we move at road speed on water, but we risk
+                // losing the boat if shot — add a risk premium.
+                return 2.0
+            default:
+                break
+            }
+        } else {
+            switch t {
+            case .seaTile, .minedSeaTile:
+                return nil // Deadly without a boat
+            case .riverTile:
+                return 5.33 // Passable but extremely slow without a boat
+            default:
+                break
+            }
+        }
+
         switch terrainClass(at: pos) {
         case .passable(let cost): return cost
         case .impassable: return nil
-        case .unknown: return 5.0  // High cost but not impassable - explore cautiously
+        case .unknown: return 3.0  // Moderate cost — encourage exploration
         }
     }
 
@@ -178,52 +205,57 @@ class WorldModel {
         return nil
     }
 
+    /// Classify tile terrain. Costs are proportional to inverse speed from the
+    /// game engine's maxspeed() function (road = 3.125 as baseline cost 1.0).
+    /// Water tiles are handled separately in movementCost(at:) based on boat status.
     static func classifyTile(_ tile: GSTileType) -> TerrainClass {
         switch tile {
-        // Fast terrain
+        // Fast terrain — road speed 3.125
         case .roadTile, .minedRoadTile:
             return .passable(cost: 1.0)
         case .boatTile:
             return .passable(cost: 1.0)
-        // Bases are passable (and desirable!)
         case .friendlyBaseTile, .hostileBaseTile, .neutralBaseTile:
             return .passable(cost: 1.0)
 
-        // Medium terrain
+        // Medium terrain — grass speed 2.344 → cost 1.33
         case .grassTile, .minedGrassTile:
             return .passable(cost: 1.33)
-        case .craterTile, .minedCraterTile:
-            return .passable(cost: 1.33)
 
-        // Slow terrain
-        case .swampTile, .minedSwampTile:
-            return .passable(cost: 2.0)
-        case .rubbleTile, .minedRubbleTile:
-            return .passable(cost: 2.5)
-
-        // Very slow terrain
+        // Slow terrain — forest speed 1.172 → cost 2.67
         case .forestTile, .minedForestTile:
             return .passable(cost: 2.67)
 
-        // Impassable
-        case .wallTile, .damagedWallTile:
-            return .impassable
+        // Very slow terrain — rubble speed 0.586 → cost 5.33
+        case .craterTile, .minedCraterTile:
+            return .passable(cost: 5.33)
+        case .swampTile, .minedSwampTile:
+            return .passable(cost: 5.33)
+        case .rubbleTile, .minedRubbleTile:
+            return .passable(cost: 5.33)
+
+        // Water — handled dynamically in movementCost(at:) based on boat status.
+        // Classify as passable here; movementCost overrides for water tiles.
         case .riverTile:
-            return .impassable
+            return .passable(cost: 5.33)
         case .seaTile, .minedSeaTile:
             return .impassable
 
-        // Pillboxes - hostile ones are dangerous, friendly ones passable
+        // Impassable walls
+        case .wallTile, .damagedWallTile:
+            return .impassable
+
+        // Pillboxes — friendly are passable (road speed), hostile are impassable
         default:
             let raw = tile.rawValue
             if raw >= GSTileType.friendlyPill00Tile.rawValue && raw <= GSTileType.friendlyPill15Tile.rawValue {
-                return .passable(cost: 1.5)
+                return .passable(cost: 1.0)
             } else if raw >= GSTileType.hostilePill00Tile.rawValue && raw <= GSTileType.hostilePill15Tile.rawValue {
-                return .impassable // Don't path through hostile pillboxes
+                return .impassable
             } else if tile == .unknownTile {
                 return .unknown
             }
-            return .passable(cost: 2.0) // Default fallback
+            return .passable(cost: 2.0)
         }
     }
 }
