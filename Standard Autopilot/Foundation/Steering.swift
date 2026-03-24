@@ -73,29 +73,48 @@ class SteeringController {
     /// Follow a path by steering toward the next appropriate waypoint.
     func followPath(_ path: PathResult, gameState: GSRobotGameState) -> SteeringOutput {
         let currentTile = tilePosFromVec2f(gameState.tankposition)
+        let tankPos = gameState.tankposition
+        let waypoints = path.waypoints
 
-        // Look ahead in the path for a waypoint that's not our current tile
-        // and try to look 2-3 tiles ahead for smoother movement
-        var targetWaypoint: TilePos?
-
-        if let waypoints = Optional(path.waypoints), waypoints.count > 0 {
-            // Find our approximate position in the path
-            var startIdx = 0
-            for (i, wp) in waypoints.enumerated() {
-                if wp == currentTile {
-                    startIdx = i
-                }
-            }
-
-            // Look 2-3 waypoints ahead for smooth steering
-            let lookAhead = min(startIdx + 3, waypoints.count - 1)
-            targetWaypoint = waypoints[lookAhead]
-        }
-
-        guard let target = targetWaypoint else {
+        guard waypoints.count > 0 else {
             return SteeringOutput(decelerate: true)
         }
 
-        return steerToward(target: target.vec2f, gameState: gameState)
+        // Find our approximate position in the path
+        var startIdx = 0
+        for (i, wp) in waypoints.enumerated() {
+            if wp == currentTile {
+                startIdx = i
+            }
+        }
+
+        // The immediate next waypoint (one tile ahead)
+        let nextIdx = min(startIdx + 1, waypoints.count - 1)
+        let nextWaypoint = waypoints[nextIdx]
+
+        // Check if the path changes direction at the next waypoint (i.e. a turn)
+        // by comparing the direction from current to next vs next to the one after
+        let farIdx = min(startIdx + 3, waypoints.count - 1)
+        let isStraightLine: Bool
+        if farIdx > nextIdx {
+            let farWaypoint = waypoints[farIdx]
+            let dirToNext = angleTo(from: tankPos, to: nextWaypoint.vec2f)
+            let dirToFar = angleTo(from: tankPos, to: farWaypoint.vec2f)
+            isStraightLine = abs(normalizeAngle(dirToFar - dirToNext)) < .pi / 6
+        } else {
+            isStraightLine = true
+        }
+
+        // On straight segments, look further ahead for smooth driving.
+        // At turns, steer toward the immediate next tile center so we
+        // don't cut corners and drift to tile edges.
+        let targetWaypoint: TilePos
+        if isStraightLine {
+            targetWaypoint = waypoints[farIdx]
+        } else {
+            targetWaypoint = nextWaypoint
+        }
+
+        return steerToward(target: targetWaypoint.vec2f, gameState: gameState)
     }
 }
