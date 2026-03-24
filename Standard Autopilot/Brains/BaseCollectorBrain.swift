@@ -692,7 +692,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         let tankPos = gameState.tankposition
 
         // Find the most threatening shell (closest that's heading toward us)
-        var bestShell: ExternalShell?
+        var bestShell: Shell?
         var bestDist: Float = .infinity
 
         for shell in shells {
