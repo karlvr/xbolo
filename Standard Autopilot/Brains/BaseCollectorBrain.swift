@@ -96,8 +96,14 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             handleRefueling(cmd: cmd, gameState: gameState, tankTile: tankTile)
         }
 
-        // Always dodge incoming shells regardless of state
-        applyShellDodging(cmd: cmd, gameState: gameState)
+        // Dodge incoming shells — but not if we're hidden in forest.
+        // Pillboxes can't see us in forest beyond ~2 tiles, so dodging
+        // would just give away our position or move us out of cover.
+        let inForest = world.isForestTile(at: tankTile)
+        let nearHostilePill = (world.nearestHostilePillDistance(to: tankTile) ?? .infinity) <= 2.0
+        if !inForest || nearHostilePill {
+            applyShellDodging(cmd: cmd, gameState: gameState)
+        }
 
         return cmd
     }

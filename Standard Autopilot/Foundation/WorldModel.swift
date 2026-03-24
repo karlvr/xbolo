@@ -189,6 +189,24 @@ class WorldModel {
         return targets.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) })
     }
 
+    /// Whether the tank is well-hidden in forest at the given position.
+    /// In the game engine, pillboxes can't see a tank in forest beyond
+    /// ~2 tile distance (forestvis <= 0.25). The tank is considered hidden
+    /// if it's on a forest tile.
+    func isForestTile(at pos: TilePos) -> Bool {
+        let t = tile(at: pos)
+        return t == .forestTile || t == .minedForestTile
+    }
+
+    /// Whether a hostile pillbox is within the given range of a position.
+    func nearestHostilePillDistance(to pos: TilePos) -> Float? {
+        let hostilePills = pills.filter { $0.ownership == .hostile }
+        guard let nearest = hostilePills.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) }) else {
+            return nil
+        }
+        return nearest.pos.floatDistance(to: pos)
+    }
+
     // MARK: - Private
 
     private func parsePillTile(_ tile: GSTileType, x: Int, y: Int) -> PillInfo? {
