@@ -73,6 +73,14 @@ class SteeringController {
     /// Reference to the world model for checking terrain near waypoints.
     var world: WorldModel?
 
+    /// Last waypoint index we were near — used to prevent backtracking on U-shaped paths.
+    private var lastWaypointIdx = 0
+
+    /// Reset path progress tracking (call when path changes).
+    func resetPathProgress() {
+        lastWaypointIdx = 0
+    }
+
     /// Follow a path by steering toward the next appropriate waypoint.
     func followPath(_ path: PathResult, gameState: GSRobotGameState) -> SteeringOutput {
         let tankPos = gameState.tankposition
@@ -82,19 +90,23 @@ class SteeringController {
             return SteeringOutput(decelerate: true)
         }
 
-        // Find the nearest waypoint to our current position.
-        // We used to require an exact tile match, but if the tank drifted
-        // off-path (dodging, momentum, stale path), startIdx fell back to 0
-        // and the tank steered toward the path start — into walls.
-        var startIdx = 0
+        // Find the nearest waypoint, searching forward from our last known
+        // position. This prevents backtracking on U-shaped paths where a
+        // spatially close waypoint on a different path segment could be picked.
+        let searchStart = min(lastWaypointIdx, waypoints.count - 1)
+        var startIdx = searchStart
         var bestDist: Float = .infinity
-        for (i, wp) in waypoints.enumerated() {
-            let d = distanceSquared(tankPos, wp.vec2f)
+        // Search forward from last position, plus a small window behind
+        // in case the tank drifted backward slightly
+        let searchFrom = max(0, searchStart - 2)
+        for i in searchFrom..<waypoints.count {
+            let d = distanceSquared(tankPos, waypoints[i].vec2f)
             if d < bestDist {
                 bestDist = d
                 startIdx = i
             }
         }
+        lastWaypointIdx = startIdx
 
         // Look ahead along the path. In open terrain, extend lookahead along
         // straight segments (and at least 2 ahead for centering). In tight

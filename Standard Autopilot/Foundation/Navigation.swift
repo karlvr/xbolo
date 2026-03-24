@@ -154,7 +154,10 @@ class Pathfinder {
             TilePos(x: pos.x, y: pos.y + 1),
             TilePos(x: pos.x - 1, y: pos.y),
         ]
-        return cardinals.first(where: { world.movementCost(at: $0) != nil })
+        return cardinals.first(where: {
+            $0.x >= 0 && $0.x < kWorldWidth && $0.y >= 0 && $0.y < kWorldHeight
+            && world.movementCost(at: $0) != nil
+        })
     }
 
     private func reconstructPath(cameFrom: [TilePos: TilePos], current: TilePos, gScore: [TilePos: Float]) -> PathResult {

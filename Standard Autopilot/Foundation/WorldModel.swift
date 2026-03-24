@@ -212,18 +212,31 @@ class WorldModel {
     }
 
     /// Check if a hostile pillbox has line-of-sight to a position (no walls in between).
+    /// Uses Bresenham-style stepping to avoid missing diagonal tiles.
     private func pillboxCanSee(pill: PillInfo, target: TilePos) -> Bool {
-        let dx = target.x - pill.pos.x
-        let dy = target.y - pill.pos.y
-        let steps = max(abs(dx), abs(dy))
-        if steps == 0 { return true }
+        var x = pill.pos.x
+        var y = pill.pos.y
+        let dx = abs(target.x - pill.pos.x)
+        let dy = abs(target.y - pill.pos.y)
+        let sx = pill.pos.x < target.x ? 1 : -1
+        let sy = pill.pos.y < target.y ? 1 : -1
+        var err = dx - dy
 
-        for i in 1..<steps {
-            let x = pill.pos.x + dx * i / steps
-            let y = pill.pos.y + dy * i / steps
+        while x != target.x || y != target.y {
+            let e2 = err * 2
+            if e2 > -dy {
+                err -= dy
+                x += sx
+            }
+            if e2 < dx {
+                err += dx
+                y += sy
+            }
+            // Don't check the target tile itself
+            if x == target.x && y == target.y { break }
             let t = tile(at: TilePos(x: x, y: y))
             if t == .wallTile || t == .damagedWallTile {
-                return false  // Wall blocks line of sight
+                return false
             }
         }
         return true

@@ -251,7 +251,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                 return
             }
 
-            planPathToTarget(from: tankTile, to: target.pos)
+            if !planPathToTarget(from: tankTile, to: target.pos) {
+                pathFailCount += 1
+            }
         }
 
         // Follow the path
@@ -260,9 +262,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             applySteeringToCmd(steer, cmd: cmd)
         } else {
             // No path found — stop and wait for the next scheduled replan.
-            // Do NOT drive directly toward the target (ignores obstacles).
             cmd.decelerate = true
-            pathFailCount += 1
             if pathFailCount >= maxPathFailures {
                 // Can't reach this target — blacklist it temporarily and pick a new one
                 if let target = targetBase {
@@ -447,7 +447,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                 state = .navigatingToBase
                 return
             }
-            planPathToTarget(from: tankTile, to: target)
+            if !planPathToTarget(from: tankTile, to: target) {
+                exploreFailCount += 1
+            }
         }
 
         // Follow the path
@@ -455,9 +457,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let steer = steering.followPath(path, gameState: gameState)
             applySteeringToCmd(steer, cmd: cmd)
         } else {
-            // Can't reach explore target — give up on it
+            // Can't reach explore target — wait for replan. exploreFailCount
+            // is incremented in planPathToTarget when pathfinding fails.
             cmd.decelerate = true
-            exploreFailCount += 1
             if exploreFailCount >= maxExploreFailures {
                 // Mark this chunk as explored (even though we couldn't reach it)
                 // so we don't keep trying
@@ -674,15 +676,18 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
     // MARK: - Path Planning
 
-    private func planPathToTarget(from: TilePos, to: TilePos) {
+    @discardableResult
+    private func planPathToTarget(from: TilePos, to: TilePos) -> Bool {
         replanCounter = 0
         currentPath = pathfinder.findPath(from: from, to: to)
+        steering.resetPathProgress()
         if let path = currentPath {
-            pathFailCount = 0
             NSLog("[Brain] Path: (%d,%d)→(%d,%d), %d waypoints, cost %.1f",
                   from.x, from.y, to.x, to.y, path.waypoints.count, path.totalCost)
+            return true
         } else {
             NSLog("[Brain] Path FAILED: (%d,%d)→(%d,%d)", from.x, from.y, to.x, to.y)
+            return false
         }
     }
 
