@@ -9,6 +9,14 @@
 import Foundation
 import BoloKit
 
+// MARK: - Exploration Chunk
+
+/// A coarse grid position for tracking explored areas.
+struct ChunkPos: Hashable {
+    let cx: Int
+    let cy: Int
+}
+
 // MARK: - Brain State Machine
 
 enum BrainState {
@@ -17,6 +25,7 @@ enum BrainState {
     case attackingBase         // Shooting at a hostile base
     case retreatingToRefuel   // Heading back to a friendly base
     case refueling            // Sitting on a friendly base restocking
+    case exploring             // No known targets — exploring unexplored map areas
 }
 
 // MARK: - Base Collector Brain
@@ -41,10 +50,17 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var lastArmor: Int32 = -1
     private var unreachableTargets: [TilePos: Int] = [:]  // pos -> tick when it was blacklisted
 
+    // Exploration state — track which map chunks we've visited
+    private var exploredChunks = Set<ChunkPos>()
+    private var exploreTarget: TilePos?
+    private var exploreFailCount = 0
+
     // How often to recalculate path (ticks)
     private let replanInterval = 50  // Once per second
     private let maxPathFailures = 3  // Give up on target after this many failures
     private let unreachableCooldown = 500  // Re-try unreachable targets after ~10 seconds
+    private let chunkSize = 16  // Exploration chunk size in tiles
+    private let maxExploreFailures = 3  // Give up on an explore target after this many failures
 
     public override required init() {
         super.init()
@@ -151,14 +167,18 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             return
         }
 
-        // Check if we've arrived at the target
+        // Check if we've arrived at the target.
+        // Use tile adjacency (Manhattan distance) not Euclidean distance,
+        // because Euclidean < 2.0 can mean "close but with a wall between us".
         let distToTarget = distance(gameState.tankposition, target.pos.vec2f)
-        if distToTarget < 2.0 {
+        let tileAdjacent = tankTile.distance(to: target.pos) <= 1
+
+        if tileAdjacent {
             if target.ownership == .hostile {
                 state = .attackingBase
                 return
             } else {
-                // Neutral base - just drive onto it to capture
+                // Neutral base — drive directly onto it to capture
                 let steer = steering.steerToward(target: target.pos.vec2f, gameState: gameState)
                 applySteeringToCmd(steer, cmd: cmd)
 
