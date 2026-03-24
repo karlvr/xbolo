@@ -192,6 +192,18 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     // MARK: - State Handlers
 
     private func handleScanning(cmd: GSRobotCommandState, gameState: GSRobotGameState, tankTile: TilePos) {
+        // Don't stand still while deciding — if we're in danger, keep moving.
+        // If we're on a friendly base, decelerate (refuel while thinking).
+        let onFriendlyBase = world.tile(at: tankTile) == .friendlyBaseTile
+        let inDanger = !world.isDeepForest(at: tankTile)
+            && (world.nearestHostilePillDistance(to: tankTile) ?? .infinity) <= 5.0
+
+        if onFriendlyBase {
+            cmd.decelerate = true  // Park on base to refuel
+        } else if inDanger {
+            cmd.accelerate = true  // Keep moving — don't be a sitting duck
+        }
+
         // Look for the best target base
         if let target = pickTargetBase(tankTile: tankTile) {
             targetBase = target
