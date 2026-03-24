@@ -1789,6 +1789,8 @@ END
 - (void)keyEvent:(BOOL)event forKey:(unsigned short)keyCode {
   NSString *object;
 
+  if (self.robotActive) return;
+
 TRY
   object = keyConfigDict[[NSString stringWithFormat:@"%d", keyCode]];
   if (object != nil) {
@@ -2089,6 +2091,12 @@ END
 }
 
 // NSApplication delegate methods
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  if (!client_running) {
+    [newGameWindow orderFrontRegardless];
+  }
+}
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification {
   [statusPanel setFloatingPanel:YES];

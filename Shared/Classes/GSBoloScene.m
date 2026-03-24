@@ -553,7 +553,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
   {
     NSPoint aPoint;
     aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
-    if ([self.anyView mouse:aPoint inRect:self.anyView.visibleRect]) {
+    if (!self.hideSelector && [self.anyView mouse:aPoint inRect:self.anyView.visibleRect]) {
       aPoint = [self convertPointFromView:aPoint];
 
       if (!_selector) {

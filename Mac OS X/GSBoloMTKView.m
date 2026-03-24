@@ -97,6 +97,7 @@ static NSCursor *cursor = nil;
 }
 
 - (void)refresh {
+  _renderer.scene.hideSelector = boloController.robotActive;
   [_renderer.scene update];
 }
 

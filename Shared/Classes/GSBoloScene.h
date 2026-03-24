@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) CGFloat baseZoom;
 @property (nonatomic) BOOL povMode;
+@property (nonatomic) BOOL hideSelector;
 
 - (void)update;
 - (void)scroll:(CGPoint)delta;

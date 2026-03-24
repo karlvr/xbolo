@@ -575,7 +575,7 @@ TRY
   }
 
   /* draw selector */
-  {
+  if (!boloController.robotActive) {
     NSPoint aPoint;
     aPoint = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
     if ([self mouse:aPoint inRect:self.visibleRect]) {
