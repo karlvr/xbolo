@@ -119,7 +119,10 @@ class SteeringController {
 
         // Slow down before corners: if there's a direction change within
         // the next few waypoints, brake so we don't overshoot the turn.
-        if output.accelerate {
+        // Don't brake on very short paths — the destination is close enough
+        // that steerToward's own close-range braking handles it.
+        let remainingWaypoints = waypoints.count - startIdx
+        if output.accelerate && remainingWaypoints > 4 {
             let cornerIdx = findUpcomingCorner(waypoints: waypoints, fromIdx: startIdx, lookAhead: 4)
             if let cornerIdx = cornerIdx {
                 let cornerPos = waypoints[cornerIdx].vec2f
