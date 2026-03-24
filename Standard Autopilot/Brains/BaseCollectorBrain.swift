@@ -187,9 +187,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let currentAngle = directionToRadians(Int(gameState.tankdirection))
             let diff = normalizeAngle(desiredAngle - currentAngle)
 
-            if diff > 0.15 {
+            let turnThreshold: Float = .pi / 16 // Half a direction step
+            if diff > turnThreshold {
                 cmd.left = true
-            } else if diff < -0.15 {
+            } else if diff < -turnThreshold {
                 cmd.right = true
             }
 

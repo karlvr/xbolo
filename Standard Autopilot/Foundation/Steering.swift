@@ -43,8 +43,10 @@ class SteeringController {
         // Calculate angular difference
         let angleDiff = normalizeAngle(desiredAngle - currentAngle)
 
-        // Turn toward target
-        let turnThreshold: Float = 0.15 // ~8.5 degrees
+        // Turn toward target.
+        // The tank has 16 discrete headings (22.5° each). Use half a step as the
+        // dead zone so we accept the nearest available heading without oscillating.
+        let turnThreshold: Float = .pi / 16 // 11.25° — half a direction step
         if angleDiff > turnThreshold {
             output.left = true
         } else if angleDiff < -turnThreshold {
