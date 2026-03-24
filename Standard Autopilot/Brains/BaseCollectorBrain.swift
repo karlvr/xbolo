@@ -137,8 +137,22 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             }
         }
 
-        // Replan periodically
+        // Replan periodically and re-evaluate whether this is still the best target
         if replanCounter >= replanInterval || currentPath == nil {
+            // Check if a better target has appeared (e.g., closer neutral base)
+            if let better = pickTargetBase(tankTile: tankTile) {
+                let currentDist = target.pos.floatDistance(to: tankTile)
+                let betterDist = better.pos.floatDistance(to: tankTile)
+                let isMuchCloser = betterDist < currentDist * 0.5
+                let isEasierType = better.ownership == .neutral && target.ownership == .hostile
+
+                if better.pos != target.pos && (isMuchCloser || isEasierType) {
+                    targetBase = better
+                    planPathToTarget(from: tankTile, to: better.pos)
+                    return
+                }
+            }
+
             planPathToTarget(from: tankTile, to: target.pos)
         }
 
