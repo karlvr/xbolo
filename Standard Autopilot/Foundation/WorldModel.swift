@@ -201,13 +201,13 @@ class WorldModel {
                 if dx == 0 && dy == 0 { continue }
                 let neighbor = TilePos(x: pos.x + dx, y: pos.y + dy)
                 if let neighborCost = movementCost(at: neighbor) {
-                    // Adjacent tile is slower — add a fraction of the cost difference
+                    // Adjacent tile is slower — add a small fraction of the difference
                     if neighborCost > myCost {
-                        penalty = max(penalty, (neighborCost - myCost) * 0.3)
+                        penalty = max(penalty, (neighborCost - myCost) * 0.15)
                     }
                 } else {
-                    // Adjacent tile is impassable (wall, sea) — strong penalty
-                    penalty = max(penalty, myCost * 0.5)
+                    // Adjacent tile is impassable (wall, sea) — moderate penalty
+                    penalty = max(penalty, myCost * 0.25)
                 }
             }
         }
@@ -262,39 +262,30 @@ class WorldModel {
         return targets.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) })
     }
 
-    /// Additional cost penalty for tiles that are under threat from hostile
-    /// pillboxes. Forest tiles are exempt beyond ~2 tiles (the tank is hidden).
-    /// Returns 0 for safe tiles.
-    ///
-    /// The penalty is kept moderate (max 3.0) so the pathfinder prefers safer
-    /// routes but doesn't create extreme detours that thread through tight
-    /// gaps where the tank physically can't fit (TANKRADIUS = 0.375).
+    /// Danger multiplier for tiles near hostile pillboxes. Returns 0 for safe
+    /// tiles. Used as a multiplier on movement cost: slow terrain near pillboxes
+    /// costs proportionally more (you're exposed longer on slow terrain).
     func dangerCost(at pos: TilePos) -> Float {
         let deepForest = isDeepForest(at: pos)
+        let edgeForest = !deepForest && isForestTile(at: pos)
         let forestVisRange: Float = 2.0
-        let pillDangerRange: Float = 5.0  // Effective pillbox threat range
-        let maxPenalty: Float = 3.0
+        let pillDangerRange: Float = 5.0
+        let maxPenalty: Float = 1.5  // At point-blank, cost is 2.5x base
 
         var totalPenalty: Float = 0
         for pill in pills where pill.ownership == .hostile {
             let dist = pill.pos.floatDistance(to: pos)
             if dist > pillDangerRange { continue }
 
-            // Only DEEP forest (all 8 neighbors also forest) truly hides the tank.
-            // Edge forest tiles are still visible to pillboxes.
+            // Deep forest: fully hidden beyond 2 tiles
             if deepForest && dist > forestVisRange { continue }
-            // Edge forest still gets partial concealment benefit at range
-            if isForestTile(at: pos) && !deepForest && dist > forestVisRange {
-                // Reduce penalty but don't eliminate — edge forest is partially visible
-                let penalty = maxPenalty * 0.3 * (1.0 - dist / pillDangerRange)
-                totalPenalty += penalty
+            // Edge forest: partially hidden — reduced penalty
+            if edgeForest && dist > forestVisRange {
+                totalPenalty += maxPenalty * 0.3 * (1.0 - dist / pillDangerRange)
                 continue
             }
 
-            // Closer = more dangerous. Penalty scales linearly from max at dist=0
-            // to 0 at pillDangerRange.
-            let penalty = maxPenalty * (1.0 - dist / pillDangerRange)
-            totalPenalty += penalty
+            totalPenalty += maxPenalty * (1.0 - dist / pillDangerRange)
         }
         return totalPenalty
     }

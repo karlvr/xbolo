@@ -83,11 +83,15 @@ class Pathfinder {
 
                 guard let cost = world.movementCost(at: neighbor) else { continue }
 
-                // Diagonal movement costs sqrt(2) * tile cost
+                // Diagonal movement costs sqrt(2) * tile cost.
+                // Danger and border are multipliers: slow terrain near a pillbox
+                // costs proportionally more (you're exposed longer). This avoids
+                // distorting paths onto worse terrain just to avoid pillboxes.
                 let isDiagonal = neighbor.x != current.pos.x && neighbor.y != current.pos.y
-                let moveCost = (isDiagonal ? cost * 1.414 : cost)
-                    + world.dangerCost(at: neighbor)
-                    + world.borderCost(at: neighbor)
+                let baseCost = isDiagonal ? cost * 1.414 : cost
+                let dangerMult = 1.0 + world.dangerCost(at: neighbor)
+                let borderAdd = world.borderCost(at: neighbor)
+                let moveCost = baseCost * dangerMult + borderAdd
                 let tentativeG = current.g + moveCost
 
                 if tentativeG < (gScore[neighbor] ?? Float.infinity) {
