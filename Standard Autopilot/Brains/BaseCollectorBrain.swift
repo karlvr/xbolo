@@ -151,8 +151,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             }
         }
 
-        // Replan periodically and re-evaluate whether this is still the best target
-        if replanCounter >= replanInterval || currentPath == nil {
+        // Replan periodically and re-evaluate whether this is still the best target.
+        // Only replan on the timer — do NOT replan every tick when currentPath is nil,
+        // as that runs expensive A* pathfinding 50 times per second.
+        if replanCounter >= replanInterval {
             // Check if a better target has appeared (e.g., closer neutral base)
             if let better = pickTargetBase(tankTile: tankTile) {
                 let currentDist = target.pos.floatDistance(to: tankTile)
@@ -175,10 +177,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let steer = steering.followPath(path, gameState: gameState)
             applySteeringToCmd(steer, cmd: cmd)
         } else {
-            // No path found - stop and force replan next tick.
+            // No path found — stop and wait for the next scheduled replan.
             // Do NOT drive directly toward the target (ignores obstacles).
             cmd.decelerate = true
-            replanCounter = replanInterval // Force replan next tick
             pathFailCount += 1
             if pathFailCount >= maxPathFailures {
                 // Can't reach this target, pick a new one
@@ -268,8 +269,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             return
         }
 
-        // Replan periodically
-        if replanCounter >= replanInterval || currentPath == nil {
+        // Replan periodically (not every tick — A* is expensive)
+        if replanCounter >= replanInterval {
             planPathToTarget(from: tankTile, to: base.pos)
         }
 
