@@ -2104,7 +2104,7 @@ END
 
 - (BOOL)applicationOpenUntitledFile:(NSApplication *)theApplication {
   if (!client_running) {
-    [newGameWindow makeKeyAndOrderFront:self];
+    [newGameWindow orderFront:self];
     if([[NSUserDefaults standardUserDefaults] boolForKey: @"GSStartGameImmediately"])
       [self hostOK:nil];
     else
