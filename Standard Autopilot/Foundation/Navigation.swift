@@ -39,7 +39,7 @@ class Pathfinder {
 
     /// Find a path from start to goal using A*.
     /// Returns nil if no path exists.
-    func findPath(from start: TilePos, to goal: TilePos, maxIterations: Int = 2000) -> PathResult? {
+    func findPath(from start: TilePos, to goal: TilePos, maxIterations: Int = 5000) -> PathResult? {
         // Quick check: if goal is impassable, try adjacent tiles
         if world.movementCost(at: goal) == nil {
             // Try to path to an adjacent passable tile
