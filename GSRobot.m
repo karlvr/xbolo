@@ -157,7 +157,10 @@
     [_condLock unlockWithCondition: NEW_DATA];
     [_condLock lockWhenCondition: THREAD_EXITED];
     [_condLock unlock];
-    
+
+    // Release all keys that the robot was pressing
+    keyevent(ACCELMASK | BRAKEMASK | TURNLMASK | TURNRMASK | LMINEMASK | SHOOTMASK | INCREMASK | DECREMASK, 0);
+
     _robot = nil;
 }
 
