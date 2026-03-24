@@ -183,6 +183,22 @@ class WorldModel {
         return friendlyBases.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) })
     }
 
+    /// Find the nearest friendly base that isn't under fire from hostile pillboxes.
+    /// Falls back to any friendly base if all are threatened.
+    func nearestSafeFriendlyBase(to pos: TilePos) -> BaseInfo? {
+        let pillRange: Float = 7.0
+        let safeBases = friendlyBases.filter { base in
+            !pills.contains { pill in
+                pill.ownership == .hostile && pill.pos.floatDistance(to: base.pos) <= pillRange
+            }
+        }
+        if let nearest = safeBases.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) }) {
+            return nearest
+        }
+        // All bases are threatened — fall back to nearest
+        return nearestFriendlyBase(to: pos)
+    }
+
     /// Find the nearest non-friendly base (hostile or neutral).
     func nearestTargetBase(to pos: TilePos) -> BaseInfo? {
         let targets = hostileBases + neutralBases

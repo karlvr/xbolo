@@ -326,7 +326,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private func handleRetreating(cmd: GSRobotCommandState, gameState: GSRobotGameState, tankTile: TilePos) {
         guard let base = refuelBase else {
             // No friendly base known - scan for one
-            if let fb = world.nearestFriendlyBase(to: tankTile) {
+            if let fb = world.nearestSafeFriendlyBase(to: tankTile) {
                 refuelBase = fb
             } else {
                 // No friendly base at all - just keep fighting
@@ -627,7 +627,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
     private func transitionToRetreat(tankTile: TilePos) {
         state = .retreatingToRefuel
-        refuelBase = world.nearestFriendlyBase(to: tankTile)
+        refuelBase = world.nearestSafeFriendlyBase(to: tankTile)
         currentPath = nil
         replanCounter = replanInterval // Force immediate replan
     }
