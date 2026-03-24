@@ -37,6 +37,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var tickCount = 0
     private var replanCounter = 0
     private var pathFailCount = 0
+    private var lastTankTile = TilePos(x: -1, y: -1)
+    private var lastArmor: Int32 = -1
 
     // How often to recalculate path (ticks)
     private let replanInterval = 50  // Once per second
@@ -60,6 +62,18 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         world.update(from: gameState)
 
         let tankTile = tilePosFromVec2f(gameState.tankposition)
+
+        // Detect respawn: armor jumped back to full, or tank teleported far away.
+        // Reset all brain state so we start fresh from the new position.
+        let teleported = lastTankTile.x >= 0
+            && (abs(tankTile.x - lastTankTile.x) > 5 || abs(tankTile.y - lastTankTile.y) > 5)
+        let respawned = lastArmor >= 0 && lastArmor <= Int32(kCriticalArmorThreshold)
+            && gameState.tankarmor >= Int32(kMaxArmor - 5)
+        if teleported || respawned {
+            resetBrainState()
+        }
+        lastTankTile = tankTile
+        lastArmor = gameState.tankarmor
 
         // Check for critical situations that override current state
         if shouldRetreat(gameState: gameState) && state != .retreatingToRefuel && state != .refueling {
@@ -300,6 +314,17 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         if fullyStocked {
             state = .scanning
         }
+    }
+
+    // MARK: - State Reset
+
+    private func resetBrainState() {
+        state = .scanning
+        targetBase = nil
+        currentPath = nil
+        refuelBase = nil
+        replanCounter = 0
+        pathFailCount = 0
     }
 
     // MARK: - Decision Making
