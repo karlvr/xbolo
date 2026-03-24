@@ -43,13 +43,12 @@ let kCriticalArmorThreshold = 5
 
 // MARK: - Direction helpers
 
-/// Convert a 0-15 tank direction to radians (mathematical: 0=East, CCW positive).
-/// The game uses: 0=North(up), 4=East, 8=South, 12=West
-/// In screen coords Y is inverted, so North = -Y.
-/// The internal angle convention from GSRobot.m: dir = angle * 8/PI - 0.5
-/// Reverse: angle = (dir + 0.5) * PI / 8
+/// Convert a 0-15 tank direction to radians.
+/// The game's angle convention: 0=East, PI/2=North(-Y), PI=West, 3PI/2=South.
+/// GSRobot.m quantizes: dir = (int)(angle * 8/PI - 0.5), giving bin k the range
+/// [(k+0.5)*PI/8, (k+1.5)*PI/8) centered at (k+1)*PI/8.
 func directionToRadians(_ dir: Int) -> Float {
-    return (Float(dir) + 0.5) * .pi / 8.0
+    return (Float(dir) + 1.0) * .pi / 8.0
 }
 
 /// Convert radians to 0-15 direction
