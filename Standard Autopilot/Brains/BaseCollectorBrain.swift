@@ -157,18 +157,14 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         // Only replan on the timer — do NOT replan every tick when currentPath is nil,
         // as that runs expensive A* pathfinding 50 times per second.
         if replanCounter >= replanInterval {
-            // Check if a better target has appeared (e.g., closer neutral base)
-            if let better = pickTargetBase(tankTile: tankTile) {
-                let currentDist = target.pos.floatDistance(to: tankTile)
-                let betterDist = better.pos.floatDistance(to: tankTile)
-                let isMuchCloser = betterDist < currentDist * 0.5
-                let isEasierType = better.ownership == .neutral && target.ownership == .hostile
-
-                if better.pos != target.pos && (isMuchCloser || isEasierType) {
-                    targetBase = better
-                    planPathToTarget(from: tankTile, to: better.pos)
-                    return
-                }
+            // Re-evaluate: pickTargetBase already returns the best target
+            // (nearest neutral first, then nearest hostile). If it differs
+            // from our current target, switch — don't cling to a stale goal
+            // when a better one is available.
+            if let better = pickTargetBase(tankTile: tankTile), better.pos != target.pos {
+                targetBase = better
+                planPathToTarget(from: tankTile, to: better.pos)
+                return
             }
 
             planPathToTarget(from: tankTile, to: target.pos)
