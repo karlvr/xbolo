@@ -162,7 +162,10 @@ class WorldModel {
             case .seaTile, .minedSeaTile:
                 return nil // Deadly without a boat
             case .riverTile:
-                return 5.33 // Passable but extremely slow without a boat
+                // River without a boat: very slow AND drains 1 shell + 1 mine
+                // every 15 ticks (0.3s). Treat as near-impassable so the
+                // pathfinder strongly avoids it.
+                return 20.0
             default:
                 break
             }
