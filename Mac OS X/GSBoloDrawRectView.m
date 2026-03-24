@@ -169,7 +169,7 @@ END
   [self scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([self mouse:[self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:self.window.contentView] inRect:self.visibleRect] && (screen = self.window.screen)) {
+  if (self.window.isKeyWindow && [self mouse:[self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:self.window.contentView] inRect:self.visibleRect] && (screen = self.window.screen)) {
     cgpoint.x = nspoint.x;
     cgpoint.y = screen.frame.size.height - nspoint.y + 64.0;
     CGWarpMouseCursorPosition(cgpoint);

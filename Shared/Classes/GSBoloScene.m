@@ -320,7 +320,7 @@ CGSize CGSizeMul(CGSize s, CGFloat m) {
 
 #if TARGET_OS_OSX
   const NSPoint aPoint = [self.anyView convertPoint:self.anyView.window.mouseLocationOutsideOfEventStream fromView:nil];
-  const BOOL moveCursor = [self.anyView mouse:aPoint inRect:self.anyView.visibleRect];
+  const BOOL moveCursor = self.anyView.window.isKeyWindow && [self.anyView mouse:aPoint inRect:self.anyView.visibleRect];
 #endif
 
   if (animated) {
