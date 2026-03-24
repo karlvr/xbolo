@@ -95,6 +95,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         let tankTile = tilePosFromVec2f(gameState.tankposition)
 
+        // Mark the current chunk as explored
+        let currentChunk = chunkFor(tankTile)
+        exploredChunks.insert(currentChunk)
+
         // Detect respawn: tank teleported far away (spawned at a new location).
         let teleported = lastTankTile.x >= 0
             && (abs(tankTile.x - lastTankTile.x) > 5 || abs(tankTile.y - lastTankTile.y) > 5)
@@ -121,6 +125,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             handleRetreating(cmd: cmd, gameState: gameState, tankTile: tankTile)
         case .refueling:
             handleRefueling(cmd: cmd, gameState: gameState, tankTile: tankTile)
+        case .exploring:
+            handleExploring(cmd: cmd, gameState: gameState, tankTile: tankTile)
         }
 
         // Dodge incoming shells — but not if we're hidden in forest.
@@ -144,12 +150,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             planPathToTarget(from: tankTile, to: target.pos)
             state = .navigatingToBase
         } else {
-            // No bases found - just drive around exploring
-            cmd.accelerate = true
-            // Turn occasionally to explore
-            if tickCount % 100 < 30 {
-                cmd.left = true
-            }
+            // No known targets — explore the map to find bases
+            transitionToExploring(tankTile: tankTile)
         }
     }
 
@@ -354,6 +356,127 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         }
     }
 
+    private func handleExploring(cmd: GSRobotCommandState, gameState: GSRobotGameState, tankTile: TilePos) {
+        // Check if a base target has appeared while exploring
+        if let target = pickTargetBase(tankTile: tankTile) {
+            targetBase = target
+            planPathToTarget(from: tankTile, to: target.pos)
+            state = .navigatingToBase
+            return
+        }
+
+        // Pick an explore target if we don't have one or have arrived
+        if let target = exploreTarget {
+            let dist = tankTile.floatDistance(to: target)
+            if dist < 2.0 {
+                // Arrived at explore target — pick a new one
+                exploreTarget = nil
+                exploreFailCount = 0
+            }
+        }
+
+        if exploreTarget == nil {
+            if let target = pickExploreTarget(tankTile: tankTile) {
+                exploreTarget = target
+                exploreFailCount = 0
+                planPathToTarget(from: tankTile, to: target)
+            } else {
+                // Everywhere is explored or unreachable — reset and try again
+                exploredChunks.removeAll()
+                state = .scanning
+                return
+            }
+        }
+
+        // Replan periodically
+        if replanCounter >= replanInterval, let target = exploreTarget {
+            // Also re-check for bases each replan
+            if let base = pickTargetBase(tankTile: tankTile) {
+                targetBase = base
+                planPathToTarget(from: tankTile, to: base.pos)
+                state = .navigatingToBase
+                return
+            }
+            planPathToTarget(from: tankTile, to: target)
+        }
+
+        // Follow the path
+        if let path = currentPath, !path.isEmpty {
+            let steer = steering.followPath(path, gameState: gameState)
+            applySteeringToCmd(steer, cmd: cmd)
+        } else {
+            // Can't reach explore target — give up on it
+            cmd.decelerate = true
+            exploreFailCount += 1
+            if exploreFailCount >= maxExploreFailures {
+                // Mark this chunk as explored (even though we couldn't reach it)
+                // so we don't keep trying
+                if let target = exploreTarget {
+                    exploredChunks.insert(chunkFor(target))
+                }
+                exploreTarget = nil
+                exploreFailCount = 0
+            }
+        }
+    }
+
+    // MARK: - Exploration
+
+    private func chunkFor(_ pos: TilePos) -> ChunkPos {
+        return ChunkPos(cx: pos.x / chunkSize, cy: pos.y / chunkSize)
+    }
+
+    private func chunkCenter(_ chunk: ChunkPos) -> TilePos {
+        return TilePos(x: chunk.cx * chunkSize + chunkSize / 2,
+                       y: chunk.cy * chunkSize + chunkSize / 2)
+    }
+
+    private func transitionToExploring(tankTile: TilePos) {
+        state = .exploring
+        exploreTarget = nil
+        exploreFailCount = 0
+        currentPath = nil
+    }
+
+    /// Pick the nearest unexplored chunk center to navigate toward.
+    private func pickExploreTarget(tankTile: TilePos) -> TilePos? {
+        let chunksX = kWorldWidth / chunkSize
+        let chunksY = kWorldHeight / chunkSize
+        let tankChunk = chunkFor(tankTile)
+
+        var bestTarget: TilePos?
+        var bestDist: Float = .infinity
+
+        // Search in expanding rings from the tank's chunk to find nearest unexplored
+        let maxRadius = max(chunksX, chunksY)
+        for radius in 1...maxRadius {
+            for dcx in -radius...radius {
+                for dcy in -radius...radius {
+                    // Only check the border of this ring
+                    if abs(dcx) != radius && abs(dcy) != radius { continue }
+
+                    let cx = tankChunk.cx + dcx
+                    let cy = tankChunk.cy + dcy
+                    guard cx >= 0, cx < chunksX, cy >= 0, cy < chunksY else { continue }
+
+                    let chunk = ChunkPos(cx: cx, cy: cy)
+                    if exploredChunks.contains(chunk) { continue }
+
+                    let center = chunkCenter(chunk)
+                    let dist = center.floatDistance(to: tankTile)
+                    if dist < bestDist {
+                        bestDist = dist
+                        bestTarget = center
+                    }
+                }
+            }
+            // If we found something in this ring, no need to search further
+            if bestTarget != nil { return bestTarget }
+        }
+
+        return bestTarget
+    }
+
     // MARK: - State Reset
 
     private func resetBrainState() {
@@ -364,6 +487,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         replanCounter = 0
         pathFailCount = 0
         unreachableTargets.removeAll()
+        exploreTarget = nil
+        exploreFailCount = 0
+        // Note: don't clear exploredChunks — we remember what we've seen across respawns
     }
 
     // MARK: - Decision Making
