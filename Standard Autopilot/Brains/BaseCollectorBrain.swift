@@ -36,9 +36,11 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var refuelBase: BaseInfo?
     private var tickCount = 0
     private var replanCounter = 0
+    private var pathFailCount = 0
 
     // How often to recalculate path (ticks)
     private let replanInterval = 50  // Once per second
+    private let maxPathFailures = 3  // Give up on target after this many failures
 
     public override required init() {
         super.init()
@@ -145,9 +147,16 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let steer = steering.followPath(path, gameState: gameState)
             applySteeringToCmd(steer, cmd: cmd)
         } else {
-            // No path - drive directly
-            let steer = steering.steerToward(target: target.pos.vec2f, gameState: gameState)
-            applySteeringToCmd(steer, cmd: cmd)
+            // No path found - stop and force replan next tick.
+            // Do NOT drive directly toward the target (ignores obstacles).
+            cmd.decelerate = true
+            replanCounter = replanInterval // Force replan next tick
+            pathFailCount += 1
+            if pathFailCount >= maxPathFailures {
+                // Can't reach this target, pick a new one
+                pathFailCount = 0
+                state = .scanning
+            }
         }
     }
 
@@ -241,8 +250,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let steer = steering.followPath(path, gameState: gameState)
             applySteeringToCmd(steer, cmd: cmd)
         } else {
-            let steer = steering.steerToward(target: base.pos.vec2f, gameState: gameState)
-            applySteeringToCmd(steer, cmd: cmd)
+            // No path to friendly base - stop and replan
+            cmd.decelerate = true
+            replanCounter = replanInterval
         }
     }
 
@@ -313,6 +323,9 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private func planPathToTarget(from: TilePos, to: TilePos) {
         replanCounter = 0
         currentPath = pathfinder.findPath(from: from, to: to)
+        if currentPath != nil {
+            pathFailCount = 0
+        }
     }
 
     // MARK: - Shell Dodging
