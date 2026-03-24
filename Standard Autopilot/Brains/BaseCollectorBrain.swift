@@ -55,6 +55,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var lastTankTile = TilePos(x: -1, y: -1)
     private var stuckTickCount = 0
     private var lastArmor: Int32 = -1
+    private var lastHadBoat = false
     private var unreachableTargets: [TilePos: Int] = [:]  // pos -> tick when it was blacklisted
 
     // Exploration state — track which map chunks we've visited
@@ -101,6 +102,15 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         // Update world model
         world.update(from: gameState)
+
+        // Boat status changed — water costs flip, so force a replan
+        let currentHasBoat = gameState.tankhasboat != 0
+        if currentHasBoat != lastHadBoat {
+            NSLog("[Brain] Boat status changed: %@", currentHasBoat ? "got boat" : "lost boat")
+            currentPath = nil
+            replanCounter = replanInterval  // Force immediate replan
+        }
+        lastHadBoat = currentHasBoat
 
         let tankTile = tilePosFromVec2f(gameState.tankposition)
 

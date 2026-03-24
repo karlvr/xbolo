@@ -142,19 +142,25 @@ class WorldModel {
     }
 
     /// Get the movement cost for pathfinding. Returns nil if impassable.
-    /// Accounts for boat status: with a boat, water is fast; without, it's
-    /// very slow (river) or deadly (sea).
+    /// Accounts for boat status: with a boat, water is cheap but stepping
+    /// onto land is penalized (loses the boat). Without a boat, water is
+    /// expensive/deadly but boat tiles are attractive (pick up a boat).
     func movementCost(at pos: TilePos) -> Float? {
         let t = tile(at: pos)
 
-        // Boat-aware water handling
         if hasBoat {
             switch t {
             case .riverTile, .seaTile, .minedSeaTile:
-                // With a boat we move at road speed on water, but we risk
-                // losing the boat if shot — add a risk premium.
-                return 2.0
+                // With a boat we move at road speed on water
+                return 1.5
+            case .boatTile:
+                // Already have a boat, boat tile is just water
+                return 1.5
             default:
+                // Stepping onto land loses the boat! Add a penalty to
+                // discourage leaving water unless the destination requires it.
+                // This doesn't prevent land paths — just makes the pathfinder
+                // prefer staying on water when both options exist.
                 break
             }
         } else {
@@ -166,6 +172,10 @@ class WorldModel {
                 // every 15 ticks (0.3s). Treat as near-impassable so the
                 // pathfinder strongly avoids it.
                 return 20.0
+            case .boatTile:
+                // Boat pickup! Make this attractive — slightly cheaper than road
+                // to encourage picking up boats when the path goes near water.
+                return 0.8
             default:
                 break
             }
