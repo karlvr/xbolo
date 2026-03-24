@@ -123,9 +123,9 @@ class SteeringController {
             }
         }
 
-        NSLog("[Steer] tank=(%.1f,%.1f) startIdx=%d lookAheadIdx=%d target=(%d,%d) wpCount=%d",
-              tankPos.x, tankPos.y, startIdx, lookAheadIdx,
-              waypoints[lookAheadIdx].x, waypoints[lookAheadIdx].y, waypoints.count)
+//        NSLog("[Steer] tank=(%.1f,%.1f) startIdx=%d lookAheadIdx=%d target=(%d,%d) wpCount=%d",
+//              tankPos.x, tankPos.y, startIdx, lookAheadIdx,
+//              waypoints[lookAheadIdx].x, waypoints[lookAheadIdx].y, waypoints.count)
 
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
 
@@ -135,9 +135,9 @@ class SteeringController {
         // tank could never restart. The steerToward function's own close-range
         // handling is sufficient.
 
-        NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
-              output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
-              output.left ? 1 : 0, output.right ? 1 : 0)
+//        NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
+//              output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
+//              output.left ? 1 : 0, output.right ? 1 : 0)
 
         return output
     }
