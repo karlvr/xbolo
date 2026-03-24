@@ -178,6 +178,32 @@ class WorldModel {
         }
     }
 
+    /// Extra cost for tiles adjacent to slower or impassable terrain.
+    /// The tank has TANKRADIUS=0.375, so its body clips into adjacent tiles.
+    /// This keeps the pathfinder away from terrain edges.
+    func borderCost(at pos: TilePos) -> Float {
+        let myCost = movementCost(at: pos) ?? 0
+        if myCost == 0 { return 0 } // Impassable tile, no border cost
+
+        var penalty: Float = 0
+        for dy in -1...1 {
+            for dx in -1...1 {
+                if dx == 0 && dy == 0 { continue }
+                let neighbor = TilePos(x: pos.x + dx, y: pos.y + dy)
+                if let neighborCost = movementCost(at: neighbor) {
+                    // Adjacent tile is slower — add a fraction of the cost difference
+                    if neighborCost > myCost {
+                        penalty = max(penalty, (neighborCost - myCost) * 0.3)
+                    }
+                } else {
+                    // Adjacent tile is impassable (wall, sea) — strong penalty
+                    penalty = max(penalty, myCost * 0.5)
+                }
+            }
+        }
+        return penalty
+    }
+
     /// Find the nearest friendly base to a position.
     func nearestFriendlyBase(to pos: TilePos) -> BaseInfo? {
         return friendlyBases.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) })
