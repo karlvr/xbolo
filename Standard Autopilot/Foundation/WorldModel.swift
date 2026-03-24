@@ -270,7 +270,7 @@ class WorldModel {
     /// routes but doesn't create extreme detours that thread through tight
     /// gaps where the tank physically can't fit (TANKRADIUS = 0.375).
     func dangerCost(at pos: TilePos) -> Float {
-        let isForest = isForestTile(at: pos)
+        let deepForest = isDeepForest(at: pos)
         let forestVisRange: Float = 2.0
         let pillDangerRange: Float = 5.0  // Effective pillbox threat range
         let maxPenalty: Float = 3.0
@@ -280,8 +280,16 @@ class WorldModel {
             let dist = pill.pos.floatDistance(to: pos)
             if dist > pillDangerRange { continue }
 
-            // Forest hides the tank beyond ~2 tiles
-            if isForest && dist > forestVisRange { continue }
+            // Only DEEP forest (all 8 neighbors also forest) truly hides the tank.
+            // Edge forest tiles are still visible to pillboxes.
+            if deepForest && dist > forestVisRange { continue }
+            // Edge forest still gets partial concealment benefit at range
+            if isForestTile(at: pos) && !deepForest && dist > forestVisRange {
+                // Reduce penalty but don't eliminate — edge forest is partially visible
+                let penalty = maxPenalty * 0.3 * (1.0 - dist / pillDangerRange)
+                totalPenalty += penalty
+                continue
+            }
 
             // Closer = more dangerous. Penalty scales linearly from max at dist=0
             // to 0 at pillDangerRange.
@@ -291,13 +299,27 @@ class WorldModel {
         return totalPenalty
     }
 
-    /// Whether the tank is well-hidden in forest at the given position.
-    /// In the game engine, pillboxes can't see a tank in forest beyond
-    /// ~2 tile distance (forestvis <= 0.25). The tank is considered hidden
-    /// if it's on a forest tile.
+    /// Whether a tile is forest terrain.
     func isForestTile(at pos: TilePos) -> Bool {
         let t = tile(at: pos)
         return t == .forestTile || t == .minedForestTile
+    }
+
+    /// Whether the tank is well-hidden in deep forest at the given tile.
+    /// The game engine's forestvis() checks all 8 neighbors: if any adjacent
+    /// tile is NOT forest, visibility increases based on proximity to that edge.
+    /// The tank is only truly hidden (forestvis ≈ 0) when ALL 8 neighbors are forest.
+    func isDeepForest(at pos: TilePos) -> Bool {
+        guard isForestTile(at: pos) else { return false }
+        for dy in -1...1 {
+            for dx in -1...1 {
+                if dx == 0 && dy == 0 { continue }
+                if !isForestTile(at: TilePos(x: pos.x + dx, y: pos.y + dy)) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     /// Whether a hostile pillbox is within the given range of a position.

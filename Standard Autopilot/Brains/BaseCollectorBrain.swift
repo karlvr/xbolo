@@ -168,12 +168,12 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             handleExploring(cmd: cmd, gameState: gameState, tankTile: tankTile)
         }
 
-        // Dodge incoming shells — but not if we're hidden in forest.
-        // Pillboxes can't see us in forest beyond ~2 tiles, so dodging
-        // would just give away our position or move us out of cover.
-        let inForest = world.isForestTile(at: tankTile)
+        // Dodge incoming shells — but not if we're hidden in deep forest.
+        // The tank is only truly hidden when ALL 8 neighboring tiles are also
+        // forest. Edge forest tiles are still visible to pillboxes.
+        let inDeepForest = world.isDeepForest(at: tankTile)
         let nearHostilePill = (world.nearestHostilePillDistance(to: tankTile) ?? .infinity) <= 2.0
-        if !inForest || nearHostilePill {
+        if !inDeepForest || nearHostilePill {
             applyShellDodging(cmd: cmd, gameState: gameState)
         }
 
