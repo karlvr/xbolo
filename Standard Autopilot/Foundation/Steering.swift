@@ -70,6 +70,9 @@ class SteeringController {
         return output
     }
 
+    /// Reference to the world model for checking terrain near waypoints.
+    var world: WorldModel?
+
     /// Follow a path by steering toward the next appropriate waypoint.
     func followPath(_ path: PathResult, gameState: GSRobotGameState) -> SteeringOutput {
         let tankPos = gameState.tankposition
@@ -93,17 +96,28 @@ class SteeringController {
             }
         }
 
-        // Look ahead along the path, extending while consecutive waypoints
-        // maintain the same direction. Stop at direction changes to avoid
-        // cutting corners around obstacles.
-        // Always look at least 2 waypoints ahead (when available) so the
-        // tank gets enough angular correction to stay centered on the path.
-        // With only 1 waypoint ahead, the angle to the next tile center
-        // can fall within the steering dead zone, leaving the tank slightly
-        // off-center and unable to pass through narrow gaps.
-        let minLookAhead = min(startIdx + 2, waypoints.count - 1)
+        // Look ahead along the path. In open terrain, extend lookahead along
+        // straight segments (and at least 2 ahead for centering). In tight
+        // corridors (walls adjacent), use only 1 waypoint to avoid cutting corners.
         let nextIdx = min(startIdx + 1, waypoints.count - 1)
-        var lookAheadIdx = minLookAhead
+        var lookAheadIdx = nextIdx
+
+        // Check if the next waypoint is in a tight corridor (impassable neighbor)
+        let inCorridor = world.map { w in
+            let wp = waypoints[nextIdx]
+            for dy in -1...1 {
+                for dx in -1...1 {
+                    if dx == 0 && dy == 0 { continue }
+                    if w.movementCost(at: TilePos(x: wp.x + dx, y: wp.y + dy)) == nil {
+                        return true
+                    }
+                }
+            }
+            return false
+        } ?? false
+
+        let minLookAhead = inCorridor ? nextIdx : min(startIdx + 2, waypoints.count - 1)
+        lookAheadIdx = max(lookAheadIdx, minLookAhead)
 
         if nextIdx < waypoints.count - 1 {
             let firstDx = waypoints[nextIdx].x - waypoints[startIdx].x
@@ -115,10 +129,9 @@ class SteeringController {
                 if dx == firstDx && dy == firstDy {
                     lookAheadIdx = max(lookAheadIdx, i)
                 } else if i <= minLookAhead {
-                    // Even if direction changed, include at least 2 ahead
                     lookAheadIdx = max(lookAheadIdx, i)
                 } else {
-                    break // Direction changed beyond minimum lookahead
+                    break // Direction changed — don't cut the corner
                 }
             }
         }

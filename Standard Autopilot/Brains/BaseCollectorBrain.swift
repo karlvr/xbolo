@@ -74,6 +74,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     public override required init() {
         super.init()
         pathfinder = Pathfinder(world: world)
+        steering.world = world
     }
 
     public static var minimumRobotInterfaceVersionRequired: Int32 {
