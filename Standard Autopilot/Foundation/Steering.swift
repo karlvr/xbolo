@@ -114,21 +114,28 @@ class SteeringController {
         let nextIdx = min(startIdx + 1, waypoints.count - 1)
         var lookAheadIdx = nextIdx
 
-        // Check if the next waypoint is in a tight corridor (impassable neighbor)
-        let inCorridor = world.map { w in
+        // Check if the next waypoint needs precise steering:
+        // - In a corridor (impassable neighbor like walls)
+        // - On a boat with land adjacent (drifting onto land loses the boat)
+        let needsPrecision = world.map { w in
             let wp = waypoints[nextIdx]
+            let onBoat = w.hasBoat
             for dy in -1...1 {
                 for dx in -1...1 {
                     if dx == 0 && dy == 0 { continue }
-                    if w.movementCost(at: TilePos(x: wp.x + dx, y: wp.y + dy)) == nil {
-                        return true
+                    let neighbor = TilePos(x: wp.x + dx, y: wp.y + dy)
+                    if w.movementCost(at: neighbor) == nil {
+                        return true  // Wall/impassable — corridor
+                    }
+                    if onBoat && !w.isWaterTile(at: neighbor) {
+                        return true  // Land next to water while on boat
                     }
                 }
             }
             return false
         } ?? false
 
-        let minLookAhead = inCorridor ? nextIdx : min(startIdx + 2, waypoints.count - 1)
+        let minLookAhead = needsPrecision ? nextIdx : min(startIdx + 2, waypoints.count - 1)
         lookAheadIdx = max(lookAheadIdx, minLookAhead)
 
         if nextIdx < waypoints.count - 1 {
