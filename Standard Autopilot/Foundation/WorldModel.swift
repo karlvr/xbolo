@@ -183,19 +183,40 @@ class WorldModel {
         return friendlyBases.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) })
     }
 
+    /// Check if a hostile pillbox has line-of-sight to a position (no walls in between).
+    private func pillboxCanSee(pill: PillInfo, target: TilePos) -> Bool {
+        let dx = target.x - pill.pos.x
+        let dy = target.y - pill.pos.y
+        let steps = max(abs(dx), abs(dy))
+        if steps == 0 { return true }
+
+        for i in 1..<steps {
+            let x = pill.pos.x + dx * i / steps
+            let y = pill.pos.y + dy * i / steps
+            let t = tile(at: TilePos(x: x, y: y))
+            if t == .wallTile || t == .damagedWallTile {
+                return false  // Wall blocks line of sight
+            }
+        }
+        return true
+    }
+
     /// Find the nearest friendly base that isn't under fire from hostile pillboxes.
-    /// Falls back to any friendly base if all are threatened.
+    /// Checks line-of-sight so a pillbox behind a wall doesn't count as a threat.
+    /// Falls back to nearest if all are threatened.
     func nearestSafeFriendlyBase(to pos: TilePos) -> BaseInfo? {
         let pillRange: Float = 7.0
         let safeBases = friendlyBases.filter { base in
             !pills.contains { pill in
-                pill.ownership == .hostile && pill.pos.floatDistance(to: base.pos) <= pillRange
+                pill.ownership == .hostile
+                && pill.pos.floatDistance(to: base.pos) <= pillRange
+                && pillboxCanSee(pill: pill, target: base.pos)
             }
         }
         if let nearest = safeBases.min(by: { $0.pos.floatDistance(to: pos) < $1.pos.floatDistance(to: pos) }) {
             return nearest
         }
-        // All bases are threatened — fall back to nearest
+        // All bases are threatened — pick nearest anyway
         return nearestFriendlyBase(to: pos)
     }
 

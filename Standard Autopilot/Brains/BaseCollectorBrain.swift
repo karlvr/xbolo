@@ -681,42 +681,50 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         let shells = UnsafeBufferPointer(start: gameState.shells, count: Int(gameState.shellscount))
         let tankPos = gameState.tankposition
 
+        // Find the most threatening shell (closest that's heading toward us)
+        var bestShell: ExternalShell?
+        var bestDist: Float = .infinity
+
         for shell in shells {
             let shellDist = distance(tankPos, shell.position)
-            if shellDist > 5.0 { continue } // Too far to worry about
+            if shellDist > 6.0 { continue } // Shells travel at 7 tiles/sec
 
             // Check if shell is heading roughly toward us
             let shellToTank = angleTo(from: shell.position, to: tankPos)
-            let shellDir = shell.direction
-            let angleDiff = abs(normalizeAngle(shellToTank - shellDir))
+            let angleDiff = abs(normalizeAngle(shellToTank - shell.direction))
 
-            if angleDiff < .pi / 4 && shellDist < 3.0 {
-                // Shell is coming at us! Dodge perpendicular.
-                // REPLACE all steering — don't just add flags on top of
-                // path-following, which causes conflicting accelerate+decelerate.
-                cmd.accelerate = false
-                cmd.decelerate = false
-                cmd.left = false
-                cmd.right = false
-
-                let perpAngle = shellDir + .pi / 2
-                let dodgeX = cosf(perpAngle)
-                let dodgeY = -sinf(perpAngle)
-                let offsetX = tankPos.x - shell.position.x
-                let offsetY = tankPos.y - shell.position.y
-
-                // Dot product to see which side we're on
-                let dot = offsetX * dodgeX + offsetY * dodgeY
-
-                if dot >= 0 {
-                    cmd.left = true
-                } else {
-                    cmd.right = true
-                }
-                cmd.accelerate = true
-                break // Dodge the nearest threat
+            // Tighter angle check at longer range, wider at close range
+            let angleThreshold: Float = shellDist < 2.0 ? .pi / 3 : .pi / 6
+            if angleDiff < angleThreshold && shellDist < bestDist {
+                bestDist = shellDist
+                bestShell = shell
             }
         }
+
+        guard let shell = bestShell else { return }
+
+        // Dodge perpendicular to the shell's direction.
+        // REPLACE all steering to avoid conflicting commands.
+        cmd.accelerate = false
+        cmd.decelerate = false
+        cmd.left = false
+        cmd.right = false
+
+        let perpAngle = shell.direction + .pi / 2
+        let dodgeX = cosf(perpAngle)
+        let dodgeY = -sinf(perpAngle)
+        let offsetX = tankPos.x - shell.position.x
+        let offsetY = tankPos.y - shell.position.y
+
+        // Dot product to see which side we're on — dodge away
+        let dot = offsetX * dodgeX + offsetY * dodgeY
+
+        if dot >= 0 {
+            cmd.left = true
+        } else {
+            cmd.right = true
+        }
+        cmd.accelerate = true
     }
 
     // MARK: - Helpers
