@@ -58,6 +58,20 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     public func stepXBoloRobot(with gameState: GSRobotGameState) -> GSRobotCommandState {
         let cmd = GSRobotCommandState()
         tickCount += 1
+
+        // Skip brain execution while the tank is dead. Running the state
+        // machine during death corrupts state (shouldRetreat fires because
+        // armor is 0, pathfinding fails from invalid position, etc.).
+        // Reset state so we start clean on respawn.
+        if gameState.tankarmor <= 0 {
+            if lastArmor > 0 {
+                // Just died — reset everything for respawn
+                resetBrainState()
+            }
+            lastArmor = gameState.tankarmor
+            return cmd
+        }
+
         replanCounter += 1
 
         // Update world model
@@ -65,13 +79,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
 
         let tankTile = tilePosFromVec2f(gameState.tankposition)
 
-        // Detect respawn: armor jumped back to full, or tank teleported far away.
-        // Reset all brain state so we start fresh from the new position.
+        // Detect respawn: tank teleported far away (spawned at a new location).
         let teleported = lastTankTile.x >= 0
             && (abs(tankTile.x - lastTankTile.x) > 5 || abs(tankTile.y - lastTankTile.y) > 5)
-        let respawned = lastArmor >= 0 && lastArmor <= Int32(kCriticalArmorThreshold)
-            && gameState.tankarmor >= Int32(kMaxArmor - 5)
-        if teleported || respawned {
+        if teleported {
             resetBrainState()
         }
         lastTankTile = tankTile
