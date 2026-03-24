@@ -146,6 +146,7 @@
 		55D1E2111CFB7BE1003C0B00 /* XStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2101CFB7BE1003C0B00 /* XStatusBar.swift */; };
 		55D1E2131CFB7E96003C0B00 /* XBuilderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D1E2121CFB7E96003C0B00 /* XBuilderStatusView.swift */; };
 		55F4E51A1D28781E00CC90E0 /* StandardAutopilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F4E5191D28781E00CC90E0 /* StandardAutopilot.swift */; };
+		AA100001AABB000100000001 /* Standard Autopilot.xbolorobot in Embed Robots */ = {isa = PBXBuildFile; fileRef = 55F4E5111D2877BC00CC90E0 /* Standard Autopilot.xbolorobot */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AA0001011D28781E00CC90E0 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001021D28781E00CC90E0 /* GameConstants.swift */; };
 		AA0001031D28781E00CC90E0 /* WorldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001041D28781E00CC90E0 /* WorldModel.swift */; };
 		AA0001051D28781E00CC90E0 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001061D28781E00CC90E0 /* Navigation.swift */; };
@@ -274,6 +275,13 @@
 			remoteGlobalIDString = 55C405E220CEE0060033C0E2;
 			remoteInfo = BoloKit;
 		};
+		AA100002AABB000200000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55F4E5101D2877BC00CC90E0;
+			remoteInfo = "Standard Autopilot";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -332,6 +340,17 @@
 				55712C371CF9068700326A27 /* XBolo Quick Look Plug-in.qlgenerator in Embed QuickLook PlugIn */,
 			);
 			name = "Embed QuickLook PlugIn";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA100003AABB000300000003 /* Embed Robots */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA100001AABB000100000001 /* Standard Autopilot.xbolorobot in Embed Robots */,
+			);
+			name = "Embed Robots";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -1156,6 +1175,7 @@
 				40E827AF10558D7600B39BB9 /* Copy Plugins */,
 				403F6B8F105EDAD9009C8088 /* Copy Frameworks */,
 				5512E8C828EECAA200366E1F /* Embed Foundation Extensions */,
+				AA100003AABB000300000003 /* Embed Robots */,
 			);
 			buildRules = (
 			);
@@ -1164,6 +1184,7 @@
 				40E828751055A15E00B39BB9 /* PBXTargetDependency */,
 				55C405E920CEE0060033C0E2 /* PBXTargetDependency */,
 				5512E8C328EECAA200366E1F /* PBXTargetDependency */,
+				AA100004AABB000400000004 /* PBXTargetDependency */,
 			);
 			name = "Mac OS X";
 			productName = XBolo;
@@ -1685,6 +1706,11 @@
 			isa = PBXTargetDependency;
 			target = 55C405E220CEE0060033C0E2 /* BoloKit */;
 			targetProxy = 55C405F220CEE9270033C0E2 /* PBXContainerItemProxy */;
+		};
+		AA100004AABB000400000004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55F4E5101D2877BC00CC90E0 /* Standard Autopilot */;
+			targetProxy = AA100002AABB000200000002 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
