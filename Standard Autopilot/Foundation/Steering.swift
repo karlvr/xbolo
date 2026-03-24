@@ -161,15 +161,29 @@ class SteeringController {
 
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
 
-        // Corner braking removed — it was causing the tank to permanently
-        // stall. The braking kicked in whenever a corner was within 2 tiles,
-        // but after stopping the corner was STILL within 2 tiles, so the
-        // tank could never restart. The steerToward function's own close-range
-        // handling is sufficient.
-
-//        NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
-//              output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
-//              output.left ? 1 : 0, output.right ? 1 : 0)
+        // In precision mode (corridors, boat near land): slow down when
+        // approaching the target waypoint so we don't overshoot turns.
+        // Unlike the old corner braking (which stalled permanently), this
+        // only applies in precision mode AND only when close to the target.
+        // The tank can always restart because once it passes the waypoint,
+        // startIdx advances and the target moves further away.
+        if needsPrecision && output.accelerate {
+            let distToTarget = distance(tankPos, waypoints[lookAheadIdx].vec2f)
+            if distToTarget < 1.5 {
+                // Check if there's a direction change coming
+                let hasCorner = lookAheadIdx + 1 < waypoints.count && {
+                    let dx1 = waypoints[lookAheadIdx].x - waypoints[max(lookAheadIdx - 1, 0)].x
+                    let dy1 = waypoints[lookAheadIdx].y - waypoints[max(lookAheadIdx - 1, 0)].y
+                    let dx2 = waypoints[lookAheadIdx + 1].x - waypoints[lookAheadIdx].x
+                    let dy2 = waypoints[lookAheadIdx + 1].y - waypoints[lookAheadIdx].y
+                    return dx1 != dx2 || dy1 != dy2
+                }()
+                if hasCorner {
+                    output.accelerate = false
+                    output.decelerate = true
+                }
+            }
+        }
 
         return output
     }
