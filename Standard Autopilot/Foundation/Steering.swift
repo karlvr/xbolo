@@ -159,7 +159,39 @@ class SteeringController {
 //              tankPos.x, tankPos.y, startIdx, lookAheadIdx,
 //              waypoints[lookAheadIdx].x, waypoints[lookAheadIdx].y, waypoints.count)
 
-        var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
+        // In precision mode, offset the steering target away from adjacent
+        // walls/land. Waypoints are at tile centers (0.5 from walls), but
+        // TANKRADIUS is 0.375, leaving only 0.125 margin. Nudging the target
+        // gives the steering a clear correction vector away from the wall.
+        var steerTarget = waypoints[lookAheadIdx].vec2f
+        if needsPrecision, let w = world {
+            let wp = waypoints[lookAheadIdx]
+            var nudgeX: Float = 0
+            var nudgeY: Float = 0
+            let nudgeAmount: Float = 0.25
+
+            // Check each cardinal direction for walls/land-while-on-boat
+            let left = TilePos(x: wp.x - 1, y: wp.y)
+            let right = TilePos(x: wp.x + 1, y: wp.y)
+            let up = TilePos(x: wp.x, y: wp.y - 1)
+            let down = TilePos(x: wp.x, y: wp.y + 1)
+
+            func shouldAvoid(_ pos: TilePos) -> Bool {
+                if w.movementCost(at: pos) == nil { return true }
+                if w.hasBoat && w.isWaterTile(at: wp) && !w.isWaterTile(at: pos) { return true }
+                return false
+            }
+
+            if shouldAvoid(left) { nudgeX += nudgeAmount }
+            if shouldAvoid(right) { nudgeX -= nudgeAmount }
+            if shouldAvoid(up) { nudgeY += nudgeAmount }
+            if shouldAvoid(down) { nudgeY -= nudgeAmount }
+
+            steerTarget.x += nudgeX
+            steerTarget.y += nudgeY
+        }
+
+        var output = steerToward(target: steerTarget, gameState: gameState)
 
         // In precision mode (corridors, boat near land): slow down before
         // corners. Measure distance to the CORNER waypoint (where the turn
