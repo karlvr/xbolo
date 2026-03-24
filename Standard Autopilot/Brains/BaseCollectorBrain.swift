@@ -167,6 +167,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             applyShellDodging(cmd: cmd, gameState: gameState)
         }
 
+        NSLog("[Cmd] accel=%d decel=%d left=%d right=%d",
+              cmd.accelerate ? 1 : 0, cmd.decelerate ? 1 : 0,
+              cmd.left ? 1 : 0, cmd.right ? 1 : 0)
+
         return cmd
     }
 

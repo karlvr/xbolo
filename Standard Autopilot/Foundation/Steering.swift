@@ -129,49 +129,17 @@ class SteeringController {
 
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
 
+        // Corner braking removed — it was causing the tank to permanently
+        // stall. The braking kicked in whenever a corner was within 2 tiles,
+        // but after stopping the corner was STILL within 2 tiles, so the
+        // tank could never restart. The steerToward function's own close-range
+        // handling is sufficient.
+
         NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
               output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
               output.left ? 1 : 0, output.right ? 1 : 0)
 
-        // Slow down before corners: if there's a direction change within
-        // the next few waypoints, brake so we don't overshoot the turn.
-        // Don't brake on very short paths — the destination is close enough
-        // that steerToward's own close-range braking handles it.
-        let remainingWaypoints = waypoints.count - startIdx
-        if output.accelerate && remainingWaypoints > 4 {
-            let cornerIdx = findUpcomingCorner(waypoints: waypoints, fromIdx: startIdx, lookAhead: 4)
-            if let cornerIdx = cornerIdx {
-                let cornerPos = waypoints[cornerIdx].vec2f
-                let distToCorner = distance(tankPos, cornerPos)
-                // Brake when approaching a corner to avoid overshooting into
-                // walls or water. At road speed (~3 tiles/sec) and 50 ticks/sec,
-                // braking from 2 tiles away gives enough room to slow down.
-                if distToCorner < 2.0 {
-                    output.accelerate = false
-                    output.decelerate = true
-                }
-            }
-        }
-
         return output
     }
 
-    /// Find the next direction change (corner) in the path within lookAhead steps.
-    /// Returns the waypoint index where the turn occurs, or nil if the path is straight.
-    private func findUpcomingCorner(waypoints: [TilePos], fromIdx: Int, lookAhead: Int) -> Int? {
-        guard fromIdx + 1 < waypoints.count else { return nil }
-
-        let firstDx = waypoints[fromIdx + 1].x - waypoints[fromIdx].x
-        let firstDy = waypoints[fromIdx + 1].y - waypoints[fromIdx].y
-
-        let endIdx = min(fromIdx + lookAhead, waypoints.count - 1)
-        for i in (fromIdx + 2)...endIdx {
-            let dx = waypoints[i].x - waypoints[i - 1].x
-            let dy = waypoints[i].y - waypoints[i - 1].y
-            if dx != firstDx || dy != firstDy {
-                return i - 1 // The last waypoint before the direction change
-            }
-        }
-        return nil
-    }
 }
