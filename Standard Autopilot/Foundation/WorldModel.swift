@@ -278,9 +278,12 @@ class WorldModel {
     func dangerCost(at pos: TilePos) -> Float {
         let deepForest = isDeepForest(at: pos)
         let edgeForest = !deepForest && isForestTile(at: pos)
+        let onWater = isWaterTile(at: pos)
         let forestVisRange: Float = 2.0
         let pillDangerRange: Float = 5.0
-        let maxPenalty: Float = 1.5  // At point-blank, cost is 2.5x base
+        // On a boat, getting shot means losing the boat and drowning.
+        // Much worse than just taking armor damage on land.
+        let maxPenalty: Float = (hasBoat && onWater) ? 5.0 : 1.5
 
         var totalPenalty: Float = 0
         for pill in pills where pill.ownership == .hostile {
