@@ -193,8 +193,13 @@ class WorldModel {
                 if dx == 0 && dy == 0 { continue }
                 let neighbor = TilePos(x: pos.x + dx, y: pos.y + dy)
                 if let neighborCost = movementCost(at: neighbor) {
+                    // On a boat, adjacent land is effectively a wall — losing the
+                    // boat is catastrophic. Strong penalty to keep paths away from shore.
+                    if hasBoat && isWaterTile(at: pos) && !isWaterTile(at: neighbor) {
+                        penalty = max(penalty, 3.0)
+                    }
                     // Adjacent tile is slower — add a small fraction of the difference
-                    if neighborCost > myCost {
+                    else if neighborCost > myCost {
                         penalty = max(penalty, (neighborCost - myCost) * 0.15)
                     }
                 } else {
