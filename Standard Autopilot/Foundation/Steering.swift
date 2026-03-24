@@ -161,16 +161,16 @@ class SteeringController {
 
         var output = steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
 
-        // In precision mode (corridors, boat near land): slow down when
-        // approaching the target waypoint so we don't overshoot turns.
-        // Unlike the old corner braking (which stalled permanently), this
-        // only applies in precision mode AND only when close to the target.
-        // The tank can always restart because once it passes the waypoint,
-        // startIdx advances and the target moves further away.
+        // In precision mode (corridors, boat near land): stop accelerating
+        // when approaching a turn so the tank coasts through at lower speed.
+        // IMPORTANT: only set accelerate=false, never decelerate=true.
+        // Setting decelerate causes the same permanent stall as the old corner
+        // braking — the tank stops, is still near the corner, brakes again forever.
+        // By just releasing the gas, the tank slows naturally but keeps inching
+        // forward, eventually passing the waypoint and resuming acceleration.
         if needsPrecision && output.accelerate {
             let distToTarget = distance(tankPos, waypoints[lookAheadIdx].vec2f)
             if distToTarget < 1.5 {
-                // Check if there's a direction change coming
                 let hasCorner = lookAheadIdx + 1 < waypoints.count && {
                     let dx1 = waypoints[lookAheadIdx].x - waypoints[max(lookAheadIdx - 1, 0)].x
                     let dy1 = waypoints[lookAheadIdx].y - waypoints[max(lookAheadIdx - 1, 0)].y
@@ -180,7 +180,7 @@ class SteeringController {
                 }()
                 if hasCorner {
                     output.accelerate = false
-                    output.decelerate = true
+                    // Do NOT set decelerate — let the tank coast, don't brake to a stop
                 }
             }
         }
