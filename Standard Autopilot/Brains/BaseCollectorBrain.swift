@@ -137,6 +137,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                 if let target = targetBase {
                     unreachableTargets[target.pos] = tickCount
                 }
+                if let target = exploreTarget {
+                    exploredChunks.insert(chunkFor(target))
+                    exploreTarget = nil
+                }
                 stuckTickCount = 0
                 currentPath = nil
                 state = .scanning
@@ -221,18 +225,21 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         let tileAdjacent = tankTile.distance(to: target.pos) <= 1
 
         if tileAdjacent {
+            // Check if the base has been captured (turned friendly)
+            let currentTile = world.tile(at: target.pos)
+            if currentTile == .friendlyBaseTile {
+                state = .scanning
+                return
+            }
+
             if target.ownership == .hostile {
                 state = .attackingBase
                 return
             } else {
-                // Neutral base — drive directly onto it to capture
+                // Neutral base — drive directly onto it to capture.
+                // Stay here until it turns friendly.
                 let steer = steering.steerToward(target: target.pos.vec2f, gameState: gameState)
                 applySteeringToCmd(steer, cmd: cmd)
-
-                // If we're right on top of it, check if captured
-                if distToTarget < 0.8 {
-                    state = .scanning // Will re-scan and it should be friendly now
-                }
                 return
             }
         }
@@ -430,7 +437,12 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                 NSLog("[Brain] Explore target: (%d, %d), %d/%d chunks explored",
                       target.x, target.y, exploredChunks.count,
                       (kWorldWidth / chunkSize) * (kWorldHeight / chunkSize))
-                planPathToTarget(from: tankTile, to: target)
+                if !planPathToTarget(from: tankTile, to: target) {
+                    // Can't reach this target — mark chunk as explored and try another
+                    exploredChunks.insert(chunkFor(target))
+                    exploreTarget = nil
+                    return
+                }
             } else {
                 // Everywhere is explored or unreachable — reset and try again
                 NSLog("[Brain] All chunks explored — resetting exploration")
