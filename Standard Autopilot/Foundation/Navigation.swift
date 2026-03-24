@@ -85,7 +85,7 @@ class Pathfinder {
 
                 // Diagonal movement costs sqrt(2) * tile cost
                 let isDiagonal = neighbor.x != current.pos.x && neighbor.y != current.pos.y
-                let moveCost = isDiagonal ? cost * 1.414 : cost
+                let moveCost = (isDiagonal ? cost * 1.414 : cost) + world.dangerCost(at: neighbor)
                 let tentativeG = current.g + moveCost
 
                 if tentativeG < (gScore[neighbor] ?? Float.infinity) {
