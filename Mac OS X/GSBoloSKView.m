@@ -153,8 +153,9 @@ static NSCursor *cursor = nil;
 }
 
 - (void)resetCursorRects {
-  [self addCursorRect:self.visibleRect cursor:cursor];
-  [cursor setOnMouseEntered:YES];
+  NSCursor *activeCursor = boloController.robotActive ? [NSCursor arrowCursor] : cursor;
+  [self addCursorRect:self.visibleRect cursor:activeCursor];
+  [activeCursor setOnMouseEntered:YES];
 }
 
 @end

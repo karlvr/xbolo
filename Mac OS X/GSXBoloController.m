@@ -1889,9 +1889,18 @@ CLEANUP
 END
 }
 
+- (BOOL)robotActive {
+  [robotLock lock];
+  BOOL active = robot != nil;
+  [robotLock unlock];
+  return active;
+}
+
 // mouse event method
 - (void)mouseEvent:(GSPoint)point {
   int gotlock = 0;
+
+  if (self.robotActive) return;
 
 TRY
   if (GSPointInRect(GSMakeRect(0, 0, WIDTH, WIDTH), point)) {
@@ -3923,6 +3932,7 @@ END
         }
     }
     [robotLock unlock];
+    [boloView.window invalidateCursorRectsForView:boloView];
 }
 
 - (void)setupRobotsMenu

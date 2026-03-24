@@ -321,6 +321,9 @@ NS_ASSUME_NONNULL_BEGIN
 // mouse event method
 - (void)mouseEvent:(GSPoint)point;
 
+// robot state
+@property (nonatomic, readonly) BOOL robotActive;
+
 // accessor methods
 @property (nonatomic, copy, nullable) NSURL * hostMap;
 @property (nonatomic) BOOL hostUPnP;
