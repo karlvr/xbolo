@@ -73,7 +73,6 @@ class SteeringController {
     /// Follow a path by steering toward the next appropriate waypoint.
     func followPath(_ path: PathResult, gameState: GSRobotGameState) -> SteeringOutput {
         let currentTile = tilePosFromVec2f(gameState.tankposition)
-        let tankPos = gameState.tankposition
         let waypoints = path.waypoints
 
         guard waypoints.count > 0 else {
@@ -88,33 +87,28 @@ class SteeringController {
             }
         }
 
-        // The immediate next waypoint (one tile ahead)
+        // Walk forward from our position, extending lookahead only while
+        // consecutive path waypoints maintain the same direction (dx, dy).
+        // Stop at the first direction change — that's where the path bends
+        // around an obstacle and we must not cut the corner.
         let nextIdx = min(startIdx + 1, waypoints.count - 1)
-        let nextWaypoint = waypoints[nextIdx]
+        var lookAheadIdx = nextIdx
 
-        // Check if the path changes direction at the next waypoint (i.e. a turn)
-        // by comparing the direction from current to next vs next to the one after
-        let farIdx = min(startIdx + 3, waypoints.count - 1)
-        let isStraightLine: Bool
-        if farIdx > nextIdx {
-            let farWaypoint = waypoints[farIdx]
-            let dirToNext = angleTo(from: tankPos, to: nextWaypoint.vec2f)
-            let dirToFar = angleTo(from: tankPos, to: farWaypoint.vec2f)
-            isStraightLine = abs(normalizeAngle(dirToFar - dirToNext)) < .pi / 6
-        } else {
-            isStraightLine = true
+        if lookAheadIdx < waypoints.count - 1 {
+            let firstDx = waypoints[nextIdx].x - waypoints[startIdx].x
+            let firstDy = waypoints[nextIdx].y - waypoints[startIdx].y
+
+            for i in (nextIdx + 1)..<min(startIdx + 4, waypoints.count) {
+                let dx = waypoints[i].x - waypoints[i - 1].x
+                let dy = waypoints[i].y - waypoints[i - 1].y
+                if dx == firstDx && dy == firstDy {
+                    lookAheadIdx = i
+                } else {
+                    break // Direction changed — obstacle bend
+                }
+            }
         }
 
-        // On straight segments, look further ahead for smooth driving.
-        // At turns, steer toward the immediate next tile center so we
-        // don't cut corners and drift to tile edges.
-        let targetWaypoint: TilePos
-        if isStraightLine {
-            targetWaypoint = waypoints[farIdx]
-        } else {
-            targetWaypoint = nextWaypoint
-        }
-
-        return steerToward(target: targetWaypoint.vec2f, gameState: gameState)
+        return steerToward(target: waypoints[lookAheadIdx].vec2f, gameState: gameState)
     }
 }
