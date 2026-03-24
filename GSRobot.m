@@ -143,6 +143,9 @@
     
     _robot = [[class alloc] init];
     _halt = NO;
+    // Reset condition lock state so step() doesn't bail on THREAD_EXITED from a previous unload
+    [_condLock lock];
+    [_condLock unlockWithCondition: NO_NEW_DATA];
     [NSThread detachNewThreadSelector: @selector(_watcherThread) toTarget: self withObject: nil];
     return YES; // no errors, never any error, hooray!
 }
