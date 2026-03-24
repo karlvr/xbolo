@@ -192,11 +192,15 @@ class WorldModel {
     /// Additional cost penalty for tiles that are under threat from hostile
     /// pillboxes. Forest tiles are exempt beyond ~2 tiles (the tank is hidden).
     /// Returns 0 for safe tiles.
+    ///
+    /// The penalty is kept moderate (max 3.0) so the pathfinder prefers safer
+    /// routes but doesn't create extreme detours that thread through tight
+    /// gaps where the tank physically can't fit (TANKRADIUS = 0.375).
     func dangerCost(at pos: TilePos) -> Float {
         let isForest = isForestTile(at: pos)
         let forestVisRange: Float = 2.0
-        let pillDangerRange: Float = 7.0  // Pillbox shooting range
-        let maxPenalty: Float = 10.0
+        let pillDangerRange: Float = 5.0  // Effective pillbox threat range
+        let maxPenalty: Float = 3.0
 
         var totalPenalty: Float = 0
         for pill in pills where pill.ownership == .hostile {
