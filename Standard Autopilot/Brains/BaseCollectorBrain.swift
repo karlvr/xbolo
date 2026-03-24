@@ -39,7 +39,13 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private let aiming = AimingController()
 
     // State
-    private var state: BrainState = .scanning
+    private var state: BrainState = .scanning {
+        didSet {
+            if state != oldValue {
+                NSLog("[Brain] %@ → %@", "\(oldValue)", "\(state)")
+            }
+        }
+    }
     private var targetBase: BaseInfo?
     private var currentPath: PathResult?
     private var refuelBase: BaseInfo?
@@ -82,6 +88,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         if gameState.tankarmor <= 0 {
             if lastArmor > 0 {
                 // Just died — reset everything for respawn
+                NSLog("[Brain] Tank died — resetting state")
                 resetBrainState()
             }
             lastArmor = gameState.tankarmor
@@ -103,6 +110,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         let teleported = lastTankTile.x >= 0
             && (abs(tankTile.x - lastTankTile.x) > 5 || abs(tankTile.y - lastTankTile.y) > 5)
         if teleported {
+            NSLog("[Brain] Respawn detected at (%d, %d)", tankTile.x, tankTile.y)
             resetBrainState()
         }
         lastTankTile = tankTile
@@ -147,6 +155,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         // Look for the best target base
         if let target = pickTargetBase(tankTile: tankTile) {
             targetBase = target
+            NSLog("[Brain] Target: %@ base at (%d, %d)", "\(target.ownership)", target.pos.x, target.pos.y)
             planPathToTarget(from: tankTile, to: target.pos)
             state = .navigatingToBase
         } else {
@@ -221,6 +230,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             if pathFailCount >= maxPathFailures {
                 // Can't reach this target — blacklist it temporarily and pick a new one
                 if let target = targetBase {
+                    NSLog("[Brain] Blacklisting unreachable base at (%d, %d)", target.pos.x, target.pos.y)
                     unreachableTargets[target.pos] = tickCount
                 }
                 pathFailCount = 0
@@ -379,9 +389,13 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             if let target = pickExploreTarget(tankTile: tankTile) {
                 exploreTarget = target
                 exploreFailCount = 0
+                NSLog("[Brain] Explore target: (%d, %d), %d/%d chunks explored",
+                      target.x, target.y, exploredChunks.count,
+                      (kWorldWidth / chunkSize) * (kWorldHeight / chunkSize))
                 planPathToTarget(from: tankTile, to: target)
             } else {
                 // Everywhere is explored or unreachable — reset and try again
+                NSLog("[Brain] All chunks explored — resetting exploration")
                 exploredChunks.removeAll()
                 state = .scanning
                 return
@@ -573,8 +587,12 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private func planPathToTarget(from: TilePos, to: TilePos) {
         replanCounter = 0
         currentPath = pathfinder.findPath(from: from, to: to)
-        if currentPath != nil {
+        if let path = currentPath {
             pathFailCount = 0
+            NSLog("[Brain] Path: (%d,%d)→(%d,%d), %d waypoints, cost %.1f",
+                  from.x, from.y, to.x, to.y, path.waypoints.count, path.totalCost)
+        } else {
+            NSLog("[Brain] Path FAILED: (%d,%d)→(%d,%d)", from.x, from.y, to.x, to.y)
         }
     }
 
