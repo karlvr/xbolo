@@ -39,10 +39,12 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var pathFailCount = 0
     private var lastTankTile = TilePos(x: -1, y: -1)
     private var lastArmor: Int32 = -1
+    private var unreachableTargets: [TilePos: Int] = [:]  // pos -> tick when it was blacklisted
 
     // How often to recalculate path (ticks)
     private let replanInterval = 50  // Once per second
     private let maxPathFailures = 3  // Give up on target after this many failures
+    private let unreachableCooldown = 500  // Re-try unreachable targets after ~10 seconds
 
     public override required init() {
         super.init()
@@ -182,7 +184,10 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             cmd.decelerate = true
             pathFailCount += 1
             if pathFailCount >= maxPathFailures {
-                // Can't reach this target, pick a new one
+                // Can't reach this target — blacklist it temporarily and pick a new one
+                if let target = targetBase {
+                    unreachableTargets[target.pos] = tickCount
+                }
                 pathFailCount = 0
                 state = .scanning
             }
@@ -279,9 +284,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let steer = steering.followPath(path, gameState: gameState)
             applySteeringToCmd(steer, cmd: cmd)
         } else {
-            // No path to friendly base - stop and replan
+            // No path to friendly base — stop and wait for the next scheduled replan
             cmd.decelerate = true
-            replanCounter = replanInterval
         }
     }
 
@@ -326,6 +330,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         refuelBase = nil
         replanCounter = 0
         pathFailCount = 0
+        unreachableTargets.removeAll()
     }
 
     // MARK: - Decision Making
@@ -342,17 +347,34 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         replanCounter = replanInterval // Force immediate replan
     }
 
-    /// Pick the best target base to go after.
+    /// Pick the best target base to go after, skipping recently-unreachable targets.
     private func pickTargetBase(tankTile: TilePos) -> BaseInfo? {
+        // Expire old blacklist entries
+        unreachableTargets = unreachableTargets.filter { tickCount - $0.value < unreachableCooldown }
+
+        func isReachable(_ base: BaseInfo) -> Bool {
+            return unreachableTargets[base.pos] == nil
+        }
+
         // Prioritize: neutral bases first (easy capture), then hostile bases
-        let neutrals = world.neutralBases.sorted { $0.pos.floatDistance(to: tankTile) < $1.pos.floatDistance(to: tankTile) }
+        let neutrals = world.neutralBases
+            .filter(isReachable)
+            .sorted { $0.pos.floatDistance(to: tankTile) < $1.pos.floatDistance(to: tankTile) }
         if let nearest = neutrals.first {
             return nearest
         }
 
-        let hostiles = world.hostileBases.sorted { $0.pos.floatDistance(to: tankTile) < $1.pos.floatDistance(to: tankTile) }
+        let hostiles = world.hostileBases
+            .filter(isReachable)
+            .sorted { $0.pos.floatDistance(to: tankTile) < $1.pos.floatDistance(to: tankTile) }
         if let nearest = hostiles.first {
             return nearest
+        }
+
+        // If everything is blacklisted, clear the blacklist and try again
+        if !unreachableTargets.isEmpty {
+            unreachableTargets.removeAll()
+            return pickTargetBase(tankTile: tankTile)
         }
 
         return nil
