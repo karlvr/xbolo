@@ -573,12 +573,8 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             return nearest
         }
 
-        // If everything is blacklisted, clear the blacklist and try again
-        if !unreachableTargets.isEmpty {
-            unreachableTargets.removeAll()
-            return pickTargetBase(tankTile: tankTile)
-        }
-
+        // All known bases are blacklisted or none exist — return nil
+        // so the brain falls through to exploration mode
         return nil
     }
 
