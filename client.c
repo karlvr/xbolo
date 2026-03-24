@@ -2729,7 +2729,7 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRSmallBoom)) FAIL(EAGAIN)
   srsmallboom = (struct SRSmallBoom *)client.recvbuf.ptr;
 
-  if (srsmallboom->player >= MAX_PLAYERS) LOGFAIL(EINVAL)
+  if (srsmallboom->player >= MAX_PLAYERS && srsmallboom->player != NEUTRAL) LOGFAIL(EINVAL)
   if (srsmallboom->x >= WIDTH || srsmallboom->y >= WIDTH) LOGFAIL(EINVAL)
 
   /* turn terrain to crater */
@@ -2809,7 +2809,7 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRSuperBoom)) FAIL(EAGAIN)
   srsuperboom = (struct SRSuperBoom *)client.recvbuf.ptr;
 
-  if (srsuperboom->player >= MAX_PLAYERS) LOGFAIL(EINVAL)
+  if (srsuperboom->player >= MAX_PLAYERS && srsuperboom->player != NEUTRAL) LOGFAIL(EINVAL)
   if (srsuperboom->x + 1 >= WIDTH || srsuperboom->y + 1 >= WIDTH) LOGFAIL(EINVAL)
 
   /* turn terrain to crater */
