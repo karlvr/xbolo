@@ -3901,15 +3901,23 @@ END
     [robotLock lock];
     if(newRobot != robot)
     {
-      NSError *err;
-        if(![newRobot loadWithError:&err])
+        if(newRobot == nil)
         {
-            [NSApp presentError: err];
+            [robot unload];
+            robot = nil;
         }
         else
         {
-            [robot unload];
-            robot = newRobot;
+            NSError *err = nil;
+            if(![newRobot loadWithError:&err])
+            {
+                [NSApp presentError: err];
+            }
+            else
+            {
+                [robot unload];
+                robot = newRobot;
+            }
         }
     }
     [robotLock unlock];
