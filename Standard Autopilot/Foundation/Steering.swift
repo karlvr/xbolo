@@ -196,10 +196,11 @@ class SteeringController {
         var output = steerToward(target: steerTarget, gameState: gameState)
 
         // In precision mode (corridors, boat near land): slow down before
-        // corners. Measure distance to the CORNER waypoint (where the turn
-        // actually happens), not the intermediate waypoint before it.
+        // corners. Measure distance from the LOOKAHEAD WAYPOINT to the corner,
+        // not from the tank. This way we only brake when we're approaching
+        // the corner along the path, not when the corner happens to be nearby
+        // but we haven't started moving yet.
         if needsPrecision && output.accelerate {
-            // Find the corner: where direction changes within the next few waypoints
             if let cornerWpIdx = (lookAheadIdx + 1..<min(lookAheadIdx + 4, waypoints.count)).first(where: { i in
                 let dx1 = waypoints[i].x - waypoints[i - 1].x
                 let dy1 = waypoints[i].y - waypoints[i - 1].y
@@ -207,8 +208,11 @@ class SteeringController {
                 let dy0 = waypoints[i - 1].y - waypoints[max(i - 2, 0)].y
                 return dx1 != dx0 || dy1 != dy0
             }) {
-                let distToCorner = distance(tankPos, waypoints[cornerWpIdx].vec2f)
-                if distToCorner < 1.5 {
+                // Only brake if we've reached the waypoint before the corner
+                let distTankToLookAhead = distance(tankPos, waypoints[lookAheadIdx].vec2f)
+                let wpBeforeCorner = cornerWpIdx - 1
+                let distTankToPreCorner = distance(tankPos, waypoints[wpBeforeCorner].vec2f)
+                if distTankToPreCorner < 1.0 && distTankToLookAhead < 1.0 {
                     output.accelerate = false
                     output.decelerate = true
                 }
