@@ -155,9 +155,9 @@ class SteeringController {
             }
         }
 
-//        NSLog("[Steer] tank=(%.1f,%.1f) startIdx=%d lookAheadIdx=%d target=(%d,%d) wpCount=%d",
-//              tankPos.x, tankPos.y, startIdx, lookAheadIdx,
-//              waypoints[lookAheadIdx].x, waypoints[lookAheadIdx].y, waypoints.count)
+        NSLog("[Steer] tank=(%.1f,%.1f) dir=%d startIdx=%d lookAhead=%d target=(%.1f,%.1f) prec=%d",
+              tankPos.x, tankPos.y, gameState.tankdirection, startIdx, lookAheadIdx,
+              steerTarget.x, steerTarget.y, needsPrecision ? 1 : 0)
 
         // In precision mode, offset the steering target away from adjacent
         // walls/land. Waypoints are at tile centers (0.5 from walls), but
@@ -212,6 +212,10 @@ class SteeringController {
                 }
             }
         }
+
+        NSLog("[Steer] accel=%d decel=%d left=%d right=%d",
+              output.accelerate ? 1 : 0, output.decelerate ? 1 : 0,
+              output.left ? 1 : 0, output.right ? 1 : 0)
 
         return output
     }

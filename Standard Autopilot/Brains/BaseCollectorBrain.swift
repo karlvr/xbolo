@@ -53,6 +53,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private var replanCounter = 0
     private var pathFailCount = 0
     private var lastTankTile = TilePos(x: -1, y: -1)
+    private var lastTankPos = Vec2f(x: -1, y: -1)
     private var stuckTickCount = 0
     private var lastArmor: Int32 = -1
     private var lastHadBoat = false
@@ -69,7 +70,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
     private let unreachableCooldown = 500  // Re-try unreachable targets after ~10 seconds
     private let chunkSize = 16  // Exploration chunk size in tiles
     private let maxExploreFailures = 3  // Give up on an explore target after this many failures
-    private let stuckThreshold = 150  // ~3 seconds without moving = stuck
+    private let stuckThreshold = 300  // ~6 seconds without moving = stuck
 
     public override required init() {
         super.init()
@@ -127,9 +128,13 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             NSLog("[Brain] Respawn detected at (%d, %d)", tankTile.x, tankTile.y)
             resetBrainState()
         }
-        // Detect being stuck: if the tank hasn't moved tiles for several seconds,
-        // abandon the current target and try something else.
-        if tankTile == lastTankTile {
+        // Detect being stuck: if the tank hasn't moved meaningfully for a while,
+        // abandon the current target. Use sub-tile position so slow movement
+        // on swamp/forest (which doesn't cross tile boundaries quickly) still
+        // counts as progress.
+        let tankPos = gameState.tankposition
+        let moved = lastTankPos.x >= 0 && distance(tankPos, lastTankPos) > 0.1
+        if !moved {
             stuckTickCount += 1
             if stuckTickCount >= stuckThreshold && state != .scanning {
                 NSLog("[Brain] Stuck for %d ticks at (%d, %d) — abandoning current goal",
@@ -150,6 +155,7 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         }
 
         lastTankTile = tankTile
+        lastTankPos = tankPos
         lastArmor = gameState.tankarmor
 
         // Check for critical situations that override current state
