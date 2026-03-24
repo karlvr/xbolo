@@ -151,7 +151,7 @@ class WorldModel {
         if hasBoat {
             switch t {
             case .riverTile, .seaTile, .minedSeaTile, .boatTile:
-                return 1.5  // Fast on water with boat
+                return 1.0  // Boat speed = road speed (3.125 tiles/sec)
             default:
                 break  // Land — penalty applied by pathfinder as transition cost
             }

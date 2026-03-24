@@ -393,9 +393,11 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             }
         }
 
-        // Check if fully stocked
-        let fullyStocked = gameState.tankshells >= Int32(kMaxShells - 5)
-            && gameState.tankarmor >= Int32(kMaxArmor - 5)
+        // Wait until fully restocked — especially armor, since we
+        // retreated because we were damaged. Don't leave early.
+        let fullyStocked = gameState.tankshells >= Int32(kMaxShells - 2)
+            && gameState.tankarmor >= Int32(kMaxArmor - 2)
+            && gameState.tankmines >= Int32(kMaxMines / 2)
 
         if fullyStocked {
             state = .scanning
