@@ -687,8 +687,14 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
             let angleDiff = abs(normalizeAngle(shellToTank - shellDir))
 
             if angleDiff < .pi / 4 && shellDist < 3.0 {
-                // Shell is coming at us! Dodge perpendicular
-                // Determine which side to dodge (pick the side we're already slightly offset to)
+                // Shell is coming at us! Dodge perpendicular.
+                // REPLACE all steering — don't just add flags on top of
+                // path-following, which causes conflicting accelerate+decelerate.
+                cmd.accelerate = false
+                cmd.decelerate = false
+                cmd.left = false
+                cmd.right = false
+
                 let perpAngle = shellDir + .pi / 2
                 let dodgeX = cosf(perpAngle)
                 let dodgeY = -sinf(perpAngle)
