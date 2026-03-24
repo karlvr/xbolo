@@ -150,18 +150,10 @@ class WorldModel {
 
         if hasBoat {
             switch t {
-            case .riverTile, .seaTile, .minedSeaTile:
-                // With a boat we move at road speed on water
-                return 1.5
-            case .boatTile:
-                // Already have a boat, boat tile is just water
-                return 1.5
+            case .riverTile, .seaTile, .minedSeaTile, .boatTile:
+                return 1.5  // Fast on water with boat
             default:
-                // Stepping onto land loses the boat! Add a penalty to
-                // discourage leaving water unless the destination requires it.
-                // This doesn't prevent land paths — just makes the pathfinder
-                // prefer staying on water when both options exist.
-                break
+                break  // Land — penalty applied by pathfinder as transition cost
             }
         } else {
             switch t {
@@ -288,6 +280,12 @@ class WorldModel {
             totalPenalty += maxPenalty * (1.0 - dist / pillDangerRange)
         }
         return totalPenalty
+    }
+
+    /// Whether a tile is water (river, sea, boat).
+    func isWaterTile(at pos: TilePos) -> Bool {
+        let t = tile(at: pos)
+        return t == .riverTile || t == .seaTile || t == .minedSeaTile || t == .boatTile
     }
 
     /// Whether a tile is forest terrain.

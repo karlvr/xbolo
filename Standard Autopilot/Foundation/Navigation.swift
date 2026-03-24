@@ -91,7 +91,16 @@ class Pathfinder {
                 let baseCost = isDiagonal ? cost * 1.414 : cost
                 let dangerMult = 1.0 + world.dangerCost(at: neighbor)
                 let borderAdd = world.borderCost(at: neighbor)
-                let moveCost = baseCost * dangerMult + borderAdd
+
+                // Penalty for stepping from water to land when on a boat.
+                // Losing the boat makes all subsequent water tiles impassable/expensive,
+                // so this one-time cost discourages leaving water prematurely.
+                var transitionCost: Float = 0
+                if world.hasBoat && world.isWaterTile(at: current.pos) && !world.isWaterTile(at: neighbor) {
+                    transitionCost = 15.0
+                }
+
+                let moveCost = baseCost * dangerMult + borderAdd + transitionCost
                 let tentativeG = current.g + moveCost
 
                 if tentativeG < (gScore[neighbor] ?? Float.infinity) {
