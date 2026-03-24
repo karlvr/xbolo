@@ -72,17 +72,23 @@ class SteeringController {
 
     /// Follow a path by steering toward the next appropriate waypoint.
     func followPath(_ path: PathResult, gameState: GSRobotGameState) -> SteeringOutput {
-        let currentTile = tilePosFromVec2f(gameState.tankposition)
+        let tankPos = gameState.tankposition
         let waypoints = path.waypoints
 
         guard waypoints.count > 0 else {
             return SteeringOutput(decelerate: true)
         }
 
-        // Find our approximate position in the path
+        // Find the nearest waypoint to our current position.
+        // We used to require an exact tile match, but if the tank drifted
+        // off-path (dodging, momentum, stale path), startIdx fell back to 0
+        // and the tank steered toward the path start — into walls.
         var startIdx = 0
+        var bestDist: Float = .infinity
         for (i, wp) in waypoints.enumerated() {
-            if wp == currentTile {
+            let d = distanceSquared(tankPos, wp.vec2f)
+            if d < bestDist {
+                bestDist = d
                 startIdx = i
             }
         }

@@ -426,9 +426,34 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
         return ChunkPos(cx: pos.x / chunkSize, cy: pos.y / chunkSize)
     }
 
-    private func chunkCenter(_ chunk: ChunkPos) -> TilePos {
-        return TilePos(x: chunk.cx * chunkSize + chunkSize / 2,
-                       y: chunk.cy * chunkSize + chunkSize / 2)
+    /// Get a passable tile within the chunk to navigate to.
+    /// Tries the center first, then searches nearby within the chunk.
+    private func passableTileInChunk(_ chunk: ChunkPos) -> TilePos? {
+        let baseX = chunk.cx * chunkSize
+        let baseY = chunk.cy * chunkSize
+        let center = TilePos(x: baseX + chunkSize / 2, y: baseY + chunkSize / 2)
+
+        // Try center first
+        if world.movementCost(at: center) != nil {
+            return center
+        }
+
+        // Search outward from center within the chunk for a passable tile
+        for radius in 1..<(chunkSize / 2) {
+            for dx in -radius...radius {
+                for dy in -radius...radius {
+                    if abs(dx) != radius && abs(dy) != radius { continue }
+                    let pos = TilePos(x: center.x + dx, y: center.y + dy)
+                    guard pos.x >= baseX, pos.x < baseX + chunkSize,
+                          pos.y >= baseY, pos.y < baseY + chunkSize else { continue }
+                    if world.movementCost(at: pos) != nil {
+                        return pos
+                    }
+                }
+            }
+        }
+
+        return nil // Entire chunk is impassable (e.g., ocean)
     }
 
     private func transitionToExploring(tankTile: TilePos) {
@@ -462,11 +487,15 @@ public class BaseCollectorBrain: NSObject, GSRobotProtocol {
                     let chunk = ChunkPos(cx: cx, cy: cy)
                     if exploredChunks.contains(chunk) { continue }
 
-                    let center = chunkCenter(chunk)
-                    let dist = center.floatDistance(to: tankTile)
+                    // Find a passable tile in this chunk; skip if entirely impassable
+                    guard let target = passableTileInChunk(chunk) else {
+                        exploredChunks.insert(chunk) // Mark impassable chunks as explored
+                        continue
+                    }
+                    let dist = target.floatDistance(to: tankTile)
                     if dist < bestDist {
                         bestDist = dist
-                        bestTarget = center
+                        bestTarget = target
                     }
                 }
             }
