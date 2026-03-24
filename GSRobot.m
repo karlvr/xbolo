@@ -158,8 +158,10 @@
     [_condLock lockWhenCondition: THREAD_EXITED];
     [_condLock unlock];
 
-    // Release all keys that the robot was pressing
-    keyevent(ACCELMASK | BRAKEMASK | TURNLMASK | TURNRMASK | LMINEMASK | SHOOTMASK | INCREMASK | DECREMASK, 0);
+    // Release all keys except brake, and press brake so the tank decelerates
+    // instead of coasting on its remaining momentum.
+    keyevent(ACCELMASK | TURNLMASK | TURNRMASK | LMINEMASK | SHOOTMASK | INCREMASK | DECREMASK, 0);
+    keyevent(BRAKEMASK, 1);
 
     _robot = nil;
 }
