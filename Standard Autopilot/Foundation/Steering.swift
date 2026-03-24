@@ -93,24 +93,32 @@ class SteeringController {
             }
         }
 
-        // Walk forward from our position, extending lookahead only while
-        // consecutive path waypoints maintain the same direction (dx, dy).
-        // Stop at the first direction change — that's where the path bends
-        // around an obstacle and we must not cut the corner.
+        // Look ahead along the path, extending while consecutive waypoints
+        // maintain the same direction. Stop at direction changes to avoid
+        // cutting corners around obstacles.
+        // Always look at least 2 waypoints ahead (when available) so the
+        // tank gets enough angular correction to stay centered on the path.
+        // With only 1 waypoint ahead, the angle to the next tile center
+        // can fall within the steering dead zone, leaving the tank slightly
+        // off-center and unable to pass through narrow gaps.
+        let minLookAhead = min(startIdx + 2, waypoints.count - 1)
         let nextIdx = min(startIdx + 1, waypoints.count - 1)
-        var lookAheadIdx = nextIdx
+        var lookAheadIdx = minLookAhead
 
-        if lookAheadIdx < waypoints.count - 1 {
+        if nextIdx < waypoints.count - 1 {
             let firstDx = waypoints[nextIdx].x - waypoints[startIdx].x
             let firstDy = waypoints[nextIdx].y - waypoints[startIdx].y
 
-            for i in (nextIdx + 1)..<min(startIdx + 4, waypoints.count) {
+            for i in (nextIdx + 1)..<min(startIdx + 5, waypoints.count) {
                 let dx = waypoints[i].x - waypoints[i - 1].x
                 let dy = waypoints[i].y - waypoints[i - 1].y
                 if dx == firstDx && dy == firstDy {
-                    lookAheadIdx = i
+                    lookAheadIdx = max(lookAheadIdx, i)
+                } else if i <= minLookAhead {
+                    // Even if direction changed, include at least 2 ahead
+                    lookAheadIdx = max(lookAheadIdx, i)
                 } else {
-                    break // Direction changed — obstacle bend
+                    break // Direction changed beyond minimum lookahead
                 }
             }
         }
